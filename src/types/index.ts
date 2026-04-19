@@ -5,6 +5,7 @@ export type Category =
   | 'plastic'
   | 'metal'
   | 'eco'
+  | 'package_design'
 
 export const CATEGORY_LABELS: Record<Category, string> = {
   saneobyong: '산업용',
@@ -13,6 +14,7 @@ export const CATEGORY_LABELS: Record<Category, string> = {
   plastic: '플라스틱',
   metal: '금속',
   eco: '친환경',
+  package_design: '패키지 디자인',
 }
 
 export interface Company {
