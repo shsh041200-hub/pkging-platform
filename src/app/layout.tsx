@@ -1,12 +1,5 @@
 import type { Metadata } from 'next'
-import { Noto_Sans_KR } from 'next/font/google'
 import './globals.css'
-
-const notoSansKR = Noto_Sans_KR({
-  subsets: ['latin'],
-  weight: ['400', '500', '700'],
-  display: 'swap',
-})
 
 export const metadata: Metadata = {
   title: '패키징 플랫폼 — 전국 패키징 업체 디렉토리',
@@ -23,7 +16,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="ko" className="h-full">
-      <body className={`${notoSansKR.className} min-h-full flex flex-col antialiased`}>
+      <body className="min-h-full flex flex-col antialiased bg-slate-50 text-slate-900">
         {children}
       </body>
     </html>

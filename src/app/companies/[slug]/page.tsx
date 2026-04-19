@@ -54,141 +54,205 @@ export default async function CompanyPage({ params }: Props) {
       : null
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <header className="bg-white border-b border-gray-200">
-        <div className="max-w-4xl mx-auto px-4 py-3 flex items-center gap-2">
-          <Link href="/" className="text-blue-600 text-sm hover:underline">
-            ← 목록으로
+    <div className="min-h-screen bg-slate-50">
+      {/* Header */}
+      <header className="bg-[#0d1d2e] sticky top-0 z-50">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
+          <Link href="/" className="flex items-center gap-2.5">
+            <span className="text-white font-bold text-lg tracking-wide">PKGING</span>
+            <span className="text-slate-400 text-xs hidden sm:inline">B2B 포장업체 디렉토리</span>
           </Link>
+          <nav className="flex items-center gap-4">
+            <Link href="/login" className="text-slate-300 text-sm hover:text-white transition-colors">
+              로그인
+            </Link>
+            <Link
+              href="/signup"
+              className="border border-white/30 text-white text-sm px-4 py-1.5 rounded-lg hover:bg-white/10 transition-colors"
+            >
+              업체 등록
+            </Link>
+          </nav>
         </div>
       </header>
 
-      <main className="max-w-4xl mx-auto px-4 py-8">
-        {/* Company Header */}
-        <div className="bg-white rounded-2xl border border-gray-200 p-6 mb-6">
-          <div className="flex items-start justify-between mb-4">
-            <div>
-              <div className="flex items-center gap-2 mb-1">
-                <h1 className="text-2xl font-bold text-gray-900">{company.name}</h1>
+      {/* Breadcrumb */}
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 pt-5 pb-0">
+        <Link href="/" className="text-sm text-[#1e3a5f] hover:underline inline-flex items-center gap-1">
+          ← 목록으로
+        </Link>
+      </div>
+
+      <main className="max-w-4xl mx-auto px-4 sm:px-6 py-5 pb-16">
+        {/* Company Hero Card */}
+        <div className="bg-white border border-slate-200 rounded-xl p-6 sm:p-8 mb-5">
+          <div className="flex items-start gap-4 mb-5">
+            {/* Logo placeholder */}
+            <div className="w-14 h-14 rounded-lg bg-slate-100 border border-slate-200 flex items-center justify-center flex-shrink-0">
+              <span className="text-xl font-bold text-slate-400">
+                {company.name.charAt(0)}
+              </span>
+            </div>
+
+            <div className="flex-1 min-w-0">
+              <div className="flex flex-wrap items-center gap-2 mb-1">
+                <h1 className="text-2xl font-bold text-slate-900">{company.name}</h1>
                 {company.is_verified && (
-                  <span className="bg-blue-100 text-blue-700 text-xs px-2 py-0.5 rounded-full">
-                    인증업체
+                  <span className="inline-flex items-center gap-1 text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-200 px-2.5 py-1 rounded-full">
+                    ✓ 인증업체
                   </span>
                 )}
               </div>
-              <span className="inline-block bg-gray-100 text-gray-600 text-sm px-3 py-1 rounded-full">
-                {CATEGORY_LABELS[company.category as Category]}
-              </span>
-            </div>
-            {avgRating && (
-              <div className="text-center">
-                <div className="text-2xl font-bold text-yellow-500">★ {avgRating}</div>
-                <div className="text-xs text-gray-400">{reviews?.length}개 리뷰</div>
+              <div className="flex flex-wrap items-center gap-2 text-sm text-slate-500">
+                <span className="bg-slate-100 text-slate-600 text-xs font-medium px-2.5 py-1 rounded-md">
+                  {CATEGORY_LABELS[company.category as Category]}
+                </span>
+                {company.province && (
+                  <span>
+                    {company.province} {company.city}
+                  </span>
+                )}
+                {avgRating && (
+                  <span className="flex items-center gap-1">
+                    <span className="text-amber-500">★</span>
+                    <span className="font-medium text-slate-700">{avgRating}</span>
+                    <span className="text-slate-400">({reviews?.length}개 리뷰)</span>
+                  </span>
+                )}
               </div>
-            )}
+            </div>
           </div>
 
           {company.description && (
-            <p className="text-gray-600 leading-relaxed mb-4">{company.description}</p>
+            <p className="text-sm text-slate-600 leading-relaxed mb-6 border-l-2 border-slate-200 pl-4">
+              {company.description}
+            </p>
           )}
 
-          <div className="grid grid-cols-2 gap-3 text-sm">
-            {company.province && (
-              <div>
-                <span className="text-gray-400">위치</span>
-                <p className="text-gray-700">
-                  {company.province} {company.city}
-                </p>
-              </div>
-            )}
-            {company.phone && (
-              <div>
-                <span className="text-gray-400">전화번호</span>
-                <p className="text-gray-700">
-                  <a href={`tel:${company.phone}`} className="text-blue-600 hover:underline">
+          {/* Contact grid */}
+          {(company.phone || company.email || company.website) && (
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-5 border-t border-slate-100">
+              {company.phone && (
+                <div>
+                  <p className="text-xs font-medium text-slate-400 uppercase tracking-wide mb-1">전화</p>
+                  <a
+                    href={`tel:${company.phone}`}
+                    className="text-sm text-[#1e3a5f] font-medium hover:underline"
+                  >
                     {company.phone}
                   </a>
-                </p>
-              </div>
-            )}
-            {company.email && (
-              <div>
-                <span className="text-gray-400">이메일</span>
-                <p className="text-gray-700">
-                  <a href={`mailto:${company.email}`} className="text-blue-600 hover:underline">
+                </div>
+              )}
+              {company.email && (
+                <div>
+                  <p className="text-xs font-medium text-slate-400 uppercase tracking-wide mb-1">이메일</p>
+                  <a
+                    href={`mailto:${company.email}`}
+                    className="text-sm text-[#1e3a5f] font-medium hover:underline truncate block"
+                  >
                     {company.email}
                   </a>
-                </p>
-              </div>
-            )}
-            {company.website && (
-              <div>
-                <span className="text-gray-400">웹사이트</span>
-                <p className="text-gray-700">
+                </div>
+              )}
+              {company.website && (
+                <div>
+                  <p className="text-xs font-medium text-slate-400 uppercase tracking-wide mb-1">웹사이트</p>
                   <a
                     href={company.website}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-blue-600 hover:underline"
+                    className="text-sm text-[#1e3a5f] font-medium hover:underline"
                   >
                     방문하기 →
                   </a>
-                </p>
-              </div>
-            )}
-          </div>
+                </div>
+              )}
+            </div>
+          )}
         </div>
 
-        {/* Products */}
-        {company.products && company.products.length > 0 && (
-          <div className="bg-white rounded-2xl border border-gray-200 p-6 mb-6">
-            <h2 className="font-semibold text-gray-900 mb-3">취급 제품</h2>
-            <div className="flex flex-wrap gap-2">
-              {company.products.map((product: string, i: number) => (
-                <span
-                  key={i}
-                  className="bg-blue-50 text-blue-700 text-sm px-3 py-1 rounded-full"
-                >
-                  {product}
-                </span>
-              ))}
-            </div>
-          </div>
-        )}
+        {/* Products + Certifications grid */}
+        {((company.products && company.products.length > 0) ||
+          (company.certifications && company.certifications.length > 0)) && (
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-5">
+            {company.products && company.products.length > 0 && (
+              <div className="bg-white border border-slate-200 rounded-xl p-5">
+                <h2 className="text-xs font-semibold text-slate-900 mb-3 uppercase tracking-wide">
+                  취급 제품
+                </h2>
+                <div className="flex flex-wrap gap-2">
+                  {company.products.map((product: string, i: number) => (
+                    <span
+                      key={i}
+                      className="text-xs font-medium bg-slate-50 border border-slate-200 text-slate-700 px-3 py-1.5 rounded-md"
+                    >
+                      {product}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
 
-        {/* Certifications */}
-        {company.certifications && company.certifications.length > 0 && (
-          <div className="bg-white rounded-2xl border border-gray-200 p-6 mb-6">
-            <h2 className="font-semibold text-gray-900 mb-3">인증</h2>
-            <div className="flex flex-wrap gap-2">
-              {company.certifications.map((cert: string, i: number) => (
-                <span key={i} className="bg-green-50 text-green-700 text-sm px-3 py-1 rounded-full">
-                  ✓ {cert}
-                </span>
-              ))}
-            </div>
+            {company.certifications && company.certifications.length > 0 && (
+              <div className="bg-white border border-slate-200 rounded-xl p-5">
+                <h2 className="text-xs font-semibold text-slate-900 mb-3 uppercase tracking-wide">
+                  보유 인증
+                </h2>
+                <div className="flex flex-wrap gap-2">
+                  {company.certifications.map((cert: string, i: number) => (
+                    <span
+                      key={i}
+                      className="text-xs font-medium bg-emerald-50 border border-emerald-200 text-emerald-700 px-3 py-1.5 rounded-md"
+                    >
+                      ✓ {cert}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         )}
 
         {/* Reviews */}
-        <div className="bg-white rounded-2xl border border-gray-200 p-6">
-          <h2 className="font-semibold text-gray-900 mb-4">리뷰 ({reviews?.length ?? 0})</h2>
+        <div className="bg-white border border-slate-200 rounded-xl p-5">
+          <div className="flex items-center justify-between mb-5">
+            <h2 className="text-xs font-semibold text-slate-900 uppercase tracking-wide">
+              바이어 리뷰
+            </h2>
+            {avgRating && (
+              <div className="flex items-center gap-2">
+                <span className="text-2xl font-bold text-slate-900">{avgRating}</span>
+                <div>
+                  <div className="text-amber-400 text-sm">
+                    {'★'.repeat(Math.round(Number(avgRating)))}
+                    {'☆'.repeat(5 - Math.round(Number(avgRating)))}
+                  </div>
+                  <div className="text-xs text-slate-400">{reviews?.length}개 리뷰</div>
+                </div>
+              </div>
+            )}
+          </div>
+
           {reviews && reviews.length > 0 ? (
-            <div className="space-y-4">
+            <div className="divide-y divide-slate-100">
               {reviews.map((review) => (
-                <div key={review.id} className="border-b border-gray-100 pb-4 last:border-0">
-                  <div className="flex items-center gap-2 mb-1">
-                    <span className="text-yellow-500">{'★'.repeat(review.rating)}{'☆'.repeat(5 - review.rating)}</span>
-                    <span className="text-xs text-gray-400">
+                <div key={review.id} className="py-4 first:pt-0 last:pb-0">
+                  <div className="flex items-center gap-2 mb-1.5">
+                    <span className="text-amber-400 text-sm">
+                      {'★'.repeat(review.rating)}{'☆'.repeat(5 - review.rating)}
+                    </span>
+                    <span className="text-xs text-slate-400">
                       {new Date(review.created_at).toLocaleDateString('ko-KR')}
                     </span>
                   </div>
-                  {review.content && <p className="text-gray-600 text-sm">{review.content}</p>}
+                  {review.content && (
+                    <p className="text-sm text-slate-600 leading-relaxed">{review.content}</p>
+                  )}
                 </div>
               ))}
             </div>
           ) : (
-            <p className="text-gray-400 text-sm">아직 리뷰가 없습니다.</p>
+            <p className="text-sm text-slate-400 text-center py-8">아직 리뷰가 없습니다.</p>
           )}
         </div>
       </main>
