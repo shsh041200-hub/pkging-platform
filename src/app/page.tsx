@@ -39,14 +39,6 @@ export default async function HomePage({
             <span className="text-white font-bold text-lg tracking-wide">PKGING</span>
             <span className="text-slate-400 text-xs hidden sm:inline">B2B 포장업체 디렉토리</span>
           </Link>
-          <nav className="flex items-center gap-4">
-            <Link
-              href="/login"
-              className="text-slate-300 text-sm hover:text-white transition-colors"
-            >
-              관리자 로그인
-            </Link>
-          </nav>
         </div>
       </header>
 
