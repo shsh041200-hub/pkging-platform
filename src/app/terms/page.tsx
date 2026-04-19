@@ -149,6 +149,7 @@ export default function TermsPage() {
           <Link href="/" className="hover:text-slate-600">홈</Link>
           <Link href="/privacy" className="hover:text-slate-600">개인정보처리방침</Link>
           <Link href="/terms" className="hover:text-slate-600 font-medium text-slate-600">이용약관</Link>
+          <Link href="/opt-out" className="hover:text-slate-600">정보 삭제·수정 요청</Link>
         </div>
       </footer>
     </div>

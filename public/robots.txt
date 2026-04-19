@@ -1,0 +1,12 @@
+User-agent: *
+Allow: /
+
+# PkgingBot follows robots.txt on all target sites before crawling.
+# If you wish to exclude your site from our B2B directory, please:
+# 1. Add a Disallow rule for PkgingBot below on your own robots.txt, OR
+# 2. Submit a removal request at https://pkging.kr/opt-out
+
+User-agent: PkgingBot
+Allow: /
+
+Sitemap: https://pkging.kr/sitemap.xml
