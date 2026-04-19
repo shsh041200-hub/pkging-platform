@@ -30,7 +30,7 @@ values
   '서울특별시', '성동구',
   '02-000-1102', 'hello@packingstory.co.kr', 'https://packingstory.co.kr',
   ARRAY['소량 패키지 디자인', '박스 디자인', '브랜드 패키징', '인쇄 연계'],
-  ARRAY[],
+  ARRAY[]::text[],
   false
 ),
 (
@@ -52,7 +52,7 @@ values
   '서울특별시', '용산구',
   '02-000-1104', 'project@bdesign.kr', 'https://bdesign.kr',
   ARRAY['D2C 패키지 디자인', '언박싱 디자인', '이커머스 박스 디자인', '브랜드 아이덴티티'],
-  ARRAY[],
+  ARRAY[]::text[],
   true
 ),
 (
@@ -74,7 +74,7 @@ values
   '대구광역시', '중구',
   '053-000-1106', 'hello@designpack.kr', null,
   ARRAY['특산물 패키지 디자인', '전통주 라벨 디자인', '선물 패키징 디자인', '지역 브랜딩'],
-  ARRAY[],
+  ARRAY[]::text[],
   false
 ),
 (
@@ -107,7 +107,7 @@ values
   '광주광역시', '동구',
   '062-000-1109', null, null,
   ARRAY['한국 전통 패키지 디자인', '한지 포장 디자인', '전통주 라벨', '전통 선물 패키징'],
-  ARRAY[],
+  ARRAY[]::text[],
   false
 ),
 (

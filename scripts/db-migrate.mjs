@@ -36,6 +36,47 @@ if (!ACCESS_TOKEN) {
   process.exit(1)
 }
 
+/**
+ * SQL 파일을 개별 구문으로 분리 (문자열 리터럴 내 세미콜론 무시)
+ * ALTER TYPE ADD VALUE → INSERT 순서 보장을 위해 구문별 별도 트랜잭션으로 실행
+ */
+function splitStatements(sql) {
+  const statements = []
+  let current = ''
+  let inString = false
+  let stringChar = ''
+  let i = 0
+
+  while (i < sql.length) {
+    const ch = sql[i]
+    // 문자열 리터럴 추적 (단순 single-quote)
+    if (!inString && ch === "'") {
+      inString = true
+      stringChar = "'"
+      current += ch
+    } else if (inString && ch === stringChar) {
+      // escape: ''
+      if (sql[i + 1] === stringChar) {
+        current += ch + sql[i + 1]
+        i += 2
+        continue
+      }
+      inString = false
+      current += ch
+    } else if (!inString && ch === ';') {
+      const stmt = current.trim()
+      if (stmt) statements.push(stmt)
+      current = ''
+    } else {
+      current += ch
+    }
+    i++
+  }
+  const last = current.trim()
+  if (last) statements.push(last)
+  return statements.filter((s) => s.replace(/--[^\n]*/g, '').trim())
+}
+
 async function runSQL(sql) {
   const res = await fetch(`https://api.supabase.com/v1/projects/${PROJECT_REF}/database/query`, {
     method: 'POST',
@@ -75,7 +116,11 @@ async function main() {
     }
     process.stdout.write(`⚙️  apply ${file} ... `)
     const sql = readFileSync(join(migrationsDir, file), 'utf-8')
-    await runSQL(sql)
+    // ALTER TYPE ADD VALUE는 같은 트랜잭션에서 사용 불가 — 구문별 분리 실행
+    const statements = splitStatements(sql)
+    for (const stmt of statements) {
+      await runSQL(stmt)
+    }
     await runSQL(`INSERT INTO _applied_migrations (filename) VALUES ('${file.replace(/'/g, "''")}')`)
     console.log('✅')
     count++
