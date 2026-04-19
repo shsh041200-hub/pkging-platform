@@ -104,7 +104,7 @@ export default async function HomePage({
       </div>
 
       {/* Results Section */}
-      <section className="max-w-6xl mx-auto px-4 sm:px-6 py-8 pb-16">
+      <section className="max-w-6xl mx-auto px-4 sm:px-6 py-8">
         {/* Results header */}
         <div className="flex items-center justify-between mb-5">
           <p className="text-sm text-slate-500">
@@ -114,7 +114,7 @@ export default async function HomePage({
           </p>
         </div>
 
-        {companies && companies.length > 0 ? (
+          {companies && companies.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {companies.map((company) => (
               <Link
@@ -183,6 +183,22 @@ export default async function HomePage({
           </div>
         )}
       </section>
+
+      {/* Footer */}
+      <footer className="border-t border-slate-200 bg-white mt-auto py-6">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
+          <div className="flex flex-wrap items-center justify-between gap-4">
+            <p className="text-xs text-slate-400">
+              © 2026 PKGING. 본 서비스의 업체 정보는 공개된 출처에서 자동 수집되었습니다.
+              정보 오류·삭제 요청: privacy@pkging.kr
+            </p>
+            <div className="flex gap-4 text-xs text-slate-400">
+              <Link href="/privacy" className="hover:text-slate-600">개인정보처리방침</Link>
+              <Link href="/terms" className="hover:text-slate-600">이용약관</Link>
+            </div>
+          </div>
+        </div>
+      </footer>
     </div>
   )
 }

@@ -63,15 +63,12 @@ export default async function CompanyPage({ params }: Props) {
             <span className="text-slate-400 text-xs hidden sm:inline">B2B 포장업체 디렉토리</span>
           </Link>
           <nav className="flex items-center gap-4">
-            <Link href="/login" className="text-slate-300 text-sm hover:text-white transition-colors">
-              로그인
-            </Link>
-            <Link
-              href="/signup"
-              className="border border-white/30 text-white text-sm px-4 py-1.5 rounded-lg hover:bg-white/10 transition-colors"
+            <a
+              href="mailto:privacy@pkging.kr"
+              className="text-slate-300 text-sm hover:text-white transition-colors"
             >
-              업체 등록
-            </Link>
+              업체 정보 수정·삭제
+            </a>
           </nav>
         </div>
       </header>
@@ -256,6 +253,22 @@ export default async function CompanyPage({ params }: Props) {
           )}
         </div>
       </main>
+
+      {/* Footer */}
+      <footer className="border-t border-slate-200 bg-white py-6">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6">
+          <div className="flex flex-wrap items-center justify-between gap-4">
+            <p className="text-xs text-slate-400">
+              © 2026 PKGING. 업체 정보는 공개 출처에서 자동 수집되었습니다.
+              정보 오류·삭제 요청: privacy@pkging.kr
+            </p>
+            <div className="flex gap-4 text-xs text-slate-400">
+              <Link href="/privacy" className="hover:text-slate-600">개인정보처리방침</Link>
+              <Link href="/terms" className="hover:text-slate-600">이용약관</Link>
+            </div>
+          </div>
+        </div>
+      </footer>
     </div>
   )
 }
