@@ -44,13 +44,7 @@ export default async function HomePage({
               href="/login"
               className="text-slate-300 text-sm hover:text-white transition-colors"
             >
-              로그인
-            </Link>
-            <Link
-              href="/signup"
-              className="border border-white/30 text-white text-sm px-4 py-1.5 rounded-lg hover:bg-white/10 transition-colors"
-            >
-              업체 등록
+              관리자 로그인
             </Link>
           </nav>
         </div>
