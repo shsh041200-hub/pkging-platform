@@ -69,11 +69,12 @@ export default async function CompanyPage({ params }: Props) {
   return (
     <div className="min-h-screen bg-slate-50">
       {/* Header */}
-      <header className="bg-[#0d1d2e] sticky top-0 z-50">
+      <header className="bg-[#0F172A] sticky top-0 z-50 border-b border-white/5">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2.5">
-            <span className="text-white font-bold text-lg tracking-wide">K&amp;P</span>
-            <span className="text-slate-400 text-xs hidden sm:inline">B2B 포장업체 디렉토리</span>
+          <Link href="/" className="flex items-center gap-3">
+            <span className="text-white font-bold text-lg tracking-tight">Korea Pack</span>
+            <span className="hidden sm:inline text-white/40 text-xs">|</span>
+            <span className="hidden sm:inline text-white/50 text-xs">B2B 포장업체 디렉토리</span>
           </Link>
           <nav className="flex items-center gap-4">
             <a
@@ -88,7 +89,7 @@ export default async function CompanyPage({ params }: Props) {
 
       {/* Breadcrumb */}
       <div className="max-w-4xl mx-auto px-4 sm:px-6 pt-5 pb-0">
-        <Link href="/" className="text-sm text-[#1e3a5f] hover:underline inline-flex items-center gap-1">
+        <Link href="/" className="text-sm text-blue-600 hover:underline inline-flex items-center gap-1">
           ← 목록으로
         </Link>
       </div>
@@ -109,7 +110,7 @@ export default async function CompanyPage({ params }: Props) {
                 <h1 className="text-2xl font-bold text-slate-900">{company.name}</h1>
                 {company.is_verified && (
                   <span className="inline-flex items-center gap-1 text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-200 px-2.5 py-1 rounded-full">
-                    ✓ 인증업체
+                    인증업체
                   </span>
                 )}
               </div>
@@ -118,24 +119,28 @@ export default async function CompanyPage({ params }: Props) {
                   {CATEGORY_LABELS[company.category as Category]}
                 </span>
                 {company.province && (
-                  <span className="text-xs">📍 {company.province} {company.city}</span>
+                  <span className="text-xs">{company.province} {company.city}</span>
                 )}
                 {company.founded_year && (
                   <span className="text-xs text-slate-400">est. {company.founded_year}</span>
                 )}
                 {avgRating && (
-                  <span className="flex items-center gap-1 text-xs">
-                    <span className="text-amber-500">★</span>
-                    <span className="font-medium text-slate-700">{avgRating}</span>
-                    <span className="text-slate-400">({reviews?.length}개 리뷰)</span>
-                  </span>
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-sm font-bold text-slate-900">{avgRating}</span>
+                    <div className="flex gap-0.5">
+                      {[1,2,3,4,5].map(n => (
+                        <div key={n} className={`w-2.5 h-2.5 rounded-sm ${n <= Math.round(Number(avgRating)) ? 'bg-amber-400' : 'bg-slate-200'}`} />
+                      ))}
+                    </div>
+                    <span className="text-xs text-slate-400">{reviews?.length}개 리뷰</span>
+                  </div>
                 )}
               </div>
             </div>
           </div>
 
           {company.description && (
-            <p className="text-sm text-slate-600 leading-relaxed mb-6 border-l-2 border-slate-200 pl-4">
+            <p className="text-sm text-slate-600 leading-relaxed mb-6">
               {company.description}
             </p>
           )}
@@ -186,10 +191,10 @@ export default async function CompanyPage({ params }: Props) {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-5 border-t border-slate-100">
               {company.email && (
                 <div>
-                  <p className="text-xs font-medium text-slate-400 uppercase tracking-wide mb-1">이메일</p>
+                  <p className="text-xs font-medium text-slate-400 mb-1">이메일</p>
                   <a
                     href={`mailto:${company.email}`}
-                    className="text-sm text-[#1e3a5f] font-medium hover:underline truncate block"
+                    className="text-sm text-blue-600 font-medium hover:underline truncate block"
                   >
                     {company.email}
                   </a>
@@ -197,12 +202,12 @@ export default async function CompanyPage({ params }: Props) {
               )}
               {company.website && (
                 <div>
-                  <p className="text-xs font-medium text-slate-400 uppercase tracking-wide mb-1">웹사이트</p>
+                  <p className="text-xs font-medium text-slate-400 mb-1">웹사이트</p>
                   <a
                     href={company.website}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-sm text-[#1e3a5f] font-medium hover:underline"
+                    className="text-sm text-blue-600 font-medium hover:underline"
                   >
                     방문하기 →
                   </a>
@@ -218,7 +223,7 @@ export default async function CompanyPage({ params }: Props) {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {company.products && company.products.length > 0 && (
               <div className="bg-white border border-slate-200 rounded-xl p-5">
-                <h2 className="text-xs font-semibold text-slate-900 mb-3 uppercase tracking-wide">
+                <h2 className="text-sm font-semibold text-slate-700 mb-3">
                   취급 제품
                 </h2>
                 <div className="flex flex-wrap gap-2">
@@ -236,7 +241,7 @@ export default async function CompanyPage({ params }: Props) {
 
             {company.certifications && company.certifications.length > 0 && (
               <div className="bg-white border border-slate-200 rounded-xl p-5">
-                <h2 className="text-xs font-semibold text-slate-900 mb-3 uppercase tracking-wide">
+                <h2 className="text-sm font-semibold text-slate-700 mb-3">
                   보유 인증
                 </h2>
                 <div className="flex flex-wrap gap-2">
@@ -245,7 +250,7 @@ export default async function CompanyPage({ params }: Props) {
                       key={i}
                       className="text-xs font-medium bg-emerald-50 border border-emerald-200 text-emerald-700 px-3 py-1.5 rounded-md"
                     >
-                      ✓ {cert}
+                      {cert}
                     </span>
                   ))}
                 </div>
@@ -257,7 +262,7 @@ export default async function CompanyPage({ params }: Props) {
         {/* Service Capabilities */}
         {hasServiceCapabilities && (
           <div className="bg-white border border-slate-200 rounded-xl p-5">
-            <h2 className="text-xs font-semibold text-slate-900 mb-4 uppercase tracking-wide">
+            <h2 className="text-sm font-semibold text-slate-700 mb-4">
               서비스 역량
             </h2>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
@@ -266,7 +271,7 @@ export default async function CompanyPage({ params }: Props) {
                   key={i}
                   className="flex items-center gap-2 text-sm text-slate-700 bg-slate-50 rounded-lg px-3 py-2.5"
                 >
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#1e3a5f] flex-shrink-0" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-blue-600 flex-shrink-0" />
                   {cap}
                 </div>
               ))}
@@ -279,7 +284,7 @@ export default async function CompanyPage({ params }: Props) {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {hasTargetIndustries && (
               <div className="bg-white border border-slate-200 rounded-xl p-5">
-                <h2 className="text-xs font-semibold text-slate-900 mb-3 uppercase tracking-wide">
+                <h2 className="text-sm font-semibold text-slate-700 mb-3">
                   주요 납품 산업
                 </h2>
                 <div className="flex flex-wrap gap-2">
@@ -297,7 +302,7 @@ export default async function CompanyPage({ params }: Props) {
 
             {hasKeyClients && (
               <div className="bg-white border border-slate-200 rounded-xl p-5">
-                <h2 className="text-xs font-semibold text-slate-900 mb-3 uppercase tracking-wide">
+                <h2 className="text-sm font-semibold text-slate-700 mb-3">
                   주요 납품처
                 </h2>
                 <div className="flex flex-wrap gap-2">
@@ -318,18 +323,19 @@ export default async function CompanyPage({ params }: Props) {
         {/* Reviews */}
         <div className="bg-white border border-slate-200 rounded-xl p-5">
           <div className="flex items-center justify-between mb-5">
-            <h2 className="text-xs font-semibold text-slate-900 uppercase tracking-wide">
+            <h2 className="text-sm font-semibold text-slate-700">
               바이어 리뷰
             </h2>
             {avgRating && (
               <div className="flex items-center gap-2">
                 <span className="text-2xl font-bold text-slate-900">{avgRating}</span>
                 <div>
-                  <div className="text-amber-400 text-sm">
-                    {'★'.repeat(Math.round(Number(avgRating)))}
-                    {'☆'.repeat(5 - Math.round(Number(avgRating)))}
+                  <div className="flex gap-0.5">
+                    {[1,2,3,4,5].map(n => (
+                      <div key={n} className={`w-3 h-3 rounded-sm ${n <= Math.round(Number(avgRating)) ? 'bg-amber-400' : 'bg-slate-200'}`} />
+                    ))}
                   </div>
-                  <div className="text-xs text-slate-400">{reviews?.length}개 리뷰</div>
+                  <div className="text-xs text-slate-400 mt-0.5">{reviews?.length}개 리뷰</div>
                 </div>
               </div>
             )}
@@ -340,9 +346,11 @@ export default async function CompanyPage({ params }: Props) {
               {reviews.map((review) => (
                 <div key={review.id} className="py-4 first:pt-0 last:pb-0">
                   <div className="flex items-center gap-2 mb-1.5">
-                    <span className="text-amber-400 text-sm">
-                      {'★'.repeat(review.rating)}{'☆'.repeat(5 - review.rating)}
-                    </span>
+                    <div className="flex gap-0.5">
+                      {[1,2,3,4,5].map(n => (
+                        <div key={n} className={`w-2.5 h-2.5 rounded-sm ${n <= review.rating ? 'bg-amber-400' : 'bg-slate-200'}`} />
+                      ))}
+                    </div>
                     <span className="text-xs text-slate-400">
                       {new Date(review.created_at).toLocaleDateString('ko-KR')}
                     </span>

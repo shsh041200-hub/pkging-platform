@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { FilterAccordion } from './filter-accordion'
 import {
   CATEGORY_LABELS,
   TAG_LABELS,
@@ -85,30 +86,31 @@ export default async function HomePage({
   return (
     <div className="min-h-screen bg-slate-50">
       {/* Header */}
-      <header className="bg-[#0d1d2e] sticky top-0 z-50">
+      <header className="bg-[#0F172A] sticky top-0 z-50 border-b border-white/5">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2.5">
-            <span className="text-white font-bold text-lg tracking-wide">K&amp;P</span>
-            <span className="text-slate-400 text-xs hidden sm:inline">B2B 포장업체 디렉토리</span>
+          <Link href="/" className="flex items-center gap-3">
+            <span className="text-white font-bold text-lg tracking-tight">Korea Pack</span>
+            <span className="hidden sm:inline text-white/40 text-xs">|</span>
+            <span className="hidden sm:inline text-white/50 text-xs">B2B 포장업체 디렉토리</span>
           </Link>
         </div>
       </header>
 
       {/* Hero + Search */}
-      <section className="bg-[#0d1d2e] py-12 px-4">
+      <section className="bg-gradient-to-b from-[#0F172A] to-[#1a2d45] py-16 sm:py-24 px-4">
         <div className="max-w-2xl mx-auto text-center">
-          <h1 className="text-2xl sm:text-4xl font-bold text-white tracking-tight">
-            국내 포장업체 전문 디렉토리
+          <h1 className="text-3xl sm:text-5xl font-bold text-white tracking-tight leading-[1.15]">
+            국내 포장업체<br className="sm:hidden" /> 전문 디렉토리
           </h1>
-          <p className="text-slate-300 text-base sm:text-lg mt-3 mb-7">
-            어떤 제품을 포장하시나요? 제품 유형부터 선택해 B2B 포장 파트너를 찾으세요
+          <p className="text-slate-300 text-lg mt-4 mb-8 leading-relaxed">
+            어떤 제품을 포장하시나요?<br className="sm:hidden" /> B2B 포장 파트너를 바로 찾으세요
           </p>
-          <form method="GET" className="flex max-w-xl mx-auto shadow-lg">
+          <form method="GET" className="flex max-w-xl mx-auto rounded-xl overflow-hidden shadow-xl ring-1 ring-white/10">
             <input
               name="q"
               defaultValue={q}
               placeholder="업체명, 제품, 인증, 지역으로 검색..."
-              className="flex-1 px-5 py-3.5 rounded-l-lg text-sm text-slate-900 bg-white focus:outline-none focus:ring-2 focus:ring-[#1e3a5f]/40"
+              className="flex-1 px-5 py-4 text-sm text-slate-900 bg-white focus:outline-none"
             />
             {buyer_category && <input type="hidden" name="buyer_category" value={buyer_category} />}
             {packaging_form && <input type="hidden" name="packaging_form" value={packaging_form} />}
@@ -116,13 +118,13 @@ export default async function HomePage({
             {tag && <input type="hidden" name="tag" value={tag} />}
             <button
               type="submit"
-              className="bg-[#1e3a5f] text-white font-semibold px-6 py-3.5 rounded-r-lg hover:bg-[#162d4a] transition-colors text-sm"
+              className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-4 transition-colors text-sm flex-shrink-0"
             >
               검색
             </button>
           </form>
           {totalCount != null && (
-            <p className="text-slate-400 text-xs mt-3">{totalCount.toLocaleString()}개 업체 등록됨</p>
+            <p className="text-white/40 text-xs mt-4">{totalCount.toLocaleString()}개 업체 등록됨</p>
           )}
         </div>
       </section>
@@ -138,7 +140,7 @@ export default async function HomePage({
               href={q ? `/?q=${q}` : '/'}
               className={`flex-shrink-0 px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${
                 !buyer_category && !packaging_form && !category && !tag
-                  ? 'bg-[#0d1d2e] text-white'
+                  ? 'bg-[#0F172A] text-white'
                   : 'text-slate-500 hover:text-slate-800 hover:bg-slate-100'
               }`}
             >
@@ -153,7 +155,7 @@ export default async function HomePage({
                 })}
                 className={`flex-shrink-0 px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${
                   buyer_category === key
-                    ? 'bg-[#1e3a5f] text-white'
+                    ? 'bg-[#0F172A] text-white'
                     : 'text-slate-500 hover:text-slate-800 hover:bg-slate-100'
                 }`}
               >
@@ -171,59 +173,52 @@ export default async function HomePage({
                 href={buildUrl({
                   packaging_form: packaging_form === key ? undefined : key,
                 })}
-                className={`flex-shrink-0 px-3 py-1 rounded-full text-xs font-medium transition-colors border ${
+                className={`flex-shrink-0 px-3.5 py-1.5 rounded-full text-xs font-medium transition-all border ${
                   packaging_form === key
-                    ? 'bg-[#1e3a5f] text-white border-[#1e3a5f]'
+                    ? 'bg-[#0F172A] text-white border-[#0F172A]'
                     : 'text-slate-500 border-slate-200 hover:text-slate-700 hover:border-slate-400 bg-white'
                 }`}
               >
-                {packaging_form === key ? `✓ ${PACKAGING_FORM_LABELS[key]}` : PACKAGING_FORM_LABELS[key]}
+                {PACKAGING_FORM_LABELS[key]}
               </Link>
             ))}
           </div>
 
-          {/* Level 3: 소재 + 태그 (접힌 세부 필터) */}
-          <details className="group pb-2">
-            <summary className="text-xs text-slate-400 cursor-pointer hover:text-slate-600 select-none list-none flex items-center gap-1 w-fit">
-              <span className="group-open:hidden">▸</span>
-              <span className="hidden group-open:inline">▾</span>
-              소재 / 기능 태그 세부 필터
-            </summary>
-            <div className="pt-2 flex flex-wrap gap-2">
-              <div className="flex gap-1 flex-wrap">
-                <span className="text-xs text-slate-400 self-center">소재:</span>
-                {(Object.entries(CATEGORY_LABELS) as [Category, string][]).map(([key, label]) => (
-                  <Link
-                    key={key}
-                    href={buildUrl({ category: category === key ? undefined : key })}
-                    className={`flex-shrink-0 px-2.5 py-0.5 rounded text-xs font-medium transition-colors border ${
-                      category === key
-                        ? 'bg-slate-700 text-white border-slate-700'
-                        : 'text-slate-500 border-slate-200 hover:border-slate-400 bg-white'
-                    }`}
-                  >
-                    {category === key ? `✓ ${label}` : label}
-                  </Link>
-                ))}
-              </div>
-              <div className="flex gap-1 flex-wrap">
-                <span className="text-xs text-slate-400 self-center">기능:</span>
-                {(Object.entries(TAG_LABELS) as [CompanyTag, string][]).map(([key, label]) => (
-                  <Link
-                    key={key}
-                    href={buildUrl({ tag: tag === key ? undefined : key })}
-                    className={`flex-shrink-0 px-2.5 py-0.5 rounded text-xs font-medium transition-colors border ${
-                      tag === key
-                        ? 'bg-slate-700 text-white border-slate-700'
-                        : 'text-slate-500 border-slate-200 hover:border-slate-400 bg-white'
-                    }`}
-                  >
-                    {tag === key ? `✓ ${label}` : label}
-                  </Link>
-                ))}
-              </div>
+          {/* Level 3: 소재 + 태그 (세부 필터) */}
+          <FilterAccordion>
+            <div className="flex gap-1.5 flex-wrap">
+              <span className="text-xs text-slate-400 self-center">소재:</span>
+              {(Object.entries(CATEGORY_LABELS) as [Category, string][]).map(([key, label]) => (
+                <Link
+                  key={key}
+                  href={buildUrl({ category: category === key ? undefined : key })}
+                  className={`flex-shrink-0 px-3.5 py-1.5 rounded-full text-xs font-medium transition-all border ${
+                    category === key
+                      ? 'bg-[#0F172A] text-white border-[#0F172A]'
+                      : 'text-slate-500 border-slate-200 hover:border-slate-400 hover:text-slate-700 bg-white'
+                  }`}
+                >
+                  {label}
+                </Link>
+              ))}
             </div>
-          </details>
+            <div className="flex gap-1.5 flex-wrap">
+              <span className="text-xs text-slate-400 self-center">기능:</span>
+              {(Object.entries(TAG_LABELS) as [CompanyTag, string][]).map(([key, label]) => (
+                <Link
+                  key={key}
+                  href={buildUrl({ tag: tag === key ? undefined : key })}
+                  className={`flex-shrink-0 px-3.5 py-1.5 rounded-full text-xs font-medium transition-all border ${
+                    tag === key
+                      ? 'bg-[#0F172A] text-white border-[#0F172A]'
+                      : 'text-slate-500 border-slate-200 hover:border-slate-400 hover:text-slate-700 bg-white'
+                  }`}
+                >
+                  {label}
+                </Link>
+              ))}
+            </div>
+          </FilterAccordion>
         </div>
       </div>
 
@@ -235,7 +230,7 @@ export default async function HomePage({
               <span className="font-semibold text-slate-900">{companies?.length ?? 0}개</span> 업체
             </p>
             {activeFilters.map((f, i) => (
-              <span key={i} className="text-xs bg-[#1e3a5f]/10 text-[#1e3a5f] font-medium px-2.5 py-1 rounded-full">
+              <span key={i} className="text-xs bg-blue-50 text-blue-700 font-medium px-2.5 py-1 rounded-full">
                 {f}
               </span>
             ))}
@@ -258,87 +253,54 @@ export default async function HomePage({
               <Link
                 key={company.id}
                 href={`/companies/${company.slug}`}
-                className="bg-white border border-slate-200 rounded-xl p-5 hover:border-slate-300 hover:shadow-[0_4px_20px_rgba(0,0,0,0.07)] transition-all duration-200 block group"
+                className="bg-white border border-slate-200 rounded-xl p-5 hover:border-slate-300 hover:shadow-[0_4px_16px_rgba(0,0,0,0.08)] transition-all duration-200 block group"
               >
-                {/* Top: buyer_category + packaging_form + verified */}
+                {/* Top: category + verified */}
                 <div className="flex items-center justify-between mb-3">
-                  <div className="flex items-center gap-1.5 flex-wrap">
+                  <div className="flex gap-1.5 flex-wrap">
                     {company.buyer_category && (
                       <span className="text-xs font-medium bg-blue-50 text-blue-700 px-2.5 py-1 rounded-md">
                         {BUYER_CATEGORY_LABELS[company.buyer_category as BuyerCategory]}
                       </span>
                     )}
-                    {company.packaging_form && (
-                      <span className="text-xs font-medium bg-slate-100 text-slate-600 px-2 py-0.5 rounded-md">
-                        {PACKAGING_FORM_LABELS[company.packaging_form as PackagingForm]}
-                      </span>
-                    )}
                   </div>
-                  <div className="flex items-center gap-1.5 flex-shrink-0">
-                    {company.founded_year && (
-                      <span className="text-xs text-slate-400">est. {company.founded_year}</span>
-                    )}
-                    {company.is_verified && (
-                      <span className="inline-flex items-center gap-0.5 text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-200 px-2 py-0.5 rounded-full">
-                        ✓ 인증
-                      </span>
-                    )}
-                  </div>
+                  {company.is_verified && (
+                    <span className="text-xs font-medium text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full">
+                      인증
+                    </span>
+                  )}
                 </div>
 
-                <h2 className="text-base font-semibold text-slate-900 mb-1.5 group-hover:text-[#1e3a5f] transition-colors">
+                <h2 className="text-[15px] font-semibold text-slate-900 mb-1 group-hover:text-blue-700 transition-colors">
                   {company.name}
                 </h2>
+
+                {company.province && (
+                  <p className="text-xs text-slate-400 mb-2">{company.province} {company.city}</p>
+                )}
 
                 <p className="text-sm text-slate-500 leading-relaxed line-clamp-2 mb-3">
                   {company.description ?? ''}
                 </p>
 
                 {company.products && company.products.length > 0 && (
-                  <div className="flex flex-wrap gap-1 mb-2.5">
-                    {(company.products as string[]).slice(0, 3).map((p, i) => (
+                  <div className="flex flex-wrap gap-1 mb-3">
+                    {(company.products as string[]).slice(0, 2).map((p, i) => (
                       <span key={i} className="text-xs bg-slate-50 border border-slate-200 text-slate-600 px-2 py-0.5 rounded">
                         {p}
                       </span>
                     ))}
-                    {company.products.length > 3 && (
-                      <span className="text-xs text-slate-400 px-1 self-center">+{company.products.length - 3}</span>
+                    {company.products.length > 2 && (
+                      <span className="text-xs text-slate-400">+{company.products.length - 2}</span>
                     )}
                   </div>
                 )}
-
-                {company.certifications && company.certifications.length > 0 && (
-                  <div className="flex flex-wrap gap-1 mb-2.5">
-                    {(company.certifications as string[]).slice(0, 2).map((cert, i) => (
-                      <span key={i} className="text-xs bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded">
-                        ✓ {cert}
-                      </span>
-                    ))}
-                    {company.certifications.length > 2 && (
-                      <span className="text-xs text-slate-400 self-center">+{company.certifications.length - 2}</span>
-                    )}
-                  </div>
-                )}
-
-                {/* Level 3 chips (material + tags, compact) */}
-                <div className="flex flex-wrap gap-1 mb-3">
-                  <span className="text-xs bg-slate-50 border border-slate-100 text-slate-500 px-2 py-0.5 rounded">
-                    {CATEGORY_LABELS[company.category as Category]}
-                  </span>
-                  {company.tags && (company.tags as string[]).slice(0, 2).map((t) => (
-                    <span key={t} className="text-xs bg-slate-50 border border-slate-100 text-slate-500 px-2 py-0.5 rounded">
-                      {TAG_LABELS[t as CompanyTag] ?? t}
-                    </span>
-                  ))}
-                </div>
 
                 <div className="border-t border-slate-100 pt-3 flex items-center justify-between">
-                  {company.province && (
-                    <span className="text-xs text-slate-400">
-                      📍 {company.province} {company.city}
-                    </span>
-                  )}
-                  <span className="text-xs font-medium text-[#1e3a5f] group-hover:underline ml-auto">
+                  <span className="text-xs text-slate-400">
+                    {CATEGORY_LABELS[company.category as Category]}{company.founded_year ? ` · est. ${company.founded_year}` : ''}
+                  </span>
+                  <span className="text-xs font-medium text-blue-600 group-hover:underline">
                     상세보기 →
                   </span>
                 </div>
@@ -354,7 +316,7 @@ export default async function HomePage({
             </div>
             <p className="text-slate-500 font-medium mb-1">검색 결과가 없습니다</p>
             <p className="text-slate-400 text-sm mb-4">검색어나 카테고리를 변경해보세요</p>
-            <Link href="/" className="text-sm text-[#1e3a5f] font-medium hover:underline">
+            <Link href="/" className="text-sm text-blue-600 font-medium hover:underline">
               전체 목록 보기
             </Link>
           </div>
