@@ -20,7 +20,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!company) return { title: '업체를 찾을 수 없습니다' }
 
   return {
-    title: `${company.name} — 패키징 플랫폼`,
+    title: `${company.name} — Korea Pack`,
     description: company.description ?? `${company.name} 패키징 업체 상세 정보`,
     openGraph: {
       title: company.name,
@@ -72,7 +72,7 @@ export default async function CompanyPage({ params }: Props) {
       <header className="bg-[#0d1d2e] sticky top-0 z-50">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2.5">
-            <span className="text-white font-bold text-lg tracking-wide">PKGING</span>
+            <span className="text-white font-bold text-lg tracking-wide">K&amp;P</span>
             <span className="text-slate-400 text-xs hidden sm:inline">B2B 포장업체 디렉토리</span>
           </Link>
           <nav className="flex items-center gap-4">
@@ -364,7 +364,7 @@ export default async function CompanyPage({ params }: Props) {
         <div className="max-w-4xl mx-auto px-4 sm:px-6">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <p className="text-xs text-slate-400">
-              © 2026 PKGING. 업체 정보는 공개 출처에서 자동 수집되었습니다.
+              © 2026 Korea Pack. 업체 정보는 공개 출처에서 자동 수집되었습니다.
               정보 오류·삭제 요청: privacy@pkging.kr
             </p>
             <div className="flex gap-4 text-xs text-slate-400">

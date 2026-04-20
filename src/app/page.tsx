@@ -88,7 +88,7 @@ export default async function HomePage({
       <header className="bg-[#0d1d2e] sticky top-0 z-50">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2.5">
-            <span className="text-white font-bold text-lg tracking-wide">PKGING</span>
+            <span className="text-white font-bold text-lg tracking-wide">K&amp;P</span>
             <span className="text-slate-400 text-xs hidden sm:inline">B2B 포장업체 디렉토리</span>
           </Link>
         </div>
@@ -366,7 +366,7 @@ export default async function HomePage({
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <p className="text-xs text-slate-400">
-              © 2026 PKGING. 본 서비스의 업체 정보는 공개된 출처에서 자동 수집되었습니다.
+              © 2026 Korea Pack. 본 서비스의 업체 정보는 공개된 출처에서 자동 수집되었습니다.
               정보 오류·삭제 요청: privacy@pkging.kr
             </p>
             <div className="flex gap-4 text-xs text-slate-400">

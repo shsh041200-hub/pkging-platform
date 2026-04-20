@@ -2,7 +2,7 @@ import Link from 'next/link'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: '요청 접수 완료 — 패키징 플랫폼',
+  title: '요청 접수 완료 — Korea Pack',
 }
 
 export default function OptOutThanksPage() {
@@ -11,7 +11,7 @@ export default function OptOutThanksPage() {
       <header className="bg-[#0d1d2e] sticky top-0 z-50">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 h-14 flex items-center">
           <Link href="/" className="flex items-center gap-2.5">
-            <span className="text-white font-bold text-lg tracking-wide">PKGING</span>
+            <span className="text-white font-bold text-lg tracking-wide">K&amp;P</span>
             <span className="text-slate-400 text-xs hidden sm:inline">B2B 포장업체 디렉토리</span>
           </Link>
         </div>

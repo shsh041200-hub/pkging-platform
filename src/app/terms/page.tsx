@@ -2,8 +2,8 @@ import Link from 'next/link'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: '이용약관 — 패키징 플랫폼',
-  description: '패키징 플랫폼 이용약관',
+  title: '이용약관 — Korea Pack',
+  description: 'Korea Pack 이용약관',
 }
 
 export default function TermsPage() {
@@ -12,7 +12,7 @@ export default function TermsPage() {
       <header className="bg-[#0d1d2e] sticky top-0 z-50">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 h-14 flex items-center">
           <Link href="/" className="flex items-center gap-2.5">
-            <span className="text-white font-bold text-lg tracking-wide">PKGING</span>
+            <span className="text-white font-bold text-lg tracking-wide">K&amp;P</span>
             <span className="text-slate-400 text-xs hidden sm:inline">B2B 포장업체 디렉토리</span>
           </Link>
         </div>
@@ -27,7 +27,7 @@ export default function TermsPage() {
           <section>
             <h2 className="text-base font-semibold text-slate-900 mb-3">제1조 (목적)</h2>
             <p>
-              이 약관은 패키징 플랫폼(이하 &quot;서비스&quot;)의 이용에 관한 조건 및 절차, 이용자와 서비스 운영자의
+              이 약관은 Korea Pack(이하 &quot;서비스&quot;)의 이용에 관한 조건 및 절차, 이용자와 서비스 운영자의
               권리·의무 및 책임 사항을 규정함을 목적으로 합니다.
             </p>
           </section>
