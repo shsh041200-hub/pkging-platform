@@ -182,19 +182,8 @@ export default async function CompanyPage({ params }: Props) {
           )}
 
           {/* Contact grid */}
-          {(company.phone || company.email || company.website) && (
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-5 border-t border-slate-100">
-              {company.phone && (
-                <div>
-                  <p className="text-xs font-medium text-slate-400 uppercase tracking-wide mb-1">전화</p>
-                  <a
-                    href={`tel:${company.phone}`}
-                    className="text-sm text-[#1e3a5f] font-medium hover:underline"
-                  >
-                    {company.phone}
-                  </a>
-                </div>
-              )}
+          {(company.email || company.website) && (
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-5 border-t border-slate-100">
               {company.email && (
                 <div>
                   <p className="text-xs font-medium text-slate-400 uppercase tracking-wide mb-1">이메일</p>
