@@ -10,7 +10,8 @@ type Props = {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { slug } = await params
+  const { slug: rawSlug } = await params
+  const slug = decodeURIComponent(rawSlug)
   const supabase = await createClient()
   const { data: company } = await supabase
     .from('companies')
@@ -38,7 +39,8 @@ const EMPLOYEE_RANGE_LABELS: Record<string, string> = {
 }
 
 export default async function CompanyPage({ params }: Props) {
-  const { slug } = await params
+  const { slug: rawSlug } = await params
+  const slug = decodeURIComponent(rawSlug)
   const supabase = await createClient()
 
   const { data: company } = await supabase
