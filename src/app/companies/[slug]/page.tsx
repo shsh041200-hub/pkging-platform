@@ -9,6 +9,8 @@ type Props = {
   params: Promise<{ slug: string }>
 }
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://packlinx.com'
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug: rawSlug } = await params
   const slug = decodeURIComponent(rawSlug)
@@ -21,12 +23,25 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   if (!company) return { title: '업체를 찾을 수 없습니다' }
 
+  const title = `${company.name} — BOXTER`
+  const description = company.description ?? `${company.name} 패키징 업체 상세 정보`
+
   return {
-    title: `${company.name} — BOXTER`,
-    description: company.description ?? `${company.name} 패키징 업체 상세 정보`,
+    title,
+    description,
+    alternates: {
+      canonical: `/companies/${slug}`,
+    },
     openGraph: {
       title: company.name,
-      description: company.description ?? '',
+      description,
+      url: `${siteUrl}/companies/${slug}`,
+      type: 'profile',
+    },
+    twitter: {
+      card: 'summary',
+      title: company.name,
+      description,
     },
   }
 }
@@ -63,6 +78,19 @@ export default async function CompanyPage({ params }: Props) {
       ? (reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length).toFixed(1)
       : null
 
+  const companyJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'LocalBusiness',
+    name: company.name,
+    description: company.description ?? '',
+    url: `${siteUrl}/companies/${slug}`,
+    ...(company.province && { address: { '@type': 'PostalAddress', addressRegion: company.province, addressLocality: company.city ?? '' } }),
+    ...(company.website && { sameAs: [company.website] }),
+    ...(company.email && { email: company.email }),
+    ...(company.founded_year && { foundingDate: String(company.founded_year) }),
+    ...(avgRating && { aggregateRating: { '@type': 'AggregateRating', ratingValue: avgRating, reviewCount: reviews?.length ?? 0 } }),
+  }
+
   const hasExpandedInfo = company.founded_year || company.employee_range || company.min_order_quantity
   const hasServiceCapabilities = company.service_capabilities && company.service_capabilities.length > 0
   const hasKeyClients = company.key_clients && company.key_clients.length > 0
@@ -71,6 +99,10 @@ export default async function CompanyPage({ params }: Props) {
 
   return (
     <div className="min-h-screen bg-slate-50">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(companyJsonLd) }}
+      />
       {/* Header */}
       <header className="bg-[#0F172A] sticky top-0 z-50 border-b border-white/5">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">

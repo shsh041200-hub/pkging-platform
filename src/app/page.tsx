@@ -14,6 +14,35 @@ import {
 } from '@/types'
 import { createClient } from '@/lib/supabase/server'
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://packlinx.com'
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebSite',
+      name: 'BOXTER',
+      url: siteUrl,
+      description: '전국 패키징 업체를 한눈에. 식품·산업용·친환경 포장재 B2B 파트너 찾기.',
+      inLanguage: 'ko',
+      potentialAction: {
+        '@type': 'SearchAction',
+        target: {
+          '@type': 'EntryPoint',
+          urlTemplate: `${siteUrl}/?q={search_term_string}`,
+        },
+        'query-input': 'required name=search_term_string',
+      },
+    },
+    {
+      '@type': 'Organization',
+      name: 'BOXTER',
+      url: siteUrl,
+      logo: `${siteUrl}/boxter-logo-light.svg`,
+    },
+  ],
+}
+
 export default async function HomePage({
   searchParams,
 }: {
@@ -86,6 +115,10 @@ export default async function HomePage({
 
   return (
     <div className="min-h-screen bg-slate-50">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       {/* Header */}
       <header className="bg-[#0F172A] sticky top-0 z-50 border-b border-white/5">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
