@@ -259,47 +259,51 @@ export default async function HomePage({
             {companies.map((company) => (
               <div
                 key={company.id}
-                className="bg-white border border-slate-200 rounded-xl p-5 hover:border-slate-300 hover:shadow-[0_4px_16px_rgba(0,0,0,0.08)] transition-all duration-200 group"
+                className="bg-white border border-slate-200 rounded-xl p-5 hover:border-slate-300 hover:shadow-[0_4px_16px_rgba(0,0,0,0.08)] transition-all duration-200 group relative"
               >
-                <div className="flex items-start justify-between mb-2">
-                  <Link href={`/companies/${company.slug}`} className="flex-1 min-w-0">
-                    <h2 className="text-lg font-bold text-slate-900 group-hover:text-blue-700 transition-colors leading-snug">
-                      {company.name}
-                    </h2>
-                  </Link>
+                <div className="flex items-start justify-between mb-3">
+                  <div className="flex flex-wrap gap-1.5">
+                    {company.buyer_category && (
+                      <span className="text-xs font-medium bg-blue-50 text-blue-700 px-2.5 py-1 rounded-md">
+                        {BUYER_CATEGORY_LABELS[company.buyer_category as BuyerCategory]}
+                      </span>
+                    )}
+                    {company.packaging_form && (
+                      <span className="text-xs font-medium bg-slate-100 text-slate-600 px-2.5 py-1 rounded-md">
+                        {PACKAGING_FORM_LABELS[company.packaging_form as PackagingForm]}
+                      </span>
+                    )}
+                  </div>
                   {company.is_verified && (
-                    <span className="flex-shrink-0 ml-2 text-xs font-medium text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full">
-                      인증
+                    <span className="text-xs font-medium text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full flex-shrink-0 ml-2">
+                      ✓ 인증
                     </span>
                   )}
                 </div>
 
-                <div className="flex flex-wrap gap-1.5 mb-2.5">
-                  {company.buyer_category && (
-                    <span className="text-xs font-medium bg-blue-50 text-blue-700 px-2.5 py-1 rounded-md">
-                      {BUYER_CATEGORY_LABELS[company.buyer_category as BuyerCategory]}
-                    </span>
-                  )}
-                  {company.packaging_form && (
-                    <span className="text-xs font-medium bg-slate-100 text-slate-600 px-2.5 py-1 rounded-md">
-                      {PACKAGING_FORM_LABELS[company.packaging_form as PackagingForm]}
-                    </span>
-                  )}
-                  <span className="text-xs bg-slate-50 text-slate-500 px-2 py-1 rounded-md">
-                    {CATEGORY_LABELS[company.category as Category]}
-                  </span>
-                </div>
+                <h2 className="text-base font-bold text-slate-900 mb-0.5 group-hover:text-blue-700 transition-colors leading-snug">
+                  <Link
+                    href={`/companies/${company.slug}`}
+                    className="after:absolute after:inset-0 after:content-['']"
+                  >
+                    {company.name}
+                  </Link>
+                </h2>
 
-                <Link href={`/companies/${company.slug}`}>
-                  <p className="text-sm text-slate-500 leading-relaxed line-clamp-2 mb-3">
-                    {company.description ?? ''}
+                {company.province && (
+                  <p className="text-xs text-slate-400 mb-2">
+                    {company.province}{company.city ? ` ${company.city}` : ''}
                   </p>
-                </Link>
+                )}
+
+                <p className="text-sm text-slate-500 leading-relaxed line-clamp-2 mb-3">
+                  {company.description ?? ''}
+                </p>
 
                 {company.products && company.products.length > 0 && (
                   <div className="flex flex-wrap gap-1 mb-3">
                     {(company.products as string[]).slice(0, 3).map((p, i) => (
-                      <span key={i} className="text-xs bg-slate-50 border border-slate-200 text-slate-600 px-2 py-0.5 rounded">
+                      <span key={i} className="text-xs bg-slate-50 border border-slate-100 text-slate-500 px-2 py-0.5 rounded">
                         {p}
                       </span>
                     ))}
@@ -309,31 +313,33 @@ export default async function HomePage({
                   </div>
                 )}
 
-                <div className="border-t border-slate-100 pt-3 flex items-center justify-between">
-                  <div className="flex items-center gap-2 text-xs text-slate-400 min-w-0">
-                    {company.province && (
-                      <span>{company.province} {company.city}</span>
-                    )}
-                    {company.founded_year && (
-                      <span>· est. {company.founded_year}</span>
-                    )}
-                  </div>
-                  <div className="flex items-center gap-3 flex-shrink-0">
-                    {company.website && (
-                      <a
-                        href={company.website}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        onClick={(e) => e.stopPropagation()}
-                        className="text-xs font-medium text-slate-500 hover:text-blue-600 transition-colors"
-                      >
-                        웹사이트
-                      </a>
-                    )}
-                    <Link href={`/companies/${company.slug}`} className="text-xs font-medium text-blue-600 hover:underline">
-                      상세보기 →
-                    </Link>
-                  </div>
+                <div className="border-t border-slate-100 pt-3 flex items-center justify-between gap-2">
+                  {company.website ? (
+                    <a
+                      href={company.website}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="relative z-10 text-xs text-slate-500 hover:text-blue-600 flex items-center gap-1 transition-colors min-w-0"
+                    >
+                      <svg className="w-3.5 h-3.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
+                          d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
+                      </svg>
+                      <span className="truncate max-w-[140px]">
+                        {company.website.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '')}
+                      </span>
+                      <svg className="w-3 h-3 flex-shrink-0 opacity-50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                          d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                      </svg>
+                    </a>
+                  ) : (
+                    <span className="text-xs text-slate-300">—</span>
+                  )}
+                  <span className="text-xs text-slate-400 flex-shrink-0">
+                    {CATEGORY_LABELS[company.category as Category]}
+                    {company.founded_year ? ` · ${company.founded_year}년` : ''}
+                  </span>
                 </div>
               </div>
             ))}
