@@ -1,20 +1,35 @@
 export type Category =
-  | 'saneobyong'
-  | 'food_grade'
-  | 'jiryu'
+  | 'paper'
   | 'plastic'
   | 'metal'
+  | 'flexible'
   | 'eco'
-  | 'package_design'
+  | 'glass'
 
 export const CATEGORY_LABELS: Record<Category, string> = {
-  saneobyong: '산업용',
-  food_grade: '식품등급',
-  jiryu: '지류',
-  plastic: '플라스틱',
-  metal: '금속',
-  eco: '친환경',
-  package_design: '패키지 디자인',
+  paper:    '지류/종이',
+  plastic:  '플라스틱',
+  metal:    '금속',
+  flexible: '연포장',
+  eco:      '친환경',
+  glass:    '유리',
+}
+
+export type CompanyTag =
+  | 'food_grade'
+  | 'industrial'
+  | 'cosmetic'
+  | 'pharma'
+  | 'design_service'
+  | 'ecommerce'
+
+export const TAG_LABELS: Record<CompanyTag, string> = {
+  food_grade:     '식품등급',
+  industrial:     '산업용',
+  cosmetic:       '화장품',
+  pharma:         '제약',
+  design_service: '디자인',
+  ecommerce:      '이커머스',
 }
 
 export interface Company {
@@ -24,6 +39,7 @@ export interface Company {
   description: string | null
   category: Category
   subcategory: string | null
+  tags: string[]
   address: string | null
   city: string | null
   province: string | null
@@ -33,6 +49,12 @@ export interface Company {
   logo_url: string | null
   products: string[]
   certifications: string[]
+  founded_year: number | null
+  employee_range: '1-10' | '11-50' | '51-200' | '200+' | null
+  min_order_quantity: string | null
+  service_capabilities: string[]
+  target_industries: string[]
+  key_clients: string[]
   is_verified: boolean
   created_at: string
   updated_at: string

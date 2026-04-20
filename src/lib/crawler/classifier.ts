@@ -1,4 +1,4 @@
-import { type Category } from '@/types'
+import { type Category, type CompanyTag } from '@/types'
 
 interface CategoryRule {
   category: Category
@@ -6,14 +6,49 @@ interface CategoryRule {
   subcategoryMap: Record<string, string[]>
 }
 
-const RULES: CategoryRule[] = [
+interface TagRule {
+  tag: CompanyTag
+  keywords: string[]
+}
+
+const CATEGORY_RULES: CategoryRule[] = [
   {
-    category: 'food_grade',
-    keywords: ['식품', 'HACCP', 'haccp', '식품등급', '냉동', '냉장', '진공포장', '신선', '농산물', '수산물'],
+    category: 'paper',
+    keywords: ['종이', '지류', '골판지', '박스', '쇼핑백', '인쇄', '페이퍼', '제지', '단상자', '한지', '크라프트'],
     subcategoryMap: {
-      '신선/농수산': ['신선', '농수산', '농산물', '수산물', '냉동', '냉장'],
-      '가공식품': ['가공식품', '즉석', '레토르트', 'MAP', '실링'],
-      '유기농/로컬': ['유기농', '유기', '로컬', '제주', '특산물'],
+      '인쇄/출판': ['인쇄', '출판', '카탈로그'],
+      '명품/프리미엄': ['명품', '프리미엄', '고급', '럭셔리'],
+      '패션/라이프스타일': ['패션', '라이프스타일'],
+      '골판지/박스': ['골판지', '박스', '단상자'],
+    },
+  },
+  {
+    category: 'plastic',
+    keywords: ['플라스틱', 'PET', 'PP', 'HDPE', 'PE', '사출', '압출', '수지', '폴리', 'PVC', 'PS'],
+    subcategoryMap: {
+      PET: ['PET', 'pet'],
+      'PP/사출': ['PP', '사출', '트레이'],
+      'HDPE/드럼': ['HDPE', '드럼'],
+      '용기/보틀': ['용기', '보틀', '병'],
+    },
+  },
+  {
+    category: 'metal',
+    keywords: ['금속', '알루미늄', '스틸', '철', '캔', '드럼', '틴', '주석', '금속캔', '메탈'],
+    subcategoryMap: {
+      '음료/식품캔': ['음료캔', '식품캔', '캔'],
+      '드럼/컨테이너': ['드럼', '컨테이너', '스틸드럼'],
+      '알루미늄': ['알루미늄', '방산', '방진'],
+      '틴케이스/선물': ['틴케이스', '틴박스', '선물'],
+    },
+  },
+  {
+    category: 'flexible',
+    keywords: ['연포장', '파우치', '필름', '라미네이트', '비닐', '봉투', '스탠딩파우치', 'BOPP', 'OPP', '스트레치'],
+    subcategoryMap: {
+      '파우치': ['파우치', '스탠딩파우치'],
+      '필름/라미': ['필름', '라미네이트', 'BOPP', 'OPP'],
+      '비닐/봉투': ['비닐', '봉투'],
     },
   },
   {
@@ -26,41 +61,39 @@ const RULES: CategoryRule[] = [
     },
   },
   {
-    category: 'metal',
-    keywords: ['금속', '알루미늄', '스틸', '철', '캔', '드럼', '틴', '주석', '금속캔', '메탈'],
+    category: 'glass',
+    keywords: ['유리', '글라스', '유리병', '유리용기', '유리컵'],
     subcategoryMap: {
-      '음료/식품캔': ['음료캔', '식품캔', '캔'],
-      '드럼/컨테이너': ['드럼', '컨테이너', '스틸드럼'],
-      '알루미늄/방산': ['알루미늄', '방산', '방진'],
-      '틴케이스/선물': ['틴케이스', '틴박스', '선물'],
+      '유리병/보틀': ['유리병', '보틀'],
+      '유리용기': ['유리용기', '유리컵'],
     },
   },
+]
+
+const TAG_RULES: TagRule[] = [
   {
-    category: 'plastic',
-    keywords: ['플라스틱', 'PET', 'PP', 'HDPE', 'PE', '사출', '압출', '수지', '폴리'],
-    subcategoryMap: {
-      PET: ['PET', 'pet'],
-      'PP/사출': ['PP', '사출', '트레이'],
-      'HDPE/드럼': ['HDPE', '드럼'],
-    },
+    tag: 'food_grade',
+    keywords: ['식품', 'HACCP', 'haccp', '식품등급', '냉동', '냉장', '진공포장', '신선', '농산물', '수산물', '식품용', '식품포장'],
   },
   {
-    category: 'jiryu',
-    keywords: ['종이', '지류', '골판지', '박스', '쇼핑백', '인쇄', '페이퍼', '제지', '단상자'],
-    subcategoryMap: {
-      '인쇄/출판': ['인쇄', '출판', '카탈로그'],
-      '명품/프리미엄': ['명품', '프리미엄', '고급', '럭셔리'],
-      '패션/라이프스타일': ['패션', '라이프스타일', '패브릭'],
-    },
+    tag: 'industrial',
+    keywords: ['산업용', '공업용', '방청', 'ESD', '팔레트', '물류', '크레이트', '완충재', '산업포장', '중공업', '정밀부품'],
   },
   {
-    category: 'saneobyong',
-    keywords: ['산업용', '공업용', '방청', 'ESD', '팔레트', '물류', '크레이트', '완충재', '포장재', '패키징'],
-    subcategoryMap: {
-      '중공업/해양': ['중공업', '해양', '조선', '항만', '물류'],
-      '정밀/전자': ['정밀', '전자', '반도체', 'ESD', '클린룸'],
-      '목재/천연': ['목재', '원목', '왕겨', '천연'],
-    },
+    tag: 'cosmetic',
+    keywords: ['화장품', '코스메틱', '뷰티', '스킨케어', '메이크업', '향수', '화장품용기'],
+  },
+  {
+    tag: 'pharma',
+    keywords: ['제약', '의약품', '의료', '약품', '블리스터', 'pharma', 'GMP'],
+  },
+  {
+    tag: 'design_service',
+    keywords: ['패키지 디자인', '패키징 디자인', '디자인 서비스', '브랜딩', '디자인 에이전시', '디자인 스튜디오', '라벨 디자인'],
+  },
+  {
+    tag: 'ecommerce',
+    keywords: ['이커머스', '온라인 쇼핑', '언박싱', 'D2C', '배송박스', '쿠팡', '스마트스토어'],
   },
 ]
 
@@ -71,10 +104,17 @@ function detectSubcategory(text: string, rule: CategoryRule): string | null {
   return null
 }
 
+function detectTags(text: string): CompanyTag[] {
+  return TAG_RULES
+    .filter((rule) => rule.keywords.some((kw) => text.includes(kw)))
+    .map((rule) => rule.tag)
+}
+
 export interface ClassificationResult {
   category: Category
   subcategory: string | null
   confidence: number
+  tags: CompanyTag[]
 }
 
 // Broad packaging relevance keywords — any one match means the page is likely packaging-related
@@ -88,6 +128,7 @@ const PACKAGING_RELEVANCE_KEYWORDS = [
   '식품포장', '포장재', '포장용기', '포장지',
   'packaging', 'pack', 'container', 'carton', 'bag',
   '제함', '봉함', '실링', '충전',
+  '파우치', '라미네이트', '연포장',
 ]
 
 // Signals that strongly indicate a non-packaging page (news, error, games, etc.)
@@ -160,7 +201,7 @@ export function isPackagingRelevant(text: string): boolean {
 }
 
 export function classifyCompany(text: string): ClassificationResult {
-  const scores: Array<{ rule: CategoryRule; score: number }> = RULES.map((rule) => {
+  const scores = CATEGORY_RULES.map((rule) => {
     const score = rule.keywords.reduce(
       (acc, kw) => acc + (text.includes(kw) ? 1 : 0),
       0
@@ -171,8 +212,10 @@ export function classifyCompany(text: string): ClassificationResult {
   scores.sort((a, b) => b.score - a.score)
   const best = scores[0]
 
+  const tags = detectTags(text)
+
   if (best.score === 0) {
-    return { category: 'saneobyong', subcategory: null, confidence: 0 }
+    return { category: 'plastic', subcategory: null, confidence: 0, tags }
   }
 
   const total = scores.reduce((s, x) => s + x.score, 0)
@@ -182,5 +225,6 @@ export function classifyCompany(text: string): ClassificationResult {
     category: best.rule.category,
     subcategory: detectSubcategory(text, best.rule),
     confidence,
+    tags,
   }
 }
