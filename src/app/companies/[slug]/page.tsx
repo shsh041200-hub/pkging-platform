@@ -77,20 +77,12 @@ export default async function CompanyPage({ params }: Props) {
             <span className="hidden sm:inline text-white/40 text-xs">|</span>
             <span className="hidden sm:inline text-white/50 text-xs">B2B 포장업체 디렉토리</span>
           </Link>
-          <nav className="flex items-center gap-4">
-            <Link
-              href="/register"
-              className="text-sm text-slate-300 hover:text-white transition-colors font-medium"
-            >
-              업체 등록
-            </Link>
-            <a
-              href="mailto:privacy@pkging.kr"
-              className="text-slate-300 text-sm hover:text-white transition-colors"
-            >
-              업체 정보 수정·삭제
-            </a>
-          </nav>
+          <a
+            href="mailto:privacy@pkging.kr"
+            className="text-sm text-slate-300 hover:text-white transition-colors font-medium"
+          >
+            업체 정보 수정·삭제
+          </a>
         </div>
       </header>
 
