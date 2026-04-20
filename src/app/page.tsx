@@ -94,12 +94,6 @@ export default async function HomePage({
             <span className="hidden sm:inline text-white/40 text-xs">|</span>
             <span className="hidden sm:inline text-white/50 text-xs">B2B 포장업체 디렉토리</span>
           </Link>
-          <a
-            href="mailto:privacy@pkging.kr"
-            className="text-sm text-slate-300 hover:text-white transition-colors font-medium"
-          >
-            업체 정보 수정·삭제
-          </a>
         </div>
       </header>
 
