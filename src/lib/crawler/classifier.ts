@@ -77,6 +77,45 @@ export interface ClassificationResult {
   confidence: number
 }
 
+// Broad packaging relevance keywords — any one match means the page is likely packaging-related
+const PACKAGING_RELEVANCE_KEYWORDS = [
+  '박스', '포장', '패키지', '패키징', '상자', '용기', '봉투', '쇼핑백',
+  '비닐', '필름', '테이프', '완충', '에어캡', '버블', '스트레치',
+  '골판지', '지류', '인쇄', '제지', '종이', '합지', '싸바리',
+  'PET', 'PP', 'HDPE', 'PLA', '사출', '수지',
+  '캔', '드럼', '틴', '금속캔', '알루미늄 포일',
+  '친환경포장', '생분해', '재생포장', 'FSC', 'GRS',
+  '식품포장', '포장재', '포장용기', '포장지',
+  'packaging', 'pack', 'container', 'carton', 'bag',
+  '제함', '봉함', '실링', '충전',
+]
+
+// Signals that strongly indicate a non-packaging page (news, error, games, etc.)
+const IRRELEVANT_SIGNALS = [
+  // News/media
+  '기자', '보도', '취재', '뉴스레터', '헬로티', '더구루', '푸드투데이',
+  'IT동아', 'AI타임스', '이코노믹리뷰', 'Newsroom', '보도자료',
+  '단독]', '인터뷰]',
+  // Error pages
+  'Access Denied', 'Reference #', 'Página no encontrada', '404', 'Not Found',
+  // PDFs / binary content
+  '%PDF', 'endobj',
+  // Clearly unrelated domains/topics
+  '게임', '플레이', '아이템', '퀘스트',
+  '욕실타일', '화장실타일',
+  '학생화방', '내륙운송', '해상운송', '항공운송',
+]
+
+export function isPackagingRelevant(text: string): boolean {
+  // Reject if strong irrelevant signals appear in a short span near the start
+  const head = text.slice(0, 500)
+  for (const sig of IRRELEVANT_SIGNALS) {
+    if (head.includes(sig)) return false
+  }
+  // Accept if at least one packaging keyword appears anywhere in the text
+  return PACKAGING_RELEVANCE_KEYWORDS.some((kw) => text.includes(kw))
+}
+
 export function classifyCompany(text: string): ClassificationResult {
   const scores: Array<{ rule: CategoryRule; score: number }> = RULES.map((rule) => {
     const score = rule.keywords.reduce(
@@ -90,7 +129,6 @@ export function classifyCompany(text: string): ClassificationResult {
   const best = scores[0]
 
   if (best.score === 0) {
-    // Default to saneobyong (industrial packaging) if no match
     return { category: 'saneobyong', subcategory: null, confidence: 0 }
   }
 

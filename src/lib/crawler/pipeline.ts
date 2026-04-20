@@ -1,7 +1,7 @@
 import { createServiceClient } from '@/lib/supabase/service'
 import { fetchHtml } from './fetcher'
 import { extractCompanyInfo } from './extractor'
-import { classifyCompany } from './classifier'
+import { classifyCompany, isPackagingRelevant } from './classifier'
 
 function slugify(name: string): string {
   return name
@@ -51,12 +51,23 @@ export async function runCrawlJob(jobId: string): Promise<PipelineResult> {
   // 2. Extract
   const extracted = extractCompanyInfo(fetched.html, fetched.finalUrl)
 
-  // 3. Classify
-  const classification = classifyCompany(
-    [extracted.name, extracted.description, extracted.rawText].filter(Boolean).join(' ')
-  )
+  // 3. Relevance check — skip pages unrelated to packaging
+  const fullText = [extracted.name, extracted.description, extracted.rawText]
+    .filter(Boolean)
+    .join(' ')
 
-  // 4. Build company record
+  if (!isPackagingRelevant(fullText)) {
+    await db
+      .from('crawl_jobs')
+      .update({ status: 'skipped', error: 'not packaging related', updated_at: new Date().toISOString() })
+      .eq('id', jobId)
+    return { jobId, status: 'skipped' }
+  }
+
+  // 4. Classify
+  const classification = classifyCompany(fullText)
+
+  // 5. Build company record
   const name = extracted.name ?? new URL(fetched.finalUrl).hostname
   const slug = slugify(name)
 
@@ -78,7 +89,7 @@ export async function runCrawlJob(jobId: string): Promise<PipelineResult> {
     updated_at: new Date().toISOString(),
   }
 
-  // 5. Upsert to companies (by slug)
+  // 6. Upsert to companies (by slug)
   const { data: existing } = await db
     .from('companies')
     .select('id')
