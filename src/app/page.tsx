@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { BoxterLogo } from '@/components/BoxterLogo'
 import { FilterAccordion } from './filter-accordion'
 import {
   CATEGORY_LABELS,
@@ -89,7 +90,7 @@ export default async function HomePage({
       <header className="bg-[#0F172A] sticky top-0 z-50 border-b border-white/5">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-3">
-            <span className="text-white font-bold text-lg tracking-tight">Korea Pack</span>
+            <BoxterLogo variant="dark" size="sm" />
             <span className="hidden sm:inline text-white/40 text-xs">|</span>
             <span className="hidden sm:inline text-white/50 text-xs">B2B 포장업체 디렉토리</span>
           </Link>
@@ -328,7 +329,7 @@ export default async function HomePage({
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <p className="text-xs text-slate-400">
-              © 2026 Korea Pack. 본 서비스의 업체 정보는 공개된 출처에서 자동 수집되었습니다.
+              © 2026 BOXTER. 본 서비스의 업체 정보는 공개된 출처에서 자동 수집되었습니다.
               정보 오류·삭제 요청: privacy@pkging.kr
             </p>
             <div className="flex gap-4 text-xs text-slate-400">

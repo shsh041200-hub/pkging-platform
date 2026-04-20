@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 64" fill="none" role="img" aria-label="BOXTER">
+  <title>BOXTER</title>
+
+  <!-- Symbol: Open package box -->
+  <g transform="translate(8, 6)">
+    <!-- Box body: front face -->
+    <rect x="4" y="18" width="40" height="28" rx="2" fill="#FFFFFF"/>
+
+    <!-- Box lid: left panel -->
+    <path d="M4 18 L24 10 L24 18 Z" fill="#E2E8F0"/>
+
+    <!-- Box lid: right panel -->
+    <path d="M44 18 L24 10 L24 18 Z" fill="#CBD5E1"/>
+
+    <!-- Orange accent: inner fold line on lid -->
+    <line x1="24" y1="10" x2="24" y2="18" stroke="#F97316" stroke-width="2" stroke-linecap="round"/>
+
+    <!-- Orange accent: horizontal tape stripe across box body -->
+    <rect x="4" y="27" width="40" height="5" fill="#F97316" opacity="0.95"/>
+
+    <!-- Subtle shadow depth on right lid -->
+    <path d="M44 18 L24 10 L24 18 Z" fill="black" opacity="0.1"/>
+  </g>
+
+  <!-- Wordmark: BOXTER -->
+  <text
+    x="66"
+    y="42"
+    font-family="'Inter', 'Helvetica Neue', 'Arial', sans-serif"
+    font-weight="800"
+    font-size="28"
+    letter-spacing="2"
+    fill="#FFFFFF"
+  >BOXTER</text>
+
+  <!-- Orange dot accent after wordmark -->
+  <circle cx="272" cy="30" r="3.5" fill="#F97316"/>
+</svg>

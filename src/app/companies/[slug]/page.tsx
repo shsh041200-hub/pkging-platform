@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import { createClient } from '@/lib/supabase/server'
+import { BoxterLogo } from '@/components/BoxterLogo'
 import { CATEGORY_LABELS, TAG_LABELS, type Category, type CompanyTag } from '@/types'
 
 type Props = {
@@ -20,7 +21,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!company) return { title: '업체를 찾을 수 없습니다' }
 
   return {
-    title: `${company.name} — Korea Pack`,
+    title: `${company.name} — BOXTER`,
     description: company.description ?? `${company.name} 패키징 업체 상세 정보`,
     openGraph: {
       title: company.name,
@@ -72,7 +73,7 @@ export default async function CompanyPage({ params }: Props) {
       <header className="bg-[#0F172A] sticky top-0 z-50 border-b border-white/5">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-3">
-            <span className="text-white font-bold text-lg tracking-tight">Korea Pack</span>
+            <BoxterLogo variant="dark" size="sm" />
             <span className="hidden sm:inline text-white/40 text-xs">|</span>
             <span className="hidden sm:inline text-white/50 text-xs">B2B 포장업체 디렉토리</span>
           </Link>
@@ -372,7 +373,7 @@ export default async function CompanyPage({ params }: Props) {
         <div className="max-w-4xl mx-auto px-4 sm:px-6">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <p className="text-xs text-slate-400">
-              © 2026 Korea Pack. 업체 정보는 공개 출처에서 자동 수집되었습니다.
+              © 2026 BOXTER. 업체 정보는 공개 출처에서 자동 수집되었습니다.
               정보 오류·삭제 요청: privacy@pkging.kr
             </p>
             <div className="flex gap-4 text-xs text-slate-400">
