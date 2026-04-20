@@ -1,7 +1,7 @@
 import { createServiceClient } from '@/lib/supabase/service'
 import { fetchHtml } from './fetcher'
 import { extractCompanyInfo } from './extractor'
-import { classifyCompany, isPackagingRelevant } from './classifier'
+import { classifyCompany, isPackagingRelevant, isCompanyHomepage, extractHomepage } from './classifier'
 
 function slugify(name: string): string {
   return name
@@ -38,7 +38,18 @@ export async function runCrawlJob(jobId: string): Promise<PipelineResult> {
     return { jobId, status: 'failed', error: 'Job not found' }
   }
 
-  // 1. Fetch
+  // 1. Skip known non-homepage URL patterns at the job level before fetching
+  const jobUrl = job.url
+  if (!isCompanyHomepage(jobUrl)) {
+    const homepage = extractHomepage(jobUrl)
+    await db
+      .from('crawl_jobs')
+      .update({ status: 'skipped', error: `product/blog page detected — use homepage: ${homepage}`, updated_at: new Date().toISOString() })
+      .eq('id', jobId)
+    return { jobId, status: 'skipped' }
+  }
+
+  // 2. Fetch
   const fetched = await fetchHtml(job.url)
   if (!fetched.ok) {
     await db
@@ -48,10 +59,10 @@ export async function runCrawlJob(jobId: string): Promise<PipelineResult> {
     return { jobId, status: 'failed', error: fetched.error }
   }
 
-  // 2. Extract
+  // 3. Extract
   const extracted = extractCompanyInfo(fetched.html, fetched.finalUrl)
 
-  // 3. Relevance check — skip pages unrelated to packaging
+  // 4. Relevance check — skip pages unrelated to packaging
   const fullText = [extracted.name, extracted.description, extracted.rawText]
     .filter(Boolean)
     .join(' ')
@@ -64,10 +75,10 @@ export async function runCrawlJob(jobId: string): Promise<PipelineResult> {
     return { jobId, status: 'skipped' }
   }
 
-  // 4. Classify
+  // 5. Classify
   const classification = classifyCompany(fullText)
 
-  // 5. Build company record
+  // 6. Build company record
   const name = extracted.name ?? new URL(fetched.finalUrl).hostname
   const slug = slugify(name)
 
@@ -89,7 +100,7 @@ export async function runCrawlJob(jobId: string): Promise<PipelineResult> {
     updated_at: new Date().toISOString(),
   }
 
-  // 6. Upsert to companies (by slug)
+  // 7. Upsert to companies (by slug)
   const { data: existing } = await db
     .from('companies')
     .select('id')
@@ -128,7 +139,7 @@ export async function runCrawlJob(jobId: string): Promise<PipelineResult> {
     companyId = inserted.id
   }
 
-  // 6. Mark job done
+  // 8. Mark job done
   await db
     .from('crawl_jobs')
     .update({

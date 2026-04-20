@@ -104,7 +104,50 @@ const IRRELEVANT_SIGNALS = [
   '게임', '플레이', '아이템', '퀘스트',
   '욕실타일', '화장실타일',
   '학생화방', '내륙운송', '해상운송', '항공운송',
+  // Market research signals
+  '연평균 성장률(CAGR)', 'CAGR)', 'billion by',
+  // Blog / case-study openers that appear near the start of non-vendor pages
+  '번째 후기', '번째 작업', '번째 납품',
 ]
+
+// URL patterns that indicate a product/blog/FAQ page rather than a company homepage
+const NON_HOMEPAGE_URL_PATTERNS = [
+  /\/product\/[^/]+\/\d+/,     // /product/{slug}/{id}
+  /\/goods\/goods_view/,
+  /\/goods\/goods_list/,
+  /\/shop_view\//,
+  /\/product\/detail/,
+  /product_no=\d+/,
+  /goodsNo=\d+/,
+  /[?&]idx=\d+/,
+  /[?&]bmode=view/,
+  /[?&]prdid=\d+/,
+  /\/notice\/.*bmode=/,
+  /\/faq\/.*bmode=/,
+  /\/\d+\/\?idx=/,             // Naver blog-style: /27/?idx=20
+]
+
+export function isCompanyHomepage(url: string): boolean {
+  try {
+    const parsed = new URL(url)
+    // A homepage URL has a short path (just "/" or nothing meaningful)
+    const path = parsed.pathname
+    if (NON_HOMEPAGE_URL_PATTERNS.some((p) => p.test(url))) return false
+    // Allow paths that look like category or section pages (not product/article IDs)
+    return true
+  } catch {
+    return true
+  }
+}
+
+export function extractHomepage(url: string): string {
+  try {
+    const parsed = new URL(url)
+    return `${parsed.protocol}//${parsed.host}/`
+  } catch {
+    return url
+  }
+}
 
 export function isPackagingRelevant(text: string): boolean {
   // Reject if strong irrelevant signals appear in a short span near the start

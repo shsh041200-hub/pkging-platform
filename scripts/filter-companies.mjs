@@ -144,6 +144,66 @@ function isArticleOrReport(company) {
   return false;
 }
 
+// Numbered review / case-study blog posts (e.g. "150번째 후기. ...")
+function isBlogOrCaseStudy(company) {
+  const { name, description, website } = company;
+
+  // Name patterns: numbered reviews and case studies
+  if (/^\d+번째\s*후기/.test(name)) return true;
+  if (/^후기\s*\d+/.test(name)) return true;
+  if (/제작사례/.test(name) && /^\d+/.test(name)) return true;
+  if (/납품사례/.test(name) && /^\d+/.test(name)) return true;
+
+  // Name pattern: sample product listing (not a company page)
+  if (/^\[샘플제작\]/.test(name)) return true;
+
+  // Description: classic blog-case-study openers
+  if (/이번에\s*새롭게\s*체결된\s*거래처/.test(description || '')) return true;
+
+  // Blog/post URL patterns (e.g. /27/?idx=20, ?bmode=view&idx=...)
+  if (/\/\d+\/\?idx=\d+/.test(website || '')) return true;
+  if (/[?&]bmode=view/.test(website || '')) return true;
+
+  return false;
+}
+
+// Market research reports, white papers
+function isMarketReport(company) {
+  const { name, description, website } = company;
+
+  if (/시장\s*보고서/.test(name)) return true;
+  if (/시장\s*분석\s*보고서/.test(name)) return true;
+  if (/\d{4}년.*시장\s*규모/.test(name)) return true;
+  if (/보고서\s*\d{4}/.test(name)) return true;
+
+  // Market research aggregator domains
+  const marketResearchDomains = [
+    'imarcgroup.com', 'grandviewresearch.com', 'mordorintelligence.com',
+    'marketsandmarkets.com', 'fortunebusinessinsights.com', 'gminsights.com',
+  ];
+  if (marketResearchDomains.some(d => (website || '').includes(d))) return true;
+
+  if (/시장\s*규모.*CAGR|CAGR.*시장\s*규모/.test(description || '')) return true;
+
+  return false;
+}
+
+// Pages that are FAQ, notice, portfolio pages — not company homepages
+function isNonCompanyPage(company) {
+  const { name, website } = company;
+
+  if (/[?:]\s*(FAQ|notice|포트폴리오|portfolio)/i.test(name)) return true;
+  if (/\s*:\s*notice$/.test(name)) return true;
+  if (/포트폴리오$/.test(name) && /[?&](bmode|idx)=/.test(website || '')) return true;
+
+  // Foreign B2B manufacturer aggregator pages (e.g. made-in-china.com)
+  if (/made-in-china\.com/.test(website || '')) return true;
+  // TV/cable shopping mall product pages
+  if (/gsshop\.co/.test(website || '') || /lotteshoppingave\.com/.test(website || '')) return true;
+
+  return false;
+}
+
 function isExhibitionListing(company) {
   const { name, website } = company;
   if (name === '대한민국ESG친환경대전 (ESG') return true;
@@ -158,6 +218,9 @@ function classifyCompany(company) {
   if (isCompletelyUnrelated(company)) return 'completely_unrelated';
   if (isArticleOrReport(company)) return 'article_or_report';
   if (isExhibitionListing(company)) return 'exhibition';
+  if (isBlogOrCaseStudy(company)) return 'blog_or_case_study';
+  if (isMarketReport(company)) return 'market_report';
+  if (isNonCompanyPage(company)) return 'non_company_page';
   return null;
 }
 
