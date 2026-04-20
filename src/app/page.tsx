@@ -30,7 +30,7 @@ export default async function HomePage({
 
   let query = supabase
     .from('companies')
-    .select('id, slug, name, description, category, buyer_category, packaging_form, tags, city, province, is_verified, products, certifications, founded_year')
+    .select('id, slug, name, description, category, buyer_category, packaging_form, tags, city, province, is_verified, products, certifications, founded_year, website')
     .order('is_verified', { ascending: false })
     .order('name')
     .limit(60)
@@ -93,6 +93,12 @@ export default async function HomePage({
             <BoxterLogo variant="dark" size="sm" />
             <span className="hidden sm:inline text-white/40 text-xs">|</span>
             <span className="hidden sm:inline text-white/50 text-xs">B2B 포장업체 디렉토리</span>
+          </Link>
+          <Link
+            href="/register"
+            className="text-sm text-slate-300 hover:text-white transition-colors font-medium"
+          >
+            업체 등록
           </Link>
         </div>
       </header>
@@ -251,61 +257,85 @@ export default async function HomePage({
         {companies && companies.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {companies.map((company) => (
-              <Link
+              <div
                 key={company.id}
-                href={`/companies/${company.slug}`}
-                className="bg-white border border-slate-200 rounded-xl p-5 hover:border-slate-300 hover:shadow-[0_4px_16px_rgba(0,0,0,0.08)] transition-all duration-200 block group"
+                className="bg-white border border-slate-200 rounded-xl p-5 hover:border-slate-300 hover:shadow-[0_4px_16px_rgba(0,0,0,0.08)] transition-all duration-200 group"
               >
-                {/* Top: category + verified */}
-                <div className="flex items-center justify-between mb-3">
-                  <div className="flex gap-1.5 flex-wrap">
-                    {company.buyer_category && (
-                      <span className="text-xs font-medium bg-blue-50 text-blue-700 px-2.5 py-1 rounded-md">
-                        {BUYER_CATEGORY_LABELS[company.buyer_category as BuyerCategory]}
-                      </span>
-                    )}
-                  </div>
+                <div className="flex items-start justify-between mb-2">
+                  <Link href={`/companies/${company.slug}`} className="flex-1 min-w-0">
+                    <h2 className="text-lg font-bold text-slate-900 group-hover:text-blue-700 transition-colors leading-snug">
+                      {company.name}
+                    </h2>
+                  </Link>
                   {company.is_verified && (
-                    <span className="text-xs font-medium text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full">
+                    <span className="flex-shrink-0 ml-2 text-xs font-medium text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full">
                       인증
                     </span>
                   )}
                 </div>
 
-                <h2 className="text-[15px] font-semibold text-slate-900 mb-1 group-hover:text-blue-700 transition-colors">
-                  {company.name}
-                </h2>
+                <div className="flex flex-wrap gap-1.5 mb-2.5">
+                  {company.buyer_category && (
+                    <span className="text-xs font-medium bg-blue-50 text-blue-700 px-2.5 py-1 rounded-md">
+                      {BUYER_CATEGORY_LABELS[company.buyer_category as BuyerCategory]}
+                    </span>
+                  )}
+                  {company.packaging_form && (
+                    <span className="text-xs font-medium bg-slate-100 text-slate-600 px-2.5 py-1 rounded-md">
+                      {PACKAGING_FORM_LABELS[company.packaging_form as PackagingForm]}
+                    </span>
+                  )}
+                  <span className="text-xs bg-slate-50 text-slate-500 px-2 py-1 rounded-md">
+                    {CATEGORY_LABELS[company.category as Category]}
+                  </span>
+                </div>
 
-                {company.province && (
-                  <p className="text-xs text-slate-400 mb-2">{company.province} {company.city}</p>
-                )}
-
-                <p className="text-sm text-slate-500 leading-relaxed line-clamp-2 mb-3">
-                  {company.description ?? ''}
-                </p>
+                <Link href={`/companies/${company.slug}`}>
+                  <p className="text-sm text-slate-500 leading-relaxed line-clamp-2 mb-3">
+                    {company.description ?? ''}
+                  </p>
+                </Link>
 
                 {company.products && company.products.length > 0 && (
                   <div className="flex flex-wrap gap-1 mb-3">
-                    {(company.products as string[]).slice(0, 2).map((p, i) => (
+                    {(company.products as string[]).slice(0, 3).map((p, i) => (
                       <span key={i} className="text-xs bg-slate-50 border border-slate-200 text-slate-600 px-2 py-0.5 rounded">
                         {p}
                       </span>
                     ))}
-                    {company.products.length > 2 && (
-                      <span className="text-xs text-slate-400">+{company.products.length - 2}</span>
+                    {company.products.length > 3 && (
+                      <span className="text-xs text-slate-400">+{company.products.length - 3}</span>
                     )}
                   </div>
                 )}
 
                 <div className="border-t border-slate-100 pt-3 flex items-center justify-between">
-                  <span className="text-xs text-slate-400">
-                    {CATEGORY_LABELS[company.category as Category]}{company.founded_year ? ` · est. ${company.founded_year}` : ''}
-                  </span>
-                  <span className="text-xs font-medium text-blue-600 group-hover:underline">
-                    상세보기 →
-                  </span>
+                  <div className="flex items-center gap-2 text-xs text-slate-400 min-w-0">
+                    {company.province && (
+                      <span>{company.province} {company.city}</span>
+                    )}
+                    {company.founded_year && (
+                      <span>· est. {company.founded_year}</span>
+                    )}
+                  </div>
+                  <div className="flex items-center gap-3 flex-shrink-0">
+                    {company.website && (
+                      <a
+                        href={company.website}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={(e) => e.stopPropagation()}
+                        className="text-xs font-medium text-slate-500 hover:text-blue-600 transition-colors"
+                      >
+                        웹사이트
+                      </a>
+                    )}
+                    <Link href={`/companies/${company.slug}`} className="text-xs font-medium text-blue-600 hover:underline">
+                      상세보기 →
+                    </Link>
+                  </div>
                 </div>
-              </Link>
+              </div>
             ))}
           </div>
         ) : (
