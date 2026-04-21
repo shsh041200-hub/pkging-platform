@@ -31,6 +31,7 @@ export function QuoteRequestModal({ companyId, companyName, isOpen, onClose }: P
   })
   const [submitting, setSubmitting] = useState(false)
   const [success, setSuccess] = useState(false)
+  const [error, setError] = useState('')
   const overlayRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -43,6 +44,7 @@ export function QuoteRequestModal({ companyId, companyName, isOpen, onClose }: P
   useEffect(() => {
     if (!isOpen) {
       setSuccess(false)
+      setError('')
       setForm({ contactName: '', phone: '', packagingType: '', quantity: '', companyName: '', details: '', desiredDelivery: '' })
     }
   }, [isOpen])
@@ -57,16 +59,22 @@ export function QuoteRequestModal({ companyId, companyName, isOpen, onClose }: P
     e.preventDefault()
     if (!form.contactName || !form.phone || !form.packagingType || !form.quantity) return
     setSubmitting(true)
+    setError('')
     try {
-      await fetch('/api/quote-requests', {
+      const res = await fetch('/api/quote-requests', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ companyId, ...form }),
       })
+      if (!res.ok) {
+        const data = await res.json().catch(() => null)
+        setError(data?.error ?? '요청 처리 중 오류가 발생했습니다.')
+        return
+      }
       setSuccess(true)
       setTimeout(() => { onClose() }, 2000)
     } catch {
-      // silently fail — API may not be available yet
+      setError('네트워크 오류가 발생했습니다. 다시 시도해주세요.')
     } finally {
       setSubmitting(false)
     }
@@ -213,6 +221,9 @@ export function QuoteRequestModal({ companyId, companyName, isOpen, onClose }: P
             </div>
 
             <div className="px-6 pb-6 flex-shrink-0">
+              {error && (
+                <p className="text-[13px] text-red-600 bg-red-50 border border-red-200 rounded-lg px-4 py-2.5 mb-3">{error}</p>
+              )}
               <button
                 type="submit"
                 disabled={submitting || !form.contactName || !form.phone || !form.packagingType || !form.quantity}
