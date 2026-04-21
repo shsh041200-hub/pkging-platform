@@ -290,9 +290,8 @@ export default async function CompanyPage({ params }: Props) {
         {/* Company Description */}
         {company.description && (
           <div className="bg-white border border-gray-200 rounded-xl p-6 sm:p-8">
-            <h2 className="text-[13px] font-semibold text-gray-700 uppercase tracking-wider mb-4 flex items-center gap-2">
+            <h2 className="text-[13px] font-semibold text-gray-700 uppercase tracking-wider mb-4">
               업체 소개
-              <span className="text-[10px] font-medium text-[#005EFF] bg-[#EBF2FF] px-1.5 py-0.5 rounded normal-case tracking-normal">AI 생성</span>
             </h2>
             <div className="border-l-2 border-[#005EFF]/20 pl-5">
               <p className="text-[15px] text-gray-700 leading-[1.8] whitespace-pre-line">
@@ -333,7 +332,7 @@ export default async function CompanyPage({ params }: Props) {
                   {company.certifications.map((cert: string, i: number) => (
                     <span
                       key={i}
-                      className="text-[12px] font-medium bg-gray-100 text-gray-700 px-3 py-1.5 rounded"
+                      className="text-[12px] font-medium bg-green-50 text-green-700 border border-green-200 px-3 py-1.5 rounded"
                     >
                       {cert}
                     </span>
@@ -347,15 +346,14 @@ export default async function CompanyPage({ params }: Props) {
         {/* Service Capabilities */}
         {hasServiceCapabilities && (
           <div className="bg-white border border-gray-200 rounded-xl p-5">
-            <h2 className="text-[13px] font-semibold text-gray-700 uppercase tracking-wider mb-4 flex items-center gap-2">
+            <h2 className="text-[13px] font-semibold text-gray-700 uppercase tracking-wider mb-4">
               서비스 역량
-              <span className="text-[10px] font-medium text-[#005EFF] bg-[#EBF2FF] px-1.5 py-0.5 rounded normal-case tracking-normal">AI 생성</span>
             </h2>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
               {(company.service_capabilities as string[]).map((cap: string, i: number) => (
                 <div
                   key={i}
-                  className="flex items-center gap-2 text-[13px] text-gray-700 bg-gray-50 rounded-lg px-3 py-2.5"
+                  className="flex items-center gap-2 text-[13px] text-[#005EFF] bg-[#EBF2FF] rounded-lg px-3 py-2.5"
                 >
                   <span className="w-1.5 h-1.5 rounded-full bg-[#005EFF] flex-shrink-0" />
                   {cap}
@@ -370,15 +368,14 @@ export default async function CompanyPage({ params }: Props) {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {hasTargetIndustries && (
               <div className="bg-white border border-gray-200 rounded-xl p-5">
-                <h2 className="text-[13px] font-semibold text-gray-700 uppercase tracking-wider mb-3 flex items-center gap-2">
+                <h2 className="text-[13px] font-semibold text-gray-700 uppercase tracking-wider mb-3">
                   주요 납품 산업
-                  <span className="text-[10px] font-medium text-[#005EFF] bg-[#EBF2FF] px-1.5 py-0.5 rounded normal-case tracking-normal">AI 생성</span>
                 </h2>
                 <div className="flex flex-wrap gap-2">
                   {(company.target_industries as string[]).map((ind: string, i: number) => (
                     <span
                       key={i}
-                      className="text-[12px] font-medium bg-gray-100 text-gray-700 px-3 py-1.5 rounded"
+                      className="text-[12px] font-medium bg-gray-100 text-gray-500 px-3 py-1.5 rounded"
                     >
                       {ind}
                     </span>
@@ -389,15 +386,14 @@ export default async function CompanyPage({ params }: Props) {
 
             {hasKeyClients && (
               <div className="bg-white border border-gray-200 rounded-xl p-5">
-                <h2 className="text-[13px] font-semibold text-gray-700 uppercase tracking-wider mb-3 flex items-center gap-2">
+                <h2 className="text-[13px] font-semibold text-gray-700 uppercase tracking-wider mb-3">
                   주요 납품처
-                  <span className="text-[10px] font-medium text-[#005EFF] bg-[#EBF2FF] px-1.5 py-0.5 rounded normal-case tracking-normal">AI 생성</span>
                 </h2>
                 <div className="flex flex-wrap gap-2">
                   {(company.key_clients as string[]).map((client: string, i: number) => (
                     <span
                       key={i}
-                      className="text-[12px] font-medium bg-gray-100 text-gray-700 px-3 py-1.5 rounded"
+                      className="text-[12px] font-medium bg-white text-gray-500 border border-gray-200 px-3 py-1.5 rounded"
                     >
                       {client}
                     </span>
@@ -461,21 +457,17 @@ export default async function CompanyPage({ params }: Props) {
           )}
         </div>
 
-        {/* Disclaimer */}
-        <div className="bg-gray-50 border border-gray-200 rounded-xl p-5">
-          <p className="text-[12px] text-gray-500 leading-relaxed">
-            <span className="font-semibold text-gray-600">참고 안내</span>
-            {' '}— 본 페이지의 일부 정보(업체 소개, 서비스 역량, 주요 납품 산업, 주요 납품처 등)는 AI가 공개된 자료를 기반으로 자동 생성한 것으로, 참고용이며 정확성을 보장하지 않습니다.
-            정보 오류가 있는 경우{' '}
-            <a href="mailto:privacy@pkging.kr" className="text-[#005EFF] hover:underline underline-offset-2">
-              privacy@pkging.kr
-            </a>
-            로 수정을 요청해 주세요.
+        {/* AI Disclaimer */}
+        <div className="border-t border-gray-100 pt-5 text-center">
+          <p className="text-[12px] text-gray-400 leading-relaxed max-w-lg mx-auto">
+            본 업체 정보의 일부(업체 소개, 서비스 역량, 납품 산업, 납품처)는
+            공개 자료를 기반으로 AI가 생성한 참고 정보이며, 실제와 다를 수 있습니다.
+            정확한 정보는 업체에 직접 문의해주세요.
           </p>
-          <div className="mt-3 pt-3 border-t border-gray-200">
+          <div className="mt-2">
             <a
               href={`mailto:privacy@pkging.kr?subject=${encodeURIComponent('업체 정보 수정 요청: ' + company.name)}`}
-              className="text-[12px] text-gray-500 hover:text-gray-700 underline underline-offset-2 transition-colors"
+              className="text-[12px] text-gray-400 hover:text-gray-600 underline underline-offset-2 transition-colors"
             >
               정보 수정 요청 →
             </a>

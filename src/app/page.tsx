@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { BoxterLogo } from '@/components/BoxterLogo'
 import { FilterAccordion } from './filter-accordion'
+import { BuyerCategoryFilter } from './buyer-category-filter'
 import {
   CATEGORY_LABELS,
   TAG_LABELS,
@@ -227,22 +228,24 @@ export default async function HomePage({
             >
               전체
             </Link>
-            {(Object.keys(BUYER_CATEGORY_LABELS) as BuyerCategory[]).map((key) => (
-              <Link
-                key={key}
-                href={buildUrl({
-                  buyer_category: buyer_category === key ? undefined : key,
-                  packaging_form: buyer_category === key ? undefined : packaging_form,
-                })}
-                className={`flex-shrink-0 px-3.5 py-1.5 rounded-md text-[13px] font-medium transition-all ${
-                  buyer_category === key
-                    ? 'bg-gray-900 text-white'
-                    : 'text-gray-500 hover:text-gray-800 hover:bg-gray-50'
-                }`}
-              >
-                {BUYER_CATEGORY_LABELS[key]}
-              </Link>
-            ))}
+            <BuyerCategoryFilter forceExpand={(Object.keys(BUYER_CATEGORY_LABELS) as BuyerCategory[]).indexOf(buyer_category as BuyerCategory) >= 5}>
+              {(Object.keys(BUYER_CATEGORY_LABELS) as BuyerCategory[]).map((key) => (
+                <Link
+                  key={key}
+                  href={buildUrl({
+                    buyer_category: buyer_category === key ? undefined : key,
+                    packaging_form: buyer_category === key ? undefined : packaging_form,
+                  })}
+                  className={`flex-shrink-0 px-3.5 py-1.5 rounded-md text-[13px] font-medium transition-all ${
+                    buyer_category === key
+                      ? 'bg-gray-900 text-white'
+                      : 'text-gray-500 hover:text-gray-800 hover:bg-gray-50'
+                  }`}
+                >
+                  {BUYER_CATEGORY_LABELS[key]}
+                </Link>
+              ))}
+            </BuyerCategoryFilter>
           </div>
 
           {/* Level 2 */}
@@ -333,39 +336,23 @@ export default async function HomePage({
             {companies.map((company) => (
               <article
                 key={company.id}
-                className="bg-white border border-gray-200 rounded-xl overflow-hidden hover:border-gray-300 hover:shadow-[0_8px_24px_rgba(0,0,0,0.08),0_2px_4px_rgba(0,0,0,0.04)] hover:-translate-y-px transition-all duration-200 group relative"
+                className="bg-white border border-gray-200 rounded-xl overflow-hidden hover:border-gray-300 hover:shadow-[0_8px_24px_rgba(0,0,0,0.08),0_2px_4px_rgba(0,0,0,0.04)] hover:-translate-y-px transition-all duration-200 group relative flex flex-col min-h-[260px] max-h-[280px]"
               >
-                {company.is_verified && (company.certifications as string[] | null)?.length! > 0 && (
-                  <div className="flex items-center gap-1.5 bg-gradient-to-r from-green-50 to-emerald-50 px-6 py-2 text-[11px] font-semibold text-green-800 border-b border-green-200">
-                    <svg className="w-3.5 h-3.5 flex-shrink-0" viewBox="0 0 24 24" fill="currentColor">
-                      <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                    </svg>
-                    인증업체
-                    <span className="ml-auto font-medium text-green-700 text-[11px]">
-                      {(company.certifications as string[])[0]}{(company.certifications as string[]).length > 1 ? ` 외 ${(company.certifications as string[]).length - 1}건` : ''}
-                    </span>
-                  </div>
-                )}
-                <div className="p-6">
-                  <div className="flex items-start justify-between mb-3.5">
+                <div className="p-6 flex flex-col flex-1 overflow-hidden">
+                  <div className="flex items-start justify-between mb-3">
                     <div className="flex flex-wrap gap-1.5">
                       {company.buyer_category && (
                         <span className="text-[11px] font-medium bg-gray-100 text-gray-600 px-2 py-0.5 rounded">
                           {BUYER_CATEGORY_LABELS[company.buyer_category as BuyerCategory]}
                         </span>
                       )}
-                      {company.packaging_form && (
-                        <span className="text-[11px] font-medium bg-gray-100 text-gray-500 px-2 py-0.5 rounded">
-                          {PACKAGING_FORM_LABELS[company.packaging_form as PackagingForm]}
-                        </span>
-                      )}
                     </div>
                     {company.is_verified && (
-                      <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-green-700 bg-green-50 border border-green-200 px-2 py-0.5 rounded-full flex-shrink-0 ml-2">
+                      <span className="inline-flex items-center gap-1 text-[11px] font-medium text-green-700 bg-green-50 border border-green-200 px-2 py-0.5 rounded flex-shrink-0 ml-2">
                         <svg className="w-3 h-3" viewBox="0 0 24 24" fill="currentColor">
                           <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                         </svg>
-                        인증업체
+                        인증
                       </span>
                     )}
                   </div>
@@ -379,41 +366,26 @@ export default async function HomePage({
                     </Link>
                   </h2>
 
-                  <p className="text-[13px] text-gray-500 leading-relaxed line-clamp-2 mb-3">
+                  <p className="text-[13px] text-gray-500 leading-relaxed line-clamp-2 mb-3 flex-1">
                     {company.description ?? ''}
                   </p>
 
-                  {((company.service_capabilities as string[] | null)?.length! > 0 || (company.target_industries as string[] | null)?.length! > 0) && (
-                    <div className="mb-3">
-                      {(company.service_capabilities as string[] | null)?.length! > 0 && (
-                        <div className="flex flex-wrap gap-1 mb-1">
-                          {(company.service_capabilities as string[]).slice(0, 3).map((cap, i) => (
-                            <span key={i} className="text-[11px] font-medium bg-[#EBF2FF] text-[#005EFF] px-2 py-0.5 rounded">
-                              {cap}
-                            </span>
-                          ))}
-                        </div>
+                  {(company.certifications as string[] | null)?.length! > 0 && (
+                    <div className="flex flex-wrap gap-1.5 mb-3">
+                      {(company.certifications as string[]).slice(0, 2).map((cert, i) => (
+                        <span key={i} className="text-[11px] font-medium text-gray-700 bg-gray-100 px-2 py-0.5 rounded">
+                          {cert}
+                        </span>
+                      ))}
+                      {(company.certifications as string[]).length > 2 && (
+                        <span className="text-[11px] font-medium text-gray-500 bg-gray-100 px-2 py-0.5 rounded">
+                          +{(company.certifications as string[]).length - 2}
+                        </span>
                       )}
-                      {(company.target_industries as string[] | null)?.length! > 0 && (
-                        <div className="flex flex-wrap gap-1 mb-1">
-                          {(company.target_industries as string[]).slice(0, 2).map((ind, i) => (
-                            <span key={i} className="text-[11px] font-medium bg-gray-100 text-gray-500 px-2 py-0.5 rounded">
-                              {ind}
-                            </span>
-                          ))}
-                        </div>
-                      )}
-                      <p className="text-[10px] text-gray-400 mt-0.5">AI 생성 정보</p>
                     </div>
                   )}
 
-                  {company.data_source && DATA_SOURCE_LABELS[company.data_source as string] && (
-                    <p className="text-[10px] text-gray-400 -mt-1 mb-1">
-                      {DATA_SOURCE_LABELS[company.data_source as string]}
-                    </p>
-                  )}
-
-                  <div className="border-t border-gray-100 pt-3.5 flex items-center justify-between gap-2">
+                  <div className="border-t border-gray-100 pt-3 mt-auto flex items-center justify-between gap-2">
                     {company.website ? (
                       <a
                         href={company.website}
@@ -434,8 +406,7 @@ export default async function HomePage({
                     )}
                     <div className="flex items-center gap-2 flex-shrink-0">
                       <span className="text-[11px] text-gray-400">
-                        {CATEGORY_LABELS[company.category as Category]}
-                        {company.founded_year ? ` · est. ${company.founded_year}` : ''}
+                        {company.packaging_form ? PACKAGING_FORM_LABELS[company.packaging_form as PackagingForm] : CATEGORY_LABELS[company.category as Category]}
                       </span>
                     </div>
                   </div>
