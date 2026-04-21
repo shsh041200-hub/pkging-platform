@@ -4,7 +4,6 @@ import { BoxterLogo } from '@/components/BoxterLogo'
 import {
   INDUSTRY_CATEGORIES,
   INDUSTRY_CATEGORY_LABELS,
-  INDUSTRY_CATEGORY_DESCRIPTIONS,
   INDUSTRY_CATEGORY_ICONS,
   MATERIAL_TYPES,
   MATERIAL_TYPE_LABELS,
@@ -134,128 +133,132 @@ export default async function HomePage({
         </div>
       </header>
 
-      {/* Hero */}
-      <section className="bg-white border-b border-gray-100 pt-16 pb-20 sm:pt-20 sm:pb-24 px-5">
-        <div className="max-w-2xl mx-auto text-center">
-          <div className="inline-block text-[11px] font-semibold tracking-widest uppercase text-[#005EFF] bg-[#EBF2FF] px-3 py-1.5 rounded-full mb-5">
-            국내 패키징 플랫폼
-          </div>
-          <h1 className="text-[38px] sm:text-[52px] font-extrabold text-gray-900 leading-[1.1] tracking-[-0.04em]">
-            국내 포장업체<br />전문 디렉토리
-          </h1>
-          <p className="text-gray-500 text-[16px] sm:text-[17px] mt-4 mb-9 leading-relaxed max-w-md mx-auto">
-            B2B 포장 파트너를 바로 찾으세요.
-          </p>
-          <form method="GET" className="flex max-w-xl mx-auto rounded-xl overflow-hidden border border-gray-200 shadow-[0_2px_8px_rgba(0,0,0,0.06)] focus-within:border-[#005EFF] focus-within:shadow-[0_2px_8px_rgba(0,0,0,0.06),0_0_0_3px_rgba(0,94,255,0.12)] transition-shadow">
-            <input
-              name="q"
-              defaultValue={q}
-              placeholder="업체명, 제품, 인증, 지역으로 검색..."
-              className="flex-1 px-5 py-4 text-[15px] text-gray-900 bg-white placeholder:text-gray-400 focus:outline-none"
-            />
-            <button
-              type="submit"
-              className="bg-[#005EFF] hover:bg-[#0047CC] text-white font-semibold px-6 py-3 transition-colors text-sm flex-shrink-0 m-1.5 rounded-lg"
-            >
-              검색
-            </button>
-          </form>
-          {totalCount != null && (
-            <div className="flex items-center justify-center gap-3 mt-5 text-[12px] text-gray-400 font-medium">
-              <span>{totalCount.toLocaleString()}개 업체 등록됨</span>
-              <span className="text-gray-200">·</span>
-              <span>업체 인증 시스템</span>
-              <span className="text-gray-200">·</span>
-              <span>무료 이용</span>
+      {/* Hero — search left, category buttons right */}
+      <section className="bg-white border-b border-gray-100 pt-10 pb-10 sm:pt-14 sm:pb-12 px-5">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex flex-col lg:flex-row lg:items-start lg:gap-12">
+            {/* Left: heading + search */}
+            <div className="flex-1 lg:max-w-xl">
+              <div className="inline-block text-[11px] font-semibold tracking-widest uppercase text-[#005EFF] bg-[#EBF2FF] px-3 py-1.5 rounded-full mb-4">
+                국내 패키징 플랫폼
+              </div>
+              <h1 className="text-[32px] sm:text-[42px] font-extrabold text-gray-900 leading-[1.1] tracking-[-0.04em] mb-3">
+                국내 포장업체<br />전문 디렉토리
+              </h1>
+              <p className="text-gray-500 text-[15px] sm:text-[16px] mb-6 leading-relaxed">
+                B2B 포장 파트너를 바로 찾으세요.
+              </p>
+              <form method="GET" className="flex rounded-xl overflow-hidden border border-gray-200 shadow-[0_2px_8px_rgba(0,0,0,0.06)] focus-within:border-[#005EFF] focus-within:shadow-[0_2px_8px_rgba(0,0,0,0.06),0_0_0_3px_rgba(0,94,255,0.12)] transition-shadow">
+                <input
+                  name="q"
+                  defaultValue={q}
+                  placeholder="업체명, 제품, 인증, 지역으로 검색..."
+                  className="flex-1 px-5 py-3.5 text-[15px] text-gray-900 bg-white placeholder:text-gray-400 focus:outline-none"
+                />
+                <button
+                  type="submit"
+                  className="bg-[#005EFF] hover:bg-[#0047CC] text-white font-semibold px-6 py-3 transition-colors text-sm flex-shrink-0 m-1.5 rounded-lg"
+                >
+                  검색
+                </button>
+              </form>
+              {totalCount != null && (
+                <div className="flex items-center gap-3 mt-4 text-[12px] text-gray-400 font-medium">
+                  <span>{totalCount.toLocaleString()}개 업체 등록됨</span>
+                  <span className="text-gray-200">·</span>
+                  <span>업체 인증 시스템</span>
+                  <span className="text-gray-200">·</span>
+                  <span>무료 이용</span>
+                </div>
+              )}
             </div>
-          )}
+
+            {/* Right: 6 category buttons */}
+            {showingCategory && (
+              <div className="mt-8 lg:mt-0 lg:flex-1">
+                <h2 className="text-[13px] font-bold text-gray-500 uppercase tracking-wider mb-3">업종별 찾기</h2>
+                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-2 gap-2">
+                  {INDUSTRY_CATEGORIES.filter((cat) => categoryCounts[cat] > 0).map((cat) => (
+                    <Link
+                      key={cat}
+                      href={`/categories/${categoryToSlug(cat)}`}
+                      className="group flex items-center gap-2.5 bg-white border border-gray-200 rounded-lg px-3.5 py-3 hover:border-[#005EFF]/30 hover:bg-[#F8FAFF] transition-all duration-150"
+                    >
+                      <span className="text-lg flex-shrink-0">{INDUSTRY_CATEGORY_ICONS[cat]}</span>
+                      <div className="min-w-0">
+                        <span className="text-[13px] font-semibold text-gray-900 group-hover:text-[#005EFF] transition-colors block truncate">
+                          {INDUSTRY_CATEGORY_LABELS[cat]}
+                        </span>
+                        <span className="text-[11px] text-gray-400">{categoryCounts[cat]}개</span>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       </section>
 
-      {/* Category Card Grid */}
-      {showingCategory && (
-        <section className="max-w-7xl mx-auto px-5 sm:px-8 py-10">
-          <h2 className="text-[15px] font-bold text-gray-900 mb-5">업종별 포장업체 찾기</h2>
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-            {INDUSTRY_CATEGORIES.filter((cat) => categoryCounts[cat] > 0).map((cat) => (
+      {/* Filter Bar — only when search/filter active */}
+      {!showingCategory && (
+        <div className="bg-white border-b border-gray-100 sticky top-16 z-40">
+          <div className="max-w-7xl mx-auto px-5 sm:px-8">
+            {/* Industry tabs */}
+            <div className="flex gap-0.5 pt-2 overflow-x-auto scrollbar-none">
               <Link
-                key={cat}
-                href={`/categories/${categoryToSlug(cat)}`}
-                className="group bg-white border border-gray-200 rounded-xl p-5 hover:border-[#005EFF]/30 hover:shadow-[0_8px_24px_rgba(0,94,255,0.08)] hover:-translate-y-0.5 transition-all duration-200"
-              >
-                <div className="text-2xl mb-3">{INDUSTRY_CATEGORY_ICONS[cat]}</div>
-                <h3 className="text-[14px] font-bold text-gray-900 mb-1 group-hover:text-[#005EFF] transition-colors">
-                  {INDUSTRY_CATEGORY_LABELS[cat]}
-                </h3>
-                <p className="text-[12px] text-gray-400 leading-relaxed mb-3">
-                  {INDUSTRY_CATEGORY_DESCRIPTIONS[cat]}
-                </p>
-                <span className="text-[11px] font-semibold text-[#005EFF] bg-[#EBF2FF] px-2 py-0.5 rounded-full">
-                  {categoryCounts[cat]}개 업체
-                </span>
-              </Link>
-            ))}
-          </div>
-        </section>
-      )}
-
-      {/* Filter Bar */}
-      <div className="bg-white border-b border-gray-100 sticky top-16 z-40">
-        <div className="max-w-7xl mx-auto px-5 sm:px-8">
-          {/* Industry tabs */}
-          <div className="flex gap-0.5 pt-2 overflow-x-auto scrollbar-none">
-            <Link
-              href={q ? `/?q=${q}` : '/'}
-              className={`flex-shrink-0 px-4 py-2.5 text-[13px] font-medium transition-all border-b-2 ${
-                !industry
-                  ? 'border-gray-900 text-gray-900 font-semibold'
-                  : 'border-transparent text-gray-400 hover:text-gray-700'
-              }`}
-            >
-              전체
-            </Link>
-            {INDUSTRY_CATEGORIES.filter((cat) => categoryCounts[cat] > 0).map((cat) => (
-              <Link
-                key={cat}
-                href={buildUrl({
-                  industry: industry === cat ? undefined : cat,
-                  material: industry === cat ? undefined : material,
-                })}
-                className={`flex-shrink-0 px-4 py-2.5 text-[13px] font-medium transition-all border-b-2 whitespace-nowrap ${
-                  industry === cat
+                href={q ? `/?q=${q}` : '/'}
+                className={`flex-shrink-0 px-4 py-2.5 text-[13px] font-medium transition-all border-b-2 ${
+                  !industry
                     ? 'border-gray-900 text-gray-900 font-semibold'
                     : 'border-transparent text-gray-400 hover:text-gray-700'
                 }`}
               >
-                {INDUSTRY_CATEGORY_LABELS[cat]}
+                전체
               </Link>
-            ))}
-          </div>
+              {INDUSTRY_CATEGORIES.filter((cat) => categoryCounts[cat] > 0).map((cat) => (
+                <Link
+                  key={cat}
+                  href={buildUrl({
+                    industry: industry === cat ? undefined : cat,
+                    material: industry === cat ? undefined : material,
+                  })}
+                  className={`flex-shrink-0 px-4 py-2.5 text-[13px] font-medium transition-all border-b-2 whitespace-nowrap ${
+                    industry === cat
+                      ? 'border-gray-900 text-gray-900 font-semibold'
+                      : 'border-transparent text-gray-400 hover:text-gray-700'
+                  }`}
+                >
+                  {INDUSTRY_CATEGORY_LABELS[cat]}
+                </Link>
+              ))}
+            </div>
 
-          {/* Material chips */}
-          <div className="flex gap-1.5 py-2.5 overflow-x-auto scrollbar-none">
-            <span className="flex-shrink-0 text-[10px] font-semibold text-gray-300 uppercase tracking-widest self-center mr-1 hidden sm:inline">소재</span>
-            {MATERIAL_TYPES.map((mat) => (
-              <Link
-                key={mat}
-                href={buildUrl({
-                  material: material === mat ? undefined : mat,
-                })}
-                className={`flex-shrink-0 px-2.5 py-1 rounded text-[11px] font-medium transition-all border ${
-                  material === mat
-                    ? 'bg-[#005EFF] text-white border-[#005EFF]'
-                    : 'text-gray-500 border-gray-200 hover:text-gray-700 hover:border-gray-300 bg-white'
-                }`}
-              >
-                {MATERIAL_TYPE_LABELS[mat]}
-              </Link>
-            ))}
+            {/* Material chips */}
+            <div className="flex gap-1.5 py-2.5 overflow-x-auto scrollbar-none">
+              <span className="flex-shrink-0 text-[10px] font-semibold text-gray-300 uppercase tracking-widest self-center mr-1 hidden sm:inline">소재</span>
+              {MATERIAL_TYPES.map((mat) => (
+                <Link
+                  key={mat}
+                  href={buildUrl({
+                    material: material === mat ? undefined : mat,
+                  })}
+                  className={`flex-shrink-0 px-2.5 py-1 rounded text-[11px] font-medium transition-all border ${
+                    material === mat
+                      ? 'bg-[#005EFF] text-white border-[#005EFF]'
+                      : 'text-gray-500 border-gray-200 hover:text-gray-700 hover:border-gray-300 bg-white'
+                  }`}
+                >
+                  {MATERIAL_TYPE_LABELS[mat]}
+                </Link>
+              ))}
+            </div>
           </div>
         </div>
-      </div>
+      )}
 
-      {/* Results */}
-      <section className="max-w-7xl mx-auto px-5 sm:px-8 py-8">
+      {/* Results — only when search/filter active */}
+      {!showingCategory && <section className="max-w-7xl mx-auto px-5 sm:px-8 py-8">
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-2.5 flex-wrap">
             <p className="text-sm text-gray-500">
@@ -379,7 +382,7 @@ export default async function HomePage({
             </Link>
           </div>
         )}
-      </section>
+      </section>}
 
       {/* Footer */}
       <footer className="border-t border-gray-100 bg-gray-50 mt-auto py-8">
