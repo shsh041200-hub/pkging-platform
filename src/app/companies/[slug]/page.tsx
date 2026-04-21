@@ -124,8 +124,8 @@ export default async function CompanyPage({ params }: Props) {
         {/* Company Hero Card */}
         <div className="bg-white border border-gray-200 rounded-xl p-6 sm:p-10">
           <div className="flex items-start gap-4 mb-6">
-            <div className="w-14 h-14 rounded-xl bg-gray-100 border border-gray-200 flex items-center justify-center flex-shrink-0">
-              <span className="text-xl font-bold text-gray-400">
+            <div className={`w-14 h-14 rounded-xl flex items-center justify-center flex-shrink-0 ${company.is_verified ? 'bg-green-50 border border-green-200' : 'bg-gray-100 border border-gray-200'}`}>
+              <span className={`text-xl font-bold ${company.is_verified ? 'text-green-700' : 'text-gray-400'}`}>
                 {company.name.charAt(0)}
               </span>
             </div>
@@ -135,6 +135,9 @@ export default async function CompanyPage({ params }: Props) {
                 <h1 className="text-[28px] font-bold text-gray-900 tracking-[-0.025em] leading-tight">{company.name}</h1>
                 {company.is_verified && (
                   <span className="inline-flex items-center gap-1 text-[11px] font-semibold bg-green-50 text-green-700 border border-green-200 px-2.5 py-1 rounded-full">
+                    <svg className="w-3 h-3" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
                     인증업체
                   </span>
                 )}
@@ -163,6 +166,22 @@ export default async function CompanyPage({ params }: Props) {
               </div>
             </div>
           </div>
+
+          {company.is_verified && (
+            <div className="flex items-center gap-3 bg-green-50 border border-green-200 rounded-xl p-3.5 mb-6">
+              <div className="w-9 h-9 bg-white border border-green-200 rounded-lg flex items-center justify-center flex-shrink-0">
+                <svg className="w-4 h-4 text-green-600" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+              </div>
+              <div>
+                <p className="text-[13px] font-semibold text-green-800">BOXTER 인증업체</p>
+                <p className="text-[12px] text-gray-600">
+                  웹사이트 운영 확인{(company.certifications as string[] | null)?.length! > 0 ? ` · ${(company.certifications as string[]).join(' · ')} 보유` : ''}
+                </p>
+              </div>
+            </div>
+          )}
 
           {company.description && (
             <p className="text-[14px] text-gray-600 leading-relaxed mb-6">

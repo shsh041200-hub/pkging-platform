@@ -294,70 +294,86 @@ export default async function HomePage({
             {companies.map((company) => (
               <article
                 key={company.id}
-                className="bg-white border border-gray-200 rounded-xl p-6 hover:border-gray-300 hover:shadow-[0_8px_24px_rgba(0,0,0,0.08),0_2px_4px_rgba(0,0,0,0.04)] hover:-translate-y-px transition-all duration-200 group relative"
+                className="bg-white border border-gray-200 rounded-xl overflow-hidden hover:border-gray-300 hover:shadow-[0_8px_24px_rgba(0,0,0,0.08),0_2px_4px_rgba(0,0,0,0.04)] hover:-translate-y-px transition-all duration-200 group relative"
               >
-                <div className="flex items-start justify-between mb-3.5">
-                  <div className="flex flex-wrap gap-1.5">
-                    {company.buyer_category && (
-                      <span className="text-[11px] font-medium bg-gray-100 text-gray-600 px-2 py-0.5 rounded">
-                        {BUYER_CATEGORY_LABELS[company.buyer_category as BuyerCategory]}
-                      </span>
-                    )}
-                    {company.packaging_form && (
-                      <span className="text-[11px] font-medium bg-gray-100 text-gray-500 px-2 py-0.5 rounded">
-                        {PACKAGING_FORM_LABELS[company.packaging_form as PackagingForm]}
+                {company.is_verified && (company.certifications as string[] | null)?.length! > 0 && (
+                  <div className="flex items-center gap-1.5 bg-gradient-to-r from-green-50 to-emerald-50 px-6 py-2 text-[11px] font-semibold text-green-800 border-b border-green-200">
+                    <svg className="w-3.5 h-3.5 flex-shrink-0" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    인증업체
+                    <span className="ml-auto font-medium text-green-700 text-[11px]">
+                      {(company.certifications as string[])[0]}{(company.certifications as string[]).length > 1 ? ` 외 ${(company.certifications as string[]).length - 1}건` : ''}
+                    </span>
+                  </div>
+                )}
+                <div className="p-6">
+                  <div className="flex items-start justify-between mb-3.5">
+                    <div className="flex flex-wrap gap-1.5">
+                      {company.buyer_category && (
+                        <span className="text-[11px] font-medium bg-gray-100 text-gray-600 px-2 py-0.5 rounded">
+                          {BUYER_CATEGORY_LABELS[company.buyer_category as BuyerCategory]}
+                        </span>
+                      )}
+                      {company.packaging_form && (
+                        <span className="text-[11px] font-medium bg-gray-100 text-gray-500 px-2 py-0.5 rounded">
+                          {PACKAGING_FORM_LABELS[company.packaging_form as PackagingForm]}
+                        </span>
+                      )}
+                    </div>
+                    {company.is_verified && (
+                      <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-green-700 bg-green-50 border border-green-200 px-2 py-0.5 rounded-full flex-shrink-0 ml-2">
+                        <svg className="w-3 h-3" viewBox="0 0 24 24" fill="currentColor">
+                          <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                        인증업체
                       </span>
                     )}
                   </div>
-                  {company.is_verified && (
-                    <span className="text-[11px] font-semibold text-green-700 bg-green-50 border border-green-200 px-2 py-0.5 rounded flex-shrink-0 ml-2">
-                      인증
-                    </span>
-                  )}
-                </div>
 
-                <h2 className="text-base font-bold text-gray-900 mb-1 leading-snug tracking-[-0.02em]">
-                  <Link
-                    href={`/companies/${company.slug}`}
-                    className="after:absolute after:inset-0 after:content-['']"
-                  >
-                    {company.name}
-                  </Link>
-                </h2>
-
-                {company.province && (
-                  <p className="text-[12px] text-gray-400 mb-2.5">
-                    {company.province}{company.city ? ` ${company.city}` : ''}
-                  </p>
-                )}
-
-                <p className="text-[13px] text-gray-500 leading-relaxed line-clamp-2 mb-4">
-                  {company.description ?? ''}
-                </p>
-
-                <div className="border-t border-gray-100 pt-3.5 flex items-center justify-between gap-2">
-                  {company.website ? (
-                    <a
-                      href={company.website}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="relative z-10 text-[12px] text-gray-400 hover:text-gray-600 flex items-center gap-1.5 transition-colors min-w-0"
+                  <h2 className="text-base font-bold text-gray-900 mb-1 leading-snug tracking-[-0.02em]">
+                    <Link
+                      href={`/companies/${company.slug}`}
+                      className="after:absolute after:inset-0 after:content-['']"
                     >
-                      <svg className="w-3 h-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
-                          d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
-                      </svg>
-                      <span className="truncate max-w-[130px]">
-                        {company.website.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '')}
-                      </span>
-                    </a>
-                  ) : (
-                    <span className="text-[12px] text-gray-300">—</span>
+                      {company.name}
+                    </Link>
+                  </h2>
+
+                  {company.province && (
+                    <p className="text-[12px] text-gray-400 mb-2.5">
+                      {company.province}{company.city ? ` ${company.city}` : ''}
+                    </p>
                   )}
-                  <span className="text-[11px] text-gray-400 flex-shrink-0">
-                    {CATEGORY_LABELS[company.category as Category]}
-                    {company.founded_year ? ` · est. ${company.founded_year}` : ''}
-                  </span>
+
+                  <p className="text-[13px] text-gray-500 leading-relaxed line-clamp-2 mb-4">
+                    {company.description ?? ''}
+                  </p>
+
+                  <div className="border-t border-gray-100 pt-3.5 flex items-center justify-between gap-2">
+                    {company.website ? (
+                      <a
+                        href={company.website}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="relative z-10 text-[12px] text-gray-400 hover:text-gray-600 flex items-center gap-1.5 transition-colors min-w-0"
+                      >
+                        <svg className="w-3 h-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
+                            d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
+                        </svg>
+                        <span className="truncate max-w-[130px]">
+                          {company.website.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '')}
+                        </span>
+                      </a>
+                    ) : (
+                      <span className="text-[12px] text-gray-300">—</span>
+                    )}
+                    <span className="text-[11px] text-gray-400 flex-shrink-0">
+                      {CATEGORY_LABELS[company.category as Category]}
+                      {company.founded_year ? ` · est. ${company.founded_year}` : ''}
+                    </span>
+                  </div>
                 </div>
               </article>
             ))}
