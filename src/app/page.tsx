@@ -181,19 +181,20 @@ export default async function HomePage({
               <div className="mt-6 md:mt-0 md:flex-1">
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                   {INDUSTRY_CATEGORIES.filter((cat) => categoryCounts[cat] > 0).map((cat) => (
-                    <Link
-                      key={cat}
-                      href={`/categories/${categoryToSlug(cat)}`}
-                      className="group flex items-center gap-2.5 bg-white border border-gray-200 rounded-lg px-3 py-2.5 hover:border-[#005EFF]/30 hover:bg-[#F8FAFF] transition-all duration-150"
-                    >
-                      <span className="text-base flex-shrink-0">{INDUSTRY_CATEGORY_ICONS[cat]}</span>
-                      <div className="min-w-0">
-                        <span className="text-[13px] font-semibold text-gray-900 group-hover:text-[#005EFF] transition-colors block truncate">
-                          {INDUSTRY_CATEGORY_LABELS[cat]}
-                        </span>
-                        <span className="text-[11px] text-gray-400">{categoryCounts[cat]}개</span>
-                      </div>
-                    </Link>
+                    <form key={cat} action={`/categories/${categoryToSlug(cat)}`} className="contents">
+                      <button
+                        type="submit"
+                        className="group flex items-center gap-2.5 bg-white border border-gray-200 rounded-lg px-3 py-2.5 hover:border-[#005EFF]/30 hover:bg-[#F8FAFF] transition-all duration-150"
+                      >
+                        <span className="text-base flex-shrink-0">{INDUSTRY_CATEGORY_ICONS[cat]}</span>
+                        <div className="min-w-0 text-left">
+                          <span className="text-[13px] font-semibold text-gray-900 group-hover:text-[#005EFF] transition-colors block truncate">
+                            {INDUSTRY_CATEGORY_LABELS[cat]}
+                          </span>
+                          <span className="text-[11px] text-gray-400">{categoryCounts[cat]}개</span>
+                        </div>
+                      </button>
+                    </form>
                   ))}
                 </div>
               </div>
