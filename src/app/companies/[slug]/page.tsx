@@ -269,8 +269,6 @@ export default async function CompanyPage({ params }: Props) {
           <div className="pt-5 border-t border-gray-100">
             <Suspense fallback={null}>
               <CompanyDetailCTA
-                companyId={company.id}
-                companyName={company.name}
                 website={company.website ?? null}
               />
             </Suspense>
@@ -486,8 +484,6 @@ export default async function CompanyPage({ params }: Props) {
       </main>
 
       <MobileStickyBar
-        companyId={company.id}
-        companyName={company.name}
         phone={company.phone ?? null}
       />
 

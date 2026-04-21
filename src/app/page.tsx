@@ -437,12 +437,6 @@ export default async function HomePage({
                         {CATEGORY_LABELS[company.category as Category]}
                         {company.founded_year ? ` · est. ${company.founded_year}` : ''}
                       </span>
-                      <Link
-                        href={`/companies/${company.slug}?quote=true`}
-                        className="border border-[#005EFF] text-[#005EFF] hover:bg-[#EBF2FF] text-[13px] font-semibold px-3 py-1.5 rounded-lg relative z-10 transition-colors"
-                      >
-                        견적 받기
-                      </Link>
                     </div>
                   </div>
                 </div>
