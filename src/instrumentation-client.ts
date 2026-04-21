@@ -9,7 +9,16 @@ export function register() {
       try {
         return origMeasure(measureName, startOrMeasureOptions as string, endMark as string)
       } catch {
-        return origMeasure(measureName)
+        return {
+          name: measureName,
+          entryType: 'measure',
+          startTime: 0,
+          duration: 0,
+          detail: null,
+          toJSON() {
+            return { name: measureName, entryType: 'measure', startTime: 0, duration: 0 }
+          },
+        } as PerformanceMeasure
       }
     }
   }
