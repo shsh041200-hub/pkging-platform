@@ -179,12 +179,6 @@ export default async function CompanyPage({ params }: Props) {
             </div>
           )}
 
-          {company.description && (
-            <p className="text-[14px] text-gray-600 leading-relaxed mb-6">
-              {company.description}
-            </p>
-          )}
-
           {/* Tags */}
           {hasTags && (
             <div className="flex flex-wrap gap-1.5 mb-6">
@@ -240,6 +234,20 @@ export default async function CompanyPage({ params }: Props) {
             </div>
           )}
         </div>
+
+        {/* Company Description */}
+        {company.description && (
+          <div className="bg-white border border-gray-200 rounded-xl p-6 sm:p-8">
+            <h2 className="text-[13px] font-semibold text-gray-700 uppercase tracking-wider mb-4">
+              업체 소개
+            </h2>
+            <div className="border-l-2 border-[#005EFF]/20 pl-5">
+              <p className="text-[15px] text-gray-700 leading-[1.8] whitespace-pre-line">
+                {company.description}
+              </p>
+            </div>
+          </div>
+        )}
 
         {/* Products + Certifications grid */}
         {((company.products && company.products.length > 0) ||
