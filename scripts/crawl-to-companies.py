@@ -282,6 +282,7 @@ def extracted_to_company(extracted: dict, slug: str) -> dict:
     phone = extracted.get("phone", "")
     category = infer_category(extracted)
     website = extracted.get("link", "")
+    data_source = extracted.get("source", "manual")
 
     # Only use link if it's a real company homepage (not naver.com)
     if website and "naver.com" in website:
@@ -296,6 +297,7 @@ def extracted_to_company(extracted: dict, slug: str) -> dict:
         "city": city,
         "phone": phone or None,
         "website": website or None,
+        "data_source": data_source,
         "is_verified": False,
         "tags": [],
         "products": [],

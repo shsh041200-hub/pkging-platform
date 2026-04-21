@@ -96,6 +96,7 @@ export async function runCrawlJob(jobId: string): Promise<PipelineResult> {
     website: extracted.website,
     products: extracted.products,
     certifications: extracted.certifications,
+    data_source: 'website_crawl',
     is_verified: false,
     updated_at: new Date().toISOString(),
   }
