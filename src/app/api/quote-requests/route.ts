@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@/lib/supabase/server'
+import { createServiceClient } from '@/lib/supabase/service'
 
 const PHONE_RE = /^0\d{1,2}-?\d{3,4}-?\d{4}$/
 
@@ -37,7 +37,7 @@ export async function POST(request: NextRequest) {
     )
   }
 
-  const supabase = await createClient()
+  const supabase = createServiceClient()
 
   const { data: company } = await supabase
     .from('companies')
