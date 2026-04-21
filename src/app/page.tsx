@@ -18,6 +18,12 @@ import { simplifyCompanyName } from '@/lib/simplify-company-name'
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://packlinx.com'
 
+const DATA_SOURCE_LABELS: Record<string, string> = {
+  naver_local: '출처: 네이버 지역 검색',
+  public_data_portal: '출처: 공공데이터 포털',
+  website_crawl: '출처: 업체 웹사이트',
+}
+
 type SearchParams = Promise<{
   q?: string
   buyer_category?: string
@@ -92,7 +98,7 @@ export default async function HomePage({
 
   let query = supabase
     .from('companies')
-    .select('id, slug, name, description, category, buyer_category, packaging_form, tags, is_verified, products, certifications, founded_year, website, service_capabilities, target_industries')
+    .select('id, slug, name, description, category, buyer_category, packaging_form, tags, is_verified, products, certifications, founded_year, website, service_capabilities, target_industries, data_source')
     .order('is_verified', { ascending: false })
     .order('name')
     .limit(60)
@@ -399,6 +405,12 @@ export default async function HomePage({
                       )}
                       <p className="text-[10px] text-gray-400 mt-0.5">AI 생성 정보</p>
                     </div>
+                  )}
+
+                  {company.data_source && DATA_SOURCE_LABELS[company.data_source as string] && (
+                    <p className="text-[10px] text-gray-400 -mt-1 mb-1">
+                      {DATA_SOURCE_LABELS[company.data_source as string]}
+                    </p>
                   )}
 
                   <div className="border-t border-gray-100 pt-3.5 flex items-center justify-between gap-2">

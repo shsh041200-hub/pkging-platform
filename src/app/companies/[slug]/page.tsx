@@ -53,6 +53,12 @@ const EMPLOYEE_RANGE_LABELS: Record<string, string> = {
   '200+': '200명 이상',
 }
 
+const DATA_SOURCE_LABELS: Record<string, string> = {
+  naver_local: '출처: 네이버 지역 검색',
+  public_data_portal: '출처: 공공데이터 포털',
+  website_crawl: '출처: 업체 웹사이트',
+}
+
 export default async function CompanyPage({ params }: Props) {
   const { slug: rawSlug } = await params
   const slug = decodeURIComponent(rawSlug)
@@ -275,6 +281,18 @@ export default async function CompanyPage({ params }: Props) {
               정보 수정 요청
             </a>
           </div>
+
+          {/* Data Source Badge */}
+          {company.data_source && DATA_SOURCE_LABELS[company.data_source as string] && (
+            <div className="pt-3 mt-1 flex">
+              <span className="inline-flex items-center gap-1 text-[11px] text-gray-400 bg-gray-50 border border-gray-100 px-2.5 py-1 rounded-full">
+                <svg className="w-3 h-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                {DATA_SOURCE_LABELS[company.data_source as string]}
+              </span>
+            </div>
+          )}
         </div>
 
         {/* Company Description */}
