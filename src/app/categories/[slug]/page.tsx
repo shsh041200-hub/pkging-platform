@@ -116,7 +116,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
         <div className="max-w-7xl mx-auto px-5 sm:px-8 h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-3">
             <BoxterLogo variant="dark" size="sm" />
-            <span className="hidden sm:inline text-white/25 text-[11px] font-medium tracking-widest uppercase">B2B 포장업체 디렉토리</span>
+            <span className="hidden sm:inline text-white/25 text-[11px] font-medium tracking-widest uppercase">전국 패키징 파트너, 한 번에</span>
           </Link>
         </div>
       </header>

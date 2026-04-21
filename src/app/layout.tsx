@@ -6,7 +6,7 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://packlinx.com'
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: 'BOXTER — 국내 B2B 포장업체 디렉토리',
+    default: 'BOXTER — 전국 패키징 파트너, 한 번에',
     template: '%s | BOXTER',
   },
   description: '전국 패키징 업체를 한눈에. 식품·산업용·친환경 포장재 B2B 파트너 찾기.',
@@ -18,7 +18,7 @@ export const metadata: Metadata = {
     canonical: '/',
   },
   openGraph: {
-    title: 'BOXTER — 국내 B2B 포장업체 디렉토리',
+    title: 'BOXTER — 전국 패키징 파트너, 한 번에',
     description: '전국 패키징 업체를 한눈에. 식품·산업용·친환경 포장재 B2B 파트너 찾기.',
     url: siteUrl,
     siteName: 'BOXTER',
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'BOXTER — 국내 B2B 포장업체 디렉토리',
+    title: 'BOXTER — 전국 패키징 파트너, 한 번에',
     description: '전국 패키징 업체를 한눈에. 식품·산업용·친환경 포장재 B2B 파트너 찾기.',
   },
   verification: {

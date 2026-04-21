@@ -128,7 +128,7 @@ export default async function HomePage({
         <div className="max-w-7xl mx-auto px-5 sm:px-8 h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-3">
             <BoxterLogo variant="dark" size="sm" />
-            <span className="hidden sm:inline text-white/25 text-[11px] font-medium tracking-widest uppercase">B2B 포장업체 디렉토리</span>
+            <span className="hidden sm:inline text-white/25 text-[11px] font-medium tracking-widest uppercase">전국 패키징 파트너, 한 번에</span>
           </Link>
         </div>
       </header>
@@ -141,7 +141,7 @@ export default async function HomePage({
               국내 패키징 플랫폼
             </div>
             <h1 className="text-[28px] sm:text-[36px] font-extrabold text-gray-900 leading-[1.15] tracking-[-0.04em]">
-              국내 포장업체 전문 디렉토리
+              전국 패키징 파트너, 한 번에
             </h1>
             <p className="text-gray-500 text-[15px] mt-2 leading-relaxed">
               B2B 포장 파트너를 바로 찾으세요.
