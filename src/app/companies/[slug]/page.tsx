@@ -3,7 +3,7 @@ import Link from 'next/link'
 import type { Metadata } from 'next'
 import { createClient } from '@/lib/supabase/server'
 import { BoxterLogo } from '@/components/BoxterLogo'
-import { CATEGORY_LABELS, TAG_LABELS, type Category, type CompanyTag } from '@/types'
+import { CATEGORY_LABELS, TAG_LABELS, BUYER_CATEGORY_LABELS, type Category, type CompanyTag, type BuyerCategory } from '@/types'
 
 type Props = {
   params: Promise<{ slug: string }>
@@ -89,6 +89,38 @@ export default async function CompanyPage({ params }: Props) {
     ...(avgRating && { aggregateRating: { '@type': 'AggregateRating', ratingValue: avgRating, reviewCount: reviews?.length ?? 0 } }),
   }
 
+  const buyerCat = company.buyer_category as BuyerCategory | null
+  const breadcrumbCategoryName = buyerCat
+    ? BUYER_CATEGORY_LABELS[buyerCat]
+    : (CATEGORY_LABELS[company.category as Category] ?? company.category)
+  const breadcrumbCategoryUrl = buyerCat
+    ? `${siteUrl}/categories/${buyerCat.replace(/_/g, '-')}`
+    : `${siteUrl}/?category=${company.category}`
+  const breadcrumbJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'BOXTER',
+        item: siteUrl,
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: breadcrumbCategoryName,
+        item: breadcrumbCategoryUrl,
+      },
+      {
+        '@type': 'ListItem',
+        position: 3,
+        name: company.name,
+        item: `${siteUrl}/companies/${slug}`,
+      },
+    ],
+  }
+
   const hasExpandedInfo = company.founded_year || company.employee_range || company.min_order_quantity
   const hasServiceCapabilities = company.service_capabilities && company.service_capabilities.length > 0
   const hasKeyClients = company.key_clients && company.key_clients.length > 0
@@ -100,6 +132,10 @@ export default async function CompanyPage({ params }: Props) {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(companyJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
 
       {/* Header */}
@@ -221,8 +257,8 @@ export default async function CompanyPage({ params }: Props) {
           )}
 
           {/* Contact */}
-          {company.website && (
-            <div className="pt-5 border-t border-gray-100 flex flex-wrap gap-3">
+          <div className="pt-5 border-t border-gray-100 flex flex-wrap gap-3">
+            {company.website && (
               <a
                 href={company.website}
                 target="_blank"
@@ -231,15 +267,22 @@ export default async function CompanyPage({ params }: Props) {
               >
                 웹사이트 방문하기 →
               </a>
-            </div>
-          )}
+            )}
+            <a
+              href={`mailto:privacy@pkging.kr?subject=${encodeURIComponent('업체 정보 수정 요청: ' + company.name)}`}
+              className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-800 border border-gray-200 hover:border-gray-300 text-[13px] font-medium px-5 py-2.5 rounded-lg transition-colors"
+            >
+              정보 수정 요청
+            </a>
+          </div>
         </div>
 
         {/* Company Description */}
         {company.description && (
           <div className="bg-white border border-gray-200 rounded-xl p-6 sm:p-8">
-            <h2 className="text-[13px] font-semibold text-gray-700 uppercase tracking-wider mb-4">
+            <h2 className="text-[13px] font-semibold text-gray-700 uppercase tracking-wider mb-4 flex items-center gap-2">
               업체 소개
+              <span className="text-[10px] font-medium text-[#005EFF] bg-[#EBF2FF] px-1.5 py-0.5 rounded normal-case tracking-normal">AI 생성</span>
             </h2>
             <div className="border-l-2 border-[#005EFF]/20 pl-5">
               <p className="text-[15px] text-gray-700 leading-[1.8] whitespace-pre-line">
@@ -294,8 +337,9 @@ export default async function CompanyPage({ params }: Props) {
         {/* Service Capabilities */}
         {hasServiceCapabilities && (
           <div className="bg-white border border-gray-200 rounded-xl p-5">
-            <h2 className="text-[13px] font-semibold text-gray-700 uppercase tracking-wider mb-4">
+            <h2 className="text-[13px] font-semibold text-gray-700 uppercase tracking-wider mb-4 flex items-center gap-2">
               서비스 역량
+              <span className="text-[10px] font-medium text-[#005EFF] bg-[#EBF2FF] px-1.5 py-0.5 rounded normal-case tracking-normal">AI 생성</span>
             </h2>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
               {(company.service_capabilities as string[]).map((cap: string, i: number) => (
@@ -316,8 +360,9 @@ export default async function CompanyPage({ params }: Props) {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {hasTargetIndustries && (
               <div className="bg-white border border-gray-200 rounded-xl p-5">
-                <h2 className="text-[13px] font-semibold text-gray-700 uppercase tracking-wider mb-3">
+                <h2 className="text-[13px] font-semibold text-gray-700 uppercase tracking-wider mb-3 flex items-center gap-2">
                   주요 납품 산업
+                  <span className="text-[10px] font-medium text-[#005EFF] bg-[#EBF2FF] px-1.5 py-0.5 rounded normal-case tracking-normal">AI 생성</span>
                 </h2>
                 <div className="flex flex-wrap gap-2">
                   {(company.target_industries as string[]).map((ind: string, i: number) => (
@@ -334,8 +379,9 @@ export default async function CompanyPage({ params }: Props) {
 
             {hasKeyClients && (
               <div className="bg-white border border-gray-200 rounded-xl p-5">
-                <h2 className="text-[13px] font-semibold text-gray-700 uppercase tracking-wider mb-3">
+                <h2 className="text-[13px] font-semibold text-gray-700 uppercase tracking-wider mb-3 flex items-center gap-2">
                   주요 납품처
+                  <span className="text-[10px] font-medium text-[#005EFF] bg-[#EBF2FF] px-1.5 py-0.5 rounded normal-case tracking-normal">AI 생성</span>
                 </h2>
                 <div className="flex flex-wrap gap-2">
                   {(company.key_clients as string[]).map((client: string, i: number) => (
@@ -403,6 +449,19 @@ export default async function CompanyPage({ params }: Props) {
               <p className="text-[13px] text-gray-400">아직 리뷰가 없습니다.</p>
             </div>
           )}
+        </div>
+
+        {/* Disclaimer */}
+        <div className="bg-gray-50 border border-gray-200 rounded-xl p-5">
+          <p className="text-[12px] text-gray-500 leading-relaxed">
+            <span className="font-semibold text-gray-600">참고 안내</span>
+            {' '}— 본 페이지의 일부 정보(업체 소개, 서비스 역량, 주요 납품 산업, 주요 납품처 등)는 AI가 공개된 자료를 기반으로 자동 생성한 것으로, 참고용이며 정확성을 보장하지 않습니다.
+            정보 오류가 있는 경우{' '}
+            <a href="mailto:privacy@pkging.kr" className="text-[#005EFF] hover:underline underline-offset-2">
+              privacy@pkging.kr
+            </a>
+            로 수정을 요청해 주세요.
+          </p>
         </div>
       </main>
 

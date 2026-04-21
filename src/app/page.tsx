@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import Link from 'next/link'
 import { BoxterLogo } from '@/components/BoxterLogo'
 import { FilterAccordion } from './filter-accordion'
@@ -16,6 +17,37 @@ import { createClient } from '@/lib/supabase/server'
 import { simplifyCompanyName } from '@/lib/simplify-company-name'
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://packlinx.com'
+
+type SearchParams = Promise<{
+  q?: string
+  buyer_category?: string
+  packaging_form?: string
+  category?: string
+  tag?: string
+}>
+
+export async function generateMetadata({
+  searchParams,
+}: {
+  searchParams: SearchParams
+}): Promise<Metadata> {
+  const { q, buyer_category, packaging_form, category, tag } = await searchParams
+  const hasFilter = buyer_category || packaging_form || category || tag
+
+  if (q) {
+    return {
+      robots: { index: false, follow: true },
+    }
+  }
+
+  if (hasFilter) {
+    return {
+      alternates: { canonical: siteUrl },
+    }
+  }
+
+  return {}
+}
 
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -60,7 +92,7 @@ export default async function HomePage({
 
   let query = supabase
     .from('companies')
-    .select('id, slug, name, description, category, buyer_category, packaging_form, tags, is_verified, products, certifications, founded_year, website')
+    .select('id, slug, name, description, category, buyer_category, packaging_form, tags, is_verified, products, certifications, founded_year, website, service_capabilities, target_industries')
     .order('is_verified', { ascending: false })
     .order('name')
     .limit(60)
@@ -341,9 +373,33 @@ export default async function HomePage({
                     </Link>
                   </h2>
 
-                  <p className="text-[13px] text-gray-500 leading-relaxed line-clamp-2 mb-4">
+                  <p className="text-[13px] text-gray-500 leading-relaxed line-clamp-2 mb-3">
                     {company.description ?? ''}
                   </p>
+
+                  {((company.service_capabilities as string[] | null)?.length! > 0 || (company.target_industries as string[] | null)?.length! > 0) && (
+                    <div className="mb-3">
+                      {(company.service_capabilities as string[] | null)?.length! > 0 && (
+                        <div className="flex flex-wrap gap-1 mb-1">
+                          {(company.service_capabilities as string[]).slice(0, 3).map((cap, i) => (
+                            <span key={i} className="text-[11px] font-medium bg-[#EBF2FF] text-[#005EFF] px-2 py-0.5 rounded">
+                              {cap}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+                      {(company.target_industries as string[] | null)?.length! > 0 && (
+                        <div className="flex flex-wrap gap-1 mb-1">
+                          {(company.target_industries as string[]).slice(0, 2).map((ind, i) => (
+                            <span key={i} className="text-[11px] font-medium bg-gray-100 text-gray-500 px-2 py-0.5 rounded">
+                              {ind}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+                      <p className="text-[10px] text-gray-400 mt-0.5">AI 생성 정보</p>
+                    </div>
+                  )}
 
                   <div className="border-t border-gray-100 pt-3.5 flex items-center justify-between gap-2">
                     {company.website ? (
