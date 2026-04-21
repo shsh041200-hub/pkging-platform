@@ -84,7 +84,6 @@ export default async function CompanyPage({ params }: Props) {
     name: company.name,
     description: company.description ?? '',
     url: `${siteUrl}/companies/${slug}`,
-    ...(company.province && { address: { '@type': 'PostalAddress', addressRegion: company.province, addressLocality: company.city ?? '' } }),
     ...(company.website && { sameAs: [company.website] }),
     ...(company.founded_year && { foundingDate: String(company.founded_year) }),
     ...(avgRating && { aggregateRating: { '@type': 'AggregateRating', ratingValue: avgRating, reviewCount: reviews?.length ?? 0 } }),
@@ -146,9 +145,6 @@ export default async function CompanyPage({ params }: Props) {
                 <span className="bg-gray-100 text-gray-600 text-[11px] font-medium px-2.5 py-1 rounded">
                   {CATEGORY_LABELS[company.category as Category]}
                 </span>
-                {company.province && (
-                  <span className="text-[12px] text-gray-400">{company.province} {company.city}</span>
-                )}
                 {company.founded_year && (
                   <span className="text-[12px] text-gray-400">est. {company.founded_year}</span>
                 )}

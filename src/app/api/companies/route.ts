@@ -8,7 +8,6 @@ export async function GET(request: NextRequest) {
   const packaging_form = searchParams.get('packaging_form')
   const category = searchParams.get('category')
   const tag = searchParams.get('tag')
-  const province = searchParams.get('province')
   const page = parseInt(searchParams.get('page') ?? '1', 10)
   const limit = Math.min(parseInt(searchParams.get('limit') ?? '20', 10), 50)
   const offset = (page - 1) * limit
@@ -18,7 +17,7 @@ export async function GET(request: NextRequest) {
   let query = supabase
     .from('companies')
     .select(
-      'id, slug, name, description, category, buyer_category, packaging_form, subcategory, tags, city, province, is_verified, founded_year, employee_range, min_order_quantity, service_capabilities, target_industries, products, certifications',
+      'id, slug, name, description, category, buyer_category, packaging_form, subcategory, tags, is_verified, founded_year, employee_range, min_order_quantity, service_capabilities, target_industries, products, certifications',
       { count: 'exact' }
     )
     .order('is_verified', { ascending: false })
@@ -34,7 +33,6 @@ export async function GET(request: NextRequest) {
   if (packaging_form) query = query.eq('packaging_form', packaging_form)
   if (category) query = query.eq('category', category)
   if (tag) query = query.contains('tags', [tag])
-  if (province) query = query.eq('province', province)
 
   const { data, count, error } = await query
 

@@ -59,14 +59,14 @@ export default async function HomePage({
 
   let query = supabase
     .from('companies')
-    .select('id, slug, name, description, category, buyer_category, packaging_form, tags, city, province, is_verified, products, certifications, founded_year, website')
+    .select('id, slug, name, description, category, buyer_category, packaging_form, tags, is_verified, products, certifications, founded_year, website')
     .order('is_verified', { ascending: false })
     .order('name')
     .limit(60)
 
   if (q) {
     query = query.or(
-      `name.ilike.%${q}%,description.ilike.%${q}%,city.ilike.%${q}%,province.ilike.%${q}%`
+      `name.ilike.%${q}%,description.ilike.%${q}%`
     )
   }
   if (buyer_category) {
@@ -339,12 +339,6 @@ export default async function HomePage({
                       {company.name}
                     </Link>
                   </h2>
-
-                  {company.province && (
-                    <p className="text-[12px] text-gray-400 mb-2.5">
-                      {company.province}{company.city ? ` ${company.city}` : ''}
-                    </p>
-                  )}
 
                   <p className="text-[13px] text-gray-500 leading-relaxed line-clamp-2 mb-4">
                     {company.description ?? ''}
