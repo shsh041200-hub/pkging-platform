@@ -209,17 +209,6 @@ export default async function CategoryPage({ params, searchParams }: Props) {
                 key={company.id}
                 className="bg-white border border-gray-200 rounded-xl overflow-hidden hover:border-gray-300 hover:shadow-[0_8px_24px_rgba(0,0,0,0.08),0_2px_4px_rgba(0,0,0,0.04)] hover:-translate-y-px transition-all duration-200 group relative"
               >
-                {company.is_verified && (company.certifications as string[] | null)?.length! > 0 && (
-                  <div className="flex items-center gap-1.5 bg-gradient-to-r from-green-50 to-emerald-50 px-6 py-2 text-[11px] font-semibold text-green-800 border-b border-green-200">
-                    <svg className="w-3.5 h-3.5 flex-shrink-0" viewBox="0 0 24 24" fill="currentColor">
-                      <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                    </svg>
-                    인증업체
-                    <span className="ml-auto font-medium text-green-700 text-[11px]">
-                      {(company.certifications as string[])[0]}{(company.certifications as string[]).length > 1 ? ` 외 ${(company.certifications as string[]).length - 1}건` : ''}
-                    </span>
-                  </div>
-                )}
                 <div className="p-6">
                   <div className="flex items-start justify-between mb-3.5">
                     <div className="flex flex-wrap gap-1.5">
@@ -229,14 +218,6 @@ export default async function CategoryPage({ params, searchParams }: Props) {
                         </span>
                       )}
                     </div>
-                    {company.is_verified && (
-                      <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-green-700 bg-green-50 border border-green-200 px-2 py-0.5 rounded-full flex-shrink-0 ml-2">
-                        <svg className="w-3 h-3" viewBox="0 0 24 24" fill="currentColor">
-                          <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                        </svg>
-                        인증업체
-                      </span>
-                    )}
                   </div>
 
                   <h2 className="text-base font-bold text-gray-900 mb-1 leading-snug tracking-[-0.02em] line-clamp-1" title={company.name}>

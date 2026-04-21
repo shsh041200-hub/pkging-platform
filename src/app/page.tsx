@@ -155,7 +155,7 @@ export default async function HomePage({
                 <input
                   name="q"
                   defaultValue={q}
-                  placeholder="업체명, 제품, 인증, 지역으로 검색..."
+                  placeholder="업체명, 제품, 인증으로 검색..."
                   className="flex-1 px-5 py-3.5 text-[15px] text-gray-900 bg-white placeholder:text-gray-400 focus:outline-none"
                 />
                 <button
@@ -168,8 +168,6 @@ export default async function HomePage({
               {totalCount != null && (
                 <div className="flex items-center gap-3 mt-3 text-[12px] text-gray-400 font-medium">
                   <span>{totalCount.toLocaleString()}개 업체 등록됨</span>
-                  <span className="text-gray-200">·</span>
-                  <span>업체 인증 시스템</span>
                   <span className="text-gray-200">·</span>
                   <span>무료 이용</span>
                 </div>
@@ -306,14 +304,6 @@ export default async function HomePage({
                         </span>
                       ))}
                     </div>
-                    {company.is_verified && (
-                      <span className="inline-flex items-center gap-1 text-[11px] font-medium text-green-700 bg-green-50 border border-green-200 px-2 py-0.5 rounded flex-shrink-0 ml-2">
-                        <svg className="w-3 h-3" viewBox="0 0 24 24" fill="currentColor">
-                          <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                        </svg>
-                        인증
-                      </span>
-                    )}
                   </div>
 
                   <h2 className="text-base font-bold text-gray-900 mb-1 leading-snug tracking-[-0.02em] line-clamp-1" title={company.name}>
