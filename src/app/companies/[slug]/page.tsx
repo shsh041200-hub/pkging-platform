@@ -1,8 +1,11 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
+import { Suspense } from 'react'
 import type { Metadata } from 'next'
 import { createClient } from '@/lib/supabase/server'
 import { BoxterLogo } from '@/components/BoxterLogo'
+import { CompanyDetailCTA } from '@/components/CompanyDetailCTA'
+import { MobileStickyBar } from '@/components/MobileStickyBar'
 import { CATEGORY_LABELS, TAG_LABELS, BUYER_CATEGORY_LABELS, type Category, type CompanyTag, type BuyerCategory } from '@/types'
 
 type Props = {
@@ -161,7 +164,7 @@ export default async function CompanyPage({ params }: Props) {
         </Link>
       </div>
 
-      <main className="max-w-[800px] mx-auto px-4 sm:px-6 py-5 pb-16 space-y-4">
+      <main className="max-w-[800px] mx-auto px-4 sm:px-6 pt-5 pb-20 md:pb-16 space-y-4">
         {/* Company Hero Card */}
         <div className="bg-white border border-gray-200 rounded-xl p-6 sm:p-10">
           <div className="flex items-start gap-4 mb-6">
@@ -262,24 +265,15 @@ export default async function CompanyPage({ params }: Props) {
             </div>
           )}
 
-          {/* Contact */}
-          <div className="pt-5 border-t border-gray-100 flex flex-wrap gap-3">
-            {company.website && (
-              <a
-                href={company.website}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 bg-[#005EFF] hover:bg-[#0047CC] text-white text-[13px] font-semibold px-5 py-2.5 rounded-lg transition-colors"
-              >
-                웹사이트 방문하기 →
-              </a>
-            )}
-            <a
-              href={`mailto:privacy@pkging.kr?subject=${encodeURIComponent('업체 정보 수정 요청: ' + company.name)}`}
-              className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-800 border border-gray-200 hover:border-gray-300 text-[13px] font-medium px-5 py-2.5 rounded-lg transition-colors"
-            >
-              정보 수정 요청
-            </a>
+          {/* CTA */}
+          <div className="pt-5 border-t border-gray-100">
+            <Suspense fallback={null}>
+              <CompanyDetailCTA
+                companyId={company.id}
+                companyName={company.name}
+                website={company.website ?? null}
+              />
+            </Suspense>
           </div>
 
           {/* Data Source Badge */}
@@ -480,8 +474,22 @@ export default async function CompanyPage({ params }: Props) {
             </a>
             로 수정을 요청해 주세요.
           </p>
+          <div className="mt-3 pt-3 border-t border-gray-200">
+            <a
+              href={`mailto:privacy@pkging.kr?subject=${encodeURIComponent('업체 정보 수정 요청: ' + company.name)}`}
+              className="text-[12px] text-gray-500 hover:text-gray-700 underline underline-offset-2 transition-colors"
+            >
+              정보 수정 요청 →
+            </a>
+          </div>
         </div>
       </main>
+
+      <MobileStickyBar
+        companyId={company.id}
+        companyName={company.name}
+        phone={company.phone ?? null}
+      />
 
       {/* Footer */}
       <footer className="border-t border-gray-100 bg-gray-50 py-8">

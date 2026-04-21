@@ -432,10 +432,18 @@ export default async function HomePage({
                     ) : (
                       <span className="text-[12px] text-gray-300">—</span>
                     )}
-                    <span className="text-[11px] text-gray-400 flex-shrink-0">
-                      {CATEGORY_LABELS[company.category as Category]}
-                      {company.founded_year ? ` · est. ${company.founded_year}` : ''}
-                    </span>
+                    <div className="flex items-center gap-2 flex-shrink-0">
+                      <span className="text-[11px] text-gray-400">
+                        {CATEGORY_LABELS[company.category as Category]}
+                        {company.founded_year ? ` · est. ${company.founded_year}` : ''}
+                      </span>
+                      <Link
+                        href={`/companies/${company.slug}?quote=true`}
+                        className="border border-[#005EFF] text-[#005EFF] hover:bg-[#EBF2FF] text-[13px] font-semibold px-3 py-1.5 rounded-lg relative z-10 transition-colors"
+                      >
+                        견적 받기
+                      </Link>
+                    </div>
                   </div>
                 </div>
               </article>
