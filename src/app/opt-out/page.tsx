@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import { BoxterLogo } from '@/components/BoxterLogo'
+import OptOutForm from './OptOutForm'
 
 export const metadata: Metadata = {
   title: '정보 삭제·수정 요청 — BOXTER',
@@ -35,103 +36,7 @@ export default function OptOutPage() {
           </p>
         </div>
 
-        <form
-          action="https://formsubmit.co/privacy@pkging.kr"
-          method="POST"
-          className="space-y-5"
-        >
-          {/* FormSubmit hidden fields */}
-          <input type="hidden" name="_subject" value="[BOXTER] 정보 삭제·수정 요청" />
-          <input type="hidden" name="_captcha" value="false" />
-          <input type="hidden" name="_template" value="table" />
-          <input type="hidden" name="_next" value="https://pkging.kr/opt-out/thanks" />
-
-          <div>
-            <label htmlFor="company" className="block text-sm font-medium text-slate-700 mb-1">
-              업체명 <span className="text-red-500">*</span>
-            </label>
-            <input
-              id="company"
-              name="업체명"
-              type="text"
-              required
-              placeholder="예: (주)한국포장"
-              className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
-
-          <div>
-            <label htmlFor="website" className="block text-sm font-medium text-slate-700 mb-1">
-              업체 웹사이트 URL
-            </label>
-            <input
-              id="website"
-              name="웹사이트_URL"
-              type="url"
-              placeholder="https://example.com"
-              className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
-
-          <div>
-            <label htmlFor="request_type" className="block text-sm font-medium text-slate-700 mb-1">
-              요청 유형 <span className="text-red-500">*</span>
-            </label>
-            <select
-              id="request_type"
-              name="요청_유형"
-              required
-              className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
-            >
-              <option value="">선택해 주세요</option>
-              <option value="삭제">정보 삭제 (디렉토리에서 완전 제거)</option>
-              <option value="수정">정보 수정 (특정 항목 변경)</option>
-              <option value="크롤링_차단">크롤링 중단 요청</option>
-              <option value="기타">기타</option>
-            </select>
-          </div>
-
-          <div>
-            <label htmlFor="detail" className="block text-sm font-medium text-slate-700 mb-1">
-              요청 내용 <span className="text-red-500">*</span>
-            </label>
-            <textarea
-              id="detail"
-              name="요청_내용"
-              required
-              rows={4}
-              placeholder="삭제 또는 수정하실 내용을 구체적으로 기재해 주세요."
-              className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
-            />
-          </div>
-
-          <div>
-            <label htmlFor="contact" className="block text-sm font-medium text-slate-700 mb-1">
-              회신용 이메일 <span className="text-red-500">*</span>
-            </label>
-            <input
-              id="contact"
-              name="회신_이메일"
-              type="email"
-              required
-              placeholder="your@email.com"
-              className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
-
-          <div className="pt-2">
-            <button
-              type="submit"
-              className="w-full rounded-lg bg-[#0d1d2e] text-white font-medium py-2.5 text-sm hover:bg-slate-700 transition-colors"
-            >
-              요청 제출
-            </button>
-          </div>
-
-          <p className="text-xs text-slate-400 text-center">
-            제출하신 정보는 요청 처리 목적으로만 사용되며, 처리 완료 후 파기됩니다.
-          </p>
-        </form>
+        <OptOutForm />
       </main>
 
       <footer className="border-t border-slate-200 bg-white py-6">
