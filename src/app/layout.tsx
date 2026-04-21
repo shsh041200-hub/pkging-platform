@@ -31,9 +31,9 @@ export const metadata: Metadata = {
     description: '전국 패키징 업체를 한눈에. 식품·산업용·친환경 포장재 B2B 파트너 찾기.',
   },
   verification: {
-    google: '',
+    google: '_GGnVSZzAe6F2EM9dnt4z7PIMimex08aUukQZzAxN7c',
     other: {
-      'naver-site-verification': '',
+      'naver-site-verification': '61dbcdceef233109c8f6544378cd3884448d161e',
     },
   },
 }
