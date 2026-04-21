@@ -86,7 +86,6 @@ export default async function CompanyPage({ params }: Props) {
     url: `${siteUrl}/companies/${slug}`,
     ...(company.province && { address: { '@type': 'PostalAddress', addressRegion: company.province, addressLocality: company.city ?? '' } }),
     ...(company.website && { sameAs: [company.website] }),
-    ...(company.email && { email: company.email }),
     ...(company.founded_year && { foundingDate: String(company.founded_year) }),
     ...(avgRating && { aggregateRating: { '@type': 'AggregateRating', ratingValue: avgRating, reviewCount: reviews?.length ?? 0 } }),
   }
@@ -213,26 +212,16 @@ export default async function CompanyPage({ params }: Props) {
           )}
 
           {/* Contact */}
-          {(company.email || company.website) && (
+          {company.website && (
             <div className="pt-5 border-t border-gray-100 flex flex-wrap gap-3">
-              {company.website && (
-                <a
-                  href={company.website}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 bg-[#005EFF] hover:bg-[#0047CC] text-white text-[13px] font-semibold px-5 py-2.5 rounded-lg transition-colors"
-                >
-                  웹사이트 방문하기 →
-                </a>
-              )}
-              {company.email && (
-                <a
-                  href={`mailto:${company.email}`}
-                  className="inline-flex items-center gap-2 bg-gray-100 hover:bg-gray-200 text-gray-700 text-[13px] font-medium px-5 py-2.5 rounded-lg transition-colors"
-                >
-                  {company.email}
-                </a>
-              )}
+              <a
+                href={company.website}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 bg-[#005EFF] hover:bg-[#0047CC] text-white text-[13px] font-semibold px-5 py-2.5 rounded-lg transition-colors"
+              >
+                웹사이트 방문하기 →
+              </a>
             </div>
           )}
         </div>

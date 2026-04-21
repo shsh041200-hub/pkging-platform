@@ -119,11 +119,11 @@ export interface Company {
   tags: string[]
   buyer_category: BuyerCategory | null
   packaging_form: PackagingForm | null
-  address: string | null
+  address?: string | null
   city: string | null
   province: string | null
   phone: string | null
-  email: string | null
+  email?: string | null
   website: string | null
   logo_url: string | null
   products: string[]
