@@ -1,6 +1,6 @@
 import { MetadataRoute } from 'next'
 import { createClient } from '@/lib/supabase/server'
-import { BUYER_CATEGORY_LABELS, type BuyerCategory } from '@/types'
+import { INDUSTRY_CATEGORIES } from '@/types'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://packlinx.com'
@@ -18,10 +18,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.7,
   }))
 
-  const categoryUrls: MetadataRoute.Sitemap = (
-    Object.keys(BUYER_CATEGORY_LABELS) as BuyerCategory[]
-  ).map((key) => ({
-    url: `${baseUrl}/categories/${key.replace(/_/g, '-')}`,
+  const categoryUrls: MetadataRoute.Sitemap = INDUSTRY_CATEGORIES.map((key) => ({
+    url: `${baseUrl}/categories/${key}`,
     lastModified: new Date(),
     changeFrequency: 'weekly' as const,
     priority: 0.8,

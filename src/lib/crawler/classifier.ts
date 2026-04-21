@@ -1,4 +1,10 @@
-import { type Category, type CompanyTag } from '@/types'
+import {
+  type Category,
+  type CompanyTag,
+  type IndustryCategory,
+  type MaterialType,
+  CATEGORY_TO_MATERIAL,
+} from '@/types'
 
 interface CategoryRule {
   category: Category
@@ -8,6 +14,11 @@ interface CategoryRule {
 
 interface TagRule {
   tag: CompanyTag
+  keywords: string[]
+}
+
+interface IndustryRule {
+  industry: IndustryCategory
   keywords: string[]
 }
 
@@ -71,30 +82,21 @@ const CATEGORY_RULES: CategoryRule[] = [
 ]
 
 const TAG_RULES: TagRule[] = [
-  {
-    tag: 'food_grade',
-    keywords: ['식품', 'HACCP', 'haccp', '식품등급', '냉동', '냉장', '진공포장', '신선', '농산물', '수산물', '식품용', '식품포장'],
-  },
-  {
-    tag: 'industrial',
-    keywords: ['산업용', '공업용', '방청', 'ESD', '팔레트', '물류', '크레이트', '완충재', '산업포장', '중공업', '정밀부품'],
-  },
-  {
-    tag: 'cosmetic',
-    keywords: ['화장품', '코스메틱', '뷰티', '스킨케어', '메이크업', '향수', '화장품용기'],
-  },
-  {
-    tag: 'pharma',
-    keywords: ['제약', '의약품', '의료', '약품', '블리스터', 'pharma', 'GMP'],
-  },
-  {
-    tag: 'design_service',
-    keywords: ['패키지 디자인', '패키징 디자인', '디자인 서비스', '브랜딩', '디자인 에이전시', '디자인 스튜디오', '라벨 디자인'],
-  },
-  {
-    tag: 'ecommerce',
-    keywords: ['이커머스', '온라인 쇼핑', '언박싱', 'D2C', '배송박스', '쿠팡', '스마트스토어'],
-  },
+  { tag: 'food_grade', keywords: ['식품', 'HACCP', 'haccp', '식품등급', '냉동', '냉장', '진공포장', '신선', '농산물', '수산물', '식품용', '식품포장'] },
+  { tag: 'industrial', keywords: ['산업용', '공업용', '방청', 'ESD', '팔레트', '물류', '크레이트', '완충재', '산업포장', '중공업', '정밀부품'] },
+  { tag: 'cosmetic', keywords: ['화장품', '코스메틱', '뷰티', '스킨케어', '메이크업', '향수', '화장품용기'] },
+  { tag: 'pharma', keywords: ['제약', '의약품', '의료', '약품', '블리스터', 'pharma', 'GMP'] },
+  { tag: 'design_service', keywords: ['패키지 디자인', '패키징 디자인', '디자인 서비스', '브랜딩', '디자인 에이전시', '디자인 스튜디오', '라벨 디자인'] },
+  { tag: 'ecommerce', keywords: ['이커머스', '온라인 쇼핑', '언박싱', 'D2C', '배송박스', '쿠팡', '스마트스토어'] },
+]
+
+const INDUSTRY_RULES: IndustryRule[] = [
+  { industry: 'food-beverage', keywords: ['식품', '음료', 'HACCP', 'haccp', '냉동', '냉장', '밀키트', '농산물', '수산물', '식품포장', '식품등급'] },
+  { industry: 'ecommerce-shipping', keywords: ['이커머스', '택배', '배송', '온라인', '쇼핑', '박스', '골판지', '완충재', '배송박스', '포장박스'] },
+  { industry: 'cosmetics-beauty', keywords: ['화장품', '뷰티', '코스메틱', '스킨케어', '향수', '메이크업', '화장품용기'] },
+  { industry: 'pharma-health', keywords: ['의약', '제약', '건강', '의료', 'GMP', '건강기능', '블리스터'] },
+  { industry: 'electronics-industrial', keywords: ['전자', '산업', '부품', '공업', '방청', 'ESD', '팔레트', '정밀', '산업포장'] },
+  { industry: 'eco-special', keywords: ['친환경', '생분해', '재활용', 'FSC', 'fsc', 'PLA', '업사이클', 'GRS', '바이오'] },
 ]
 
 function detectSubcategory(text: string, rule: CategoryRule): string | null {
@@ -110,14 +112,22 @@ function detectTags(text: string): CompanyTag[] {
     .map((rule) => rule.tag)
 }
 
+function detectIndustryCategories(text: string): IndustryCategory[] {
+  const matched = INDUSTRY_RULES
+    .filter((rule) => rule.keywords.some((kw) => text.includes(kw)))
+    .map((rule) => rule.industry)
+  return matched.length > 0 ? matched : ['ecommerce-shipping']
+}
+
 export interface ClassificationResult {
   category: Category
   subcategory: string | null
   confidence: number
   tags: CompanyTag[]
+  industryCategories: IndustryCategory[]
+  materialType: MaterialType
 }
 
-// Broad packaging relevance keywords — any one match means the page is likely packaging-related
 const PACKAGING_RELEVANCE_KEYWORDS = [
   '박스', '포장', '패키지', '패키징', '상자', '용기', '봉투', '쇼핑백',
   '비닐', '필름', '테이프', '완충', '에어캡', '버블', '스트레치',
@@ -131,29 +141,21 @@ const PACKAGING_RELEVANCE_KEYWORDS = [
   '파우치', '라미네이트', '연포장',
 ]
 
-// Signals that strongly indicate a non-packaging page (news, error, games, etc.)
 const IRRELEVANT_SIGNALS = [
-  // News/media
   '기자', '보도', '취재', '뉴스레터', '헬로티', '더구루', '푸드투데이',
   'IT동아', 'AI타임스', '이코노믹리뷰', 'Newsroom', '보도자료',
   '단독]', '인터뷰]',
-  // Error pages
   'Access Denied', 'Reference #', 'Página no encontrada', '404', 'Not Found',
-  // PDFs / binary content
   '%PDF', 'endobj',
-  // Clearly unrelated domains/topics
   '게임', '플레이', '아이템', '퀘스트',
   '욕실타일', '화장실타일',
   '학생화방', '내륙운송', '해상운송', '항공운송',
-  // Market research signals
   '연평균 성장률(CAGR)', 'CAGR)', 'billion by',
-  // Blog / case-study openers that appear near the start of non-vendor pages
   '번째 후기', '번째 작업', '번째 납품',
 ]
 
-// URL patterns that indicate a product/blog/FAQ page rather than a company homepage
 const NON_HOMEPAGE_URL_PATTERNS = [
-  /\/product\/[^/]+\/\d+/,     // /product/{slug}/{id}
+  /\/product\/[^/]+\/\d+/,
   /\/goods\/goods_view/,
   /\/goods\/goods_list/,
   /\/shop_view\//,
@@ -165,16 +167,12 @@ const NON_HOMEPAGE_URL_PATTERNS = [
   /[?&]prdid=\d+/,
   /\/notice\/.*bmode=/,
   /\/faq\/.*bmode=/,
-  /\/\d+\/\?idx=/,             // Naver blog-style: /27/?idx=20
+  /\/\d+\/\?idx=/,
 ]
 
 export function isCompanyHomepage(url: string): boolean {
   try {
-    const parsed = new URL(url)
-    // A homepage URL has a short path (just "/" or nothing meaningful)
-    const path = parsed.pathname
     if (NON_HOMEPAGE_URL_PATTERNS.some((p) => p.test(url))) return false
-    // Allow paths that look like category or section pages (not product/article IDs)
     return true
   } catch {
     return true
@@ -191,12 +189,10 @@ export function extractHomepage(url: string): string {
 }
 
 export function isPackagingRelevant(text: string): boolean {
-  // Reject if strong irrelevant signals appear in a short span near the start
   const head = text.slice(0, 500)
   for (const sig of IRRELEVANT_SIGNALS) {
     if (head.includes(sig)) return false
   }
-  // Accept if at least one packaging keyword appears anywhere in the text
   return PACKAGING_RELEVANCE_KEYWORDS.some((kw) => text.includes(kw))
 }
 
@@ -213,9 +209,17 @@ export function classifyCompany(text: string): ClassificationResult {
   const best = scores[0]
 
   const tags = detectTags(text)
+  const industryCategories = detectIndustryCategories(text)
 
   if (best.score === 0) {
-    return { category: 'plastic', subcategory: null, confidence: 0, tags }
+    return {
+      category: 'plastic',
+      subcategory: null,
+      confidence: 0,
+      tags,
+      industryCategories,
+      materialType: 'plastic-container',
+    }
   }
 
   const total = scores.reduce((s, x) => s + x.score, 0)
@@ -226,5 +230,7 @@ export function classifyCompany(text: string): ClassificationResult {
     subcategory: detectSubcategory(text, best.rule),
     confidence,
     tags,
+    industryCategories,
+    materialType: CATEGORY_TO_MATERIAL[best.rule.category],
   }
 }

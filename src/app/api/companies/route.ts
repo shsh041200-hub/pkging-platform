@@ -4,8 +4,8 @@ import { createClient } from '@/lib/supabase/server'
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url)
   const q = searchParams.get('q')
-  const buyer_category = searchParams.get('buyer_category')
-  const packaging_form = searchParams.get('packaging_form')
+  const industry = searchParams.get('industry')
+  const material = searchParams.get('material')
   const category = searchParams.get('category')
   const tag = searchParams.get('tag')
   const page = parseInt(searchParams.get('page') ?? '1', 10)
@@ -17,7 +17,7 @@ export async function GET(request: NextRequest) {
   let query = supabase
     .from('companies')
     .select(
-      'id, slug, name, description, category, buyer_category, packaging_form, subcategory, tags, is_verified, founded_year, employee_range, min_order_quantity, service_capabilities, target_industries, products, certifications',
+      'id, slug, name, description, category, industry_categories, material_type, subcategory, tags, is_verified, founded_year, employee_range, min_order_quantity, service_capabilities, target_industries, products, certifications',
       { count: 'exact' }
     )
     .order('is_verified', { ascending: false })
@@ -29,8 +29,8 @@ export async function GET(request: NextRequest) {
       `name.ilike.%${q}%,description.ilike.%${q}%,products.cs.{${q}},certifications.cs.{${q}},tags.cs.{${q}}`
     )
   }
-  if (buyer_category) query = query.eq('buyer_category', buyer_category)
-  if (packaging_form) query = query.eq('packaging_form', packaging_form)
+  if (industry) query = query.contains('industry_categories', [industry])
+  if (material) query = query.eq('material_type', material)
   if (category) query = query.eq('category', category)
   if (tag) query = query.contains('tags', [tag])
 

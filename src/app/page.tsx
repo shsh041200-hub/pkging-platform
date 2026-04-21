@@ -1,36 +1,25 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { BoxterLogo } from '@/components/BoxterLogo'
-import { FilterAccordion } from './filter-accordion'
-import { BuyerCategoryFilter } from './buyer-category-filter'
 import {
-  CATEGORY_LABELS,
-  TAG_LABELS,
-  BUYER_CATEGORY_LABELS,
-  BUYER_CATEGORY_PACKAGING_FORMS,
-  PACKAGING_FORM_LABELS,
-  type Category,
-  type CompanyTag,
-  type BuyerCategory,
-  type PackagingForm,
+  INDUSTRY_CATEGORIES,
+  INDUSTRY_CATEGORY_LABELS,
+  INDUSTRY_CATEGORY_DESCRIPTIONS,
+  INDUSTRY_CATEGORY_ICONS,
+  MATERIAL_TYPES,
+  MATERIAL_TYPE_LABELS,
+  type IndustryCategory,
+  type MaterialType,
 } from '@/types'
 import { createClient } from '@/lib/supabase/server'
 import { simplifyCompanyName } from '@/lib/simplify-company-name'
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://packlinx.com'
 
-const DATA_SOURCE_LABELS: Record<string, string> = {
-  naver_local: '출처: 네이버 지역 검색',
-  public_data_portal: '출처: 공공데이터 포털',
-  website_crawl: '출처: 업체 웹사이트',
-}
-
 type SearchParams = Promise<{
   q?: string
-  buyer_category?: string
-  packaging_form?: string
-  category?: string
-  tag?: string
+  industry?: string
+  material?: string
 }>
 
 export async function generateMetadata({
@@ -38,21 +27,9 @@ export async function generateMetadata({
 }: {
   searchParams: SearchParams
 }): Promise<Metadata> {
-  const { q, buyer_category, packaging_form, category, tag } = await searchParams
-  const hasFilter = buyer_category || packaging_form || category || tag
-
-  if (q) {
-    return {
-      robots: { index: false, follow: true },
-    }
-  }
-
-  if (hasFilter) {
-    return {
-      alternates: { canonical: siteUrl },
-    }
-  }
-
+  const { q, industry, material } = await searchParams
+  if (q) return { robots: { index: false, follow: true } }
+  if (industry || material) return { alternates: { canonical: siteUrl } }
   return {}
 }
 
@@ -83,43 +60,33 @@ const jsonLd = {
   ],
 }
 
+function categoryToSlug(key: IndustryCategory): string {
+  return key
+}
+
 export default async function HomePage({
   searchParams,
 }: {
-  searchParams: Promise<{
-    q?: string
-    buyer_category?: string
-    packaging_form?: string
-    category?: string
-    tag?: string
-  }>
+  searchParams: SearchParams
 }) {
-  const { q, buyer_category, packaging_form, category, tag } = await searchParams
+  const { q, industry, material } = await searchParams
   const supabase = await createClient()
 
   let query = supabase
     .from('companies')
-    .select('id, slug, name, description, category, buyer_category, packaging_form, tags, is_verified, products, certifications, founded_year, website, service_capabilities, target_industries, data_source')
+    .select('id, slug, name, description, category, industry_categories, material_type, tags, is_verified, products, certifications, founded_year, website, service_capabilities, target_industries, data_source')
     .order('is_verified', { ascending: false })
     .order('name')
     .limit(60)
 
   if (q) {
-    query = query.or(
-      `name.ilike.%${q}%,description.ilike.%${q}%`
-    )
+    query = query.or(`name.ilike.%${q}%,description.ilike.%${q}%`)
   }
-  if (buyer_category) {
-    query = query.eq('buyer_category', buyer_category)
+  if (industry) {
+    query = query.contains('industry_categories', [industry])
   }
-  if (packaging_form) {
-    query = query.eq('packaging_form', packaging_form)
-  }
-  if (category) {
-    query = query.eq('category', category)
-  }
-  if (tag) {
-    query = query.contains('tags', [tag])
+  if (material) {
+    query = query.eq('material_type', material)
   }
 
   const { data: companies } = await query
@@ -128,29 +95,27 @@ export default async function HomePage({
     .from('companies')
     .select('*', { count: 'exact', head: true })
 
-  const level2Options: PackagingForm[] = buyer_category && BUYER_CATEGORY_PACKAGING_FORMS[buyer_category as BuyerCategory]
-    ? BUYER_CATEGORY_PACKAGING_FORMS[buyer_category as BuyerCategory]
-    : (Object.keys(PACKAGING_FORM_LABELS) as PackagingForm[])
+  const categoryCounts: Record<string, number> = {}
+  for (const cat of INDUSTRY_CATEGORIES) {
+    const { count } = await supabase
+      .from('companies')
+      .select('*', { count: 'exact', head: true })
+      .contains('industry_categories', [cat])
+    categoryCounts[cat] = count ?? 0
+  }
 
   const buildUrl = (overrides: Record<string, string | undefined>) => {
     const params: Record<string, string> = {}
     if (q) params.q = q
-    if (buyer_category) params.buyer_category = buyer_category
-    if (packaging_form) params.packaging_form = packaging_form
-    if (category) params.category = category
-    if (tag) params.tag = tag
+    if (industry) params.industry = industry
+    if (material) params.material = material
     Object.assign(params, overrides)
     Object.keys(params).forEach((k) => { if (params[k] === undefined) delete params[k] })
     const qs = new URLSearchParams(params).toString()
     return qs ? `/?${qs}` : '/'
   }
 
-  const activeFilters = [
-    buyer_category && BUYER_CATEGORY_LABELS[buyer_category as BuyerCategory],
-    packaging_form && PACKAGING_FORM_LABELS[packaging_form as PackagingForm],
-    category && CATEGORY_LABELS[category as Category],
-    tag && TAG_LABELS[tag as CompanyTag],
-  ].filter(Boolean)
+  const showingCategory = !q && !industry && !material
 
   return (
     <div className="min-h-screen bg-white">
@@ -169,7 +134,7 @@ export default async function HomePage({
         </div>
       </header>
 
-      {/* Hero — white background, confident typography */}
+      {/* Hero */}
       <section className="bg-white border-b border-gray-100 pt-16 pb-20 sm:pt-20 sm:pb-24 px-5">
         <div className="max-w-2xl mx-auto text-center">
           <div className="inline-block text-[11px] font-semibold tracking-widest uppercase text-[#005EFF] bg-[#EBF2FF] px-3 py-1.5 rounded-full mb-5">
@@ -188,10 +153,6 @@ export default async function HomePage({
               placeholder="업체명, 제품, 인증, 지역으로 검색..."
               className="flex-1 px-5 py-4 text-[15px] text-gray-900 bg-white placeholder:text-gray-400 focus:outline-none"
             />
-            {buyer_category && <input type="hidden" name="buyer_category" value={buyer_category} />}
-            {packaging_form && <input type="hidden" name="packaging_form" value={packaging_form} />}
-            {category && <input type="hidden" name="category" value={category} />}
-            {tag && <input type="hidden" name="tag" value={tag} />}
             <button
               type="submit"
               className="bg-[#005EFF] hover:bg-[#0047CC] text-white font-semibold px-6 py-3 transition-colors text-sm flex-shrink-0 m-1.5 rounded-lg"
@@ -211,98 +172,85 @@ export default async function HomePage({
         </div>
       </section>
 
+      {/* Category Card Grid */}
+      {showingCategory && (
+        <section className="max-w-7xl mx-auto px-5 sm:px-8 py-10">
+          <h2 className="text-[15px] font-bold text-gray-900 mb-5">업종별 포장업체 찾기</h2>
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+            {INDUSTRY_CATEGORIES.filter((cat) => categoryCounts[cat] > 0).map((cat) => (
+              <Link
+                key={cat}
+                href={`/categories/${categoryToSlug(cat)}`}
+                className="group bg-white border border-gray-200 rounded-xl p-5 hover:border-[#005EFF]/30 hover:shadow-[0_8px_24px_rgba(0,94,255,0.08)] hover:-translate-y-0.5 transition-all duration-200"
+              >
+                <div className="text-2xl mb-3">{INDUSTRY_CATEGORY_ICONS[cat]}</div>
+                <h3 className="text-[14px] font-bold text-gray-900 mb-1 group-hover:text-[#005EFF] transition-colors">
+                  {INDUSTRY_CATEGORY_LABELS[cat]}
+                </h3>
+                <p className="text-[12px] text-gray-400 leading-relaxed mb-3">
+                  {INDUSTRY_CATEGORY_DESCRIPTIONS[cat]}
+                </p>
+                <span className="text-[11px] font-semibold text-[#005EFF] bg-[#EBF2FF] px-2 py-0.5 rounded-full">
+                  {categoryCounts[cat]}개 업체
+                </span>
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
+
       {/* Filter Bar */}
       <div className="bg-white border-b border-gray-100 sticky top-16 z-40">
         <div className="max-w-7xl mx-auto px-5 sm:px-8">
-
-          {/* Level 1 */}
-          <div className="flex gap-1 pt-3 pb-2 overflow-x-auto scrollbar-none items-center">
-            <span className="flex-shrink-0 text-[10px] font-semibold text-gray-300 uppercase tracking-widest self-center mr-2 hidden sm:inline">유형</span>
+          {/* Industry tabs */}
+          <div className="flex gap-0.5 pt-2 overflow-x-auto scrollbar-none">
             <Link
               href={q ? `/?q=${q}` : '/'}
-              className={`flex-shrink-0 px-3.5 py-1.5 rounded-md text-[13px] font-medium transition-all ${
-                !buyer_category && !packaging_form && !category && !tag
-                  ? 'bg-gray-900 text-white'
-                  : 'text-gray-500 hover:text-gray-800 hover:bg-gray-50'
+              className={`flex-shrink-0 px-4 py-2.5 text-[13px] font-medium transition-all border-b-2 ${
+                !industry
+                  ? 'border-gray-900 text-gray-900 font-semibold'
+                  : 'border-transparent text-gray-400 hover:text-gray-700'
               }`}
             >
               전체
             </Link>
-            <BuyerCategoryFilter forceExpand={(Object.keys(BUYER_CATEGORY_LABELS) as BuyerCategory[]).indexOf(buyer_category as BuyerCategory) >= 5}>
-              {(Object.keys(BUYER_CATEGORY_LABELS) as BuyerCategory[]).map((key) => (
-                <Link
-                  key={key}
-                  href={buildUrl({
-                    buyer_category: buyer_category === key ? undefined : key,
-                    packaging_form: buyer_category === key ? undefined : packaging_form,
-                  })}
-                  className={`flex-shrink-0 px-3.5 py-1.5 rounded-md text-[13px] font-medium transition-all ${
-                    buyer_category === key
-                      ? 'bg-gray-900 text-white'
-                      : 'text-gray-500 hover:text-gray-800 hover:bg-gray-50'
-                  }`}
-                >
-                  {BUYER_CATEGORY_LABELS[key]}
-                </Link>
-              ))}
-            </BuyerCategoryFilter>
-          </div>
-
-          {/* Level 2 */}
-          <div className="flex gap-1 pb-2.5 overflow-x-auto scrollbar-none">
-            <span className="flex-shrink-0 text-[10px] font-semibold text-gray-300 uppercase tracking-widest self-center mr-2 hidden sm:inline">형태</span>
-            {level2Options.map((key) => (
+            {INDUSTRY_CATEGORIES.filter((cat) => categoryCounts[cat] > 0).map((cat) => (
               <Link
-                key={key}
+                key={cat}
                 href={buildUrl({
-                  packaging_form: packaging_form === key ? undefined : key,
+                  industry: industry === cat ? undefined : cat,
+                  material: industry === cat ? undefined : material,
                 })}
-                className={`flex-shrink-0 px-2.5 py-1 rounded text-[11px] font-medium transition-all border ${
-                  packaging_form === key
-                    ? 'bg-[#005EFF] text-white border-[#005EFF]'
-                    : 'text-gray-500 border-gray-200 hover:text-gray-700 hover:border-gray-300 bg-white'
+                className={`flex-shrink-0 px-4 py-2.5 text-[13px] font-medium transition-all border-b-2 whitespace-nowrap ${
+                  industry === cat
+                    ? 'border-gray-900 text-gray-900 font-semibold'
+                    : 'border-transparent text-gray-400 hover:text-gray-700'
                 }`}
               >
-                {PACKAGING_FORM_LABELS[key]}
+                {INDUSTRY_CATEGORY_LABELS[cat]}
               </Link>
             ))}
           </div>
 
-          {/* Level 3 */}
-          <FilterAccordion>
-            <div className="flex gap-1.5 flex-wrap">
-              <span className="text-[10px] text-gray-300 font-semibold uppercase tracking-widest self-center mr-1">소재</span>
-              {(Object.entries(CATEGORY_LABELS) as [Category, string][]).map(([key, label]) => (
-                <Link
-                  key={key}
-                  href={buildUrl({ category: category === key ? undefined : key })}
-                  className={`flex-shrink-0 px-3 py-1 rounded-md text-[12px] font-medium transition-all border ${
-                    category === key
-                      ? 'bg-[#005EFF] text-white border-[#005EFF]'
-                      : 'text-gray-500 border-gray-200 hover:border-gray-300 hover:text-gray-700 bg-white'
-                  }`}
-                >
-                  {label}
-                </Link>
-              ))}
-            </div>
-            <div className="flex gap-1.5 flex-wrap">
-              <span className="text-[10px] text-gray-300 font-semibold uppercase tracking-widest self-center mr-1">기능</span>
-              {(Object.entries(TAG_LABELS) as [CompanyTag, string][]).map(([key, label]) => (
-                <Link
-                  key={key}
-                  href={buildUrl({ tag: tag === key ? undefined : key })}
-                  className={`flex-shrink-0 px-3 py-1 rounded-md text-[12px] font-medium transition-all border ${
-                    tag === key
-                      ? 'bg-[#005EFF] text-white border-[#005EFF]'
-                      : 'text-gray-500 border-gray-200 hover:border-gray-300 hover:text-gray-700 bg-white'
-                  }`}
-                >
-                  {label}
-                </Link>
-              ))}
-            </div>
-          </FilterAccordion>
+          {/* Material chips */}
+          <div className="flex gap-1.5 py-2.5 overflow-x-auto scrollbar-none">
+            <span className="flex-shrink-0 text-[10px] font-semibold text-gray-300 uppercase tracking-widest self-center mr-1 hidden sm:inline">소재</span>
+            {MATERIAL_TYPES.map((mat) => (
+              <Link
+                key={mat}
+                href={buildUrl({
+                  material: material === mat ? undefined : mat,
+                })}
+                className={`flex-shrink-0 px-2.5 py-1 rounded text-[11px] font-medium transition-all border ${
+                  material === mat
+                    ? 'bg-[#005EFF] text-white border-[#005EFF]'
+                    : 'text-gray-500 border-gray-200 hover:text-gray-700 hover:border-gray-300 bg-white'
+                }`}
+              >
+                {MATERIAL_TYPE_LABELS[mat]}
+              </Link>
+            ))}
+          </div>
         </div>
       </div>
 
@@ -313,17 +261,22 @@ export default async function HomePage({
             <p className="text-sm text-gray-500">
               <span className="font-semibold text-gray-900">{companies?.length ?? 0}</span>개 업체
             </p>
-            {activeFilters.map((f, i) => (
-              <span key={i} className="text-[11px] bg-[#EBF2FF] text-[#005EFF] font-medium px-2.5 py-1 rounded-full">
-                {f}
+            {industry && (
+              <span className="text-[11px] bg-[#EBF2FF] text-[#005EFF] font-medium px-2.5 py-1 rounded-full">
+                {INDUSTRY_CATEGORY_LABELS[industry as IndustryCategory]}
               </span>
-            ))}
+            )}
+            {material && (
+              <span className="text-[11px] bg-[#EBF2FF] text-[#005EFF] font-medium px-2.5 py-1 rounded-full">
+                {MATERIAL_TYPE_LABELS[material as MaterialType]}
+              </span>
+            )}
             {q && (
               <span className="text-[11px] bg-[#EBF2FF] text-[#005EFF] font-medium px-2.5 py-1 rounded-full">
                 &ldquo;{q}&rdquo;
               </span>
             )}
-            {(buyer_category || packaging_form || category || tag || q) && (
+            {(industry || material || q) && (
               <Link href="/" className="text-xs text-gray-400 hover:text-gray-600 ml-1">
                 초기화
               </Link>
@@ -341,11 +294,11 @@ export default async function HomePage({
                 <div className="p-6 flex flex-col flex-1 overflow-hidden">
                   <div className="flex items-start justify-between mb-3">
                     <div className="flex flex-wrap gap-1.5">
-                      {company.buyer_category && (
-                        <span className="text-[11px] font-medium bg-gray-100 text-gray-600 px-2 py-0.5 rounded">
-                          {BUYER_CATEGORY_LABELS[company.buyer_category as BuyerCategory]}
+                      {(company.industry_categories as string[])?.slice(0, 2).map((cat: string) => (
+                        <span key={cat} className="text-[11px] font-medium bg-gray-100 text-gray-600 px-2 py-0.5 rounded">
+                          {INDUSTRY_CATEGORY_LABELS[cat as IndustryCategory] ?? cat}
                         </span>
-                      )}
+                      ))}
                     </div>
                     {company.is_verified && (
                       <span className="inline-flex items-center gap-1 text-[11px] font-medium text-green-700 bg-green-50 border border-green-200 px-2 py-0.5 rounded flex-shrink-0 ml-2">
@@ -404,11 +357,9 @@ export default async function HomePage({
                     ) : (
                       <span className="text-[12px] text-gray-300">—</span>
                     )}
-                    <div className="flex items-center gap-2 flex-shrink-0">
-                      <span className="text-[11px] text-gray-400">
-                        {company.packaging_form ? PACKAGING_FORM_LABELS[company.packaging_form as PackagingForm] : CATEGORY_LABELS[company.category as Category]}
-                      </span>
-                    </div>
+                    <span className="text-[11px] text-gray-400">
+                      {company.material_type ? MATERIAL_TYPE_LABELS[company.material_type as MaterialType] : ''}
+                    </span>
                   </div>
                 </div>
               </article>

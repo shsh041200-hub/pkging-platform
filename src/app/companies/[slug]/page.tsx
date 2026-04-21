@@ -6,7 +6,7 @@ import { createClient } from '@/lib/supabase/server'
 import { BoxterLogo } from '@/components/BoxterLogo'
 import { CompanyDetailCTA } from '@/components/CompanyDetailCTA'
 import { MobileStickyBar } from '@/components/MobileStickyBar'
-import { CATEGORY_LABELS, TAG_LABELS, BUYER_CATEGORY_LABELS, type Category, type CompanyTag, type BuyerCategory } from '@/types'
+import { CATEGORY_LABELS, TAG_LABELS, INDUSTRY_CATEGORY_LABELS, type Category, type CompanyTag, type IndustryCategory } from '@/types'
 
 type Props = {
   params: Promise<{ slug: string }>
@@ -98,12 +98,13 @@ export default async function CompanyPage({ params }: Props) {
     ...(avgRating && { aggregateRating: { '@type': 'AggregateRating', ratingValue: avgRating, reviewCount: reviews?.length ?? 0 } }),
   }
 
-  const buyerCat = company.buyer_category as BuyerCategory | null
-  const breadcrumbCategoryName = buyerCat
-    ? BUYER_CATEGORY_LABELS[buyerCat]
+  const industryCats = (company.industry_categories as string[] | null) ?? []
+  const primaryIndustry = industryCats[0] as IndustryCategory | undefined
+  const breadcrumbCategoryName = primaryIndustry
+    ? INDUSTRY_CATEGORY_LABELS[primaryIndustry]
     : (CATEGORY_LABELS[company.category as Category] ?? company.category)
-  const breadcrumbCategoryUrl = buyerCat
-    ? `${siteUrl}/categories/${buyerCat.replace(/_/g, '-')}`
+  const breadcrumbCategoryUrl = primaryIndustry
+    ? `${siteUrl}/categories/${primaryIndustry}`
     : `${siteUrl}/?category=${company.category}`
   const breadcrumbJsonLd = {
     '@context': 'https://schema.org',
