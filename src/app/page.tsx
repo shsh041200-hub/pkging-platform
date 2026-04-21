@@ -13,6 +13,7 @@ import {
   type PackagingForm,
 } from '@/types'
 import { createClient } from '@/lib/supabase/server'
+import { simplifyCompanyName } from '@/lib/simplify-company-name'
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://packlinx.com'
 
@@ -331,12 +332,12 @@ export default async function HomePage({
                     )}
                   </div>
 
-                  <h2 className="text-base font-bold text-gray-900 mb-1 leading-snug tracking-[-0.02em]">
+                  <h2 className="text-base font-bold text-gray-900 mb-1 leading-snug tracking-[-0.02em] line-clamp-1" title={company.name}>
                     <Link
                       href={`/companies/${company.slug}`}
                       className="after:absolute after:inset-0 after:content-['']"
                     >
-                      {company.name}
+                      {simplifyCompanyName(company.name)}
                     </Link>
                   </h2>
 
