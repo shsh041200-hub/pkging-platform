@@ -101,7 +101,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
   }
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-[#F9FAFB]">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
@@ -122,7 +122,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
       </header>
 
       {/* Category Hero */}
-      <section className="bg-white border-b border-gray-100 pt-12 pb-14 sm:pt-16 sm:pb-18 px-5">
+      <section className="bg-[#F8FAFC] bg-dot-grid border-b border-gray-100 pt-12 pb-14 sm:pt-16 sm:pb-18 px-5">
         <div className="max-w-3xl mx-auto">
           <nav className="text-sm text-gray-400 mb-6">
             <Link href="/" className="hover:text-gray-600 transition-colors">홈</Link>

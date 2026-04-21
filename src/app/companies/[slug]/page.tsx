@@ -138,7 +138,7 @@ export default async function CompanyPage({ params }: Props) {
   const hasTags = company.tags && company.tags.length > 0
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-[#F9FAFB]">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(companyJsonLd) }}

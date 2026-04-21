@@ -117,7 +117,7 @@ export default async function HomePage({
   const showingCategory = !q && !industry && !material
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-[#F9FAFB]">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
@@ -134,7 +134,7 @@ export default async function HomePage({
       </header>
 
       {/* Hero — heading on top, then search (left) + categories (right) */}
-      <section className="bg-white border-b border-gray-100 pt-8 pb-8 sm:pt-10 sm:pb-10 px-5">
+      <section className="bg-[#F8FAFC] bg-dot-grid border-b border-gray-100 pt-8 pb-8 sm:pt-10 sm:pb-10 px-5">
         <div className="max-w-7xl mx-auto">
           <div className="mb-6">
             <div className="inline-block text-[11px] font-semibold tracking-widest uppercase text-[#005EFF] bg-[#EBF2FF] px-3 py-1.5 rounded-full mb-3">
