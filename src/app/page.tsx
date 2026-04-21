@@ -133,21 +133,24 @@ export default async function HomePage({
         </div>
       </header>
 
-      {/* Hero — search left, category buttons right */}
-      <section className="bg-white border-b border-gray-100 pt-10 pb-10 sm:pt-14 sm:pb-12 px-5">
+      {/* Hero — heading on top, then search (left) + categories (right) */}
+      <section className="bg-white border-b border-gray-100 pt-8 pb-8 sm:pt-10 sm:pb-10 px-5">
         <div className="max-w-7xl mx-auto">
-          <div className="flex flex-col lg:flex-row lg:items-start lg:gap-12">
-            {/* Left: heading + search */}
-            <div className="flex-1 lg:max-w-xl">
-              <div className="inline-block text-[11px] font-semibold tracking-widest uppercase text-[#005EFF] bg-[#EBF2FF] px-3 py-1.5 rounded-full mb-4">
-                국내 패키징 플랫폼
-              </div>
-              <h1 className="text-[32px] sm:text-[42px] font-extrabold text-gray-900 leading-[1.1] tracking-[-0.04em] mb-3">
-                국내 포장업체<br />전문 디렉토리
-              </h1>
-              <p className="text-gray-500 text-[15px] sm:text-[16px] mb-6 leading-relaxed">
-                B2B 포장 파트너를 바로 찾으세요.
-              </p>
+          <div className="mb-6">
+            <div className="inline-block text-[11px] font-semibold tracking-widest uppercase text-[#005EFF] bg-[#EBF2FF] px-3 py-1.5 rounded-full mb-3">
+              국내 패키징 플랫폼
+            </div>
+            <h1 className="text-[28px] sm:text-[36px] font-extrabold text-gray-900 leading-[1.15] tracking-[-0.04em]">
+              국내 포장업체 전문 디렉토리
+            </h1>
+            <p className="text-gray-500 text-[15px] mt-2 leading-relaxed">
+              B2B 포장 파트너를 바로 찾으세요.
+            </p>
+          </div>
+
+          <div className="flex flex-col md:flex-row md:items-start md:gap-8">
+            {/* Left: search */}
+            <div className="md:flex-1 md:max-w-lg">
               <form method="GET" className="flex rounded-xl overflow-hidden border border-gray-200 shadow-[0_2px_8px_rgba(0,0,0,0.06)] focus-within:border-[#005EFF] focus-within:shadow-[0_2px_8px_rgba(0,0,0,0.06),0_0_0_3px_rgba(0,94,255,0.12)] transition-shadow">
                 <input
                   name="q"
@@ -163,7 +166,7 @@ export default async function HomePage({
                 </button>
               </form>
               {totalCount != null && (
-                <div className="flex items-center gap-3 mt-4 text-[12px] text-gray-400 font-medium">
+                <div className="flex items-center gap-3 mt-3 text-[12px] text-gray-400 font-medium">
                   <span>{totalCount.toLocaleString()}개 업체 등록됨</span>
                   <span className="text-gray-200">·</span>
                   <span>업체 인증 시스템</span>
@@ -175,16 +178,15 @@ export default async function HomePage({
 
             {/* Right: 6 category buttons */}
             {showingCategory && (
-              <div className="mt-8 lg:mt-0 lg:flex-1">
-                <h2 className="text-[13px] font-bold text-gray-500 uppercase tracking-wider mb-3">업종별 찾기</h2>
-                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-2 gap-2">
+              <div className="mt-6 md:mt-0 md:flex-1">
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                   {INDUSTRY_CATEGORIES.filter((cat) => categoryCounts[cat] > 0).map((cat) => (
                     <Link
                       key={cat}
                       href={`/categories/${categoryToSlug(cat)}`}
-                      className="group flex items-center gap-2.5 bg-white border border-gray-200 rounded-lg px-3.5 py-3 hover:border-[#005EFF]/30 hover:bg-[#F8FAFF] transition-all duration-150"
+                      className="group flex items-center gap-2.5 bg-white border border-gray-200 rounded-lg px-3 py-2.5 hover:border-[#005EFF]/30 hover:bg-[#F8FAFF] transition-all duration-150"
                     >
-                      <span className="text-lg flex-shrink-0">{INDUSTRY_CATEGORY_ICONS[cat]}</span>
+                      <span className="text-base flex-shrink-0">{INDUSTRY_CATEGORY_ICONS[cat]}</span>
                       <div className="min-w-0">
                         <span className="text-[13px] font-semibold text-gray-900 group-hover:text-[#005EFF] transition-colors block truncate">
                           {INDUSTRY_CATEGORY_LABELS[cat]}
