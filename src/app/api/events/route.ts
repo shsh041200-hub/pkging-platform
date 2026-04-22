@@ -5,6 +5,7 @@ const ALLOWED_EVENT_TYPES = new Set([
   'kakao_click',
   'website_click',
   'company_view',
+  'page_view',
 ])
 
 // In-memory rate limiter: 60 requests / minute per IP
@@ -44,7 +45,8 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: '잘못된 요청 형식입니다.' }, { status: 400 })
   }
 
-  const { eventType, companyId, sessionId, metadata } = body as Record<string, unknown>
+  const { eventType, companyId, sessionId, metadata, utmSource, utmMedium, utmCampaign } =
+    body as Record<string, unknown>
 
   if (typeof eventType !== 'string' || !ALLOWED_EVENT_TYPES.has(eventType)) {
     return NextResponse.json({ error: '유효하지 않은 이벤트 유형입니다.' }, { status: 400 })
@@ -54,7 +56,8 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'sessionId는 필수입니다.' }, { status: 400 })
   }
 
-  if (typeof companyId !== 'string' || companyId.trim() === '') {
+  const hasCompanyId = typeof companyId === 'string' && companyId.trim() !== ''
+  if (!hasCompanyId && eventType !== 'page_view') {
     return NextResponse.json({ error: 'companyId는 필수입니다.' }, { status: 400 })
   }
 
@@ -63,14 +66,20 @@ export async function POST(request: NextRequest) {
       ? (metadata as Record<string, unknown>)
       : {}
 
+  const safeString = (v: unknown): string | null =>
+    typeof v === 'string' && v.trim() !== '' ? v.trim().slice(0, 200) : null
+
   const supabase = createServiceClient()
 
   const { error } = await supabase.from('conversion_events').insert({
     event_type: eventType,
-    company_id: companyId,
+    company_id: hasCompanyId ? (companyId as string) : null,
     session_id: sessionId.trim(),
     referrer_path: request.headers.get('referer') ?? null,
     metadata: safeMetadata,
+    utm_source: safeString(utmSource),
+    utm_medium: safeString(utmMedium),
+    utm_campaign: safeString(utmCampaign),
   })
 
   if (error) {

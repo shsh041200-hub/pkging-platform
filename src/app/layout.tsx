@@ -1,5 +1,7 @@
 import type { Metadata } from 'next'
 import { Noto_Sans_KR } from 'next/font/google'
+import { Suspense } from 'react'
+import { PageViewTracker } from '@/components/PageViewTracker'
 import './globals.css'
 
 const notoSansKR = Noto_Sans_KR({
@@ -57,6 +59,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="ko" className={`h-full ${notoSansKR.className}`}>
       <body className="min-h-full flex flex-col antialiased">
+        <Suspense fallback={null}>
+          <PageViewTracker />
+        </Suspense>
         {children}
       </body>
     </html>
