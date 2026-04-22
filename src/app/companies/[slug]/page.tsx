@@ -6,7 +6,7 @@ import { createClient } from '@/lib/supabase/server'
 import { BoxterLogo } from '@/components/BoxterLogo'
 import { CompanyDetailCTA } from '@/components/CompanyDetailCTA'
 import { MobileStickyBar } from '@/components/MobileStickyBar'
-import { CATEGORY_LABELS, TAG_LABELS, INDUSTRY_CATEGORY_LABELS, type Category, type CompanyTag, type IndustryCategory } from '@/types'
+import { CATEGORY_LABELS, TAG_LABELS, INDUSTRY_CATEGORY_LABELS, INDUSTRY_CATEGORY_ICONS, type Category, type CompanyTag, type IndustryCategory } from '@/types'
 
 type Props = {
   params: Promise<{ slug: string }>
@@ -438,6 +438,32 @@ export default async function CompanyPage({ params }: Props) {
             </div>
           )}
         </div>
+
+        {/* Related Categories */}
+        {industryCats.length > 0 && (
+          <div className="bg-white border border-gray-200 rounded-xl p-5">
+            <h2 className="text-[13px] font-semibold text-gray-700 uppercase tracking-wider mb-4">
+              같은 카테고리의 다른 업체 보기
+            </h2>
+            <div className="flex flex-wrap gap-2">
+              {industryCats.map((cat) => {
+                const catKey = cat as IndustryCategory
+                const catLabel = INDUSTRY_CATEGORY_LABELS[catKey]
+                if (!catLabel) return null
+                return (
+                  <Link
+                    key={cat}
+                    href={`/categories/${cat}`}
+                    className="inline-flex items-center gap-1.5 text-[13px] font-medium text-[#005EFF] bg-[#EBF2FF] hover:bg-[#dbeafe] px-3 py-2 rounded-lg transition-colors"
+                  >
+                    <span>{INDUSTRY_CATEGORY_ICONS[catKey]}</span>
+                    <span>{catLabel} 업체 보기</span>
+                  </Link>
+                )
+              })}
+            </div>
+          </div>
+        )}
 
         {/* AI Disclaimer */}
         <div className="border-t border-gray-100 pt-5 text-center">

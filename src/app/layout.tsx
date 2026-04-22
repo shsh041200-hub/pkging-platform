@@ -1,5 +1,20 @@
 import type { Metadata } from 'next'
+import { Noto_Sans_KR } from 'next/font/google'
 import './globals.css'
+
+const notoSansKR = Noto_Sans_KR({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700', '800'],
+  display: 'swap',
+  preload: true,
+  fallback: [
+    '-apple-system',
+    'BlinkMacSystemFont',
+    'Apple SD Gothic Neo',
+    'Malgun Gothic',
+    'sans-serif',
+  ],
+})
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://packlinx.com'
 
@@ -40,7 +55,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="ko" className="h-full">
+    <html lang="ko" className={`h-full ${notoSansKR.className}`}>
       <body className="min-h-full flex flex-col antialiased">
         {children}
       </body>

@@ -11,11 +11,36 @@ import {
   MATERIAL_TYPE_LABELS,
   type IndustryCategory,
   type MaterialType,
+  type BlogPost,
 } from '@/types'
 import { createClient } from '@/lib/supabase/server'
 import { simplifyCompanyName } from '@/lib/simplify-company-name'
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://packlinx.com'
+
+const CATEGORY_SEO_TITLE: Record<IndustryCategory, string> = {
+  'food-beverage': '식품 포장업체 찾기 — 전국 식품·음료 포장재 업체',
+  'ecommerce-shipping': '택배박스·이커머스 포장 업체 — 전국 배송 포장재 업체',
+  'cosmetics-beauty': '화장품 포장 업체 찾기 — 뷰티 브랜드 포장재 전문',
+  'pharma-health': '의약품·건강기능식품 포장 업체 — 전국 의약 포장재',
+  'electronics-industrial': '전자·산업용 포장 업체 — 보호 포장재 전문',
+  'eco-special': '친환경 포장재 업체 찾기 — FSC·생분해 포장 전문',
+}
+
+const CATEGORY_SEO_DESCRIPTION: Record<IndustryCategory, string> = {
+  'food-beverage':
+    '식품 포장업체를 한눈에 비교하세요. HACCP·GMP 인증 식품 포장재 전문 업체를 BOXTER에서 찾아보세요.',
+  'ecommerce-shipping':
+    '택배박스, 완충재, 배송 포장재 업체를 비교하세요. 스마트스토어·쿠팡 셀러를 위한 포장 파트너를 찾아보세요.',
+  'cosmetics-beauty':
+    '화장품 포장 업체를 한눈에 비교하세요. 소량 제작, OEM 포장, 파우치·용기 전문 업체를 BOXTER에서 찾아보세요.',
+  'pharma-health':
+    '의약품, 건강기능식품 포장 업체를 비교하세요. GMP 인증 의약 포장재 전문 업체를 찾아보세요.',
+  'electronics-industrial':
+    '전자제품, 부품, 산업재 보호 포장 업체를 비교하세요. 완충·정전기방지 포장재 전문 업체를 BOXTER에서 찾아보세요.',
+  'eco-special':
+    '친환경 포장재 업체를 비교하세요. FSC 인증, 생분해 포장재, ESG 포장 솔루션 전문 업체를 찾아보세요.',
+}
 
 function slugToCategory(slug: string): IndustryCategory | undefined {
   return INDUSTRY_CATEGORIES.find((k) => k === slug)
@@ -35,17 +60,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const categoryKey = slugToCategory(slug)
   if (!categoryKey) return { title: '카테고리를 찾을 수 없습니다' }
 
-  const label = INDUSTRY_CATEGORY_LABELS[categoryKey]
-  const desc = INDUSTRY_CATEGORY_DESCRIPTIONS[categoryKey]
-  const title = `${label} 업체`
+  const title = CATEGORY_SEO_TITLE[categoryKey]
+  const description = CATEGORY_SEO_DESCRIPTION[categoryKey]
 
   return {
     title,
-    description: `${desc}. 전국 ${label} 전문 업체를 한눈에 비교하세요.`,
+    description,
     alternates: { canonical: `/categories/${slug}` },
     openGraph: {
       title: `${title} — BOXTER`,
-      description: `${desc}. 전국 ${label} 전문 업체를 한눈에 비교하세요.`,
+      description,
       url: `${siteUrl}/categories/${slug}`,
       type: 'website',
     },
@@ -81,6 +105,14 @@ export default async function CategoryPage({ params, searchParams }: Props) {
     .select('*', { count: 'exact', head: true })
     .contains('industry_categories', [categoryKey])
 
+  const { data: relatedPosts } = await supabase
+    .from('blog_posts')
+    .select('id, slug, title, excerpt, published_at')
+    .eq('category', categoryKey)
+    .eq('status', 'published')
+    .order('published_at', { ascending: false })
+    .limit(3)
+
   const breadcrumbJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
@@ -93,8 +125,8 @@ export default async function CategoryPage({ params, searchParams }: Props) {
   const collectionJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
-    name: `${label} 업체`,
-    description: `${description}. 전국 ${label} 전문 업체를 한눈에 비교하세요.`,
+    name: CATEGORY_SEO_TITLE[categoryKey],
+    description: CATEGORY_SEO_DESCRIPTION[categoryKey],
     url: `${siteUrl}/categories/${slug}`,
     isPartOf: { '@type': 'WebSite', name: 'BOXTER', url: siteUrl },
     numberOfItems: companies?.length ?? 0,
@@ -294,6 +326,39 @@ export default async function CategoryPage({ params, searchParams }: Props) {
           </div>
         )}
       </section>
+
+      {/* Related Blog Posts */}
+      {relatedPosts && relatedPosts.length > 0 && (
+        <section className="max-w-7xl mx-auto px-5 sm:px-8 pb-12">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-[13px] font-semibold text-gray-400 uppercase tracking-wider">관련 가이드</h2>
+            <Link href="/blog" className="text-[12px] text-[#005EFF] hover:text-[#0047CC] font-medium transition-colors">
+              블로그 전체 보기 →
+            </Link>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {relatedPosts.map((post: Pick<BlogPost, 'id' | 'slug' | 'title' | 'excerpt' | 'published_at'>) => (
+              <Link
+                key={post.id}
+                href={`/blog/${post.slug}`}
+                className="bg-white border border-gray-200 rounded-xl p-5 hover:border-gray-300 hover:shadow-sm transition-all group"
+              >
+                <p className="text-[11px] text-gray-400 mb-2">
+                  {post.published_at
+                    ? new Date(post.published_at).toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' })
+                    : ''}
+                </p>
+                <h3 className="text-[14px] font-semibold text-gray-900 leading-snug mb-2 line-clamp-2 group-hover:text-[#005EFF] transition-colors">
+                  {post.title}
+                </h3>
+                {post.excerpt && (
+                  <p className="text-[12px] text-gray-500 leading-relaxed line-clamp-2">{post.excerpt}</p>
+                )}
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* Other Categories */}
       <section className="max-w-7xl mx-auto px-5 sm:px-8 pb-12">
