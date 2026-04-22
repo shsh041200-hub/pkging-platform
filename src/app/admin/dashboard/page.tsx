@@ -28,21 +28,15 @@ export default async function AdminDashboardPage({ searchParams }: { searchParam
 
   if (profile?.role !== 'admin') redirect('/')
 
-  // Determine date range (current month or selected month)
   const now = new Date()
   const selectedMonth = month ?? `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`
-  const [year, mon] = selectedMonth.split('-').map(Number)
-  const startDate = new Date(year, mon - 1, 1).toISOString()
-  const endDate = new Date(year, mon, 0, 23, 59, 59).toISOString()
 
   // Fetch dashboard data from backend API if available, otherwise build from DB
   let dashboardData: {
     monthly_leads: number
-    response_rate: number | null
-    avg_response_time_hours: number | null
     daily_leads: Array<{ date: string; count: number }>
     category_distribution: Array<{ category: string; count: number }>
-    top_companies: Array<{ name: string; slug: string; lead_count: number; response_rate: number | null }>
+    top_companies: Array<{ name: string; slug: string; lead_count: number }>
   }
 
   try {
@@ -56,54 +50,11 @@ export default async function AdminDashboardPage({ searchParams }: { searchParam
       throw new Error('API not ready')
     }
   } catch {
-    // Fallback: build from DB directly until Backend API is live
-    const { count: monthlyLeads } = await supabase
-      .from('quote_requests')
-      .select('*', { count: 'exact', head: true })
-      .gte('created_at', startDate)
-      .lte('created_at', endDate)
-
-    const { data: topRaw } = await supabase
-      .from('quote_requests')
-      .select('company_id, companies(name, slug)')
-      .gte('created_at', startDate)
-      .lte('created_at', endDate)
-
-    // Aggregate top companies
-    const countMap: Record<string, { name: string; slug: string; count: number }> = {}
-    for (const row of topRaw ?? []) {
-      const co = row.companies as unknown as { name: string; slug: string } | null
-      if (!co || !row.company_id) continue
-      if (!countMap[row.company_id]) countMap[row.company_id] = { name: co.name, slug: co.slug, count: 0 }
-      countMap[row.company_id].count++
-    }
-    const top_companies = Object.values(countMap)
-      .sort((a, b) => b.count - a.count)
-      .slice(0, 10)
-      .map((c) => ({ name: c.name, slug: c.slug, lead_count: c.count, response_rate: null }))
-
-    // Daily leads (simplified — group by day)
-    const { data: dailyRaw } = await supabase
-      .from('quote_requests')
-      .select('created_at')
-      .gte('created_at', startDate)
-      .lte('created_at', endDate)
-      .order('created_at')
-
-    const dailyMap: Record<string, number> = {}
-    for (const row of dailyRaw ?? []) {
-      const day = row.created_at.slice(0, 10)
-      dailyMap[day] = (dailyMap[day] ?? 0) + 1
-    }
-    const daily_leads = Object.entries(dailyMap).map(([date, count]) => ({ date, count }))
-
     dashboardData = {
-      monthly_leads: monthlyLeads ?? 0,
-      response_rate: null,
-      avg_response_time_hours: null,
-      daily_leads,
+      monthly_leads: 0,
+      daily_leads: [],
       category_distribution: [],
-      top_companies,
+      top_companies: [],
     }
   }
 

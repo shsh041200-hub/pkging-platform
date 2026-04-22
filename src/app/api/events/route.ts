@@ -2,8 +2,6 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createServiceClient } from '@/lib/supabase/service'
 
 const ALLOWED_EVENT_TYPES = new Set([
-  'quote_modal_open',
-  'quote_submit',
   'kakao_click',
   'website_click',
   'company_view',

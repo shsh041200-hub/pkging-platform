@@ -44,11 +44,11 @@ export async function GET(request: NextRequest) {
 
   const supabase = createServiceClient()
 
-  // ── 1. Monthly lead counts (quote_submit + kakao_click) ──
+  // ── 1. Monthly lead counts (kakao_click) ──
   const { data: monthlyLeadsRaw } = await supabase
     .from('conversion_events')
     .select('created_at, event_type')
-    .in('event_type', ['quote_submit', 'kakao_click'])
+    .in('event_type', ['kakao_click'])
     .gte('created_at', `${from}T00:00:00Z`)
     .lte('created_at', `${to}T23:59:59Z`)
 
@@ -62,7 +62,7 @@ export async function GET(request: NextRequest) {
   const { data: leadsByCompanyRaw } = await supabase
     .from('conversion_events')
     .select('company_id')
-    .in('event_type', ['quote_submit', 'kakao_click'])
+    .in('event_type', ['kakao_click'])
     .gte('created_at', `${from}T00:00:00Z`)
     .lte('created_at', `${to}T23:59:59Z`)
     .not('company_id', 'is', null)
@@ -95,7 +95,7 @@ export async function GET(request: NextRequest) {
   const { data: leadsByCategoryRaw } = await supabase
     .from('conversion_events')
     .select('company_id')
-    .in('event_type', ['quote_submit', 'kakao_click'])
+    .in('event_type', ['kakao_click'])
     .gte('created_at', `${from}T00:00:00Z`)
     .lte('created_at', `${to}T23:59:59Z`)
     .not('company_id', 'is', null)
@@ -111,37 +111,18 @@ export async function GET(request: NextRequest) {
     categoryLeads[cat] = (categoryLeads[cat] ?? 0) + 1
   }
 
-  // ── 4. Quote request response rate + average response time ──
-  const { data: quoteStats } = await supabase
-    .from('quote_requests')
-    .select('response_status, response_time_minutes')
-    .gte('created_at', `${from}T00:00:00Z`)
-    .lte('created_at', `${to}T23:59:59Z`)
-
-  const totalQuotes = quoteStats?.length ?? 0
-  const respondedQuotes = quoteStats?.filter(q => q.response_status === 'responded') ?? []
-  const responseRate = totalQuotes > 0 ? respondedQuotes.length / totalQuotes : null
-
-  const responseTimes = respondedQuotes
-    .map(q => q.response_time_minutes)
-    .filter((v): v is number => typeof v === 'number')
-  const avgResponseMinutes =
-    responseTimes.length > 0
-      ? responseTimes.reduce((a, b) => a + b, 0) / responseTimes.length
-      : null
-
-  // ── 5. Conversion funnel (view → modal_open → submit) ──
+  // ── 4. Conversion funnel (view → kakao_click) ──
   const { data: funnelRaw } = await supabase
     .from('conversion_events')
     .select('event_type')
-    .in('event_type', ['company_view', 'quote_modal_open', 'quote_submit'])
+    .in('event_type', ['company_view', 'kakao_click', 'website_click'])
     .gte('created_at', `${from}T00:00:00Z`)
     .lte('created_at', `${to}T23:59:59Z`)
 
   const funnelCounts: Record<string, number> = {
     company_view: 0,
-    quote_modal_open: 0,
-    quote_submit: 0,
+    kakao_click: 0,
+    website_click: 0,
   }
   for (const row of funnelRaw ?? []) {
     funnelCounts[row.event_type] = (funnelCounts[row.event_type] ?? 0) + 1
@@ -152,12 +133,6 @@ export async function GET(request: NextRequest) {
     monthlyLeads,
     leadsByCompany: leadsByCompanyList,
     leadsByCategory: categoryLeads,
-    quoteRequests: {
-      total: totalQuotes,
-      responded: respondedQuotes.length,
-      responseRate,
-      avgResponseMinutes,
-    },
     conversionFunnel: funnelCounts,
   })
 }

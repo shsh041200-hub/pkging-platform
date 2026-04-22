@@ -19,13 +19,10 @@ interface CompanyRank {
   name: string
   slug: string
   lead_count: number
-  response_rate: number | null
 }
 
 interface DashboardData {
   monthly_leads: number
-  response_rate: number | null
-  avg_response_time_hours: number | null
   daily_leads: DailyLead[]
   category_distribution: CategoryLead[]
   top_companies: CompanyRank[]
@@ -34,8 +31,6 @@ interface DashboardData {
 export function DashboardClient({ data }: { data: DashboardData }) {
   const {
     monthly_leads,
-    response_rate,
-    avg_response_time_hours,
     daily_leads,
     category_distribution,
     top_companies,
@@ -44,25 +39,11 @@ export function DashboardClient({ data }: { data: DashboardData }) {
   return (
     <div className="space-y-6">
       {/* KPI Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-1 gap-4">
         <div className="bg-white border border-gray-200 rounded-xl p-5">
           <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-1">월별 리드 수</p>
           <p className="text-[32px] font-extrabold text-gray-900 tracking-[-0.03em]">{monthly_leads.toLocaleString()}</p>
-          <p className="text-[12px] text-gray-400 mt-1">이번 달 견적 요청</p>
-        </div>
-        <div className="bg-white border border-gray-200 rounded-xl p-5">
-          <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-1">응답률</p>
-          <p className="text-[32px] font-extrabold text-gray-900 tracking-[-0.03em]">
-            {response_rate != null ? `${Math.round(response_rate)}%` : '—'}
-          </p>
-          <p className="text-[12px] text-gray-400 mt-1">견적 요청 응답 비율</p>
-        </div>
-        <div className="bg-white border border-gray-200 rounded-xl p-5">
-          <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-1">평균 응답시간</p>
-          <p className="text-[32px] font-extrabold text-gray-900 tracking-[-0.03em]">
-            {avg_response_time_hours != null ? `${Math.round(avg_response_time_hours)}h` : '—'}
-          </p>
-          <p className="text-[12px] text-gray-400 mt-1">업체 평균 응답 시간</p>
+          <p className="text-[12px] text-gray-400 mt-1">이번 달 카카오톡 문의</p>
         </div>
       </div>
 
@@ -126,7 +107,6 @@ export function DashboardClient({ data }: { data: DashboardData }) {
               <tr className="border-b border-gray-100 bg-gray-50">
                 <th className="text-left px-5 py-3 text-[11px] font-semibold text-gray-400 uppercase tracking-wider">업체명</th>
                 <th className="text-right px-5 py-3 text-[11px] font-semibold text-gray-400 uppercase tracking-wider">리드 수</th>
-                <th className="text-right px-5 py-3 text-[11px] font-semibold text-gray-400 uppercase tracking-wider">응답률</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
@@ -146,14 +126,11 @@ export function DashboardClient({ data }: { data: DashboardData }) {
                     </div>
                   </td>
                   <td className="px-5 py-3.5 text-right font-semibold text-gray-900">{co.lead_count.toLocaleString()}</td>
-                  <td className="px-5 py-3.5 text-right text-gray-500">
-                    {co.response_rate != null ? `${Math.round(co.response_rate)}%` : '—'}
-                  </td>
                 </tr>
               ))}
               {top_companies.length === 0 && (
                 <tr>
-                  <td colSpan={3} className="px-5 py-10 text-center text-gray-400 text-[13px]">
+                  <td colSpan={2} className="px-5 py-10 text-center text-gray-400 text-[13px]">
                     데이터가 없습니다.
                   </td>
                 </tr>
