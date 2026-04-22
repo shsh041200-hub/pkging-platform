@@ -205,7 +205,7 @@ export default async function HomePage({
               }}
             />
 
-            {/* Geometric packaging illustration (SVG, no external images) */}
+            {/* Concept #10 — Modular grid pattern (white on dark, decorative background) */}
             <svg
               className="absolute bottom-0 right-0 w-[340px] h-[340px] lg:w-[420px] lg:h-[420px] opacity-[0.07] pointer-events-none select-none"
               viewBox="0 0 420 420"
@@ -213,31 +213,27 @@ export default async function HomePage({
               xmlns="http://www.w3.org/2000/svg"
               aria-hidden="true"
             >
-              {/* Primary large box */}
-              <rect x="90" y="180" width="240" height="155" rx="4" fill="white" />
-              <path d="M90 180 L210 115 L210 180 Z" fill="white" opacity="0.55" />
-              <path d="M330 180 L210 115 L210 180 Z" fill="white" opacity="0.35" />
-              <rect x="90" y="218" width="240" height="28" fill="white" opacity="0.25" />
-              <line x1="210" y1="115" x2="210" y2="180" stroke="#F97316" strokeWidth="3" strokeLinecap="round" />
-              {/* Orange tape stripe */}
-              <rect x="90" y="218" width="240" height="28" fill="#F97316" opacity="0.45" />
-              {/* Orange accent dot at peak */}
-              <circle cx="210" cy="115" r="7" fill="#F97316" opacity="0.7" />
-
-              {/* Small box — upper right */}
-              <rect x="280" y="76" width="96" height="66" rx="3" fill="white" opacity="0.38" />
-              <path d="M280 76 L328 50 L328 76 Z" fill="white" opacity="0.28" />
-              <path d="M376 76 L328 50 L328 76 Z" fill="white" opacity="0.18" />
-              <circle cx="328" cy="50" r="5" fill="#005EFF" opacity="0.6" />
-
-              {/* Small box — lower left */}
-              <rect x="44" y="295" width="78" height="54" rx="3" fill="white" opacity="0.28" />
-              <path d="M44 295 L83 272 L83 295 Z" fill="white" opacity="0.2" />
-              <path d="M122 295 L83 272 L83 295 Z" fill="white" opacity="0.13" />
-
-              {/* Stacked outline boxes (depth/layering motif) */}
-              <rect x="130" y="355" width="160" height="4" rx="2" fill="white" opacity="0.12" />
-              <rect x="150" y="362" width="120" height="3" rx="1.5" fill="white" opacity="0.07" />
+              {/* Row 1 */}
+              <rect x="40" y="40" width="130" height="85" rx="4" stroke="white" strokeWidth="1.5"/>
+              <rect x="178" y="40" width="90" height="85" rx="4" fill="white" fillOpacity="0.4"/>
+              <rect x="276" y="40" width="110" height="85" rx="4" fill="white" fillOpacity="0.25"/>
+              {/* Row 2 */}
+              <rect x="40" y="133" width="85" height="120" rx="4" fill="white" fillOpacity="0.3"/>
+              <rect x="133" y="133" width="70" height="55" rx="4" stroke="white" strokeWidth="1.5"/>
+              <rect x="133" y="196" width="70" height="57" rx="4" fill="white" fillOpacity="0.45"/>
+              <rect x="211" y="133" width="110" height="120" rx="4" stroke="white" strokeWidth="1.2"/>
+              <rect x="329" y="133" width="90" height="120" rx="4" fill="white" fillOpacity="0.18"/>
+              {/* Row 3 */}
+              <rect x="40" y="261" width="120" height="85" rx="4" stroke="white" strokeWidth="1.2"/>
+              <rect x="168" y="261" width="50" height="85" rx="4" fill="white" fillOpacity="0.85"/>
+              <rect x="226" y="261" width="90" height="85" rx="4" stroke="white" strokeWidth="1.5"/>
+              <rect x="324" y="261" width="90" height="85" rx="4" fill="white" fillOpacity="0.22"/>
+              {/* Row 4 */}
+              <rect x="40" y="354" width="65" height="55" rx="4" fill="white" fillOpacity="0.32"/>
+              <rect x="113" y="354" width="100" height="55" rx="4" stroke="white" strokeWidth="1.2"/>
+              <rect x="221" y="354" width="85" height="55" rx="4" fill="white" fillOpacity="0.18"/>
+              <rect x="314" y="354" width="55" height="55" rx="4" stroke="white" strokeWidth="1.5"/>
+              <rect x="377" y="354" width="40" height="55" rx="4" fill="white" fillOpacity="0.32"/>
             </svg>
 
             {/* Content */}
