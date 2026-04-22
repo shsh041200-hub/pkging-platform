@@ -331,6 +331,7 @@ export default async function CompanyPage({ params }: Props) {
                 companyId={company.id}
                 companyName={company.name}
                 website={company.website ?? null}
+                iconUrl={company.icon_url ?? null}
                 kakaoUrl={(company as Record<string, unknown>).kakao_url as string | null ?? null}
               />
             </Suspense>

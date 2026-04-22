@@ -15,6 +15,7 @@ import {
 } from '@/types'
 import { createClient } from '@/lib/supabase/server'
 import { simplifyCompanyName } from '@/lib/simplify-company-name'
+import { WebsiteFavicon } from '@/components/WebsiteFavicon'
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://packlinx.com'
 
@@ -89,7 +90,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
   const supabase = await createClient()
   let query = supabase
     .from('companies')
-    .select('id, slug, name, description, category, industry_categories, material_type, tags, is_verified, products, certifications, founded_year, website, service_capabilities, target_industries')
+    .select('id, slug, name, description, category, industry_categories, material_type, tags, is_verified, products, certifications, founded_year, website, icon_url, service_capabilities, target_industries')
     .contains('industry_categories', [categoryKey])
     .order('is_verified', { ascending: false })
     .order('name')
@@ -292,10 +293,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
                         rel="noopener noreferrer"
                         className="relative z-10 text-[12px] text-gray-400 hover:text-gray-600 flex items-center gap-1.5 transition-colors min-w-0"
                       >
-                        <svg className="w-3 h-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
-                            d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
-                        </svg>
+                        <WebsiteFavicon website={company.website} iconUrl={company.icon_url ?? null} className="w-4 h-4" />
                         <span className="truncate max-w-[130px]">
                           {company.website.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '')}
                         </span>

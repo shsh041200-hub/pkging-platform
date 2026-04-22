@@ -1,15 +1,17 @@
 'use client'
 
 import { useTrackEvent } from '@/hooks/useTrackEvent'
+import { WebsiteFavicon } from './WebsiteFavicon'
 
 type Props = {
   companyId: string
   companyName: string
   website: string | null
+  iconUrl?: string | null
   kakaoUrl?: string | null
 }
 
-export function CompanyDetailCTA({ companyId, website, kakaoUrl }: Props) {
+export function CompanyDetailCTA({ companyId, website, iconUrl, kakaoUrl }: Props) {
   const { track } = useTrackEvent()
 
   const handleWebsiteClick = () => {
@@ -45,6 +47,7 @@ export function CompanyDetailCTA({ companyId, website, kakaoUrl }: Props) {
           onClick={handleWebsiteClick}
           className="inline-flex items-center gap-1.5 text-gray-500 hover:text-gray-700 text-[13px] underline underline-offset-4 transition-colors"
         >
+          <WebsiteFavicon website={website!} iconUrl={iconUrl} className="w-4 h-4" />
           웹사이트 방문하기 →
         </a>
       )}
