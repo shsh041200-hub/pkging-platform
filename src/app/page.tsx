@@ -189,24 +189,96 @@ export default async function HomePage({
         </div>
       </header>
 
-      {/* Hero */}
-      <section className="bg-[#F8FAFC] bg-dot-grid border-b border-gray-100 pt-8 pb-8 sm:pt-10 sm:pb-10 px-5">
-        <div className="max-w-7xl mx-auto">
-          <div className="mb-6">
-            <div className="inline-block text-[11px] font-semibold tracking-widest uppercase text-[#005EFF] bg-[#EBF2FF] px-3 py-1.5 rounded-full mb-3">
-              국내 패키징 플랫폼
+      {/* Hero — split layout: dark visual left | search + categories right */}
+      <section className="border-b border-gray-100 overflow-hidden">
+        <div className="flex flex-col lg:flex-row lg:min-h-[calc(100vh-64px)]">
+
+          {/* Left: Dark visual hero panel */}
+          <div className="relative bg-[#0A0F1E] lg:w-[52%] flex flex-col justify-center px-8 sm:px-12 lg:px-16 py-14 lg:py-20">
+            {/* Subtle dot-grid overlay */}
+            <div
+              className="absolute inset-0 pointer-events-none"
+              style={{
+                backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.055) 1px, transparent 1px)',
+                backgroundSize: '30px 30px',
+              }}
+            />
+
+            {/* Geometric packaging illustration (SVG, no external images) */}
+            <svg
+              className="absolute bottom-0 right-0 w-[340px] h-[340px] lg:w-[420px] lg:h-[420px] opacity-[0.07] pointer-events-none select-none"
+              viewBox="0 0 420 420"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              aria-hidden="true"
+            >
+              {/* Primary large box */}
+              <rect x="90" y="180" width="240" height="155" rx="4" fill="white" />
+              <path d="M90 180 L210 115 L210 180 Z" fill="white" opacity="0.55" />
+              <path d="M330 180 L210 115 L210 180 Z" fill="white" opacity="0.35" />
+              <rect x="90" y="218" width="240" height="28" fill="white" opacity="0.25" />
+              <line x1="210" y1="115" x2="210" y2="180" stroke="#F97316" strokeWidth="3" strokeLinecap="round" />
+              {/* Orange tape stripe */}
+              <rect x="90" y="218" width="240" height="28" fill="#F97316" opacity="0.45" />
+              {/* Orange accent dot at peak */}
+              <circle cx="210" cy="115" r="7" fill="#F97316" opacity="0.7" />
+
+              {/* Small box — upper right */}
+              <rect x="280" y="76" width="96" height="66" rx="3" fill="white" opacity="0.38" />
+              <path d="M280 76 L328 50 L328 76 Z" fill="white" opacity="0.28" />
+              <path d="M376 76 L328 50 L328 76 Z" fill="white" opacity="0.18" />
+              <circle cx="328" cy="50" r="5" fill="#005EFF" opacity="0.6" />
+
+              {/* Small box — lower left */}
+              <rect x="44" y="295" width="78" height="54" rx="3" fill="white" opacity="0.28" />
+              <path d="M44 295 L83 272 L83 295 Z" fill="white" opacity="0.2" />
+              <path d="M122 295 L83 272 L83 295 Z" fill="white" opacity="0.13" />
+
+              {/* Stacked outline boxes (depth/layering motif) */}
+              <rect x="130" y="355" width="160" height="4" rx="2" fill="white" opacity="0.12" />
+              <rect x="150" y="362" width="120" height="3" rx="1.5" fill="white" opacity="0.07" />
+            </svg>
+
+            {/* Content */}
+            <div className="relative z-10">
+              <div className="inline-block text-[11px] font-semibold tracking-widest uppercase text-[#F97316] bg-[#F97316]/10 border border-[#F97316]/20 px-3 py-1.5 rounded-full mb-5">
+                국내 패키징 플랫폼
+              </div>
+              <h1 className="text-[34px] sm:text-[44px] lg:text-[52px] font-extrabold text-white leading-[1.1] tracking-[-0.04em] mb-4">
+                전국 패키징<br />파트너, 한 번에
+              </h1>
+              <p className="text-white/55 text-[15px] leading-relaxed mb-10 max-w-[400px]">
+                검증된 B2B 포장 파트너를 바로 찾으세요.<br className="hidden sm:inline" />
+                식품·산업·친환경 전 분야 커버.
+              </p>
+              {totalCount != null && (
+                <div className="flex items-center gap-6 sm:gap-8 flex-wrap">
+                  <div>
+                    <div className="text-[26px] sm:text-[30px] font-black text-white tracking-[-0.03em] leading-none">
+                      {totalCount.toLocaleString()}
+                    </div>
+                    <div className="text-[11px] text-white/35 font-medium mt-1.5">등록 업체</div>
+                  </div>
+                  <div className="w-px h-10 bg-white/10 self-center" />
+                  <div>
+                    <div className="text-[26px] sm:text-[30px] font-black text-white tracking-[-0.03em] leading-none">6</div>
+                    <div className="text-[11px] text-white/35 font-medium mt-1.5">산업 카테고리</div>
+                  </div>
+                  <div className="w-px h-10 bg-white/10 self-center" />
+                  <div>
+                    <div className="text-[26px] sm:text-[30px] font-black text-[#F97316] tracking-[-0.03em] leading-none">무료</div>
+                    <div className="text-[11px] text-white/35 font-medium mt-1.5">이용 가능</div>
+                  </div>
+                </div>
+              )}
             </div>
-            <h1 className="text-[28px] sm:text-[36px] font-extrabold text-gray-900 leading-[1.15] tracking-[-0.04em]">
-              전국 패키징 파트너, 한 번에
-            </h1>
-            <p className="text-gray-500 text-[15px] mt-2 leading-relaxed">
-              B2B 포장 파트너를 바로 찾으세요.
-            </p>
           </div>
 
-          <div className="flex flex-col md:flex-row md:items-start md:gap-8">
-            {/* Left: search */}
-            <div className="md:flex-1 md:max-w-lg">
+          {/* Right: Search + 6 category buttons panel (light) */}
+          <div className="lg:w-[48%] bg-[#F9FAFB] border-l border-gray-100 flex items-center px-8 sm:px-12 py-12 lg:py-20">
+            <div className="w-full max-w-[440px] mx-auto lg:mx-0">
+              <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-widest mb-4">업체 검색</p>
+
               <form method="GET" className="flex rounded-xl overflow-hidden border border-gray-200 shadow-[0_2px_8px_rgba(0,0,0,0.06)] focus-within:border-[#005EFF] focus-within:shadow-[0_2px_8px_rgba(0,0,0,0.06),0_0_0_3px_rgba(0,94,255,0.12)] transition-shadow">
                 <input
                   name="q"
@@ -221,6 +293,7 @@ export default async function HomePage({
                   검색
                 </button>
               </form>
+
               {totalCount != null && (
                 <div className="flex items-center gap-3 mt-3 text-[12px] text-gray-400 font-medium">
                   <span>{totalCount.toLocaleString()}개 업체 등록됨</span>
@@ -228,32 +301,36 @@ export default async function HomePage({
                   <span>무료 이용</span>
                 </div>
               )}
-            </div>
 
-            {/* Right: 6 category buttons */}
-            {showingCategory && (
-              <div className="mt-6 md:mt-0 md:flex-1">
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                  {INDUSTRY_CATEGORIES.filter((cat) => categoryCounts[cat] > 0).map((cat) => (
-                    <form key={cat} action={`/categories/${categoryToSlug(cat)}`} className="contents">
-                      <button
-                        type="submit"
-                        className="group flex items-center gap-2.5 bg-white border border-gray-200 rounded-lg px-3 py-2.5 hover:border-[#005EFF]/30 hover:bg-[#F8FAFF] transition-all duration-150"
-                      >
-                        <span className="text-base flex-shrink-0">{INDUSTRY_CATEGORY_ICONS[cat]}</span>
-                        <div className="min-w-0 text-left">
-                          <span className="text-[13px] font-semibold text-gray-900 group-hover:text-[#005EFF] transition-colors block truncate">
-                            {INDUSTRY_CATEGORY_LABELS[cat]}
-                          </span>
-                          <span className="text-[11px] text-gray-400">{categoryCounts[cat]}개</span>
-                        </div>
-                      </button>
-                    </form>
-                  ))}
-                </div>
-              </div>
-            )}
+              {/* 6 category buttons */}
+              {showingCategory && (
+                <>
+                  <div className="flex items-center mt-7 mb-4">
+                    <span className="text-[11px] font-semibold text-gray-400 uppercase tracking-widest">카테고리 탐색</span>
+                  </div>
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                    {INDUSTRY_CATEGORIES.filter((cat) => categoryCounts[cat] > 0).map((cat) => (
+                      <form key={cat} action={`/categories/${categoryToSlug(cat)}`} className="contents">
+                        <button
+                          type="submit"
+                          className="group flex items-center gap-2.5 bg-white border border-gray-200 rounded-lg px-3 py-2.5 hover:border-[#005EFF]/30 hover:bg-[#F8FAFF] transition-all duration-150"
+                        >
+                          <span className="text-base flex-shrink-0">{INDUSTRY_CATEGORY_ICONS[cat]}</span>
+                          <div className="min-w-0 text-left">
+                            <span className="text-[13px] font-semibold text-gray-900 group-hover:text-[#005EFF] transition-colors block truncate">
+                              {INDUSTRY_CATEGORY_LABELS[cat]}
+                            </span>
+                            <span className="text-[11px] text-gray-400">{categoryCounts[cat]}개</span>
+                          </div>
+                        </button>
+                      </form>
+                    ))}
+                  </div>
+                </>
+              )}
+            </div>
           </div>
+
         </div>
       </section>
 
