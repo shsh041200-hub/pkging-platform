@@ -6,8 +6,19 @@ export default function robots(): MetadataRoute.Robots {
   return {
     rules: [
       {
+        userAgent: 'Googlebot',
+        allow: '/',
+        disallow: ['/api/', '/opt-out/'],
+      },
+      {
+        userAgent: 'Yeti',
+        allow: '/',
+        disallow: ['/api/', '/opt-out/'],
+      },
+      {
         userAgent: '*',
         allow: '/',
+        disallow: ['/api/', '/opt-out/'],
       },
     ],
     sitemap: `${baseUrl}/sitemap.xml`,
