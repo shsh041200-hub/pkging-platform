@@ -1,0 +1,1801 @@
+{
+  "timestamp": "2026-04-22T06:40:45.451799+00:00",
+  "dry_run": false,
+  "total": 297,
+  "success": 131,
+  "errors": 0,
+  "skipped": 166,
+  "failure_breakdown": {
+    "no_icon_tags_in_html": 90,
+    "url_error:[Errno -2] Name or service not known": 38,
+    "icon_tags_found_but_images_invalid": 18,
+    "url_error:[Errno -3] Temporary failure in name resolution": 14,
+    "http_403": 4,
+    "http_404": 1,
+    "http_429": 1
+  },
+  "details": [
+    {
+      "slug": "saehanpeurateg",
+      "website": "https://www.splatech.com/",
+      "status": "success",
+      "strategy": "link_icon_196px"
+    },
+    {
+      "slug": "kib-8835",
+      "website": "https://kibplastic.com/Main-Products",
+      "status": "success",
+      "strategy": "link_icon_196px"
+    },
+    {
+      "slug": "tamrapanji",
+      "website": "http://전화",
+      "status": "skip",
+      "reason": "url_error:[Errno -3] Temporary failure in name resolution"
+    },
+    {
+      "slug": "sinjeon",
+      "website": "http://www.shinjun.co.kr/",
+      "status": "success",
+      "strategy": "link_icon_196px"
+    },
+    {
+      "slug": "박스타운-5507",
+      "website": "https://www.boxtown.co.kr/",
+      "status": "skip",
+      "reason": "no_icon_tags_in_html"
+    },
+    {
+      "slug": "paekiji365il",
+      "website": "http://package3651.com",
+      "status": "skip",
+      "reason": "url_error:[Errno -2] Name or service not known"
+    },
+    {
+      "slug": "nuripaeg",
+      "website": "http://www.nuri-box.com/",
+      "status": "success",
+      "strategy": "og_image"
+    },
+    {
+      "slug": "geurinpaekiji",
+      "website": "http://greenpackage.net",
+      "status": "skip",
+      "reason": "no_icon_tags_in_html"
+    },
+    {
+      "slug": "ajinpiaenpi",
+      "website": "http://www.ajinpaper.co.kr/",
+      "status": "skip",
+      "reason": "no_icon_tags_in_html"
+    },
+    {
+      "slug": "소마박스-8612",
+      "website": "http://somabox.co.kr/",
+      "status": "success",
+      "strategy": "link_icon_196px"
+    },
+    {
+      "slug": "hangugsuchulpojanggongeob-osangongjang",
+      "website": "http://www.keppack.co.kr/",
+      "status": "skip",
+      "reason": "no_icon_tags_in_html"
+    },
+    {
+      "slug": "igseongpeuraseutig",
+      "website": "http://www.iksungplastic.co.kr/",
+      "status": "skip",
+      "reason": "no_icon_tags_in_html"
+    },
+    {
+      "slug": "daeseongpojangsaneob",
+      "website": "http://www.daeseongpack.com/",
+      "status": "skip",
+      "reason": "url_error:[Errno -2] Name or service not known"
+    },
+    {
+      "slug": "donggangnurihyeobdongjohab",
+      "website": "http://동강누리.com",
+      "status": "skip",
+      "reason": "url_error:[Errno -2] Name or service not known"
+    },
+    {
+      "slug": "eimteu",
+      "website": "http://aimtcorp.com",
+      "status": "success",
+      "strategy": "link_icon_196px"
+    },
+    {
+      "slug": "daehyeonpojangsaneob",
+      "website": "http://daehyunpkg.com/",
+      "status": "success",
+      "strategy": "og_image"
+    },
+    {
+      "slug": "ujinpojangjaesaneob",
+      "website": "http://www.woojinpack.kr/",
+      "status": "success",
+      "strategy": "og_image"
+    },
+    {
+      "slug": "handogsaneob",
+      "website": "http://www.handokclean.com/",
+      "status": "skip",
+      "reason": "url_error:[Errno -2] Name or service not known"
+    },
+    {
+      "slug": "reogseupaeg",
+      "website": "https://www.instagram.com/luxepack_korea",
+      "status": "success",
+      "strategy": "link_icon_192px"
+    },
+    {
+      "slug": "boxdama",
+      "website": "https://www.boxdama.com/",
+      "status": "success",
+      "strategy": "og_image"
+    },
+    {
+      "slug": "elwon",
+      "website": "http://eloneprint.com/",
+      "status": "skip",
+      "reason": "http_403"
+    },
+    {
+      "slug": "tabpaeg",
+      "website": "https://www.instagram.com/top__pack",
+      "status": "success",
+      "strategy": "link_icon_192px"
+    },
+    {
+      "slug": "sadanbeobin-hangugpojangjaejaehwalyongsaeobgongjej",
+      "website": "http://www.pkg.or.kr/",
+      "status": "skip",
+      "reason": "no_icon_tags_in_html"
+    },
+    {
+      "slug": "ilsinpojang",
+      "website": "http://일신포장.com",
+      "status": "skip",
+      "reason": "url_error:[Errno -2] Name or service not known"
+    },
+    {
+      "slug": "gukeompeoni",
+      "website": "https://www.instagram.com/gu_company__official",
+      "status": "success",
+      "strategy": "link_icon_192px"
+    },
+    {
+      "slug": "sehangigyejejagso",
+      "website": "http://www.shem.co.kr/",
+      "status": "skip",
+      "reason": "no_icon_tags_in_html"
+    },
+    {
+      "slug": "daegyeongpeteusaneob",
+      "website": "http://www.dkpet.kr",
+      "status": "skip",
+      "reason": "no_icon_tags_in_html"
+    },
+    {
+      "slug": "jinuteugsu-binilpojang",
+      "website": "https://www.jwpack.co.kr/",
+      "status": "success",
+      "strategy": "link_icon_512px"
+    },
+    {
+      "slug": "seukeuraebsigpum",
+      "website": "http://www.sclabfood.com/",
+      "status": "skip",
+      "reason": "url_error:[Errno -2] Name or service not known"
+    },
+    {
+      "slug": "daejinpeuraseutig",
+      "website": "http://daejn.co.kr/",
+      "status": "success",
+      "strategy": "og_image"
+    },
+    {
+      "slug": "sejongkemikal",
+      "website": "http://www.sjc01.com/",
+      "status": "skip",
+      "reason": "url_error:[Errno -2] Name or service not known"
+    },
+    {
+      "slug": "hanilsaneobsa",
+      "website": "http://www.hanil-industrial.com/",
+      "status": "skip",
+      "reason": "url_error:[Errno -2] Name or service not known"
+    },
+    {
+      "slug": "damayopaeg",
+      "website": "https://damayo.com",
+      "status": "success",
+      "strategy": "link_icon"
+    },
+    {
+      "slug": "useongjiendeupi",
+      "website": "http://www.wsgnp.co.kr",
+      "status": "skip",
+      "reason": "no_icon_tags_in_html"
+    },
+    {
+      "slug": "yulchonhwahag-jeonjasojaegongjang",
+      "website": "http://www.youlchon.com/",
+      "status": "success",
+      "strategy": "google_api"
+    },
+    {
+      "slug": "박스크루-6378",
+      "website": "https://m.box-crew.com/",
+      "status": "skip",
+      "reason": "icon_tags_found_but_images_invalid"
+    },
+    {
+      "slug": "peurapia",
+      "website": "https://www.xeonic.co.kr/",
+      "status": "skip",
+      "reason": "icon_tags_found_but_images_invalid"
+    },
+    {
+      "slug": "emodeunbagseu",
+      "website": "https://www.emodeunbox.com/",
+      "status": "success",
+      "strategy": "link_icon"
+    },
+    {
+      "slug": "ainpaeg",
+      "website": "https://www.instagram.com/ainpack_korea/",
+      "status": "success",
+      "strategy": "link_icon_192px"
+    },
+    {
+      "slug": "dongheungpojang",
+      "website": "http://전화",
+      "status": "skip",
+      "reason": "url_error:[Errno -3] Temporary failure in name resolution"
+    },
+    {
+      "slug": "ruikeom",
+      "website": "http://www.luicom.org/",
+      "status": "skip",
+      "reason": "http_403"
+    },
+    {
+      "slug": "yeonghwasuchulpojang",
+      "website": "http://yhpk.kr/",
+      "status": "skip",
+      "reason": "no_icon_tags_in_html"
+    },
+    {
+      "slug": "hyeseongpaekijing",
+      "website": "http://www.hs-marking.co.kr",
+      "status": "success",
+      "strategy": "og_image"
+    },
+    {
+      "slug": "dieseupaeg",
+      "website": "https://ecodspack.com",
+      "status": "success",
+      "strategy": "link_icon_196px"
+    },
+    {
+      "slug": "세진판지-8380",
+      "website": "https://sejinpanji.co.kr/22",
+      "status": "success",
+      "strategy": "link_icon_196px"
+    },
+    {
+      "slug": "jeongmyeonginswaesa",
+      "website": "https://jmprintingpackage.imweb.me",
+      "status": "success",
+      "strategy": "og_image"
+    },
+    {
+      "slug": "하하팩-6460",
+      "website": "https://hahapack.com/",
+      "status": "skip",
+      "reason": "no_icon_tags_in_html"
+    },
+    {
+      "slug": "yeonpaeg",
+      "website": "https://www.yeonpack.com/box",
+      "status": "success",
+      "strategy": "link_icon_196px"
+    },
+    {
+      "slug": "gongbagseu",
+      "website": "https://gongbox.com/gnb/shop/basic/",
+      "status": "success",
+      "strategy": "link_icon_256px"
+    },
+    {
+      "slug": "jayeonbinilpojang",
+      "website": "http://www.nature3388.co.kr",
+      "status": "success",
+      "strategy": "og_image"
+    },
+    {
+      "slug": "yeonggwanginswaepojang",
+      "website": "http://www.ykpackage.net",
+      "status": "skip",
+      "reason": "url_error:[Errno -2] Name or service not known"
+    },
+    {
+      "slug": "haemireu",
+      "website": "http://www.haemir.co.kr/",
+      "status": "success",
+      "strategy": "og_image"
+    },
+    {
+      "slug": "seutoljeudijain",
+      "website": "http://www.stolz.kr/",
+      "status": "success",
+      "strategy": "link_icon"
+    },
+    {
+      "slug": "peomtegkoria",
+      "website": "http://www.pum-tech.co.kr/",
+      "status": "skip",
+      "reason": "no_icon_tags_in_html"
+    },
+    {
+      "slug": "duribagseu",
+      "website": "http://www.duribox.kr/",
+      "status": "success",
+      "strategy": "link_icon_196px"
+    },
+    {
+      "slug": "haeseongpojang",
+      "website": "http://hs2555.co.kr/",
+      "status": "skip",
+      "reason": "url_error:[Errno -2] Name or service not known"
+    },
+    {
+      "slug": "wonchangmogjaepojang",
+      "website": "http://www.원창목재포장.kr",
+      "status": "skip",
+      "reason": "no_icon_tags_in_html"
+    },
+    {
+      "slug": "seonilpojangsaneob",
+      "website": "http://www.sunilpack.co.kr/",
+      "status": "skip",
+      "reason": "no_icon_tags_in_html"
+    },
+    {
+      "slug": "madae-tonbaeg-ppmadae",
+      "website": "http://052-225-7620.1004114.co.kr/",
+      "status": "success",
+      "strategy": "og_image"
+    },
+    {
+      "slug": "beulrupaegkiji",
+      "website": "http://www.ypp21.co.kr/",
+      "status": "skip",
+      "reason": "no_icon_tags_in_html"
+    },
+    {
+      "slug": "dongyeonpojangsaneob",
+      "website": "https://dypacking.kr",
+      "status": "success",
+      "strategy": "link_icon_196px"
+    },
+    {
+      "slug": "seonghuneeopaeg",
+      "website": "http://www.minipack.co.kr/",
+      "status": "success",
+      "strategy": "og_image"
+    },
+    {
+      "slug": "paibagseu",
+      "website": "http://www.fibox.co.kr/",
+      "status": "skip",
+      "reason": "no_icon_tags_in_html"
+    },
+    {
+      "slug": "boteulseu",
+      "website": "https://www.instagram.com/bottles_official",
+      "status": "success",
+      "strategy": "link_icon_192px"
+    },
+    {
+      "slug": "태방파텍-0005",
+      "website": "https://m.taebang.com/",
+      "status": "skip",
+      "reason": "icon_tags_found_but_images_invalid"
+    },
+    {
+      "slug": "saenggagmandeum",
+      "website": "https://www.thinkmaker.co.kr",
+      "status": "skip",
+      "reason": "url_error:[Errno -2] Name or service not known"
+    },
+    {
+      "slug": "taeyangsuchulpojang",
+      "website": "http://태양수출포장.com/",
+      "status": "skip",
+      "reason": "no_icon_tags_in_html"
+    },
+    {
+      "slug": "hanolsaneob",
+      "website": "http://jejuhanol.com",
+      "status": "success",
+      "strategy": "og_image"
+    },
+    {
+      "slug": "hangugsuchulpojanggongeob",
+      "website": "http://www.keppack.co.kr",
+      "status": "skip",
+      "reason": "no_icon_tags_in_html"
+    },
+    {
+      "slug": "oseongpaekiji",
+      "website": "https://osungp.com",
+      "status": "success",
+      "strategy": "link_icon_196px"
+    },
+    {
+      "slug": "bagseuya",
+      "website": "http://www.boxya.co.kr/shop/list.php?ca_id=6010",
+      "status": "success",
+      "strategy": "og_image"
+    },
+    {
+      "slug": "yusinpojanggongeob",
+      "website": "http://전화",
+      "status": "skip",
+      "reason": "url_error:[Errno -3] Temporary failure in name resolution"
+    },
+    {
+      "slug": "gusdijainyeonguso",
+      "website": "http://www.gdde.co.kr/",
+      "status": "skip",
+      "reason": "url_error:[Errno -2] Name or service not known"
+    },
+    {
+      "slug": "sinjeongmunhwasa",
+      "website": "https://www.shinjungprint.com/",
+      "status": "success",
+      "strategy": "google_api"
+    },
+    {
+      "slug": "yeonpaekiji-jongibagseujejag",
+      "website": "https://www.yeonpack.com",
+      "status": "success",
+      "strategy": "link_icon_196px"
+    },
+    {
+      "slug": "포장상자-8066",
+      "website": "http://m.koreapackage.kr/product_list.php?part_idx=1",
+      "status": "skip",
+      "reason": "icon_tags_found_but_images_invalid"
+    },
+    {
+      "slug": "seongsinpeulraseutig",
+      "website": "http://www.sungshinpl.co.kr/",
+      "status": "skip",
+      "reason": "icon_tags_found_but_images_invalid"
+    },
+    {
+      "slug": "iwonhwahag",
+      "website": "http://비닐포장재.한국",
+      "status": "skip",
+      "reason": "url_error:[Errno -2] Name or service not known"
+    },
+    {
+      "slug": "tikeidiaenpi",
+      "website": "http://tkdnp.com/main/index.php",
+      "status": "skip",
+      "reason": "no_icon_tags_in_html"
+    },
+    {
+      "slug": "하나패키지-3027",
+      "website": "https://xn--910b209bg1euvc7wd.com/",
+      "status": "success",
+      "strategy": "link_icon_196px"
+    },
+    {
+      "slug": "ilhopiaenpi",
+      "website": "http://www.ilhopnp.co.kr/type-1",
+      "status": "success",
+      "strategy": "link_icon_196px"
+    },
+    {
+      "slug": "bgfecosolution",
+      "website": "http://www.bgfecosolution.com",
+      "status": "skip",
+      "reason": "icon_tags_found_but_images_invalid"
+    },
+    {
+      "slug": "deoembagseu",
+      "website": "https://damoaskm.com/?act=shop.goods_list&GC=GM4",
+      "status": "success",
+      "strategy": "shortcut_icon"
+    },
+    {
+      "slug": "taeseongsaneobgwangju",
+      "website": "http://전화",
+      "status": "skip",
+      "reason": "url_error:[Errno -3] Temporary failure in name resolution"
+    },
+    {
+      "slug": "dijainmotibeu",
+      "website": "http://i-motive.kr/",
+      "status": "skip",
+      "reason": "no_icon_tags_in_html"
+    },
+    {
+      "slug": "samhohwaseong",
+      "website": "http://www.samhochemical.co.kr",
+      "status": "success",
+      "strategy": "og_image"
+    },
+    {
+      "slug": "myeongjingieob",
+      "website": "http://www.myung-jin.com",
+      "status": "skip",
+      "reason": "no_icon_tags_in_html"
+    },
+    {
+      "slug": "dongwonsiseutemjeu-eumseongsaeobjang",
+      "website": "https://www.dongwonsystems.com/",
+      "status": "skip",
+      "reason": "no_icon_tags_in_html"
+    },
+    {
+      "slug": "rojipaeg",
+      "website": "http://www.logipac.co.kr",
+      "status": "skip",
+      "reason": "no_icon_tags_in_html"
+    },
+    {
+      "slug": "joeunsuchulpojang",
+      "website": "https://joeunpkg.qshop.ai",
+      "status": "success",
+      "strategy": "link_icon_196px"
+    },
+    {
+      "slug": "reongpojang",
+      "website": "http://www.leonpack.co.kr",
+      "status": "success",
+      "strategy": "link_icon_196px"
+    },
+    {
+      "slug": "seheungeseupi",
+      "website": "http://www.sh-print.co.kr/",
+      "status": "skip",
+      "reason": "url_error:[Errno -2] Name or service not known"
+    },
+    {
+      "slug": "무한포장-0185",
+      "website": "https://muhanpojang.com/",
+      "status": "skip",
+      "reason": "icon_tags_found_but_images_invalid"
+    },
+    {
+      "slug": "sindaehanpanji",
+      "website": "http://www.dygroup.co.kr",
+      "status": "success",
+      "strategy": "og_image"
+    },
+    {
+      "slug": "mijusaneob",
+      "website": "http://www.mijuind.co.kr/",
+      "status": "skip",
+      "reason": "no_icon_tags_in_html"
+    },
+    {
+      "slug": "maejigseibeu",
+      "website": "http://magicsave.co.kr/",
+      "status": "skip",
+      "reason": "url_error:[Errno -2] Name or service not known"
+    },
+    {
+      "slug": "namgang",
+      "website": "http://www.nkfibc.com/",
+      "status": "skip",
+      "reason": "icon_tags_found_but_images_invalid"
+    },
+    {
+      "slug": "hwanggeumpojang",
+      "website": "http://gold-bag.co.kr",
+      "status": "skip",
+      "reason": "no_icon_tags_in_html"
+    },
+    {
+      "slug": "sinjinsuchulpojang",
+      "website": "http://전화",
+      "status": "skip",
+      "reason": "url_error:[Errno -3] Temporary failure in name resolution"
+    },
+    {
+      "slug": "hangugpojanggigye",
+      "website": "http://www.svkorea.co.kr",
+      "status": "skip",
+      "reason": "url_error:[Errno -2] Name or service not known"
+    },
+    {
+      "slug": "eeorapa",
+      "website": "http://www.airapha.com",
+      "status": "success",
+      "strategy": "link_icon"
+    },
+    {
+      "slug": "geumseongpojanggongeob",
+      "website": "http://전화",
+      "status": "skip",
+      "reason": "url_error:[Errno -3] Temporary failure in name resolution"
+    },
+    {
+      "slug": "udeunbagseu",
+      "website": "https://wooden-box.co.kr",
+      "status": "success",
+      "strategy": "link_icon_196px"
+    },
+    {
+      "slug": "nunggochchampokeu",
+      "website": "http://www.눈꽃참한우포크.com",
+      "status": "skip",
+      "reason": "url_error:[Errno -2] Name or service not known"
+    },
+    {
+      "slug": "seongyeongsaneobsa",
+      "website": "https://skpoly.co.kr",
+      "status": "success",
+      "strategy": "link_icon_196px"
+    },
+    {
+      "slug": "다원포장-1771",
+      "website": "http://www.dawonpojang.com/",
+      "status": "skip",
+      "reason": "no_icon_tags_in_html"
+    },
+    {
+      "slug": "ssissitiyeonguso",
+      "website": "http://cct.or.kr/",
+      "status": "skip",
+      "reason": "no_icon_tags_in_html"
+    },
+    {
+      "slug": "행복박스-5945",
+      "website": "http://www.happyboxing.co.kr/",
+      "status": "skip",
+      "reason": "no_icon_tags_in_html"
+    },
+    {
+      "slug": "seojunhaiteg",
+      "website": "http://www.sjptool.co.kr/",
+      "status": "success",
+      "strategy": "og_image"
+    },
+    {
+      "slug": "bagseumoa",
+      "website": "https://www.boxmoa.com/",
+      "status": "success",
+      "strategy": "link_icon"
+    },
+    {
+      "slug": "jeieseuemteg",
+      "website": "http://www.jipco.co.kr",
+      "status": "success",
+      "strategy": "og_image"
+    },
+    {
+      "slug": "dongju",
+      "website": "http://www.dongju.net/",
+      "status": "skip",
+      "reason": "no_icon_tags_in_html"
+    },
+    {
+      "slug": "주-삼보판지-6523",
+      "website": "https://isambo.com/44",
+      "status": "success",
+      "strategy": "link_icon_196px"
+    },
+    {
+      "slug": "hyoseongeeokaeb",
+      "website": "http://에어캡.kr",
+      "status": "success",
+      "strategy": "og_image"
+    },
+    {
+      "slug": "boxfriends-6811",
+      "website": "https://boxfriends.co.kr/mall/m_board.php?ps_db=customer_order&ps_category=0&ps_page=4",
+      "status": "success",
+      "strategy": "og_image"
+    },
+    {
+      "slug": "koripaeg",
+      "website": "https://www.coripack.co.kr/common/portfolio/portfolio01.asp?btype=1&jtype=2",
+      "status": "success",
+      "strategy": "link_icon"
+    },
+    {
+      "slug": "rosdepaekijingsolrusyeonjeu",
+      "website": "http://www.lottepackagingsolutions.co.kr",
+      "status": "skip",
+      "reason": "no_icon_tags_in_html"
+    },
+    {
+      "slug": "bioegseu",
+      "website": "https://www.ecoboxkorea.com/",
+      "status": "success",
+      "strategy": "og_image"
+    },
+    {
+      "slug": "paekeotibeu",
+      "website": "https://packative.com/",
+      "status": "success",
+      "strategy": "link_icon_32px"
+    },
+    {
+      "slug": "jinsongpaeg",
+      "website": "http://jinsongpack.co.kr/",
+      "status": "success",
+      "strategy": "link_icon"
+    },
+    {
+      "slug": "yuchangsusan",
+      "website": "https://www.instagram.com/u_chang_seafood",
+      "status": "success",
+      "strategy": "link_icon_192px"
+    },
+    {
+      "slug": "donggugpaekiji",
+      "website": "http://www.dkpackage.com/",
+      "status": "skip",
+      "reason": "http_404"
+    },
+    {
+      "slug": "paperuseu",
+      "website": "https://www.paperus.co.kr/moa/sub/auto/box-estimate1.asp",
+      "status": "success",
+      "strategy": "shortcut_icon"
+    },
+    {
+      "slug": "masmidoenjang",
+      "website": "http://fcmanpojang.com/",
+      "status": "skip",
+      "reason": "url_error:[Errno -2] Name or service not known"
+    },
+    {
+      "slug": "예원팩-3747",
+      "website": "https://yewonpack.com/",
+      "status": "skip",
+      "reason": "no_icon_tags_in_html"
+    },
+    {
+      "slug": "tabreonkoldeucheinsolrusyeon",
+      "website": "http://trcs.kr/",
+      "status": "skip",
+      "reason": "no_icon_tags_in_html"
+    },
+    {
+      "slug": "95mall-co-kr-5796",
+      "website": "http://mustwish.godomall.com/",
+      "status": "success",
+      "strategy": "link_icon"
+    },
+    {
+      "slug": "nyuropaeg",
+      "website": "https://www.instagram.com/_neuropack",
+      "status": "success",
+      "strategy": "link_icon_192px"
+    },
+    {
+      "slug": "dahaesaneob-balpojieeokaeb",
+      "website": "http://다해팩.kr/",
+      "status": "skip",
+      "reason": "icon_tags_found_but_images_invalid"
+    },
+    {
+      "slug": "eoseupom",
+      "website": "http://earthform.co.kr",
+      "status": "success",
+      "strategy": "link_icon_196px"
+    },
+    {
+      "slug": "daewonotopaeg",
+      "website": "http://www.autopack.co.kr/",
+      "status": "skip",
+      "reason": "no_icon_tags_in_html"
+    },
+    {
+      "slug": "bigo",
+      "website": "http://vigopack.com/",
+      "status": "skip",
+      "reason": "icon_tags_found_but_images_invalid"
+    },
+    {
+      "slug": "peulreigeuraem",
+      "website": "http://www.playgram.co.kr",
+      "status": "skip",
+      "reason": "no_icon_tags_in_html"
+    },
+    {
+      "slug": "dawonpeulraseutig",
+      "website": "http://m.theplastic.co.kr/",
+      "status": "success",
+      "strategy": "apple_touch_icon"
+    },
+    {
+      "slug": "yongjinsaneob",
+      "website": "http://www.yongjinpacking.com/",
+      "status": "skip",
+      "reason": "url_error:[Errno -2] Name or service not known"
+    },
+    {
+      "slug": "eitiegseugeulrobeol",
+      "website": "https://atxglobal.co.kr",
+      "status": "skip",
+      "reason": "no_icon_tags_in_html"
+    },
+    {
+      "slug": "sinchanguretan",
+      "website": "https://www.instagram.com/sc_urethane/",
+      "status": "success",
+      "strategy": "link_icon_192px"
+    },
+    {
+      "slug": "samhwapanji",
+      "website": "http://전화",
+      "status": "skip",
+      "reason": "url_error:[Errno -3] Temporary failure in name resolution"
+    },
+    {
+      "slug": "donggwangpanji",
+      "website": "http://전화",
+      "status": "skip",
+      "reason": "url_error:[Errno -3] Temporary failure in name resolution"
+    },
+    {
+      "slug": "hanyangpojanggigye",
+      "website": "http://www.hpack.co.kr/",
+      "status": "success",
+      "strategy": "link_icon_196px"
+    },
+    {
+      "slug": "wonjunteipeu",
+      "website": "https://www.instagram.com/wj.joon22/",
+      "status": "success",
+      "strategy": "link_icon_192px"
+    },
+    {
+      "slug": "주식회사-바래씨앤피-2971",
+      "website": "http://baraecnp.kr/47",
+      "status": "success",
+      "strategy": "link_icon_196px"
+    },
+    {
+      "slug": "송월패키지-2154",
+      "website": "https://www.songwolpkg.com/",
+      "status": "skip",
+      "reason": "no_icon_tags_in_html"
+    },
+    {
+      "slug": "hongjinpojang-gangnamsaog",
+      "website": "http://www.hjpack.net",
+      "status": "success",
+      "strategy": "apple_touch_icon"
+    },
+    {
+      "slug": "goryeojeji-panjisaeobbu",
+      "website": "http://www.koreapaper.co.kr",
+      "status": "success",
+      "strategy": "link_icon_196px"
+    },
+    {
+      "slug": "giseongbagseu",
+      "website": "http://www.ksbox1.com/product3.php",
+      "status": "skip",
+      "reason": "icon_tags_found_but_images_invalid"
+    },
+    {
+      "slug": "moseuteugeulraseu",
+      "website": "http://www.mostglass.co.kr",
+      "status": "skip",
+      "reason": "no_icon_tags_in_html"
+    },
+    {
+      "slug": "sinyeonginoteg",
+      "website": "http://syinnotek.kr/",
+      "status": "skip",
+      "reason": "no_icon_tags_in_html"
+    },
+    {
+      "slug": "taesansileob",
+      "website": "http://www.biniru.net/",
+      "status": "skip",
+      "reason": "url_error:[Errno -2] Name or service not known"
+    },
+    {
+      "slug": "maeumsangja",
+      "website": "https://www.maumsangja.com/",
+      "status": "success",
+      "strategy": "link_icon_196px"
+    },
+    {
+      "slug": "tekeupaegsolrusyeon-bonsa",
+      "website": "http://www.dongwonsystems.com/",
+      "status": "skip",
+      "reason": "no_icon_tags_in_html"
+    },
+    {
+      "slug": "rosdepaekijingsolrusyeonjeu-ansan1gongjang",
+      "website": "https://www.lottepackagingsolutions.co.kr/",
+      "status": "skip",
+      "reason": "no_icon_tags_in_html"
+    },
+    {
+      "slug": "paegpeulreiseu",
+      "website": "https://packplace.net",
+      "status": "skip",
+      "reason": "url_error:[Errno -2] Name or service not known"
+    },
+    {
+      "slug": "tiseutyudio-hwa",
+      "website": "https://www.instagram.com/tea_studio_",
+      "status": "success",
+      "strategy": "link_icon_192px"
+    },
+    {
+      "slug": "daeilteugsupojang",
+      "website": "http://www.dipk.co.kr",
+      "status": "success",
+      "strategy": "og_image"
+    },
+    {
+      "slug": "hangugipo",
+      "website": "http://www.koreaepo.co.kr/",
+      "status": "skip",
+      "reason": "icon_tags_found_but_images_invalid"
+    },
+    {
+      "slug": "dadampiaenssi",
+      "website": "https://dadampnc.imweb.me/",
+      "status": "success",
+      "strategy": "link_icon_196px"
+    },
+    {
+      "slug": "dongapeulraseutigsangsa",
+      "website": "http://www.dapl.co.kr",
+      "status": "success",
+      "strategy": "link_icon"
+    },
+    {
+      "slug": "유한포장-7250",
+      "website": "https://yuhanpojang.com/",
+      "status": "skip",
+      "reason": "icon_tags_found_but_images_invalid"
+    },
+    {
+      "slug": "hongjin-pack",
+      "website": "https://www.hjpack.net",
+      "status": "success",
+      "strategy": "apple_touch_icon"
+    },
+    {
+      "slug": "incheonmadae",
+      "website": "http://icmadae.com",
+      "status": "success",
+      "strategy": "og_image"
+    },
+    {
+      "slug": "ripaeg",
+      "website": "http://www.leepack.com/",
+      "status": "skip",
+      "reason": "icon_tags_found_but_images_invalid"
+    },
+    {
+      "slug": "아폴로산업-1438",
+      "website": "https://www.apolloind.co.kr/support/notifications/press",
+      "status": "success",
+      "strategy": "shortcut_icon"
+    },
+    {
+      "slug": "otajongpaekijingpeosipig",
+      "website": "http://www.pacificpackage.co.kr/",
+      "status": "skip",
+      "reason": "url_error:[Errno -2] Name or service not known"
+    },
+    {
+      "slug": "주-현대포장-0100",
+      "website": "https://www.vinylmart.kr/",
+      "status": "success",
+      "strategy": "link_icon_196px"
+    },
+    {
+      "slug": "changsingieob",
+      "website": "http://cs-m.co.kr",
+      "status": "success",
+      "strategy": "og_image"
+    },
+    {
+      "slug": "teseuaenteseu-meikeusaendeubagseu",
+      "website": "http://www.makesandbox.cc",
+      "status": "skip",
+      "reason": "url_error:[Errno -2] Name or service not known"
+    },
+    {
+      "slug": "jeiedisyeon",
+      "website": "http://www.jedition.net/",
+      "status": "skip",
+      "reason": "url_error:[Errno -2] Name or service not known"
+    },
+    {
+      "slug": "cheonil",
+      "website": "http://cheonilkorea.co.kr/",
+      "status": "skip",
+      "reason": "no_icon_tags_in_html"
+    },
+    {
+      "slug": "seobeuwon-igsanheobeusenteo",
+      "website": "http://www.serveone.co.kr/kr/main.do",
+      "status": "skip",
+      "reason": "no_icon_tags_in_html"
+    },
+    {
+      "slug": "peurintingbagseu-bonsa",
+      "website": "https://printingbox.kr/",
+      "status": "skip",
+      "reason": "no_icon_tags_in_html"
+    },
+    {
+      "slug": "geumseongkalrapaeg",
+      "website": "http://전화",
+      "status": "skip",
+      "reason": "url_error:[Errno -3] Temporary failure in name resolution"
+    },
+    {
+      "slug": "busanchugsan",
+      "website": "http://www.busanmeat.com",
+      "status": "success",
+      "strategy": "og_image"
+    },
+    {
+      "slug": "e-joeun-pojang",
+      "website": "http://www.fromhic.com/",
+      "status": "skip",
+      "reason": "url_error:[Errno -2] Name or service not known"
+    },
+    {
+      "slug": "wilkopaekiji",
+      "website": "http://wil-co.kr/",
+      "status": "skip",
+      "reason": "no_icon_tags_in_html"
+    },
+    {
+      "slug": "miraeakeuril",
+      "website": "https://www.instagram.com/sungwhy356",
+      "status": "success",
+      "strategy": "link_icon_192px"
+    },
+    {
+      "slug": "yunatekeu",
+      "website": "http://www.canisgood.com",
+      "status": "skip",
+      "reason": "url_error:[Errno -2] Name or service not known"
+    },
+    {
+      "slug": "cnk-propack",
+      "website": "https://ckpropack.com",
+      "status": "skip",
+      "reason": "no_icon_tags_in_html"
+    },
+    {
+      "slug": "siseukinkoria",
+      "website": "http://www.siskinkorea.com",
+      "status": "success",
+      "strategy": "og_image"
+    },
+    {
+      "slug": "sinwonpojang",
+      "website": "https://sinwonparage.co.kr",
+      "status": "skip",
+      "reason": "url_error:[Errno -2] Name or service not known"
+    },
+    {
+      "slug": "paegtuyu",
+      "website": "https://pack2u.co.kr/",
+      "status": "skip",
+      "reason": "no_icon_tags_in_html"
+    },
+    {
+      "slug": "jeonjinsaneob",
+      "website": "http://www.전진산업.com/",
+      "status": "skip",
+      "reason": "no_icon_tags_in_html"
+    },
+    {
+      "slug": "jangmipojangjajaebaeghwajeom",
+      "website": "http://www.jangmipack.co.kr",
+      "status": "skip",
+      "reason": "url_error:[Errno -2] Name or service not known"
+    },
+    {
+      "slug": "ssimilrepeulreoseu",
+      "website": "http://shinsungbox.com/",
+      "status": "skip",
+      "reason": "no_icon_tags_in_html"
+    },
+    {
+      "slug": "poeseuteg",
+      "website": "http://www.psttech.co.kr/",
+      "status": "success",
+      "strategy": "link_icon_196px"
+    },
+    {
+      "slug": "ssiaikon",
+      "website": "https://www.instagram.com/ciconfilm/",
+      "status": "success",
+      "strategy": "link_icon_192px"
+    },
+    {
+      "slug": "eiseupaeg",
+      "website": "http://www.acepack.net",
+      "status": "skip",
+      "reason": "no_icon_tags_in_html"
+    },
+    {
+      "slug": "seowonkemikal",
+      "website": "http://www.swc.kr",
+      "status": "skip",
+      "reason": "http_429"
+    },
+    {
+      "slug": "나우스팩-7563",
+      "website": "https://m.nauspack.com/goods/custom_intro.php",
+      "status": "success",
+      "strategy": "link_icon"
+    },
+    {
+      "slug": "jocheonsusan",
+      "website": "http://instagram.com/jocheonsusan",
+      "status": "success",
+      "strategy": "link_icon_192px"
+    },
+    {
+      "slug": "sinhanpojang",
+      "website": "http://www.box365.co.kr/",
+      "status": "skip",
+      "reason": "no_icon_tags_in_html"
+    },
+    {
+      "slug": "플렉시캔-2766",
+      "website": "https://flexican.co.kr/",
+      "status": "success",
+      "strategy": "og_image"
+    },
+    {
+      "slug": "조은포장마켓-4103",
+      "website": "https://m.joeunpojangmarket.com/",
+      "status": "success",
+      "strategy": "shortcut_icon"
+    },
+    {
+      "slug": "dongsingwanyurigongeob",
+      "website": "http://www.dstg.co.kr/",
+      "status": "success",
+      "strategy": "og_image"
+    },
+    {
+      "slug": "seoulib",
+      "website": "https://www.seoulib.net/",
+      "status": "success",
+      "strategy": "link_icon"
+    },
+    {
+      "slug": "mitubagseu",
+      "website": "https://me2box.com",
+      "status": "success",
+      "strategy": "link_icon"
+    },
+    {
+      "slug": "handeogpanjigongeob",
+      "website": "http://www.handukpb.co.kr",
+      "status": "skip",
+      "reason": "no_icon_tags_in_html"
+    },
+    {
+      "slug": "hansaemtekeu",
+      "website": "http://www.hstpack.co.kr/",
+      "status": "skip",
+      "reason": "no_icon_tags_in_html"
+    },
+    {
+      "slug": "hangugpojae",
+      "website": "http://www.hanpack.com",
+      "status": "success",
+      "strategy": "og_image"
+    },
+    {
+      "slug": "olbareunsaramdeul",
+      "website": "https://www.albarunpeople.com/biodegradable",
+      "status": "success",
+      "strategy": "apple_touch_icon"
+    },
+    {
+      "slug": "ebeuribagseu",
+      "website": "https://everybox.co.kr/index.html",
+      "status": "success",
+      "strategy": "link_icon_256px"
+    },
+    {
+      "slug": "핸즈픽-4293",
+      "website": "https://m.hanzpick.com/",
+      "status": "success",
+      "strategy": "shortcut_icon"
+    },
+    {
+      "slug": "파데코팩-7292",
+      "website": "https://padecopack.com/",
+      "status": "success",
+      "strategy": "link_icon_196px"
+    },
+    {
+      "slug": "gwangmyeongmogjae-2gongjang",
+      "website": "http://파레트.com",
+      "status": "skip",
+      "reason": "url_error:[Errno -2] Name or service not known"
+    },
+    {
+      "slug": "geurinbo",
+      "website": "http://greenbo.co.kr/",
+      "status": "skip",
+      "reason": "url_error:[Errno -2] Name or service not known"
+    },
+    {
+      "slug": "eswelpaekijing",
+      "website": "https://www.eshelpackaging.com",
+      "status": "skip",
+      "reason": "icon_tags_found_but_images_invalid"
+    },
+    {
+      "slug": "dongjinpanji",
+      "website": "http://www.dongjinonline.com",
+      "status": "skip",
+      "reason": "url_error:[Errno -2] Name or service not known"
+    },
+    {
+      "slug": "gulbisaenggag",
+      "website": "https://www.instagram.com/gulbee_idea",
+      "status": "success",
+      "strategy": "link_icon_192px"
+    },
+    {
+      "slug": "hanilpeurakon-bonsa",
+      "website": "http://hanilplacon.co.kr",
+      "status": "skip",
+      "reason": "no_icon_tags_in_html"
+    },
+    {
+      "slug": "dongbupojang",
+      "website": "http://www.db7426.com/",
+      "status": "skip",
+      "reason": "no_icon_tags_in_html"
+    },
+    {
+      "slug": "메가플라스틱-4565",
+      "website": "https://megaplastic.co.kr/",
+      "status": "success",
+      "strategy": "link_icon_196px"
+    },
+    {
+      "slug": "isagneteuwogseu",
+      "website": "https://issacnetworks.com/corrugated_box",
+      "status": "success",
+      "strategy": "link_icon_196px"
+    },
+    {
+      "slug": "주-s-d패키지-0295",
+      "website": "http://www.sndpackage.com/default/mp3/mp3_sub8.php?sub=08&com_board_category_code=c1",
+      "status": "skip",
+      "reason": "no_icon_tags_in_html"
+    },
+    {
+      "slug": "yelrobagseu",
+      "website": "http://www.yellobox.co.kr",
+      "status": "skip",
+      "reason": "http_403"
+    },
+    {
+      "slug": "polriwon",
+      "website": "http://www.polyone.co.kr/",
+      "status": "skip",
+      "reason": "no_icon_tags_in_html"
+    },
+    {
+      "slug": "주-한창제지-2000",
+      "website": "https://www.hanchangpaper.co.kr/",
+      "status": "skip",
+      "reason": "no_icon_tags_in_html"
+    },
+    {
+      "slug": "daeyeongpojang",
+      "website": "http://www.dygroup.co.kr",
+      "status": "success",
+      "strategy": "og_image"
+    },
+    {
+      "slug": "dongwonsiseutemjeu",
+      "website": "https://www.dongwonsystems.com",
+      "status": "skip",
+      "reason": "no_icon_tags_in_html"
+    },
+    {
+      "slug": "samseongpaekijing",
+      "website": "https://www.samsungpackaging.co.kr/",
+      "status": "skip",
+      "reason": "no_icon_tags_in_html"
+    },
+    {
+      "slug": "빅토리산업-4732",
+      "website": "http://www.victorysanup.kr/",
+      "status": "skip",
+      "reason": "no_icon_tags_in_html"
+    },
+    {
+      "slug": "boseong-ict",
+      "website": "http://www.bshitech.net/",
+      "status": "success",
+      "strategy": "og_image"
+    },
+    {
+      "slug": "hyuemaenssi-jongrojijeom",
+      "website": "http://hubenasuju.com",
+      "status": "skip",
+      "reason": "url_error:[Errno -2] Name or service not known"
+    },
+    {
+      "slug": "myeongseongmulsan",
+      "website": "https://www.msproduct.co.kr/29",
+      "status": "success",
+      "strategy": "link_icon_196px"
+    },
+    {
+      "slug": "gyeongilpojang-2",
+      "website": "https://www.kyungilpack.co.kr/",
+      "status": "success",
+      "strategy": "link_icon"
+    },
+    {
+      "slug": "eseutiem",
+      "website": "http://www.e-aurora.co.kr",
+      "status": "skip",
+      "reason": "url_error:[Errno -2] Name or service not known"
+    },
+    {
+      "slug": "daeyangjejigongeobdalseonggongjang",
+      "website": "http://www.dygroup.co.kr",
+      "status": "success",
+      "strategy": "og_image"
+    },
+    {
+      "slug": "fujee-seoul-cheonggye-daerijeom-samusa",
+      "website": "http://www.samwoosa.or.kr/",
+      "status": "skip",
+      "reason": "no_icon_tags_in_html"
+    },
+    {
+      "slug": "rosdealminyum",
+      "website": "https://www.lotteal.co.kr/business/alumi_pro_01.asp",
+      "status": "skip",
+      "reason": "no_icon_tags_in_html"
+    },
+    {
+      "slug": "daeungpeipeo-dalseongjeom",
+      "website": "http://전화",
+      "status": "skip",
+      "reason": "url_error:[Errno -3] Temporary failure in name resolution"
+    },
+    {
+      "slug": "대원팩키지-주-0087",
+      "website": "http://www.idwp.co.kr/V2/m_kr/main.php?ctt=..%2Fcontents_kr%2Fm_3_1&mc=3%7C1%7C1%7C162",
+      "status": "skip",
+      "reason": "no_icon_tags_in_html"
+    },
+    {
+      "slug": "hangeurintekeu",
+      "website": "http://www.hangreen.com/",
+      "status": "skip",
+      "reason": "no_icon_tags_in_html"
+    },
+    {
+      "slug": "ildeungpojang",
+      "website": "https://1dpojang.com",
+      "status": "success",
+      "strategy": "shortcut_icon"
+    },
+    {
+      "slug": "eungwangjieobsa",
+      "website": "https://www.instagram.com/eun.gwang7",
+      "status": "success",
+      "strategy": "link_icon_192px"
+    },
+    {
+      "slug": "ibchero",
+      "website": "http://파렛트포장기계.한국/",
+      "status": "skip",
+      "reason": "no_icon_tags_in_html"
+    },
+    {
+      "slug": "박스매니아-7705",
+      "website": "https://www.boxmania.co.kr/",
+      "status": "skip",
+      "reason": "no_icon_tags_in_html"
+    },
+    {
+      "slug": "태방포장-6011",
+      "website": "https://www.tbp.co.kr/",
+      "status": "success",
+      "strategy": "og_image"
+    },
+    {
+      "slug": "hangilalembi-eumseonggongjang",
+      "website": "http://www.hgrmb.com",
+      "status": "skip",
+      "reason": "no_icon_tags_in_html"
+    },
+    {
+      "slug": "고려제지-7200",
+      "website": "https://koreapaper.co.kr/47",
+      "status": "success",
+      "strategy": "link_icon_196px"
+    },
+    {
+      "slug": "bapeuregseu",
+      "website": "http://www.ebarflex.co.kr/",
+      "status": "skip",
+      "reason": "url_error:[Errno -2] Name or service not known"
+    },
+    {
+      "slug": "dongbangyeonpojangpaeg",
+      "website": "http://bangsancijang.com",
+      "status": "skip",
+      "reason": "url_error:[Errno -2] Name or service not known"
+    },
+    {
+      "slug": "daeagts",
+      "website": "http://www.daeagts.co.kr/",
+      "status": "skip",
+      "reason": "no_icon_tags_in_html"
+    },
+    {
+      "slug": "handoo-package",
+      "website": "https://www.handoo.co.kr",
+      "status": "skip",
+      "reason": "no_icon_tags_in_html"
+    },
+    {
+      "slug": "박스팩-6901",
+      "website": "https://boxpack.kr/",
+      "status": "skip",
+      "reason": "no_icon_tags_in_html"
+    },
+    {
+      "slug": "aipaegpiaendi",
+      "website": "http://www.ipack.or.kr",
+      "status": "skip",
+      "reason": "no_icon_tags_in_html"
+    },
+    {
+      "slug": "gugje-bandoche-gipan-mich-cheomdan-paekijing-saneo",
+      "website": "http://www.kpcashow.com/",
+      "status": "success",
+      "strategy": "og_image"
+    },
+    {
+      "slug": "mirkorea-glass",
+      "website": "https://www.mirkorea.kr",
+      "status": "success",
+      "strategy": "link_icon"
+    },
+    {
+      "slug": "daejinpojangbagseu",
+      "website": "http://www.djboxcall.co.kr/",
+      "status": "success",
+      "strategy": "og_image"
+    },
+    {
+      "slug": "gwangrimpojangtekeu",
+      "website": "http://klpc.kr/",
+      "status": "skip",
+      "reason": "no_icon_tags_in_html"
+    },
+    {
+      "slug": "고팩-4912",
+      "website": "https://www.gopack.co.kr/?act=shop.goods_list&GC=GD0900",
+      "status": "skip",
+      "reason": "icon_tags_found_but_images_invalid"
+    },
+    {
+      "slug": "namhyeonpudeuraeb",
+      "website": "https://www.instagram.com/namhyunkimchi",
+      "status": "success",
+      "strategy": "link_icon_192px"
+    },
+    {
+      "slug": "주-삼원기계-7731",
+      "website": "http://e-samwon.co.kr/taping2",
+      "status": "success",
+      "strategy": "link_icon_196px"
+    },
+    {
+      "slug": "moderato",
+      "website": "https://e-moderato.com/",
+      "status": "success",
+      "strategy": "link_icon_196px"
+    },
+    {
+      "slug": "dauhanu-yuggagong",
+      "website": "https://www.instagram.com/dawoohanu",
+      "status": "success",
+      "strategy": "link_icon_192px"
+    },
+    {
+      "slug": "원팩-0601",
+      "website": "https://one-pack.co.kr/category/%EC%83%9D%EB%B6%84%ED%95%B4%EC%B9%9C%ED%99%98%EA%B2%BD-%EB%B4%89%ED%88%AC/98/",
+      "status": "skip",
+      "reason": "no_icon_tags_in_html"
+    },
+    {
+      "slug": "didibagseu",
+      "website": "http://www.dedibox.kr",
+      "status": "skip",
+      "reason": "url_error:[Errno -2] Name or service not known"
+    },
+    {
+      "slug": "yeonri",
+      "website": "http://www.yeonripack.com",
+      "status": "skip",
+      "reason": "no_icon_tags_in_html"
+    },
+    {
+      "slug": "samyangpanji",
+      "website": "http://www.sy-board.co.kr",
+      "status": "skip",
+      "reason": "no_icon_tags_in_html"
+    },
+    {
+      "slug": "taebaegpojang",
+      "website": "https://www.instagram.com/",
+      "status": "success",
+      "strategy": "link_icon_192px"
+    },
+    {
+      "slug": "daeyangpanji",
+      "website": "http://www.dygroup.co.kr",
+      "status": "success",
+      "strategy": "og_image"
+    },
+    {
+      "slug": "alpome",
+      "website": "http://www.알포메.kr",
+      "status": "skip",
+      "reason": "no_icon_tags_in_html"
+    },
+    {
+      "slug": "daehyeonsaneob",
+      "website": "http://www.ladyhomedh.co.kr/",
+      "status": "skip",
+      "reason": "no_icon_tags_in_html"
+    },
+    {
+      "slug": "박스스-7104",
+      "website": "https://bxs.uce.kr/",
+      "status": "success",
+      "strategy": "link_icon_196px"
+    },
+    {
+      "slug": "daerimteugsubinil",
+      "website": "http://www.dlvinyl.co.kr/",
+      "status": "skip",
+      "reason": "no_icon_tags_in_html"
+    },
+    {
+      "slug": "네모박스-2028",
+      "website": "https://www.nemocorp.co.kr/",
+      "status": "success",
+      "strategy": "link_icon_196px"
+    },
+    {
+      "slug": "gwangsinpanji",
+      "website": "http://www.kwansin.co.kr",
+      "status": "skip",
+      "reason": "url_error:[Errno -2] Name or service not known"
+    },
+    {
+      "slug": "akeuraendeu",
+      "website": "http://www.arcland.co.kr/",
+      "status": "skip",
+      "reason": "no_icon_tags_in_html"
+    },
+    {
+      "slug": "dongmyeongpiaeneseu",
+      "website": "https://www.급한인쇄.com",
+      "status": "skip",
+      "reason": "no_icon_tags_in_html"
+    },
+    {
+      "slug": "bagseujib",
+      "website": "https://boxzip.kr/",
+      "status": "skip",
+      "reason": "no_icon_tags_in_html"
+    },
+    {
+      "slug": "포장대장b2b-8912",
+      "website": "https://packagehero.co.kr/",
+      "status": "skip",
+      "reason": "icon_tags_found_but_images_invalid"
+    },
+    {
+      "slug": "dainnuri",
+      "website": "http://www.allb2mall.com/",
+      "status": "success",
+      "strategy": "shortcut_icon"
+    },
+    {
+      "slug": "hanyangpaekijimol",
+      "website": "https://www.hypetmall.co.kr/",
+      "status": "success",
+      "strategy": "link_icon"
+    },
+    {
+      "slug": "hyeondaejadongpojanggi",
+      "website": "http://www.hdpacker.com/",
+      "status": "success",
+      "strategy": "og_image"
+    },
+    {
+      "slug": "일성수출포장-3713",
+      "website": "https://www.woodpack.co.kr/",
+      "status": "success",
+      "strategy": "link_icon_196px"
+    },
+    {
+      "slug": "nasanpeuraseutig",
+      "website": "http://www.nsps.kr/",
+      "status": "skip",
+      "reason": "no_icon_tags_in_html"
+    },
+    {
+      "slug": "daegwangsaneob",
+      "website": "http://www.대광산업.com",
+      "status": "skip",
+      "reason": "http_403"
+    },
+    {
+      "slug": "daeyeongpeurinpaeg",
+      "website": "https://www.dypackage.co.kr",
+      "status": "success",
+      "strategy": "og_image"
+    },
+    {
+      "slug": "keiham",
+      "website": "http://www.kham.co.kr/",
+      "status": "skip",
+      "reason": "url_error:[Errno -3] Temporary failure in name resolution"
+    },
+    {
+      "slug": "sadanbeobin-hangugpcb-amp-bandochepaekijingsaneobh",
+      "website": "https://www.kpca.or.kr/",
+      "status": "success",
+      "strategy": "og_image"
+    },
+    {
+      "slug": "sieseupi",
+      "website": "https://시에스피.com/",
+      "status": "skip",
+      "reason": "no_icon_tags_in_html"
+    },
+    {
+      "slug": "good-bag",
+      "website": "http://m.goodbag.kr/",
+      "status": "success",
+      "strategy": "link_icon"
+    },
+    {
+      "slug": "taerimpanji",
+      "website": "http://전화",
+      "status": "skip",
+      "reason": "url_error:[Errno -3] Temporary failure in name resolution"
+    },
+    {
+      "slug": "dorimpanjigongeob",
+      "website": "http://전화",
+      "status": "skip",
+      "reason": "url_error:[Errno -3] Temporary failure in name resolution"
+    },
+    {
+      "slug": "changmipojanggigye",
+      "website": "http://cmvm.co.kr/",
+      "status": "skip",
+      "reason": "icon_tags_found_but_images_invalid"
+    },
+    {
+      "slug": "pyeonggangsuchulpojang",
+      "website": "http://pgpacking.com/",
+      "status": "skip",
+      "reason": "no_icon_tags_in_html"
+    },
+    {
+      "slug": "piseukopaeg",
+      "website": "http://piskopack.co.kr/",
+      "status": "skip",
+      "reason": "no_icon_tags_in_html"
+    },
+    {
+      "slug": "giseong",
+      "website": "https://keysung.co.kr",
+      "status": "skip",
+      "reason": "no_icon_tags_in_html"
+    },
+    {
+      "slug": "daeseongssiaenssi",
+      "website": "http://전화",
+      "status": "skip",
+      "reason": "url_error:[Errno -3] Temporary failure in name resolution"
+    },
+    {
+      "slug": "bagseukeompeoni",
+      "website": "https://boxcompany.co.kr/",
+      "status": "success",
+      "strategy": "link_icon_196px"
+    },
+    {
+      "slug": "베러박스-3573",
+      "website": "https://www.betterbox.co.kr/",
+      "status": "success",
+      "strategy": "link_icon_196px"
+    },
+    {
+      "slug": "더봉투-2998",
+      "website": "https://xn--9m1b37p2vr.com/shop/list.php?ca_id=6010",
+      "status": "success",
+      "strategy": "og_image"
+    },
+    {
+      "slug": "haru-amp-siru",
+      "website": "https://www.instagram.com/haroo.siroo_official",
+      "status": "success",
+      "strategy": "link_icon_192px"
+    },
+    {
+      "slug": "samgwangjadongpojanggi",
+      "website": "http://www.samkwangpm.com/",
+      "status": "skip",
+      "reason": "url_error:[Errno -2] Name or service not known"
+    },
+    {
+      "slug": "geumseongpojanggongeobsa",
+      "website": "https://www.gs-pack.co.kr",
+      "status": "skip",
+      "reason": "no_icon_tags_in_html"
+    },
+    {
+      "slug": "beomeeokaeb",
+      "website": "http://www.bumaircap.shop",
+      "status": "skip",
+      "reason": "no_icon_tags_in_html"
+    },
+    {
+      "slug": "jeiti",
+      "website": "http://www.jtmold.com/",
+      "status": "skip",
+      "reason": "no_icon_tags_in_html"
+    },
+    {
+      "slug": "한결패키지-1569",
+      "website": "https://hgpackage.co.kr/",
+      "status": "skip",
+      "reason": "no_icon_tags_in_html"
+    },
+    {
+      "slug": "현진제업-7781",
+      "website": "http://www.papercups.co.kr/?param=business1",
+      "status": "success",
+      "strategy": "og_image"
+    }
+  ]
+}
