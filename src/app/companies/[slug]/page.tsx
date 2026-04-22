@@ -155,6 +155,11 @@ export default async function CompanyPage({ params }: Props) {
             <BoxterLogo variant="dark" size="sm" />
             <span className="hidden sm:inline text-white/25 text-[11px] font-medium tracking-widest uppercase">전국 패키징 파트너, 한 번에</span>
           </Link>
+          <nav className="flex items-center gap-6">
+            <Link href="/blog" className="text-white/70 hover:text-white text-[13px] font-medium transition-colors">
+              가이드
+            </Link>
+          </nav>
         </div>
       </header>
 

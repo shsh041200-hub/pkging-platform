@@ -151,6 +151,24 @@ export interface Company {
   updated_at: string
 }
 
+export interface BlogPost {
+  id: string
+  slug: string
+  title: string
+  excerpt: string | null
+  body: string | null
+  cover_image_url: string | null
+  og_image_url: string | null
+  category: IndustryCategory | null
+  status: 'draft' | 'published'
+  author_name: string | null
+  meta_title: string | null
+  meta_description: string | null
+  published_at: string | null
+  created_at: string
+  updated_at: string
+}
+
 export interface Review {
   id: string
   company_id: string

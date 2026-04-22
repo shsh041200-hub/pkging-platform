@@ -11,10 +11,15 @@ export default function TermsPage() {
   return (
     <div className="min-h-screen bg-slate-50">
       <header className="bg-[#0d1d2e] sticky top-0 z-50">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 h-14 flex items-center">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2.5">
             <BoxterLogo variant="dark" size="sm" />
           </Link>
+          <nav className="flex items-center gap-6">
+            <Link href="/blog" className="text-white/70 hover:text-white text-[13px] font-medium transition-colors">
+              가이드
+            </Link>
+          </nav>
         </div>
       </header>
 
