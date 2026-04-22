@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
+import { useTrackEvent } from '@/hooks/useTrackEvent'
 
 type Props = {
   companyId: string
@@ -20,6 +21,7 @@ const QUANTITY_OPTIONS = [
 ]
 
 export function QuoteRequestModal({ companyId, companyName, isOpen, onClose }: Props) {
+  const { track } = useTrackEvent()
   const [form, setForm] = useState({
     contactName: '',
     phone: '',
@@ -71,6 +73,7 @@ export function QuoteRequestModal({ companyId, companyName, isOpen, onClose }: P
         setError(data?.error ?? '요청 처리 중 오류가 발생했습니다.')
         return
       }
+      track('quote_submit', companyId)
       setSuccess(true)
       setTimeout(() => { onClose() }, 2000)
     } catch {

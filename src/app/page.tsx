@@ -7,11 +7,15 @@ import {
   INDUSTRY_CATEGORY_ICONS,
   MATERIAL_TYPES,
   MATERIAL_TYPE_LABELS,
+  CERTIFICATION_TYPES,
+  CERTIFICATION_CATEGORY_LABELS,
   type IndustryCategory,
   type MaterialType,
+  type CertificationCategory,
 } from '@/types'
 import { createClient } from '@/lib/supabase/server'
 import { simplifyCompanyName } from '@/lib/simplify-company-name'
+import { CertFilterAccordion } from './CertFilterAccordion'
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://packlinx.com'
 
@@ -19,6 +23,8 @@ type SearchParams = Promise<{
   q?: string
   industry?: string
   material?: string
+  cert?: string
+  sort?: string
 }>
 
 export async function generateMetadata({
@@ -26,9 +32,9 @@ export async function generateMetadata({
 }: {
   searchParams: SearchParams
 }): Promise<Metadata> {
-  const { q, industry, material } = await searchParams
+  const { q, industry, material, cert } = await searchParams
   if (q) return { robots: { index: false, follow: true } }
-  if (industry || material) return { alternates: { canonical: siteUrl } }
+  if (industry || material || cert) return { alternates: { canonical: siteUrl } }
   return {}
 }
 
@@ -59,6 +65,14 @@ const jsonLd = {
   ],
 }
 
+const CERT_CATEGORY_COLORS: Record<CertificationCategory, { active: string; inactive: string }> = {
+  quality:       { active: 'bg-blue-500 text-white border-blue-500',   inactive: 'text-blue-700 border-blue-200 bg-blue-50 hover:border-blue-400' },
+  food_safety:   { active: 'bg-green-600 text-white border-green-600', inactive: 'text-green-700 border-green-200 bg-green-50 hover:border-green-400' },
+  environmental: { active: 'bg-emerald-600 text-white border-emerald-600', inactive: 'text-emerald-700 border-emerald-200 bg-emerald-50 hover:border-emerald-400' },
+  pharma:        { active: 'bg-purple-600 text-white border-purple-600', inactive: 'text-purple-700 border-purple-200 bg-purple-50 hover:border-purple-400' },
+  general:       { active: 'bg-gray-700 text-white border-gray-700',   inactive: 'text-gray-600 border-gray-200 bg-gray-50 hover:border-gray-400' },
+}
+
 function categoryToSlug(key: IndustryCategory): string {
   return key
 }
@@ -68,14 +82,15 @@ export default async function HomePage({
 }: {
   searchParams: SearchParams
 }) {
-  const { q, industry, material } = await searchParams
+  const { q, industry, material, cert, sort } = await searchParams
   const supabase = await createClient()
+
+  const activeCerts = cert ? cert.split(',').filter(Boolean) : []
 
   let query = supabase
     .from('companies')
-    .select('id, slug, name, description, category, industry_categories, material_type, tags, is_verified, products, certifications, founded_year, website, service_capabilities, target_industries, data_source')
+    .select('id, slug, name, description, category, industry_categories, material_type, tags, is_verified, products, certifications, founded_year, website, service_capabilities, target_industries, data_source, review_count, avg_rating')
     .order('is_verified', { ascending: false })
-    .order('name')
     .limit(60)
 
   if (q) {
@@ -86,6 +101,15 @@ export default async function HomePage({
   }
   if (material) {
     query = query.eq('material_type', material)
+  }
+  if (activeCerts.length > 0) {
+    query = query.overlaps('certifications', activeCerts)
+  }
+
+  if (sort === 'rating') {
+    query = query.order('avg_rating', { ascending: false, nullsFirst: false })
+  } else {
+    query = query.order('name')
   }
 
   const { data: companies } = await query
@@ -108,13 +132,33 @@ export default async function HomePage({
     if (q) params.q = q
     if (industry) params.industry = industry
     if (material) params.material = material
+    if (cert) params.cert = cert
+    if (sort) params.sort = sort
     Object.assign(params, overrides)
     Object.keys(params).forEach((k) => { if (params[k] === undefined) delete params[k] })
     const qs = new URLSearchParams(params).toString()
     return qs ? `/?${qs}` : '/'
   }
 
-  const showingCategory = !q && !industry && !material
+  const buildCertUrl = (certId: string) => {
+    const current = new Set(activeCerts)
+    if (current.has(certId)) {
+      current.delete(certId)
+    } else {
+      current.add(certId)
+    }
+    const certStr = Array.from(current).join(',')
+    return buildUrl({ cert: certStr || undefined })
+  }
+
+  const showingCategory = !q && !industry && !material && activeCerts.length === 0
+
+  // Group cert types by category for filter UI
+  const certsByCategory = CERTIFICATION_TYPES.reduce<Record<CertificationCategory, typeof CERTIFICATION_TYPES>>((acc, ct) => {
+    if (!acc[ct.category]) acc[ct.category] = []
+    acc[ct.category].push(ct)
+    return acc
+  }, {} as Record<CertificationCategory, typeof CERTIFICATION_TYPES>)
 
   return (
     <div className="min-h-screen bg-[#F9FAFB]">
@@ -138,7 +182,7 @@ export default async function HomePage({
         </div>
       </header>
 
-      {/* Hero — heading on top, then search (left) + categories (right) */}
+      {/* Hero */}
       <section className="bg-[#F8FAFC] bg-dot-grid border-b border-gray-100 pt-8 pb-8 sm:pt-10 sm:pb-10 px-5">
         <div className="max-w-7xl mx-auto">
           <div className="mb-6">
@@ -259,6 +303,15 @@ export default async function HomePage({
                 </Link>
               ))}
             </div>
+
+            {/* Certification accordion filter */}
+            <CertFilterAccordion
+              certsByCategory={certsByCategory}
+              activeCerts={activeCerts}
+              certCategoryColors={CERT_CATEGORY_COLORS}
+              certCategoryLabels={CERTIFICATION_CATEGORY_LABELS}
+              buildCertUrl={buildCertUrl}
+            />
           </div>
         </div>
       )}
@@ -280,16 +333,44 @@ export default async function HomePage({
                 {MATERIAL_TYPE_LABELS[material as MaterialType]}
               </span>
             )}
+            {activeCerts.map((certId) => {
+              const ct = CERTIFICATION_TYPES.find((c) => c.id === certId)
+              return (
+                <span key={certId} className="text-[11px] bg-green-50 text-green-700 font-medium px-2.5 py-1 rounded-full border border-green-200">
+                  {ct?.label ?? certId}
+                </span>
+              )
+            })}
             {q && (
               <span className="text-[11px] bg-[#EBF2FF] text-[#005EFF] font-medium px-2.5 py-1 rounded-full">
                 &ldquo;{q}&rdquo;
               </span>
             )}
-            {(industry || material || q) && (
+            {(industry || material || q || activeCerts.length > 0) && (
               <Link href="/" className="text-xs text-gray-400 hover:text-gray-600 ml-1">
                 초기화
               </Link>
             )}
+          </div>
+
+          {/* Sort dropdown */}
+          <div className="flex items-center gap-2">
+            <Link
+              href={buildUrl({ sort: undefined })}
+              className={`text-[12px] font-medium px-2.5 py-1 rounded transition-colors ${
+                !sort ? 'text-gray-900 bg-gray-100' : 'text-gray-400 hover:text-gray-600'
+              }`}
+            >
+              기본순
+            </Link>
+            <Link
+              href={buildUrl({ sort: 'rating' })}
+              className={`text-[12px] font-medium px-2.5 py-1 rounded transition-colors ${
+                sort === 'rating' ? 'text-gray-900 bg-gray-100' : 'text-gray-400 hover:text-gray-600'
+              }`}
+            >
+              평점순
+            </Link>
           </div>
         </div>
 
@@ -309,6 +390,16 @@ export default async function HomePage({
                         </span>
                       ))}
                     </div>
+                    {/* Rating badge */}
+                    {company.avg_rating != null && company.review_count > 0 && (
+                      <div className="flex items-center gap-1 flex-shrink-0">
+                        <svg className="w-3 h-3 text-amber-400" fill="currentColor" viewBox="0 0 20 20">
+                          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                        </svg>
+                        <span className="text-[11px] font-semibold text-gray-700">{Number(company.avg_rating).toFixed(1)}</span>
+                        <span className="text-[11px] text-gray-400">({company.review_count})</span>
+                      </div>
+                    )}
                   </div>
 
                   <h2 className="text-base font-bold text-gray-900 mb-1 leading-snug tracking-[-0.02em] line-clamp-1" title={company.name}>
@@ -327,7 +418,7 @@ export default async function HomePage({
                   {(company.certifications as string[] | null)?.length! > 0 && (
                     <div className="flex flex-wrap gap-1.5 mb-3">
                       {(company.certifications as string[]).slice(0, 2).map((cert, i) => (
-                        <span key={i} className="text-[11px] font-medium text-gray-700 bg-gray-100 px-2 py-0.5 rounded">
+                        <span key={i} className="text-[11px] font-medium text-green-700 bg-green-50 border border-green-200 px-2 py-0.5 rounded">
                           {cert}
                         </span>
                       ))}

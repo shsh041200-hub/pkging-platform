@@ -1,12 +1,26 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
+import Image from 'next/image'
 import { Suspense } from 'react'
 import type { Metadata } from 'next'
 import { createClient } from '@/lib/supabase/server'
 import { BoxterLogo } from '@/components/BoxterLogo'
 import { CompanyDetailCTA } from '@/components/CompanyDetailCTA'
 import { MobileStickyBar } from '@/components/MobileStickyBar'
-import { CATEGORY_LABELS, TAG_LABELS, INDUSTRY_CATEGORY_LABELS, INDUSTRY_CATEGORY_ICONS, type Category, type CompanyTag, type IndustryCategory } from '@/types'
+import {
+  CATEGORY_LABELS,
+  TAG_LABELS,
+  INDUSTRY_CATEGORY_LABELS,
+  INDUSTRY_CATEGORY_ICONS,
+  CERTIFICATION_TYPES,
+  CERTIFICATION_CATEGORY_LABELS,
+  type Category,
+  type CompanyTag,
+  type IndustryCategory,
+  type CertificationCategory,
+  type Portfolio,
+} from '@/types'
+import { CompanyViewTracker } from './CompanyViewTracker'
 
 type Props = {
   params: Promise<{ slug: string }>
@@ -62,6 +76,21 @@ const DATA_SOURCE_LABELS: Record<string, string> = {
   website_crawl: '출처: 업체 웹사이트',
 }
 
+const CERT_CATEGORY_COLORS: Record<CertificationCategory, { bg: string; text: string; border: string }> = {
+  quality:       { bg: 'bg-blue-50',   text: 'text-blue-700',   border: 'border-blue-200' },
+  food_safety:   { bg: 'bg-green-50',  text: 'text-green-700',  border: 'border-green-200' },
+  environmental: { bg: 'bg-emerald-50', text: 'text-emerald-700', border: 'border-emerald-200' },
+  pharma:        { bg: 'bg-purple-50', text: 'text-purple-700', border: 'border-purple-200' },
+  general:       { bg: 'bg-gray-50',   text: 'text-gray-700',   border: 'border-gray-200' },
+}
+
+function resolveCertification(raw: string) {
+  const found = CERTIFICATION_TYPES.find(
+    (c) => c.id === raw || c.aliases.some((a) => a.toLowerCase() === raw.toLowerCase()),
+  )
+  return found ?? null
+}
+
 export default async function CompanyPage({ params }: Props) {
   const { slug: rawSlug } = await params
   const slug = decodeURIComponent(rawSlug)
@@ -82,10 +111,25 @@ export default async function CompanyPage({ params }: Props) {
     .order('created_at', { ascending: false })
     .limit(10)
 
+  const { data: portfolios } = await supabase
+    .from('company_portfolios')
+    .select('id, title, description, image_url, display_order')
+    .eq('company_id', company.id)
+    .order('display_order', { ascending: true })
+
   const avgRating =
     reviews && reviews.length > 0
       ? (reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length).toFixed(1)
       : null
+
+  // Rating distribution (5 → 1)
+  const ratingDist: Record<number, number> = { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 }
+  if (reviews) {
+    for (const r of reviews) {
+      if (r.rating >= 1 && r.rating <= 5) ratingDist[r.rating]++
+    }
+  }
+  const maxDist = Math.max(...Object.values(ratingDist), 1)
 
   const companyJsonLd = {
     '@context': 'https://schema.org',
@@ -136,6 +180,34 @@ export default async function CompanyPage({ params }: Props) {
   const hasKeyClients = company.key_clients && company.key_clients.length > 0
   const hasTargetIndustries = company.target_industries && company.target_industries.length > 0
   const hasTags = company.tags && company.tags.length > 0
+  const hasCertifications = company.certifications && company.certifications.length > 0
+  const hasPortfolios = portfolios && portfolios.length > 0
+
+  const certItems = hasCertifications
+    ? (company.certifications as string[]).map((raw) => ({
+        raw,
+        resolved: resolveCertification(raw),
+      }))
+    : []
+
+  // Group certs by category for display
+  const certsByCategory = certItems.reduce<Record<CertificationCategory, typeof certItems>>((acc, item) => {
+    const cat = item.resolved?.category ?? 'general'
+    if (!acc[cat]) acc[cat] = []
+    acc[cat].push(item)
+    return acc
+  }, {} as Record<CertificationCategory, typeof certItems>)
+
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL ?? ''
+
+  function getPortfolioImageUrl(rawUrl: string) {
+    if (!rawUrl) return rawUrl
+    // Apply Supabase image transform for webp conversion
+    if (rawUrl.includes('/storage/v1/object/public/')) {
+      return `${rawUrl}?width=800&format=webp`
+    }
+    return rawUrl
+  }
 
   return (
     <div className="min-h-screen bg-[#F9FAFB]">
@@ -147,6 +219,9 @@ export default async function CompanyPage({ params }: Props) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
+
+      {/* Track company_view on mount */}
+      <CompanyViewTracker companyId={company.id} />
 
       {/* Header */}
       <header className="bg-[#0A0F1E] sticky top-0 z-50 border-b border-white/[0.06]">
@@ -251,7 +326,11 @@ export default async function CompanyPage({ params }: Props) {
           <div className="pt-5 border-t border-gray-100">
             <Suspense fallback={null}>
               <CompanyDetailCTA
+                companyId={company.id}
+                companyName={company.name}
                 website={company.website ?? null}
+                phone={company.phone ?? null}
+                kakaoUrl={(company as Record<string, unknown>).kakao_url as string | null ?? null}
               />
             </Suspense>
           </div>
@@ -283,45 +362,81 @@ export default async function CompanyPage({ params }: Props) {
           </div>
         )}
 
-        {/* Products + Certifications grid */}
-        {((company.products && company.products.length > 0) ||
-          (company.certifications && company.certifications.length > 0)) && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {company.products && company.products.length > 0 && (
-              <div className="bg-white border border-gray-200 rounded-xl p-5">
-                <h2 className="text-[13px] font-semibold text-gray-700 uppercase tracking-wider mb-3">
-                  취급 제품
-                </h2>
-                <div className="flex flex-wrap gap-2">
-                  {company.products.map((product: string, i: number) => (
-                    <span
-                      key={i}
-                      className="text-[12px] font-medium bg-gray-100 text-gray-700 px-3 py-1.5 rounded"
-                    >
-                      {product}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            )}
+        {/* Products section */}
+        {company.products && company.products.length > 0 && (
+          <div className="bg-white border border-gray-200 rounded-xl p-5">
+            <h2 className="text-[13px] font-semibold text-gray-700 uppercase tracking-wider mb-3">
+              취급 제품
+            </h2>
+            <div className="flex flex-wrap gap-2">
+              {company.products.map((product: string, i: number) => (
+                <span
+                  key={i}
+                  className="text-[12px] font-medium bg-gray-100 text-gray-700 px-3 py-1.5 rounded"
+                >
+                  {product}
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
 
-            {company.certifications && company.certifications.length > 0 && (
-              <div className="bg-white border border-gray-200 rounded-xl p-5">
-                <h2 className="text-[13px] font-semibold text-gray-700 uppercase tracking-wider mb-3">
-                  보유 인증
-                </h2>
-                <div className="flex flex-wrap gap-2">
-                  {company.certifications.map((cert: string, i: number) => (
-                    <span
-                      key={i}
-                      className="text-[12px] font-medium bg-green-50 text-green-700 border border-green-200 px-3 py-1.5 rounded"
-                    >
-                      {cert}
-                    </span>
-                  ))}
+        {/* Certifications — badge UI with category color coding */}
+        {hasCertifications && (
+          <div className="bg-white border border-gray-200 rounded-xl p-5">
+            <h2 className="text-[13px] font-semibold text-gray-700 uppercase tracking-wider mb-4">
+              보유 인증
+            </h2>
+            {Object.entries(certsByCategory).map(([cat, items]) => {
+              const catKey = cat as CertificationCategory
+              const colors = CERT_CATEGORY_COLORS[catKey]
+              return (
+                <div key={cat} className="mb-3 last:mb-0">
+                  <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-widest mb-2">
+                    {CERTIFICATION_CATEGORY_LABELS[catKey]}
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    {items.map(({ raw, resolved }, i) => (
+                      <span
+                        key={i}
+                        className={`text-[12px] font-semibold px-3 py-1.5 rounded border ${colors.bg} ${colors.text} ${colors.border}`}
+                      >
+                        {resolved?.label ?? raw}
+                      </span>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            )}
+              )
+            })}
+          </div>
+        )}
+
+        {/* Portfolio Gallery */}
+        {hasPortfolios && (
+          <div className="bg-white border border-gray-200 rounded-xl p-5">
+            <h2 className="text-[13px] font-semibold text-gray-700 uppercase tracking-wider mb-4">
+              포트폴리오
+            </h2>
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+              {(portfolios as Portfolio[]).map((item) => (
+                item.image_url && (
+                  <div key={item.id} className="relative aspect-square rounded-lg overflow-hidden bg-gray-100 group">
+                    <Image
+                      src={getPortfolioImageUrl(item.image_url)}
+                      alt={item.title || '포트폴리오 이미지'}
+                      fill
+                      sizes="(max-width: 640px) 50vw, 33vw"
+                      className="object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                    {item.title && (
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-3">
+                        <p className="text-white text-[12px] font-medium line-clamp-2">{item.title}</p>
+                      </div>
+                    )}
+                  </div>
+                )
+              ))}
+            </div>
           </div>
         )}
 
@@ -407,6 +522,27 @@ export default async function CompanyPage({ params }: Props) {
             )}
           </div>
 
+          {/* Rating distribution histogram */}
+          {reviews && reviews.length > 0 && (
+            <div className="mb-5 space-y-1.5">
+              {[5, 4, 3, 2, 1].map((star) => (
+                <div key={star} className="flex items-center gap-2">
+                  <span className="text-[11px] text-gray-400 w-4 text-right flex-shrink-0">{star}</span>
+                  <svg className="w-3 h-3 text-amber-400 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                  </svg>
+                  <div className="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
+                    <div
+                      className="h-full bg-amber-400 rounded-full"
+                      style={{ width: `${(ratingDist[star] / maxDist) * 100}%` }}
+                    />
+                  </div>
+                  <span className="text-[11px] text-gray-400 w-4 flex-shrink-0">{ratingDist[star]}</span>
+                </div>
+              ))}
+            </div>
+          )}
+
           {reviews && reviews.length > 0 ? (
             <div className="divide-y divide-gray-100">
               {reviews.map((review) => (
@@ -484,6 +620,7 @@ export default async function CompanyPage({ params }: Props) {
       </main>
 
       <MobileStickyBar
+        companyId={company.id}
         phone={company.phone ?? null}
       />
 
