@@ -5,7 +5,7 @@ export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url)
   const q = searchParams.get('q')
   const industry = searchParams.get('industry')
-  const material = searchParams.get('material')
+  const material_type = searchParams.get('material_type') ?? searchParams.get('material')
   const category = searchParams.get('category')
   const tag = searchParams.get('tag')
   const page = parseInt(searchParams.get('page') ?? '1', 10)
@@ -30,8 +30,8 @@ export async function GET(request: NextRequest) {
     )
   }
   if (industry) query = query.contains('industry_categories', [industry])
-  if (material) {
-    const materials = material.split(',').filter(Boolean)
+  if (material_type) {
+    const materials = material_type.split(',').filter(Boolean)
     if (materials.length === 1) {
       query = query.eq('material_type', materials[0])
     } else if (materials.length > 1) {
