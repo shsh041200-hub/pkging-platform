@@ -190,12 +190,26 @@ export default async function HomePage({
         </div>
       </header>
 
-      {/* Hero — split layout: dark visual left | search + categories right */}
-      <section className="border-b border-gray-100 overflow-hidden">
-        <div className="flex flex-col lg:flex-row lg:min-h-[calc(100vh-64px)]">
+      {/* Hero — unified background with radial glow accents */}
+      <section className="relative bg-[#F9FAFB] border-b border-gray-100 overflow-hidden">
+        {/* Radial glow — top-left */}
+        <div
+          className="absolute -top-[20%] -left-[10%] w-[60%] h-[120%] max-md:w-[80%] max-md:h-[80%] max-md:-top-[10%] max-md:-left-[20%] pointer-events-none z-0"
+          style={{
+            background: 'radial-gradient(ellipse at center, var(--glow-primary) 0%, var(--glow-primary-mid) 40%, transparent 70%)'
+          }}
+        />
+        {/* Radial glow — bottom-right */}
+        <div
+          className="absolute -bottom-[30%] -right-[5%] w-[50%] h-[100%] max-md:w-[70%] max-md:h-[60%] max-md:-bottom-[10%] max-md:-right-[15%] pointer-events-none z-0"
+          style={{
+            background: 'radial-gradient(ellipse at center, var(--glow-secondary) 0%, transparent 60%)'
+          }}
+        />
+        <div className="relative z-10 flex flex-col lg:flex-row lg:min-h-[calc(100vh-64px)]">
 
-          {/* Left: Light visual hero panel — Concept #10 bright tone */}
-          <div className="relative bg-[#F1F5F9] lg:w-[52%] flex flex-col justify-center px-8 sm:px-12 lg:px-16 py-14 lg:py-20">
+          {/* Left: Visual hero panel */}
+          <div className="relative lg:w-[52%] flex flex-col justify-center px-8 sm:px-12 lg:px-16 py-14 lg:py-20">
             {/* Concept #10 — Modular grid pattern (slate on light, decorative background) */}
             <svg
               className="absolute bottom-0 right-0 w-[340px] h-[340px] lg:w-[420px] lg:h-[420px] opacity-[0.18] pointer-events-none select-none"
@@ -262,8 +276,8 @@ export default async function HomePage({
             </div>
           </div>
 
-          {/* Right: Search + 6 category buttons panel (light) */}
-          <div className="lg:w-[48%] bg-[#F9FAFB] border-l border-gray-100 flex items-center px-8 sm:px-12 py-12 lg:py-20">
+          {/* Right: Search + 6 category buttons panel */}
+          <div className="lg:w-[48%] flex items-center px-8 sm:px-12 py-12 lg:py-20">
             <div className="w-full max-w-[440px] mx-auto lg:mx-0">
               <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-widest mb-4">업체 검색</p>
 
