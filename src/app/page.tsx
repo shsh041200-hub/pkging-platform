@@ -101,8 +101,9 @@ export default async function HomePage({
 
   let query = supabase
     .from('companies')
-    .select('id, slug, name, description, category, industry_categories, material_type, packaging_form, tags, is_verified, products, certifications, founded_year, website, icon_url, service_capabilities, target_industries, data_source, review_count, avg_rating')
+    .select('id, slug, name, description, category, industry_categories, material_type, packaging_form, tags, is_verified, cert_count, products, certifications, founded_year, website, icon_url, service_capabilities, target_industries, data_source, review_count, avg_rating')
     .order('is_verified', { ascending: false })
+    .order('cert_count', { ascending: false })
     .limit(60)
 
   if (q) {
@@ -303,7 +304,7 @@ export default async function HomePage({
                   </div>
                   <div className="w-px h-10 bg-[#CBD5E1] self-center" />
                   <div>
-                    <div className="text-[26px] sm:text-[30px] font-black text-[#0A0F1E] tracking-[-0.03em] leading-none">6</div>
+                    <div className="text-[26px] sm:text-[30px] font-black text-[#0A0F1E] tracking-[-0.03em] leading-none">{INDUSTRY_CATEGORIES.length}</div>
                     <div className="text-[11px] text-[#94A3B8] font-medium mt-1.5">산업 카테고리</div>
                   </div>
                   <div className="w-px h-10 bg-[#CBD5E1] self-center" />

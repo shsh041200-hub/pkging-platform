@@ -11,20 +11,16 @@ import {
   MATERIAL_TYPE_LABELS,
   PACKAGING_FORMS,
   PACKAGING_FORM_LABELS,
-  DELIVERY_REGIONS,
-  DELIVERY_REGION_LABELS,
   CERTIFICATION_TYPES,
   CERTIFICATION_CATEGORY_LABELS,
   type IndustryCategory,
   type MaterialType,
   type PackagingForm,
-  type DeliveryRegion,
   type CertificationCategory,
   type CertificationType,
   type BlogPost,
 } from '@/types'
 import { PackagingFormFilter } from './PackagingFormFilter'
-import { DeliveryRegionFilter } from './DeliveryRegionFilter'
 import { CertFilterAccordion } from '@/app/CertFilterAccordion'
 import { createClient } from '@/lib/supabase/server'
 import { simplifyCompanyName } from '@/lib/simplify-company-name'
@@ -54,8 +50,8 @@ const CATEGORY_SEO_TITLE: Record<IndustryCategory, string> = {
   'pharma-health':           '의약품·건강기능식품 포장 업체 — 전국 의약 포장재',
   'electronics-industrial':  '전자·산업용 포장 업체 — 보호 포장재 전문',
   'eco-special':             '친환경 포장재 업체 찾기 — FSC·생분해 포장 전문',
-  'fresh_produce_packaging': '농산물·신선식품 포장업체 찾기 — 콜드체인·신선 포장재 전문',
-  'print_design_services':   '인쇄·패키지 디자인 업체 찾기 — 소량 맞춤 인쇄 전문',
+  'fresh_produce_packaging': '농산물·신선 포장 업체 찾기 — packlinx',
+  'print_design_services':   '인쇄·디자인 서비스 업체 찾기 — packlinx',
 }
 
 const CATEGORY_SEO_DESCRIPTION: Record<IndustryCategory, string> = {
@@ -77,6 +73,16 @@ const CATEGORY_SEO_DESCRIPTION: Record<IndustryCategory, string> = {
     '소량 주문 가능한 인쇄·패키지 디자인 업체를 찾으시나요? 박스 디자인, 라벨 인쇄, 맞춤 포장 전문 업체를 packlinx.com에서 바로 비교하세요.',
 }
 
+const CATEGORY_OG_TITLE: Partial<Record<IndustryCategory, string>> = {
+  'fresh_produce_packaging': '농산물·신선 포장 전문 업체 — packlinx',
+  'print_design_services':   '인쇄·디자인 서비스 전문 업체 — packlinx',
+}
+
+const CATEGORY_OG_DESCRIPTION: Partial<Record<IndustryCategory, string>> = {
+  'fresh_produce_packaging': '신선도 유지·콜드체인 포장재 공급업체를 빠르게 비교하세요. 국내 신선 포장 전문 업체 목록.',
+  'print_design_services':   '소량 맞춤 인쇄부터 패키지 디자인까지. 스타트업·소규모 발주에 특화된 인쇄·디자인 업체 목록.',
+}
+
 function slugToCategory(slug: string): IndustryCategory | undefined {
   return INDUSTRY_CATEGORIES.find((k) => k === slug)
 }
@@ -87,7 +93,7 @@ export function generateStaticParams() {
 
 type Props = {
   params: Promise<{ slug: string }>
-  searchParams: Promise<{ material?: string; form?: string; region?: string; cert?: string }>
+  searchParams: Promise<{ material?: string; form?: string; cert?: string }>
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -103,8 +109,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     description,
     alternates: { canonical: `/categories/${slug}` },
     openGraph: {
-      title: `${title} — BOXTER`,
-      description,
+      title: CATEGORY_OG_TITLE[categoryKey] ?? `${title} — BOXTER`,
+      description: CATEGORY_OG_DESCRIPTION[categoryKey] ?? description,
       url: `${siteUrl}/categories/${slug}`,
       type: 'website',
     },
@@ -113,7 +119,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function CategoryPage({ params, searchParams }: Props) {
   const { slug } = await params
-  const { material, form, region, cert } = await searchParams
+  const { material, form, cert } = await searchParams
   const categoryKey = slugToCategory(slug)
   if (!categoryKey) notFound()
 
@@ -129,10 +135,6 @@ export default async function CategoryPage({ params, searchParams }: Props) {
     ? (form.split(',').filter((f): f is PackagingForm => PACKAGING_FORMS.includes(f as PackagingForm)))
     : []
 
-  const selectedRegions: DeliveryRegion[] = region
-    ? (region.split(',').filter((r): r is DeliveryRegion => DELIVERY_REGIONS.includes(r as DeliveryRegion)))
-    : []
-
   const selectedCerts: string[] = cert
     ? cert.split(',').filter((c) => CERTIFICATION_TYPES.some((ct) => ct.id === c))
     : []
@@ -145,7 +147,6 @@ export default async function CategoryPage({ params, searchParams }: Props) {
     const p = new URLSearchParams()
     if (matStr) p.set('material', matStr)
     if (form) p.set('form', form)
-    if (region) p.set('region', region)
     if (cert) p.set('cert', cert)
     return `/categories/${slug}${p.toString() ? `?${p}` : ''}`
   }
@@ -158,28 +159,6 @@ export default async function CategoryPage({ params, searchParams }: Props) {
     const p = new URLSearchParams()
     if (material) p.set('material', material)
     if (formStr) p.set('form', formStr)
-    if (region) p.set('region', region)
-    if (cert) p.set('cert', cert)
-    return `/categories/${slug}${p.toString() ? `?${p}` : ''}`
-  }
-
-  const buildRegionUrl = (reg: DeliveryRegion): string => {
-    const current = new Set(selectedRegions)
-    if (current.has(reg)) current.delete(reg)
-    else current.add(reg)
-    const regionStr = Array.from(current).join(',')
-    const p = new URLSearchParams()
-    if (material) p.set('material', material)
-    if (form) p.set('form', form)
-    if (regionStr) p.set('region', regionStr)
-    if (cert) p.set('cert', cert)
-    return `/categories/${slug}${p.toString() ? `?${p}` : ''}`
-  }
-
-  const regionClearUrl = (): string => {
-    const p = new URLSearchParams()
-    if (material) p.set('material', material)
-    if (form) p.set('form', form)
     if (cert) p.set('cert', cert)
     return `/categories/${slug}${p.toString() ? `?${p}` : ''}`
   }
@@ -192,7 +171,6 @@ export default async function CategoryPage({ params, searchParams }: Props) {
     const p = new URLSearchParams()
     if (material) p.set('material', material)
     if (form) p.set('form', form)
-    if (region) p.set('region', region)
     if (certStr) p.set('cert', certStr)
     return `/categories/${slug}${p.toString() ? `?${p}` : ''}`
   }
@@ -200,11 +178,6 @@ export default async function CategoryPage({ params, searchParams }: Props) {
   const formUrls: Record<string, string> = {}
   for (const pf of PACKAGING_FORMS) {
     formUrls[pf] = buildFormUrl(pf)
-  }
-
-  const regionUrls: Record<string, string> = {}
-  for (const reg of DELIVERY_REGIONS) {
-    regionUrls[reg] = buildRegionUrl(reg)
   }
 
   const certUrls: Record<string, string> = {}
@@ -229,10 +202,6 @@ export default async function CategoryPage({ params, searchParams }: Props) {
     query = query.eq('packaging_form', selectedForms[0])
   } else if (selectedForms.length > 1) {
     query = query.in('packaging_form', selectedForms)
-  }
-  if (selectedRegions.length > 0) {
-    // OR logic: companies that deliver to any of the selected regions, plus companies with '전국' coverage
-    query = query.overlaps('delivery_regions', [...selectedRegions, '전국'])
   }
   if (selectedCerts.length > 0) {
     // Expand canonical IDs to all known aliases so stored values like 'HACCP 인증' match 'haccp'
@@ -317,9 +286,9 @@ export default async function CategoryPage({ params, searchParams }: Props) {
               {label} 업체
             </h1>
           </div>
-          <p className="text-gray-500 text-[16px] leading-relaxed max-w-lg">
+          <h2 className="text-gray-500 text-[16px] leading-relaxed max-w-lg font-normal">
             {description}
-          </p>
+          </h2>
           {totalInCategory != null && (
             <p className="text-[13px] text-[#005EFF] font-semibold mt-3">
               {totalInCategory.toLocaleString()}개 업체 등록됨
@@ -338,7 +307,6 @@ export default async function CategoryPage({ params, searchParams }: Props) {
               href={(() => {
                 const p = new URLSearchParams()
                 if (form) p.set('form', form)
-                if (region) p.set('region', region)
                 return `/categories/${slug}${p.toString() ? `?${p}` : ''}`
               })()}
               className={`flex-shrink-0 px-3 py-1.5 rounded-md text-[13px] font-medium transition-all ${
@@ -369,13 +337,6 @@ export default async function CategoryPage({ params, searchParams }: Props) {
 
           {/* Packaging form filter chips — 더 보기 접이식 (Client Component) */}
           <PackagingFormFilter selectedForms={selectedForms} formUrls={formUrls} />
-
-          {/* 배달 가능 지역 필터 (Client Component) */}
-          <DeliveryRegionFilter
-            selectedRegions={selectedRegions}
-            regionUrls={regionUrls}
-            clearUrl={regionClearUrl()}
-          />
 
           {/* 인증 필터 (Client Component) */}
           <CertFilterAccordion
@@ -415,16 +376,6 @@ export default async function CategoryPage({ params, searchParams }: Props) {
                 <span className="text-[#7C3AED]/60 text-[10px] leading-none">×</span>
               </Link>
             ))}
-            {selectedRegions.map((reg) => (
-              <Link
-                key={reg}
-                href={buildRegionUrl(reg)}
-                className="text-[11px] bg-[#EBF2FF] text-[#005EFF] font-medium px-2.5 py-1 rounded-full flex items-center gap-1 hover:bg-[#D6E8FF] transition-colors"
-              >
-                {DELIVERY_REGION_LABELS[reg]}
-                <span className="text-[#005EFF]/60 text-[10px] leading-none">×</span>
-              </Link>
-            ))}
             {selectedCerts.map((certId) => {
               const ct = CERTIFICATION_TYPES.find((c) => c.id === certId)
               if (!ct) return null
@@ -439,7 +390,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
                 </Link>
               )
             })}
-            {(selectedMaterials.length > 0 || selectedForms.length > 0 || selectedRegions.length > 0 || selectedCerts.length > 0) && (
+            {(selectedMaterials.length > 0 || selectedForms.length > 0 || selectedCerts.length > 0) && (
               <Link href={`/categories/${slug}`} className="text-xs text-gray-400 hover:text-gray-600">
                 초기화
               </Link>
