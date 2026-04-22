@@ -117,6 +117,42 @@ export const CATEGORY_TO_MATERIAL: Record<Category, MaterialType> = {
   eco:      'eco-material',
 }
 
+// ── Certification taxonomy (canonical IDs for filtering) ──
+
+export type CertificationCategory = 'quality' | 'food_safety' | 'environmental' | 'pharma' | 'general'
+
+export interface CertificationType {
+  id: string
+  label: string
+  category: CertificationCategory
+  aliases: string[]
+}
+
+export const CERTIFICATION_CATEGORY_LABELS: Record<CertificationCategory, string> = {
+  quality: '품질',
+  food_safety: '식품안전',
+  environmental: '환경',
+  pharma: '제약',
+  general: '일반',
+}
+
+export const CERTIFICATION_TYPES: CertificationType[] = [
+  { id: 'iso9001',       label: 'ISO 9001',       category: 'quality',       aliases: ['ISO 9001', 'iso9001', 'ISO9001'] },
+  { id: 'iso14001',      label: 'ISO 14001',      category: 'environmental', aliases: ['ISO 14001', 'iso14001', 'ISO14001'] },
+  { id: 'iso22000',      label: 'ISO 22000',      category: 'food_safety',   aliases: ['ISO 22000', 'iso22000', 'ISO22000'] },
+  { id: 'iso22716',      label: 'ISO 22716',      category: 'quality',       aliases: ['ISO 22716', 'iso22716', 'ISO22716'] },
+  { id: 'haccp',         label: 'HACCP',           category: 'food_safety',   aliases: ['HACCP', 'HACCP 인증', 'haccp'] },
+  { id: 'gmp',           label: 'GMP',             category: 'pharma',        aliases: ['GMP', 'gmp', 'GMP 인증'] },
+  { id: 'fsc',           label: 'FSC',             category: 'environmental', aliases: ['FSC', 'FSC 인증', 'fsc'] },
+  { id: 'grs',           label: 'GRS',             category: 'environmental', aliases: ['GRS', 'GRS 인증', 'grs'] },
+  { id: 'ok_compost',    label: 'OK Compost',      category: 'environmental', aliases: ['OK Compost', 'OK Compost 인증', 'ok compost'] },
+  { id: 'eco_friendly',  label: '친환경 인증',     category: 'environmental', aliases: ['친환경 인증', '친환경', '에코인증'] },
+  { id: 'food_hygiene',  label: '식품위생법 적합', category: 'food_safety',   aliases: ['식품위생법 적합', '식품위생법', '식품위생'] },
+  { id: 'kfda',          label: '식약처 인증',     category: 'pharma',        aliases: ['식약처 인증', '식약처', 'KFDA'] },
+  { id: 'kc',            label: 'KC 인증',         category: 'general',       aliases: ['KC 인증', 'KC', 'kc'] },
+  { id: 'food_grade',    label: '식품등급',         category: 'food_safety',   aliases: ['식품등급', '식품 등급', 'food grade'] },
+]
+
 // ── Company interface ──
 
 export interface Company {
@@ -146,9 +182,34 @@ export interface Company {
   service_capabilities: string[]
   target_industries: string[]
   key_clients: string[]
+  review_count: number
+  avg_rating: number | null
   is_verified: boolean
   created_at: string
   updated_at: string
+}
+
+export interface Portfolio {
+  id: string
+  company_id: string
+  title: string
+  description: string | null
+  image_url: string | null
+  display_order: number
+  created_at: string
+  updated_at: string
+}
+
+export interface ConversionEvent {
+  id: string
+  event_type: string
+  company_id: string | null
+  session_id: string | null
+  industry_category: string | null
+  material_type: string | null
+  referrer_path: string | null
+  metadata: Record<string, unknown>
+  created_at: string
 }
 
 export interface BlogPost {
