@@ -82,6 +82,46 @@ export const MATERIAL_TYPE_LABELS: Record<MaterialType, string> = {
   'eco-material':      '친환경 소재',
 }
 
+// ── Packaging form filter (포장 형태) ──
+
+export type PackagingForm =
+  | 'box_case'
+  | 'pouch_bag'
+  | 'bottle_container'
+  | 'tube'
+  | 'can_tin'
+  | 'shopping_bag'
+  | 'cushioning'
+  | 'stretch_film'
+  | 'label_sticker'
+  | 'tape_sealing'
+
+export const PACKAGING_FORMS: PackagingForm[] = [
+  'box_case',
+  'pouch_bag',
+  'bottle_container',
+  'tube',
+  'can_tin',
+  'shopping_bag',
+  'cushioning',
+  'stretch_film',
+  'label_sticker',
+  'tape_sealing',
+]
+
+export const PACKAGING_FORM_LABELS: Record<PackagingForm, string> = {
+  box_case:         '박스·케이스',
+  pouch_bag:        '파우치·백',
+  bottle_container: '병·용기',
+  tube:             '튜브',
+  can_tin:          '캔·틴',
+  shopping_bag:     '쇼핑백·캐리어백',
+  cushioning:       '완충재·보호재',
+  stretch_film:     '스트레치·필름',
+  label_sticker:    '라벨·스티커',
+  tape_sealing:     '테이프·밀봉재',
+}
+
 // ── Delivery region filter (배달 가능 지역, 광역 17개 시·도) ──
 
 export type DeliveryRegion =

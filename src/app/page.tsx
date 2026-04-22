@@ -7,10 +7,13 @@ import {
   INDUSTRY_CATEGORY_ICONS,
   MATERIAL_TYPES,
   MATERIAL_TYPE_LABELS,
+  PACKAGING_FORMS,
+  PACKAGING_FORM_LABELS,
   CERTIFICATION_TYPES,
   CERTIFICATION_CATEGORY_LABELS,
   type IndustryCategory,
   type MaterialType,
+  type PackagingForm,
   type CertificationCategory,
 } from '@/types'
 import { createClient } from '@/lib/supabase/server'
@@ -25,6 +28,7 @@ type SearchParams = Promise<{
   q?: string
   industry?: string
   material?: string
+  form?: string
   cert?: string
   sort?: string
 }>
@@ -34,9 +38,9 @@ export async function generateMetadata({
 }: {
   searchParams: SearchParams
 }): Promise<Metadata> {
-  const { q, industry, material, cert } = await searchParams
+  const { q, industry, material, form, cert } = await searchParams
   if (q) return { robots: { index: false, follow: true } }
-  if (industry || material || cert) return { alternates: { canonical: siteUrl } }
+  if (industry || material || form || cert) return { alternates: { canonical: siteUrl } }
   return {}
 }
 
@@ -84,17 +88,20 @@ export default async function HomePage({
 }: {
   searchParams: SearchParams
 }) {
-  const { q, industry, material, cert, sort } = await searchParams
+  const { q, industry, material, form, cert, sort } = await searchParams
   const supabase = await createClient()
 
   const activeCerts = cert ? cert.split(',').filter(Boolean) : []
   const selectedMaterials: MaterialType[] = material
     ? (material.split(',').filter((m): m is MaterialType => MATERIAL_TYPES.includes(m as MaterialType)))
     : []
+  const selectedForms: PackagingForm[] = form
+    ? (form.split(',').filter((f): f is PackagingForm => PACKAGING_FORMS.includes(f as PackagingForm)))
+    : []
 
   let query = supabase
     .from('companies')
-    .select('id, slug, name, description, category, industry_categories, material_type, tags, is_verified, products, certifications, founded_year, website, icon_url, service_capabilities, target_industries, data_source, review_count, avg_rating')
+    .select('id, slug, name, description, category, industry_categories, material_type, packaging_form, tags, is_verified, products, certifications, founded_year, website, icon_url, service_capabilities, target_industries, data_source, review_count, avg_rating')
     .order('is_verified', { ascending: false })
     .limit(60)
 
@@ -108,6 +115,11 @@ export default async function HomePage({
     query = query.eq('material_type', selectedMaterials[0])
   } else if (selectedMaterials.length > 1) {
     query = query.in('material_type', selectedMaterials)
+  }
+  if (selectedForms.length === 1) {
+    query = query.eq('packaging_form', selectedForms[0])
+  } else if (selectedForms.length > 1) {
+    query = query.in('packaging_form', selectedForms)
   }
   if (activeCerts.length > 0) {
     query = query.overlaps('certifications', activeCerts)
@@ -139,6 +151,7 @@ export default async function HomePage({
     if (q) params.q = q
     if (industry) params.industry = industry
     if (material) params.material = material
+    if (form) params.form = form
     if (cert) params.cert = cert
     if (sort) params.sort = sort
     Object.assign(params, overrides)
@@ -158,7 +171,7 @@ export default async function HomePage({
     return buildUrl({ cert: certStr || undefined })
   }
 
-  const showingCategory = !q && !industry && selectedMaterials.length === 0 && activeCerts.length === 0
+  const showingCategory = !q && !industry && selectedMaterials.length === 0 && selectedForms.length === 0 && activeCerts.length === 0
 
   const buildMaterialUrl = (mat: MaterialType): string => {
     const current = new Set(selectedMaterials)
@@ -169,6 +182,17 @@ export default async function HomePage({
     }
     const matStr = Array.from(current).join(',')
     return buildUrl({ material: matStr || undefined })
+  }
+
+  const buildFormUrl = (pf: PackagingForm): string => {
+    const current = new Set(selectedForms)
+    if (current.has(pf)) {
+      current.delete(pf)
+    } else {
+      current.add(pf)
+    }
+    const formStr = Array.from(current).join(',')
+    return buildUrl({ form: formStr || undefined })
   }
 
   // Group cert types by category for filter UI
@@ -407,6 +431,27 @@ export default async function HomePage({
               })}
             </div>
 
+            {/* Packaging form chips */}
+            <div className="flex gap-1.5 py-2.5 overflow-x-auto scrollbar-none">
+              <span className="flex-shrink-0 text-[10px] font-semibold text-gray-300 uppercase tracking-widest self-center mr-1 hidden sm:inline">형태</span>
+              {PACKAGING_FORMS.map((pf) => {
+                const isActive = selectedForms.includes(pf)
+                return (
+                  <Link
+                    key={pf}
+                    href={buildFormUrl(pf)}
+                    className={`flex-shrink-0 px-2.5 py-1 rounded text-[11px] font-medium transition-all border ${
+                      isActive
+                        ? 'bg-[#7C3AED] text-white border-[#7C3AED]'
+                        : 'text-gray-500 border-gray-200 hover:text-gray-700 hover:border-gray-300 bg-white'
+                    }`}
+                  >
+                    {PACKAGING_FORM_LABELS[pf]}
+                  </Link>
+                )
+              })}
+            </div>
+
             {/* Certification accordion filter */}
             <CertFilterAccordion
               certsByCategory={certsByCategory}
@@ -441,6 +486,16 @@ export default async function HomePage({
                 <span className="text-[#005EFF]/60 text-[10px] leading-none">×</span>
               </Link>
             ))}
+            {selectedForms.map((pf) => (
+              <Link
+                key={pf}
+                href={buildFormUrl(pf)}
+                className="text-[11px] bg-[#F3E8FF] text-[#7C3AED] font-medium px-2.5 py-1 rounded-full flex items-center gap-1 hover:bg-[#EDE9FE] transition-colors"
+              >
+                {PACKAGING_FORM_LABELS[pf]}
+                <span className="text-[#7C3AED]/60 text-[10px] leading-none">×</span>
+              </Link>
+            ))}
             {activeCerts.map((certId) => {
               const ct = CERTIFICATION_TYPES.find((c) => c.id === certId)
               return (
@@ -454,7 +509,7 @@ export default async function HomePage({
                 &ldquo;{q}&rdquo;
               </span>
             )}
-            {(industry || selectedMaterials.length > 0 || q || activeCerts.length > 0) && (
+            {(industry || selectedMaterials.length > 0 || selectedForms.length > 0 || q || activeCerts.length > 0) && (
               <Link href="/" className="text-xs text-gray-400 hover:text-gray-600 ml-1">
                 초기화
               </Link>
