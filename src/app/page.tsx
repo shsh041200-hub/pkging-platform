@@ -176,14 +176,14 @@ export default async function HomePage({
       />
 
       {/* Header */}
-      <header className="bg-[#0A0F1E] sticky top-0 z-50 border-b border-white/[0.06]">
+      <header className="bg-white sticky top-0 z-50 border-b border-gray-100">
         <div className="max-w-7xl mx-auto px-5 sm:px-8 h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-3">
-            <BoxterLogo variant="dark" size="sm" />
-            <span className="hidden sm:inline text-white/25 text-[11px] font-medium tracking-widest uppercase">전국 패키징 파트너, 한 번에</span>
+            <BoxterLogo variant="light" size="sm" />
+            <span className="hidden sm:inline text-gray-300 text-[11px] font-medium tracking-widest uppercase">전국 패키징 파트너, 한 번에</span>
           </Link>
           <nav className="flex items-center gap-6">
-            <Link href="/blog" className="text-white/70 hover:text-white text-[13px] font-medium transition-colors">
+            <Link href="/blog" className="text-gray-500 hover:text-gray-900 text-[13px] font-medium transition-colors">
               가이드
             </Link>
           </nav>
@@ -194,46 +194,37 @@ export default async function HomePage({
       <section className="border-b border-gray-100 overflow-hidden">
         <div className="flex flex-col lg:flex-row lg:min-h-[calc(100vh-64px)]">
 
-          {/* Left: Dark visual hero panel */}
-          <div className="relative bg-[#0A0F1E] lg:w-[52%] flex flex-col justify-center px-8 sm:px-12 lg:px-16 py-14 lg:py-20">
-            {/* Subtle dot-grid overlay */}
-            <div
-              className="absolute inset-0 pointer-events-none"
-              style={{
-                backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.055) 1px, transparent 1px)',
-                backgroundSize: '30px 30px',
-              }}
-            />
-
-            {/* Concept #10 — Modular grid pattern (white on dark, decorative background) */}
+          {/* Left: Light visual hero panel — Concept #10 bright tone */}
+          <div className="relative bg-[#F1F5F9] lg:w-[52%] flex flex-col justify-center px-8 sm:px-12 lg:px-16 py-14 lg:py-20">
+            {/* Concept #10 — Modular grid pattern (slate on light, decorative background) */}
             <svg
-              className="absolute bottom-0 right-0 w-[340px] h-[340px] lg:w-[420px] lg:h-[420px] opacity-[0.07] pointer-events-none select-none"
+              className="absolute bottom-0 right-0 w-[340px] h-[340px] lg:w-[420px] lg:h-[420px] opacity-[0.18] pointer-events-none select-none"
               viewBox="0 0 420 420"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
               aria-hidden="true"
             >
               {/* Row 1 */}
-              <rect x="40" y="40" width="130" height="85" rx="4" stroke="white" strokeWidth="1.5"/>
-              <rect x="178" y="40" width="90" height="85" rx="4" fill="white" fillOpacity="0.4"/>
-              <rect x="276" y="40" width="110" height="85" rx="4" fill="white" fillOpacity="0.25"/>
+              <rect x="40" y="40" width="130" height="85" rx="4" stroke="#94A3B8" strokeWidth="1.5"/>
+              <rect x="178" y="40" width="90" height="85" rx="4" fill="#CBD5E1"/>
+              <rect x="276" y="40" width="110" height="85" rx="4" fill="#E2E8F0"/>
               {/* Row 2 */}
-              <rect x="40" y="133" width="85" height="120" rx="4" fill="white" fillOpacity="0.3"/>
-              <rect x="133" y="133" width="70" height="55" rx="4" stroke="white" strokeWidth="1.5"/>
-              <rect x="133" y="196" width="70" height="57" rx="4" fill="white" fillOpacity="0.45"/>
-              <rect x="211" y="133" width="110" height="120" rx="4" stroke="white" strokeWidth="1.2"/>
-              <rect x="329" y="133" width="90" height="120" rx="4" fill="white" fillOpacity="0.18"/>
+              <rect x="40" y="133" width="85" height="120" rx="4" fill="#CBD5E1"/>
+              <rect x="133" y="133" width="70" height="55" rx="4" stroke="#94A3B8" strokeWidth="1.5"/>
+              <rect x="133" y="196" width="70" height="57" rx="4" fill="#94A3B8"/>
+              <rect x="211" y="133" width="110" height="120" rx="4" stroke="#CBD5E1" strokeWidth="1.2"/>
+              <rect x="329" y="133" width="90" height="120" rx="4" fill="#E2E8F0"/>
               {/* Row 3 */}
-              <rect x="40" y="261" width="120" height="85" rx="4" stroke="white" strokeWidth="1.2"/>
-              <rect x="168" y="261" width="50" height="85" rx="4" fill="white" fillOpacity="0.85"/>
-              <rect x="226" y="261" width="90" height="85" rx="4" stroke="white" strokeWidth="1.5"/>
-              <rect x="324" y="261" width="90" height="85" rx="4" fill="white" fillOpacity="0.22"/>
+              <rect x="40" y="261" width="120" height="85" rx="4" stroke="#CBD5E1" strokeWidth="1.2"/>
+              <rect x="168" y="261" width="50" height="85" rx="4" fill="#0A0F1E"/>
+              <rect x="226" y="261" width="90" height="85" rx="4" stroke="#94A3B8" strokeWidth="1.5"/>
+              <rect x="324" y="261" width="90" height="85" rx="4" fill="#E2E8F0"/>
               {/* Row 4 */}
-              <rect x="40" y="354" width="65" height="55" rx="4" fill="white" fillOpacity="0.32"/>
-              <rect x="113" y="354" width="100" height="55" rx="4" stroke="white" strokeWidth="1.2"/>
-              <rect x="221" y="354" width="85" height="55" rx="4" fill="white" fillOpacity="0.18"/>
-              <rect x="314" y="354" width="55" height="55" rx="4" stroke="white" strokeWidth="1.5"/>
-              <rect x="377" y="354" width="40" height="55" rx="4" fill="white" fillOpacity="0.32"/>
+              <rect x="40" y="354" width="65" height="55" rx="4" fill="#94A3B8"/>
+              <rect x="113" y="354" width="100" height="55" rx="4" stroke="#CBD5E1" strokeWidth="1.2"/>
+              <rect x="221" y="354" width="85" height="55" rx="4" fill="#E2E8F0"/>
+              <rect x="314" y="354" width="55" height="55" rx="4" stroke="#94A3B8" strokeWidth="1.5"/>
+              <rect x="377" y="354" width="40" height="55" rx="4" fill="#CBD5E1"/>
             </svg>
 
             {/* Content */}
@@ -241,30 +232,30 @@ export default async function HomePage({
               <div className="inline-block text-[11px] font-semibold tracking-widest uppercase text-[#F97316] bg-[#F97316]/10 border border-[#F97316]/20 px-3 py-1.5 rounded-full mb-5">
                 국내 패키징 플랫폼
               </div>
-              <h1 className="text-[34px] sm:text-[44px] lg:text-[52px] font-extrabold text-white leading-[1.1] tracking-[-0.04em] mb-4">
+              <h1 className="text-[34px] sm:text-[44px] lg:text-[52px] font-extrabold text-[#0A0F1E] leading-[1.1] tracking-[-0.04em] mb-4">
                 전국 패키징<br />파트너, 한 번에
               </h1>
-              <p className="text-white/55 text-[15px] leading-relaxed mb-10 max-w-[400px]">
+              <p className="text-[#64748B] text-[15px] leading-relaxed mb-10 max-w-[400px]">
                 검증된 B2B 포장 파트너를 바로 찾으세요.<br className="hidden sm:inline" />
                 식품·산업·친환경 전 분야 커버.
               </p>
               {totalCount != null && (
                 <div className="flex items-center gap-6 sm:gap-8 flex-wrap">
                   <div>
-                    <div className="text-[26px] sm:text-[30px] font-black text-white tracking-[-0.03em] leading-none">
+                    <div className="text-[26px] sm:text-[30px] font-black text-[#0A0F1E] tracking-[-0.03em] leading-none">
                       {totalCount.toLocaleString()}
                     </div>
-                    <div className="text-[11px] text-white/35 font-medium mt-1.5">등록 업체</div>
+                    <div className="text-[11px] text-[#94A3B8] font-medium mt-1.5">등록 업체</div>
                   </div>
-                  <div className="w-px h-10 bg-white/10 self-center" />
+                  <div className="w-px h-10 bg-[#CBD5E1] self-center" />
                   <div>
-                    <div className="text-[26px] sm:text-[30px] font-black text-white tracking-[-0.03em] leading-none">6</div>
-                    <div className="text-[11px] text-white/35 font-medium mt-1.5">산업 카테고리</div>
+                    <div className="text-[26px] sm:text-[30px] font-black text-[#0A0F1E] tracking-[-0.03em] leading-none">6</div>
+                    <div className="text-[11px] text-[#94A3B8] font-medium mt-1.5">산업 카테고리</div>
                   </div>
-                  <div className="w-px h-10 bg-white/10 self-center" />
+                  <div className="w-px h-10 bg-[#CBD5E1] self-center" />
                   <div>
                     <div className="text-[26px] sm:text-[30px] font-black text-[#F97316] tracking-[-0.03em] leading-none">무료</div>
-                    <div className="text-[11px] text-white/35 font-medium mt-1.5">이용 가능</div>
+                    <div className="text-[11px] text-[#94A3B8] font-medium mt-1.5">이용 가능</div>
                   </div>
                 </div>
               )}
@@ -561,7 +552,7 @@ export default async function HomePage({
       </section>}
 
       {/* Footer */}
-      <footer className="border-t border-gray-100 bg-gray-50 mt-auto py-8">
+      <footer className="border-t border-gray-100 bg-white mt-auto py-8">
         <div className="max-w-7xl mx-auto px-5 sm:px-8">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <p className="text-[12px] text-gray-400 leading-relaxed">

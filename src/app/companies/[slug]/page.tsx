@@ -224,14 +224,14 @@ export default async function CompanyPage({ params }: Props) {
       <CompanyViewTracker companyId={company.id} />
 
       {/* Header */}
-      <header className="bg-[#0A0F1E] sticky top-0 z-50 border-b border-white/[0.06]">
+      <header className="bg-white sticky top-0 z-50 border-b border-gray-100">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-3">
-            <BoxterLogo variant="dark" size="sm" />
-            <span className="hidden sm:inline text-white/25 text-[11px] font-medium tracking-widest uppercase">전국 패키징 파트너, 한 번에</span>
+            <BoxterLogo variant="light" size="sm" />
+            <span className="hidden sm:inline text-gray-300 text-[11px] font-medium tracking-widest uppercase">전국 패키징 파트너, 한 번에</span>
           </Link>
           <nav className="flex items-center gap-6">
-            <Link href="/blog" className="text-white/70 hover:text-white text-[13px] font-medium transition-colors">
+            <Link href="/blog" className="text-gray-500 hover:text-gray-900 text-[13px] font-medium transition-colors">
               가이드
             </Link>
           </nav>
@@ -622,7 +622,7 @@ export default async function CompanyPage({ params }: Props) {
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-gray-100 bg-gray-50 py-8">
+      <footer className="border-t border-gray-100 bg-white py-8">
         <div className="max-w-[800px] mx-auto px-4 sm:px-6">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <p className="text-[12px] text-gray-400">

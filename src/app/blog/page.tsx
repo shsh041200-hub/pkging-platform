@@ -82,14 +82,14 @@ export default async function BlogListPage({ searchParams }: Props) {
       />
 
       {/* Header */}
-      <header className="bg-[#0A0F1E] sticky top-0 z-50 border-b border-white/[0.06]">
+      <header className="bg-white sticky top-0 z-50 border-b border-gray-100">
         <div className="max-w-7xl mx-auto px-5 sm:px-8 h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-3">
-            <BoxterLogo variant="dark" size="sm" />
-            <span className="hidden sm:inline text-white/25 text-[11px] font-medium tracking-widest uppercase">전국 패키징 파트너, 한 번에</span>
+            <BoxterLogo variant="light" size="sm" />
+            <span className="hidden sm:inline text-gray-300 text-[11px] font-medium tracking-widest uppercase">전국 패키징 파트너, 한 번에</span>
           </Link>
           <nav className="flex items-center gap-6">
-            <Link href="/blog" className="text-white text-[13px] font-medium">
+            <Link href="/blog" className="text-gray-900 text-[13px] font-semibold">
               가이드
             </Link>
           </nav>
@@ -215,7 +215,7 @@ export default async function BlogListPage({ searchParams }: Props) {
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-gray-100 bg-gray-50 mt-auto py-8">
+      <footer className="border-t border-gray-100 bg-white mt-auto py-8">
         <div className="max-w-7xl mx-auto px-5 sm:px-8">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <p className="text-[12px] text-gray-400 leading-relaxed">
