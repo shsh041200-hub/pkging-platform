@@ -16,6 +16,7 @@ import {
 import { createClient } from '@/lib/supabase/server'
 import { simplifyCompanyName } from '@/lib/simplify-company-name'
 import { CertFilterAccordion } from './CertFilterAccordion'
+import { CompanyIcon } from '@/components/CompanyIcon'
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://packlinx.com'
 
@@ -89,7 +90,7 @@ export default async function HomePage({
 
   let query = supabase
     .from('companies')
-    .select('id, slug, name, description, category, industry_categories, material_type, tags, is_verified, products, certifications, founded_year, website, service_capabilities, target_industries, data_source, review_count, avg_rating')
+    .select('id, slug, name, description, category, industry_categories, material_type, tags, is_verified, products, certifications, founded_year, website, icon_url, service_capabilities, target_industries, data_source, review_count, avg_rating')
     .order('is_verified', { ascending: false })
     .limit(60)
 
@@ -159,6 +160,12 @@ export default async function HomePage({
     acc[ct.category].push(ct)
     return acc
   }, {} as Record<CertificationCategory, typeof CERTIFICATION_TYPES>)
+
+  // Pre-compute cert toggle URLs — serializable map avoids passing functions to Client Components
+  const certUrls: Record<string, string> = {}
+  for (const ct of CERTIFICATION_TYPES) {
+    certUrls[ct.id] = buildCertUrl(ct.id)
+  }
 
   return (
     <div className="min-h-screen bg-[#F9FAFB]">
@@ -310,7 +317,7 @@ export default async function HomePage({
               activeCerts={activeCerts}
               certCategoryColors={CERT_CATEGORY_COLORS}
               certCategoryLabels={CERTIFICATION_CATEGORY_LABELS}
-              buildCertUrl={buildCertUrl}
+              certUrls={certUrls}
             />
           </div>
         </div>
@@ -402,14 +409,23 @@ export default async function HomePage({
                     )}
                   </div>
 
-                  <h2 className="text-base font-bold text-gray-900 mb-1 leading-snug tracking-[-0.02em] line-clamp-1" title={company.name}>
-                    <Link
-                      href={`/companies/${company.slug}`}
-                      className="after:absolute after:inset-0 after:content-['']"
-                    >
-                      {simplifyCompanyName(company.name)}
-                    </Link>
-                  </h2>
+                  <div className="flex items-center gap-2 mb-1">
+                    <CompanyIcon
+                      iconUrl={company.icon_url ?? null}
+                      name={company.name}
+                      category={company.category}
+                      size="sm"
+                      linkUrl={company.website ?? null}
+                    />
+                    <h2 className="text-base font-bold text-gray-900 leading-snug tracking-[-0.02em] line-clamp-1 flex-1 min-w-0" title={company.name}>
+                      <Link
+                        href={`/companies/${company.slug}`}
+                        className="after:absolute after:inset-0 after:content-['']"
+                      >
+                        {simplifyCompanyName(company.name)}
+                      </Link>
+                    </h2>
+                  </div>
 
                   <p className="text-[13px] text-gray-500 leading-relaxed line-clamp-2 mb-3 flex-1">
                     {company.description ?? ''}

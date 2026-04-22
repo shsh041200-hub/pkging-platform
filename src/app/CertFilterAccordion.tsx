@@ -9,7 +9,7 @@ type Props = {
   activeCerts: string[]
   certCategoryColors: Record<CertificationCategory, { active: string; inactive: string }>
   certCategoryLabels: Record<CertificationCategory, string>
-  buildCertUrl: (certId: string) => string
+  certUrls: Record<string, string>
 }
 
 const CERT_CATEGORY_ORDER: CertificationCategory[] = ['quality', 'food_safety', 'environmental', 'pharma', 'general']
@@ -19,7 +19,7 @@ export function CertFilterAccordion({
   activeCerts,
   certCategoryColors,
   certCategoryLabels,
-  buildCertUrl,
+  certUrls,
 }: Props) {
   const [open, setOpen] = useState(activeCerts.length > 0)
 
@@ -68,7 +68,7 @@ export function CertFilterAccordion({
                       return (
                         <Link
                           key={ct.id}
-                          href={buildCertUrl(ct.id)}
+                          href={certUrls[ct.id] ?? '/'}
                           className={`flex-shrink-0 px-2.5 py-1 rounded text-[11px] font-medium transition-all border ${
                             isActive ? colors.active : colors.inactive
                           }`}

@@ -171,6 +171,7 @@ export interface Company {
   province: string | null
   website: string | null
   logo_url: string | null
+  icon_url: string | null
   products: string[]
   certifications: string[]
   founded_year: number | null

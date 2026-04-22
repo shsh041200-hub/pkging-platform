@@ -20,6 +20,7 @@ import {
   type Portfolio,
 } from '@/types'
 import { CompanyViewTracker } from './CompanyViewTracker'
+import { CompanyIcon } from '@/components/CompanyIcon'
 
 type Props = {
   params: Promise<{ slug: string }>
@@ -248,11 +249,13 @@ export default async function CompanyPage({ params }: Props) {
         {/* Company Hero Card */}
         <div className="bg-white border border-gray-200 rounded-xl p-6 sm:p-10">
           <div className="flex items-start gap-4 mb-6">
-            <div className="w-14 h-14 rounded-xl flex items-center justify-center flex-shrink-0 bg-gray-100 border border-gray-200">
-              <span className="text-xl font-bold text-gray-400">
-                {company.name.charAt(0)}
-              </span>
-            </div>
+            <CompanyIcon
+              iconUrl={company.icon_url ?? null}
+              name={company.name}
+              category={company.category}
+              size="lg"
+              linkUrl={company.website ?? null}
+            />
 
             <div className="flex-1 min-w-0">
               <div className="flex flex-wrap items-center gap-2 mb-2">
