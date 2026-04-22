@@ -4,16 +4,17 @@ import type { Metadata } from 'next'
 import { createClient } from '@/lib/supabase/server'
 import { BoxterLogo } from '@/components/BoxterLogo'
 import { DashboardClient } from './DashboardClient'
+import { UtmAnalyticsSection, type UtmAnalyticsData } from './UtmAnalyticsSection'
 
 export const metadata: Metadata = {
   title: '관리자 대시보드 — BOXTER',
   robots: { index: false, follow: false },
 }
 
-type SearchParams = Promise<{ month?: string }>
+type SearchParams = Promise<{ month?: string; from?: string; to?: string }>
 
 export default async function AdminDashboardPage({ searchParams }: { searchParams: SearchParams }) {
-  const { month } = await searchParams
+  const { month, from, to } = await searchParams
   const supabase = await createClient()
 
   // Auth check
@@ -56,6 +57,34 @@ export default async function AdminDashboardPage({ searchParams }: { searchParam
       category_distribution: [],
       top_companies: [],
     }
+  }
+
+  // UTM analytics data
+  const utmFrom = from ?? (() => {
+    const d = new Date(now.getFullYear(), now.getMonth() - 2, 1)
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-01`
+  })()
+  const utmTo = to ?? `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`
+
+  let utmData: UtmAnalyticsData = {
+    period: { from: utmFrom, to: utmTo },
+    totalSessions: 0,
+    totalKakaoClicks: 0,
+    conversionRate: 0,
+    monthlySessions: [],
+    postRanking: [],
+  }
+
+  try {
+    const utmRes = await fetch(
+      `${process.env.NEXT_PUBLIC_SITE_URL ?? ''}/api/admin/utm-analytics?from=${utmFrom}&to=${utmTo}`,
+      { headers: { 'x-internal': '1' }, cache: 'no-store' },
+    )
+    if (utmRes.ok) {
+      utmData = await utmRes.json()
+    }
+  } catch {
+    // fall through to empty state
   }
 
   // Month picker: generate last 12 months
@@ -109,6 +138,11 @@ export default async function AdminDashboardPage({ searchParams }: { searchParam
         </div>
 
         <DashboardClient data={dashboardData} />
+
+        {/* UTM Analytics Section */}
+        <div className="mt-10">
+          <UtmAnalyticsSection data={utmData} />
+        </div>
       </main>
     </div>
   )
