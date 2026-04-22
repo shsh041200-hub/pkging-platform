@@ -26,7 +26,7 @@ OPTIONAL_FIELDS = [
     "description", "website", "phone", "email", "address",
     "city", "province", "tags", "products", "certifications",
     "buyer_category", "packaging_form", "founded_year",
-    "employee_range", "is_verified",
+    "is_verified",
 ]
 URL_TIMEOUT = 8
 BROWSER_UA = (
@@ -81,7 +81,7 @@ def fetch_all_companies(supabase_url, service_role_key):
     fields = ",".join(["id", "slug", "name", "category", "description", "website",
                        "phone", "email", "address", "city", "province", "tags",
                        "products", "certifications", "buyer_category", "packaging_form",
-                       "founded_year", "employee_range", "is_verified"])
+                       "founded_year", "is_verified"])
     page_size = 1000
     offset = 0
     while True:

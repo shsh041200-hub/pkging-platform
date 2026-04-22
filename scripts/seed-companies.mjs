@@ -353,7 +353,7 @@ const companies = [
     products: ['연포장 필름', '알루미늄박', 'PET병', '알루미늄 캔', '스틸 캔'],
     certifications: ['ISO 9001', 'ISO 14001'], is_verified: true,
     tags: ['food_grade'], buyer_category: 'food_beverage', packaging_form: 'pouch_bag',
-    founded_year: 1980, employee_range: '200+',
+    founded_year: 1980,
   },
   {
     slug: 'myungji-pnp', name: '명지피앤피', category: 'flexible', subcategory: '파우치/지속가능',
@@ -373,7 +373,7 @@ const companies = [
     products: ['그라비어 인쇄 필름', '플렉소 인쇄 필름', '친환경 포장재', '기능성 필름'],
     certifications: ['ISO 9001', 'ISO 14001'], is_verified: true,
     tags: [], buyer_category: 'food_beverage', packaging_form: 'pouch_bag',
-    founded_year: 1986, employee_range: '51-200',
+    founded_year: 1986,
   },
   {
     slug: 'heesung-polymer', name: '희성폴리머', category: 'flexible', subcategory: '연포장필름/방수포',
@@ -383,7 +383,7 @@ const companies = [
     products: ['레토르트 파우치', '고차단 필름', 'LID 필름', '리필백', '방수포'],
     certifications: ['ISO 9001'], is_verified: true,
     tags: ['food_grade'], buyer_category: 'food_beverage', packaging_form: 'pouch_bag',
-    founded_year: 1960, employee_range: '200+',
+    founded_year: 1960,
   },
   {
     slug: 'cnk-propack', name: '씨앤케이프로팩', category: 'flexible', subcategory: '맞춤파우치',
