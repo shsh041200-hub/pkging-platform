@@ -13,17 +13,37 @@ import {
   PACKAGING_FORM_LABELS,
   DELIVERY_REGIONS,
   DELIVERY_REGION_LABELS,
+  CERTIFICATION_TYPES,
+  CERTIFICATION_CATEGORY_LABELS,
   type IndustryCategory,
   type MaterialType,
   type PackagingForm,
   type DeliveryRegion,
+  type CertificationCategory,
+  type CertificationType,
   type BlogPost,
 } from '@/types'
 import { PackagingFormFilter } from './PackagingFormFilter'
 import { DeliveryRegionFilter } from './DeliveryRegionFilter'
+import { CertFilterAccordion } from '@/app/CertFilterAccordion'
 import { createClient } from '@/lib/supabase/server'
 import { simplifyCompanyName } from '@/lib/simplify-company-name'
 import { WebsiteFavicon } from '@/components/WebsiteFavicon'
+
+const CERT_CATEGORY_COLORS: Record<CertificationCategory, { active: string; inactive: string }> = {
+  quality:       { active: 'bg-blue-600 text-white border-blue-600',    inactive: 'text-gray-500 border-gray-200 hover:text-gray-700 hover:border-gray-300 bg-white' },
+  food_safety:   { active: 'bg-green-600 text-white border-green-600',  inactive: 'text-gray-500 border-gray-200 hover:text-gray-700 hover:border-gray-300 bg-white' },
+  environmental: { active: 'bg-emerald-600 text-white border-emerald-600', inactive: 'text-gray-500 border-gray-200 hover:text-gray-700 hover:border-gray-300 bg-white' },
+  pharma:        { active: 'bg-purple-600 text-white border-purple-600', inactive: 'text-gray-500 border-gray-200 hover:text-gray-700 hover:border-gray-300 bg-white' },
+  general:       { active: 'bg-gray-700 text-white border-gray-700',    inactive: 'text-gray-500 border-gray-200 hover:text-gray-700 hover:border-gray-300 bg-white' },
+}
+
+const CERTS_BY_CATEGORY: Record<CertificationCategory, CertificationType[]> = {
+  quality: [], food_safety: [], environmental: [], pharma: [], general: [],
+}
+for (const ct of CERTIFICATION_TYPES) {
+  CERTS_BY_CATEGORY[ct.category].push(ct)
+}
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://packlinx.com'
 
@@ -67,7 +87,7 @@ export function generateStaticParams() {
 
 type Props = {
   params: Promise<{ slug: string }>
-  searchParams: Promise<{ material?: string; form?: string; region?: string }>
+  searchParams: Promise<{ material?: string; form?: string; region?: string; cert?: string }>
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -93,7 +113,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function CategoryPage({ params, searchParams }: Props) {
   const { slug } = await params
-  const { material, form, region } = await searchParams
+  const { material, form, region, cert } = await searchParams
   const categoryKey = slugToCategory(slug)
   if (!categoryKey) notFound()
 
@@ -113,56 +133,68 @@ export default async function CategoryPage({ params, searchParams }: Props) {
     ? (region.split(',').filter((r): r is DeliveryRegion => DELIVERY_REGIONS.includes(r as DeliveryRegion)))
     : []
 
+  const selectedCerts: string[] = cert
+    ? cert.split(',').filter((c) => CERTIFICATION_TYPES.some((ct) => ct.id === c))
+    : []
+
   const buildMaterialUrl = (mat: MaterialType): string => {
     const current = new Set(selectedMaterials)
-    if (current.has(mat)) {
-      current.delete(mat)
-    } else {
-      current.add(mat)
-    }
+    if (current.has(mat)) current.delete(mat)
+    else current.add(mat)
     const matStr = Array.from(current).join(',')
-    const params = new URLSearchParams()
-    if (matStr) params.set('material', matStr)
-    if (form) params.set('form', form)
-    if (region) params.set('region', region)
-    return `/categories/${slug}${params.toString() ? `?${params}` : ''}`
+    const p = new URLSearchParams()
+    if (matStr) p.set('material', matStr)
+    if (form) p.set('form', form)
+    if (region) p.set('region', region)
+    if (cert) p.set('cert', cert)
+    return `/categories/${slug}${p.toString() ? `?${p}` : ''}`
   }
 
   const buildFormUrl = (pf: PackagingForm): string => {
     const current = new Set(selectedForms)
-    if (current.has(pf)) {
-      current.delete(pf)
-    } else {
-      current.add(pf)
-    }
+    if (current.has(pf)) current.delete(pf)
+    else current.add(pf)
     const formStr = Array.from(current).join(',')
-    const params = new URLSearchParams()
-    if (material) params.set('material', material)
-    if (formStr) params.set('form', formStr)
-    if (region) params.set('region', region)
-    return `/categories/${slug}${params.toString() ? `?${params}` : ''}`
+    const p = new URLSearchParams()
+    if (material) p.set('material', material)
+    if (formStr) p.set('form', formStr)
+    if (region) p.set('region', region)
+    if (cert) p.set('cert', cert)
+    return `/categories/${slug}${p.toString() ? `?${p}` : ''}`
   }
 
   const buildRegionUrl = (reg: DeliveryRegion): string => {
     const current = new Set(selectedRegions)
-    if (current.has(reg)) {
-      current.delete(reg)
-    } else {
-      current.add(reg)
-    }
+    if (current.has(reg)) current.delete(reg)
+    else current.add(reg)
     const regionStr = Array.from(current).join(',')
-    const params = new URLSearchParams()
-    if (material) params.set('material', material)
-    if (form) params.set('form', form)
-    if (regionStr) params.set('region', regionStr)
-    return `/categories/${slug}${params.toString() ? `?${params}` : ''}`
+    const p = new URLSearchParams()
+    if (material) p.set('material', material)
+    if (form) p.set('form', form)
+    if (regionStr) p.set('region', regionStr)
+    if (cert) p.set('cert', cert)
+    return `/categories/${slug}${p.toString() ? `?${p}` : ''}`
   }
 
   const regionClearUrl = (): string => {
-    const params = new URLSearchParams()
-    if (material) params.set('material', material)
-    if (form) params.set('form', form)
-    return `/categories/${slug}${params.toString() ? `?${params}` : ''}`
+    const p = new URLSearchParams()
+    if (material) p.set('material', material)
+    if (form) p.set('form', form)
+    if (cert) p.set('cert', cert)
+    return `/categories/${slug}${p.toString() ? `?${p}` : ''}`
+  }
+
+  const buildCertUrl = (certId: string): string => {
+    const current = new Set(selectedCerts)
+    if (current.has(certId)) current.delete(certId)
+    else current.add(certId)
+    const certStr = Array.from(current).join(',')
+    const p = new URLSearchParams()
+    if (material) p.set('material', material)
+    if (form) p.set('form', form)
+    if (region) p.set('region', region)
+    if (certStr) p.set('cert', certStr)
+    return `/categories/${slug}${p.toString() ? `?${p}` : ''}`
   }
 
   const formUrls: Record<string, string> = {}
@@ -173,6 +205,11 @@ export default async function CategoryPage({ params, searchParams }: Props) {
   const regionUrls: Record<string, string> = {}
   for (const reg of DELIVERY_REGIONS) {
     regionUrls[reg] = buildRegionUrl(reg)
+  }
+
+  const certUrls: Record<string, string> = {}
+  for (const ct of CERTIFICATION_TYPES) {
+    certUrls[ct.id] = buildCertUrl(ct.id)
   }
 
   const supabase = await createClient()
@@ -196,6 +233,14 @@ export default async function CategoryPage({ params, searchParams }: Props) {
   if (selectedRegions.length > 0) {
     // OR logic: companies that deliver to any of the selected regions, plus companies with '전국' coverage
     query = query.overlaps('delivery_regions', [...selectedRegions, '전국'])
+  }
+  if (selectedCerts.length > 0) {
+    // Expand canonical IDs to all known aliases so stored values like 'HACCP 인증' match 'haccp'
+    const certAliases = selectedCerts.flatMap((id) => {
+      const found = CERTIFICATION_TYPES.find((c) => c.id === id)
+      return found ? found.aliases : [id]
+    })
+    query = query.overlaps('certifications', certAliases)
   }
 
   const { data: companies } = await query
@@ -331,6 +376,15 @@ export default async function CategoryPage({ params, searchParams }: Props) {
             regionUrls={regionUrls}
             clearUrl={regionClearUrl()}
           />
+
+          {/* 인증 필터 (Client Component) */}
+          <CertFilterAccordion
+            certsByCategory={CERTS_BY_CATEGORY}
+            activeCerts={selectedCerts}
+            certCategoryColors={CERT_CATEGORY_COLORS}
+            certCategoryLabels={CERTIFICATION_CATEGORY_LABELS}
+            certUrls={certUrls}
+          />
         </div>
       </div>
 
@@ -371,7 +425,21 @@ export default async function CategoryPage({ params, searchParams }: Props) {
                 <span className="text-[#005EFF]/60 text-[10px] leading-none">×</span>
               </Link>
             ))}
-            {(selectedMaterials.length > 0 || selectedForms.length > 0 || selectedRegions.length > 0) && (
+            {selectedCerts.map((certId) => {
+              const ct = CERTIFICATION_TYPES.find((c) => c.id === certId)
+              if (!ct) return null
+              return (
+                <Link
+                  key={certId}
+                  href={buildCertUrl(certId)}
+                  className="text-[11px] bg-green-50 text-green-700 font-medium px-2.5 py-1 rounded-full flex items-center gap-1 hover:bg-green-100 transition-colors border border-green-200"
+                >
+                  {ct.label}
+                  <span className="text-green-500/60 text-[10px] leading-none">×</span>
+                </Link>
+              )
+            })}
+            {(selectedMaterials.length > 0 || selectedForms.length > 0 || selectedRegions.length > 0 || selectedCerts.length > 0) && (
               <Link href={`/categories/${slug}`} className="text-xs text-gray-400 hover:text-gray-600">
                 초기화
               </Link>
@@ -451,12 +519,27 @@ export default async function CategoryPage({ params, searchParams }: Props) {
         ) : (
           <div className="text-center py-24">
             <div className="w-12 h-12 bg-gray-100 rounded-xl flex items-center justify-center mx-auto mb-4">
-              <svg className="w-5 h-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-              </svg>
+              {selectedCerts.length > 0 ? (
+                <svg className="w-5 h-5 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
+                </svg>
+              ) : (
+                <svg className="w-5 h-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+              )}
             </div>
-            <p className="text-gray-600 font-semibold mb-1.5 text-[15px]">검색 결과가 없습니다</p>
-            <p className="text-gray-400 text-sm mb-5">필터를 변경해보세요</p>
+            {selectedCerts.length > 0 ? (
+              <>
+                <p className="text-gray-600 font-semibold mb-1.5 text-[15px]">해당 인증 보유 업체를 추가 수집 중입니다</p>
+                <p className="text-gray-400 text-sm mb-5">현재 인증 데이터를 지속적으로 확보하고 있습니다. 다른 인증을 선택하거나 전체 업체를 확인하세요.</p>
+              </>
+            ) : (
+              <>
+                <p className="text-gray-600 font-semibold mb-1.5 text-[15px]">검색 결과가 없습니다</p>
+                <p className="text-gray-400 text-sm mb-5">필터를 변경해보세요</p>
+              </>
+            )}
             <Link href={`/categories/${slug}`} className="text-sm text-gray-900 font-medium hover:underline underline-offset-4">
               전체 보기 &rarr;
             </Link>
