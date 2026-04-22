@@ -9,10 +9,14 @@ import {
   INDUSTRY_CATEGORY_ICONS,
   MATERIAL_TYPES,
   MATERIAL_TYPE_LABELS,
+  PACKAGING_FORMS,
+  PACKAGING_FORM_LABELS,
   type IndustryCategory,
   type MaterialType,
+  type PackagingForm,
   type BlogPost,
 } from '@/types'
+import { PackagingFormFilter } from './PackagingFormFilter'
 import { createClient } from '@/lib/supabase/server'
 import { simplifyCompanyName } from '@/lib/simplify-company-name'
 import { WebsiteFavicon } from '@/components/WebsiteFavicon'
@@ -59,7 +63,7 @@ export function generateStaticParams() {
 
 type Props = {
   params: Promise<{ slug: string }>
-  searchParams: Promise<{ material?: string }>
+  searchParams: Promise<{ material?: string; form?: string }>
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -85,7 +89,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function CategoryPage({ params, searchParams }: Props) {
   const { slug } = await params
-  const { material } = await searchParams
+  const { material, form } = await searchParams
   const categoryKey = slugToCategory(slug)
   if (!categoryKey) notFound()
 
@@ -97,6 +101,10 @@ export default async function CategoryPage({ params, searchParams }: Props) {
     ? (material.split(',').filter((m): m is MaterialType => MATERIAL_TYPES.includes(m as MaterialType)))
     : []
 
+  const selectedForms: PackagingForm[] = form
+    ? (form.split(',').filter((f): f is PackagingForm => PACKAGING_FORMS.includes(f as PackagingForm)))
+    : []
+
   const buildMaterialUrl = (mat: MaterialType): string => {
     const current = new Set(selectedMaterials)
     if (current.has(mat)) {
@@ -105,13 +113,35 @@ export default async function CategoryPage({ params, searchParams }: Props) {
       current.add(mat)
     }
     const matStr = Array.from(current).join(',')
-    return matStr ? `/categories/${slug}?material=${matStr}` : `/categories/${slug}`
+    const params = new URLSearchParams()
+    if (matStr) params.set('material', matStr)
+    if (form) params.set('form', form)
+    return `/categories/${slug}${params.toString() ? `?${params}` : ''}`
+  }
+
+  const buildFormUrl = (pf: PackagingForm): string => {
+    const current = new Set(selectedForms)
+    if (current.has(pf)) {
+      current.delete(pf)
+    } else {
+      current.add(pf)
+    }
+    const formStr = Array.from(current).join(',')
+    const params = new URLSearchParams()
+    if (material) params.set('material', material)
+    if (formStr) params.set('form', formStr)
+    return `/categories/${slug}${params.toString() ? `?${params}` : ''}`
+  }
+
+  const formUrls: Record<string, string> = {}
+  for (const pf of PACKAGING_FORMS) {
+    formUrls[pf] = buildFormUrl(pf)
   }
 
   const supabase = await createClient()
   let query = supabase
     .from('companies')
-    .select('id, slug, name, description, category, industry_categories, material_type, tags, is_verified, products, certifications, founded_year, website, icon_url, service_capabilities, target_industries')
+    .select('id, slug, name, description, category, industry_categories, material_type, packaging_form, tags, is_verified, products, certifications, founded_year, website, icon_url, service_capabilities, target_industries')
     .contains('industry_categories', [categoryKey])
     .order('is_verified', { ascending: false })
     .order('name')
@@ -120,6 +150,11 @@ export default async function CategoryPage({ params, searchParams }: Props) {
     query = query.eq('material_type', selectedMaterials[0])
   } else if (selectedMaterials.length > 1) {
     query = query.in('material_type', selectedMaterials)
+  }
+  if (selectedForms.length === 1) {
+    query = query.eq('packaging_form', selectedForms[0])
+  } else if (selectedForms.length > 1) {
+    query = query.in('packaging_form', selectedForms)
   }
 
   const { data: companies } = await query
@@ -207,13 +242,14 @@ export default async function CategoryPage({ params, searchParams }: Props) {
         </div>
       </section>
 
-      {/* Material Filters */}
+      {/* Filters */}
       <div className="bg-white border-b border-gray-100 sticky top-16 z-40">
         <div className="max-w-7xl mx-auto px-5 sm:px-8">
+          {/* Material filter chips */}
           <div className="flex gap-1.5 py-3 overflow-x-auto scrollbar-none">
             <span className="flex-shrink-0 text-[10px] font-semibold text-gray-300 uppercase tracking-widest self-center mr-2 hidden sm:inline">소재</span>
             <Link
-              href={`/categories/${slug}`}
+              href={`/categories/${slug}${form ? `?form=${form}` : ''}`}
               className={`flex-shrink-0 px-3 py-1.5 rounded-md text-[13px] font-medium transition-all ${
                 selectedMaterials.length === 0
                   ? 'bg-gray-900 text-white'
@@ -239,6 +275,9 @@ export default async function CategoryPage({ params, searchParams }: Props) {
               )
             })}
           </div>
+
+          {/* Packaging form filter chips — 더 보기 접이식 (Client Component) */}
+          <PackagingFormFilter selectedForms={selectedForms} formUrls={formUrls} />
         </div>
       </div>
 
@@ -259,7 +298,17 @@ export default async function CategoryPage({ params, searchParams }: Props) {
                 <span className="text-[#005EFF]/60 text-[10px] leading-none">×</span>
               </Link>
             ))}
-            {selectedMaterials.length > 0 && (
+            {selectedForms.map((pf) => (
+              <Link
+                key={pf}
+                href={buildFormUrl(pf)}
+                className="text-[11px] bg-[#F3E8FF] text-[#7C3AED] font-medium px-2.5 py-1 rounded-full flex items-center gap-1 hover:bg-[#EDE9FE] transition-colors"
+              >
+                {PACKAGING_FORM_LABELS[pf]}
+                <span className="text-[#7C3AED]/60 text-[10px] leading-none">×</span>
+              </Link>
+            ))}
+            {(selectedMaterials.length > 0 || selectedForms.length > 0) && (
               <Link href={`/categories/${slug}`} className="text-xs text-gray-400 hover:text-gray-600">
                 초기화
               </Link>
