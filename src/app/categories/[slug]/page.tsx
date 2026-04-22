@@ -11,12 +11,16 @@ import {
   MATERIAL_TYPE_LABELS,
   PACKAGING_FORMS,
   PACKAGING_FORM_LABELS,
+  DELIVERY_REGIONS,
+  DELIVERY_REGION_LABELS,
   type IndustryCategory,
   type MaterialType,
   type PackagingForm,
+  type DeliveryRegion,
   type BlogPost,
 } from '@/types'
 import { PackagingFormFilter } from './PackagingFormFilter'
+import { DeliveryRegionFilter } from './DeliveryRegionFilter'
 import { createClient } from '@/lib/supabase/server'
 import { simplifyCompanyName } from '@/lib/simplify-company-name'
 import { WebsiteFavicon } from '@/components/WebsiteFavicon'
@@ -63,7 +67,7 @@ export function generateStaticParams() {
 
 type Props = {
   params: Promise<{ slug: string }>
-  searchParams: Promise<{ material?: string; form?: string }>
+  searchParams: Promise<{ material?: string; form?: string; region?: string }>
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -89,7 +93,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function CategoryPage({ params, searchParams }: Props) {
   const { slug } = await params
-  const { material, form } = await searchParams
+  const { material, form, region } = await searchParams
   const categoryKey = slugToCategory(slug)
   if (!categoryKey) notFound()
 
@@ -105,6 +109,10 @@ export default async function CategoryPage({ params, searchParams }: Props) {
     ? (form.split(',').filter((f): f is PackagingForm => PACKAGING_FORMS.includes(f as PackagingForm)))
     : []
 
+  const selectedRegions: DeliveryRegion[] = region
+    ? (region.split(',').filter((r): r is DeliveryRegion => DELIVERY_REGIONS.includes(r as DeliveryRegion)))
+    : []
+
   const buildMaterialUrl = (mat: MaterialType): string => {
     const current = new Set(selectedMaterials)
     if (current.has(mat)) {
@@ -116,6 +124,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
     const params = new URLSearchParams()
     if (matStr) params.set('material', matStr)
     if (form) params.set('form', form)
+    if (region) params.set('region', region)
     return `/categories/${slug}${params.toString() ? `?${params}` : ''}`
   }
 
@@ -130,12 +139,40 @@ export default async function CategoryPage({ params, searchParams }: Props) {
     const params = new URLSearchParams()
     if (material) params.set('material', material)
     if (formStr) params.set('form', formStr)
+    if (region) params.set('region', region)
+    return `/categories/${slug}${params.toString() ? `?${params}` : ''}`
+  }
+
+  const buildRegionUrl = (reg: DeliveryRegion): string => {
+    const current = new Set(selectedRegions)
+    if (current.has(reg)) {
+      current.delete(reg)
+    } else {
+      current.add(reg)
+    }
+    const regionStr = Array.from(current).join(',')
+    const params = new URLSearchParams()
+    if (material) params.set('material', material)
+    if (form) params.set('form', form)
+    if (regionStr) params.set('region', regionStr)
+    return `/categories/${slug}${params.toString() ? `?${params}` : ''}`
+  }
+
+  const regionClearUrl = (): string => {
+    const params = new URLSearchParams()
+    if (material) params.set('material', material)
+    if (form) params.set('form', form)
     return `/categories/${slug}${params.toString() ? `?${params}` : ''}`
   }
 
   const formUrls: Record<string, string> = {}
   for (const pf of PACKAGING_FORMS) {
     formUrls[pf] = buildFormUrl(pf)
+  }
+
+  const regionUrls: Record<string, string> = {}
+  for (const reg of DELIVERY_REGIONS) {
+    regionUrls[reg] = buildRegionUrl(reg)
   }
 
   const supabase = await createClient()
@@ -155,6 +192,10 @@ export default async function CategoryPage({ params, searchParams }: Props) {
     query = query.eq('packaging_form', selectedForms[0])
   } else if (selectedForms.length > 1) {
     query = query.in('packaging_form', selectedForms)
+  }
+  if (selectedRegions.length > 0) {
+    // OR logic: companies that deliver to any of the selected regions, plus companies with '전국' coverage
+    query = query.overlaps('delivery_regions', [...selectedRegions, '전국'])
   }
 
   const { data: companies } = await query
@@ -249,7 +290,12 @@ export default async function CategoryPage({ params, searchParams }: Props) {
           <div className="flex gap-1.5 py-3 overflow-x-auto scrollbar-none">
             <span className="flex-shrink-0 text-[10px] font-semibold text-gray-300 uppercase tracking-widest self-center mr-2 hidden sm:inline">소재</span>
             <Link
-              href={`/categories/${slug}${form ? `?form=${form}` : ''}`}
+              href={(() => {
+                const p = new URLSearchParams()
+                if (form) p.set('form', form)
+                if (region) p.set('region', region)
+                return `/categories/${slug}${p.toString() ? `?${p}` : ''}`
+              })()}
               className={`flex-shrink-0 px-3 py-1.5 rounded-md text-[13px] font-medium transition-all ${
                 selectedMaterials.length === 0
                   ? 'bg-gray-900 text-white'
@@ -278,6 +324,13 @@ export default async function CategoryPage({ params, searchParams }: Props) {
 
           {/* Packaging form filter chips — 더 보기 접이식 (Client Component) */}
           <PackagingFormFilter selectedForms={selectedForms} formUrls={formUrls} />
+
+          {/* 배달 가능 지역 필터 (Client Component) */}
+          <DeliveryRegionFilter
+            selectedRegions={selectedRegions}
+            regionUrls={regionUrls}
+            clearUrl={regionClearUrl()}
+          />
         </div>
       </div>
 
@@ -308,7 +361,17 @@ export default async function CategoryPage({ params, searchParams }: Props) {
                 <span className="text-[#7C3AED]/60 text-[10px] leading-none">×</span>
               </Link>
             ))}
-            {(selectedMaterials.length > 0 || selectedForms.length > 0) && (
+            {selectedRegions.map((reg) => (
+              <Link
+                key={reg}
+                href={buildRegionUrl(reg)}
+                className="text-[11px] bg-[#EBF2FF] text-[#005EFF] font-medium px-2.5 py-1 rounded-full flex items-center gap-1 hover:bg-[#D6E8FF] transition-colors"
+              >
+                {DELIVERY_REGION_LABELS[reg]}
+                <span className="text-[#005EFF]/60 text-[10px] leading-none">×</span>
+              </Link>
+            ))}
+            {(selectedMaterials.length > 0 || selectedForms.length > 0 || selectedRegions.length > 0) && (
               <Link href={`/categories/${slug}`} className="text-xs text-gray-400 hover:text-gray-600">
                 초기화
               </Link>
