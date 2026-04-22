@@ -6,7 +6,6 @@ import type { Metadata } from 'next'
 import { createClient } from '@/lib/supabase/server'
 import { BoxterLogo } from '@/components/BoxterLogo'
 import { CompanyDetailCTA } from '@/components/CompanyDetailCTA'
-import { MobileStickyBar } from '@/components/MobileStickyBar'
 import {
   CATEGORY_LABELS,
   TAG_LABELS,
@@ -329,7 +328,6 @@ export default async function CompanyPage({ params }: Props) {
                 companyId={company.id}
                 companyName={company.name}
                 website={company.website ?? null}
-                phone={company.phone ?? null}
                 kakaoUrl={(company as Record<string, unknown>).kakao_url as string | null ?? null}
               />
             </Suspense>
@@ -618,11 +616,6 @@ export default async function CompanyPage({ params }: Props) {
           </div>
         </div>
       </main>
-
-      <MobileStickyBar
-        companyId={company.id}
-        phone={company.phone ?? null}
-      />
 
       {/* Footer */}
       <footer className="border-t border-gray-100 bg-gray-50 py-8">

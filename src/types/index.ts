@@ -167,11 +167,8 @@ export interface Company {
   material_type: MaterialType | null
   buyer_category: string | null
   packaging_form: string | null
-  address?: string | null
   city: string | null
   province: string | null
-  phone: string | null
-  email?: string | null
   website: string | null
   logo_url: string | null
   products: string[]

@@ -1,9 +1,6 @@
 export interface ExtractedCompany {
   name: string | null
   description: string | null
-  phone: string | null
-  email: string | null
-  address: string | null
   city: string | null
   province: string | null
   products: string[]
@@ -48,17 +45,6 @@ function stripTags(html: string): string {
     .replace(/&gt;/g, '>')
     .replace(/\s{2,}/g, ' ')
     .trim()
-}
-
-function extractPhone(text: string): string | null {
-  // Korean phone patterns: 02-xxx-xxxx, 031-xxx-xxxx, 010-xxxx-xxxx, etc.
-  const m = text.match(/0\d{1,2}[-.\s]\d{3,4}[-.\s]\d{4}/)
-  return m ? m[0].replace(/[\s.]/g, '-') : null
-}
-
-function extractEmail(text: string): string | null {
-  const m = text.match(/[\w.+-]+@[\w-]+\.[\w.]+/)
-  return m ? m[0] : null
 }
 
 // Province detection from Korean text
@@ -109,22 +95,11 @@ export function extractCompanyInfo(html: string, url: string): ExtractedCompany 
     getMeta(html, 'name', 'description') ??
     null
 
-  const phone = extractPhone(rawText)
-  const email = extractEmail(rawText)
   const { province, city } = extractProvince(rawText)
-
-  // Simple address extraction: grab text around 도로명 or 번지 patterns
-  const addrMatch = rawText.match(
-    /[가-힣\d\s]+(?:로|길|대로|번길)\s*\d+[^\s,]*/
-  )
-  const address = addrMatch ? addrMatch[0].trim() : null
 
   return {
     name,
     description: description ? description.slice(0, 500) : null,
-    phone,
-    email,
-    address,
     city,
     province,
     products: [],

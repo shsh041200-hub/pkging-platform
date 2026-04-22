@@ -6,7 +6,6 @@ const ALLOWED_EVENT_TYPES = new Set([
   'quote_submit',
   'kakao_click',
   'website_click',
-  'phone_click',
   'company_view',
 ])
 
