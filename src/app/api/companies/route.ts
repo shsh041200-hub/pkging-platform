@@ -30,7 +30,14 @@ export async function GET(request: NextRequest) {
     )
   }
   if (industry) query = query.contains('industry_categories', [industry])
-  if (material) query = query.eq('material_type', material)
+  if (material) {
+    const materials = material.split(',').filter(Boolean)
+    if (materials.length === 1) {
+      query = query.eq('material_type', materials[0])
+    } else if (materials.length > 1) {
+      query = query.in('material_type', materials)
+    }
+  }
   if (category) query = query.eq('category', category)
   if (tag) query = query.contains('tags', [tag])
 

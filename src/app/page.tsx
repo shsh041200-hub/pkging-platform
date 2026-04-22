@@ -88,6 +88,9 @@ export default async function HomePage({
   const supabase = await createClient()
 
   const activeCerts = cert ? cert.split(',').filter(Boolean) : []
+  const selectedMaterials: MaterialType[] = material
+    ? (material.split(',').filter((m): m is MaterialType => MATERIAL_TYPES.includes(m as MaterialType)))
+    : []
 
   let query = supabase
     .from('companies')
@@ -101,8 +104,10 @@ export default async function HomePage({
   if (industry) {
     query = query.contains('industry_categories', [industry])
   }
-  if (material) {
-    query = query.eq('material_type', material)
+  if (selectedMaterials.length === 1) {
+    query = query.eq('material_type', selectedMaterials[0])
+  } else if (selectedMaterials.length > 1) {
+    query = query.in('material_type', selectedMaterials)
   }
   if (activeCerts.length > 0) {
     query = query.overlaps('certifications', activeCerts)
@@ -153,7 +158,18 @@ export default async function HomePage({
     return buildUrl({ cert: certStr || undefined })
   }
 
-  const showingCategory = !q && !industry && !material && activeCerts.length === 0
+  const showingCategory = !q && !industry && selectedMaterials.length === 0 && activeCerts.length === 0
+
+  const buildMaterialUrl = (mat: MaterialType): string => {
+    const current = new Set(selectedMaterials)
+    if (current.has(mat)) {
+      current.delete(mat)
+    } else {
+      current.add(mat)
+    }
+    const matStr = Array.from(current).join(',')
+    return buildUrl({ material: matStr || undefined })
+  }
 
   // Group cert types by category for filter UI
   const certsByCategory = CERTIFICATION_TYPES.reduce<Record<CertificationCategory, typeof CERTIFICATION_TYPES>>((acc, ct) => {
@@ -373,21 +389,22 @@ export default async function HomePage({
             {/* Material chips */}
             <div className="flex gap-1.5 py-2.5 overflow-x-auto scrollbar-none">
               <span className="flex-shrink-0 text-[10px] font-semibold text-gray-300 uppercase tracking-widest self-center mr-1 hidden sm:inline">소재</span>
-              {MATERIAL_TYPES.map((mat) => (
-                <Link
-                  key={mat}
-                  href={buildUrl({
-                    material: material === mat ? undefined : mat,
-                  })}
-                  className={`flex-shrink-0 px-2.5 py-1 rounded text-[11px] font-medium transition-all border ${
-                    material === mat
-                      ? 'bg-[#005EFF] text-white border-[#005EFF]'
-                      : 'text-gray-500 border-gray-200 hover:text-gray-700 hover:border-gray-300 bg-white'
-                  }`}
-                >
-                  {MATERIAL_TYPE_LABELS[mat]}
-                </Link>
-              ))}
+              {MATERIAL_TYPES.map((mat) => {
+                const isActive = selectedMaterials.includes(mat)
+                return (
+                  <Link
+                    key={mat}
+                    href={buildMaterialUrl(mat)}
+                    className={`flex-shrink-0 px-2.5 py-1 rounded text-[11px] font-medium transition-all border ${
+                      isActive
+                        ? 'bg-[#005EFF] text-white border-[#005EFF]'
+                        : 'text-gray-500 border-gray-200 hover:text-gray-700 hover:border-gray-300 bg-white'
+                    }`}
+                  >
+                    {MATERIAL_TYPE_LABELS[mat]}
+                  </Link>
+                )
+              })}
             </div>
 
             {/* Certification accordion filter */}
@@ -414,11 +431,16 @@ export default async function HomePage({
                 {INDUSTRY_CATEGORY_LABELS[industry as IndustryCategory]}
               </span>
             )}
-            {material && (
-              <span className="text-[11px] bg-[#EBF2FF] text-[#005EFF] font-medium px-2.5 py-1 rounded-full">
-                {MATERIAL_TYPE_LABELS[material as MaterialType]}
-              </span>
-            )}
+            {selectedMaterials.map((mat) => (
+              <Link
+                key={mat}
+                href={buildMaterialUrl(mat)}
+                className="text-[11px] bg-[#EBF2FF] text-[#005EFF] font-medium px-2.5 py-1 rounded-full flex items-center gap-1 hover:bg-[#D6E8FF] transition-colors"
+              >
+                {MATERIAL_TYPE_LABELS[mat]}
+                <span className="text-[#005EFF]/60 text-[10px] leading-none">×</span>
+              </Link>
+            ))}
             {activeCerts.map((certId) => {
               const ct = CERTIFICATION_TYPES.find((c) => c.id === certId)
               return (
@@ -432,7 +454,7 @@ export default async function HomePage({
                 &ldquo;{q}&rdquo;
               </span>
             )}
-            {(industry || material || q || activeCerts.length > 0) && (
+            {(industry || selectedMaterials.length > 0 || q || activeCerts.length > 0) && (
               <Link href="/" className="text-xs text-gray-400 hover:text-gray-600 ml-1">
                 초기화
               </Link>
