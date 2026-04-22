@@ -21,6 +21,7 @@ import {
 } from '@/types'
 import { CompanyViewTracker } from './CompanyViewTracker'
 import { CompanyIcon } from '@/components/CompanyIcon'
+import { CertificationCTABanner } from '@/components/CertificationCTABanner'
 
 type Props = {
   params: Promise<{ slug: string }>
@@ -369,7 +370,7 @@ export default async function CompanyPage({ params }: Props) {
         )}
 
         {/* Certifications — badge UI with category color coding */}
-        {hasCertifications && (
+        {hasCertifications ? (
           <div className="bg-white border border-gray-200 rounded-xl p-5">
             <h2 className="text-[13px] font-semibold text-gray-700 uppercase tracking-wider mb-4">
               보유 인증
@@ -378,7 +379,7 @@ export default async function CompanyPage({ params }: Props) {
               const catKey = cat as CertificationCategory
               const colors = CERT_CATEGORY_COLORS[catKey]
               return (
-                <div key={cat} className="mb-3 last:mb-0">
+                <div key={cat} className="mb-4 last:mb-0">
                   <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-widest mb-2">
                     {CERTIFICATION_CATEGORY_LABELS[catKey]}
                   </p>
@@ -386,8 +387,11 @@ export default async function CompanyPage({ params }: Props) {
                     {items.map(({ raw, resolved }, i) => (
                       <span
                         key={i}
-                        className={`text-[12px] font-semibold px-3 py-1.5 rounded border ${colors.bg} ${colors.text} ${colors.border}`}
+                        className={`inline-flex items-center gap-1.5 text-[12px] font-semibold px-3 py-1.5 rounded-md border ${colors.bg} ${colors.text} ${colors.border}`}
                       >
+                        <svg className="w-3 h-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                        </svg>
                         {resolved?.label ?? raw}
                       </span>
                     ))}
@@ -396,6 +400,8 @@ export default async function CompanyPage({ params }: Props) {
               )
             })}
           </div>
+        ) : (
+          <CertificationCTABanner companyId={company.id} />
         )}
 
         {/* Portfolio Gallery */}
