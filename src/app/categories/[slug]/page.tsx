@@ -20,12 +20,14 @@ import { WebsiteFavicon } from '@/components/WebsiteFavicon'
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://packlinx.com'
 
 const CATEGORY_SEO_TITLE: Record<IndustryCategory, string> = {
-  'food-beverage': '식품 포장업체 찾기 — 전국 식품·음료 포장재 업체',
-  'ecommerce-shipping': '택배박스·이커머스 포장 업체 — 전국 배송 포장재 업체',
-  'cosmetics-beauty': '화장품 포장 업체 찾기 — 뷰티 브랜드 포장재 전문',
-  'pharma-health': '의약품·건강기능식품 포장 업체 — 전국 의약 포장재',
-  'electronics-industrial': '전자·산업용 포장 업체 — 보호 포장재 전문',
-  'eco-special': '친환경 포장재 업체 찾기 — FSC·생분해 포장 전문',
+  'food-beverage':           '식품 포장업체 찾기 — 전국 식품·음료 포장재 업체',
+  'ecommerce-shipping':      '택배박스·이커머스 포장 업체 — 전국 배송 포장재 업체',
+  'cosmetics-beauty':        '화장품 포장 업체 찾기 — 뷰티 브랜드 포장재 전문',
+  'pharma-health':           '의약품·건강기능식품 포장 업체 — 전국 의약 포장재',
+  'electronics-industrial':  '전자·산업용 포장 업체 — 보호 포장재 전문',
+  'eco-special':             '친환경 포장재 업체 찾기 — FSC·생분해 포장 전문',
+  'fresh_produce_packaging': '농산물·신선식품 포장업체 찾기 — 콜드체인·신선 포장재 전문',
+  'print_design_services':   '인쇄·패키지 디자인 업체 찾기 — 소량 맞춤 인쇄 전문',
 }
 
 const CATEGORY_SEO_DESCRIPTION: Record<IndustryCategory, string> = {
@@ -41,6 +43,10 @@ const CATEGORY_SEO_DESCRIPTION: Record<IndustryCategory, string> = {
     '전자제품, 부품, 산업재 보호 포장 업체를 비교하세요. 완충·정전기방지 포장재 전문 업체를 BOXTER에서 찾아보세요.',
   'eco-special':
     '친환경 포장재 업체를 비교하세요. FSC 인증, 생분해 포장재, ESG 포장 솔루션 전문 업체를 찾아보세요.',
+  'fresh_produce_packaging':
+    '신선식품·농산물 포장 전문 업체를 찾으시나요? 콜드체인, 냉장·냉동 포장재, CA/MAP 포장 업체를 packlinx.com에서 한 번에 비교하세요.',
+  'print_design_services':
+    '소량 주문 가능한 인쇄·패키지 디자인 업체를 찾으시나요? 박스 디자인, 라벨 인쇄, 맞춤 포장 전문 업체를 packlinx.com에서 바로 비교하세요.',
 }
 
 function slugToCategory(slug: string): IndustryCategory | undefined {
@@ -87,6 +93,21 @@ export default async function CategoryPage({ params, searchParams }: Props) {
   const description = INDUSTRY_CATEGORY_DESCRIPTIONS[categoryKey]
   const icon = INDUSTRY_CATEGORY_ICONS[categoryKey]
 
+  const selectedMaterials: MaterialType[] = material
+    ? (material.split(',').filter((m): m is MaterialType => MATERIAL_TYPES.includes(m as MaterialType)))
+    : []
+
+  const buildMaterialUrl = (mat: MaterialType): string => {
+    const current = new Set(selectedMaterials)
+    if (current.has(mat)) {
+      current.delete(mat)
+    } else {
+      current.add(mat)
+    }
+    const matStr = Array.from(current).join(',')
+    return matStr ? `/categories/${slug}?material=${matStr}` : `/categories/${slug}`
+  }
+
   const supabase = await createClient()
   let query = supabase
     .from('companies')
@@ -95,8 +116,10 @@ export default async function CategoryPage({ params, searchParams }: Props) {
     .order('is_verified', { ascending: false })
     .order('name')
 
-  if (material) {
-    query = query.eq('material_type', material)
+  if (selectedMaterials.length === 1) {
+    query = query.eq('material_type', selectedMaterials[0])
+  } else if (selectedMaterials.length > 1) {
+    query = query.in('material_type', selectedMaterials)
   }
 
   const { data: companies } = await query
@@ -192,30 +215,29 @@ export default async function CategoryPage({ params, searchParams }: Props) {
             <Link
               href={`/categories/${slug}`}
               className={`flex-shrink-0 px-3 py-1.5 rounded-md text-[13px] font-medium transition-all ${
-                !material
+                selectedMaterials.length === 0
                   ? 'bg-gray-900 text-white'
                   : 'text-gray-500 hover:text-gray-800 hover:bg-gray-50'
               }`}
             >
               전체
             </Link>
-            {MATERIAL_TYPES.map((mat) => (
-              <Link
-                key={mat}
-                href={
-                  material === mat
-                    ? `/categories/${slug}`
-                    : `/categories/${slug}?material=${mat}`
-                }
-                className={`flex-shrink-0 px-2.5 py-1 rounded text-[11px] font-medium transition-all border ${
-                  material === mat
-                    ? 'bg-[#005EFF] text-white border-[#005EFF]'
-                    : 'text-gray-500 border-gray-200 hover:text-gray-700 hover:border-gray-300 bg-white'
-                }`}
-              >
-                {MATERIAL_TYPE_LABELS[mat]}
-              </Link>
-            ))}
+            {MATERIAL_TYPES.map((mat) => {
+              const isActive = selectedMaterials.includes(mat)
+              return (
+                <Link
+                  key={mat}
+                  href={buildMaterialUrl(mat)}
+                  className={`flex-shrink-0 px-2.5 py-1 rounded text-[11px] font-medium transition-all border ${
+                    isActive
+                      ? 'bg-[#005EFF] text-white border-[#005EFF]'
+                      : 'text-gray-500 border-gray-200 hover:text-gray-700 hover:border-gray-300 bg-white'
+                  }`}
+                >
+                  {MATERIAL_TYPE_LABELS[mat]}
+                </Link>
+              )
+            })}
           </div>
         </div>
       </div>
@@ -223,19 +245,24 @@ export default async function CategoryPage({ params, searchParams }: Props) {
       {/* Results */}
       <section className="max-w-7xl mx-auto px-5 sm:px-8 py-8">
         <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center gap-2.5">
+          <div className="flex items-center gap-2.5 flex-wrap">
             <p className="text-sm text-gray-500">
               <span className="font-semibold text-gray-900">{companies?.length ?? 0}</span>개 업체
             </p>
-            {material && (
-              <>
-                <span className="text-[11px] bg-[#EBF2FF] text-[#005EFF] font-medium px-2.5 py-1 rounded-full">
-                  {MATERIAL_TYPE_LABELS[material as MaterialType]}
-                </span>
-                <Link href={`/categories/${slug}`} className="text-xs text-gray-400 hover:text-gray-600 ml-1">
-                  초기화
-                </Link>
-              </>
+            {selectedMaterials.map((mat) => (
+              <Link
+                key={mat}
+                href={buildMaterialUrl(mat)}
+                className="text-[11px] bg-[#EBF2FF] text-[#005EFF] font-medium px-2.5 py-1 rounded-full flex items-center gap-1 hover:bg-[#D6E8FF] transition-colors"
+              >
+                {MATERIAL_TYPE_LABELS[mat]}
+                <span className="text-[#005EFF]/60 text-[10px] leading-none">×</span>
+              </Link>
+            ))}
+            {selectedMaterials.length > 0 && (
+              <Link href={`/categories/${slug}`} className="text-xs text-gray-400 hover:text-gray-600">
+                초기화
+              </Link>
             )}
           </div>
         </div>

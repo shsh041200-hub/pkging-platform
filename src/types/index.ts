@@ -7,6 +7,8 @@ export type IndustryCategory =
   | 'pharma-health'
   | 'electronics-industrial'
   | 'eco-special'
+  | 'fresh_produce_packaging'
+  | 'print_design_services'
 
 export const INDUSTRY_CATEGORIES: IndustryCategory[] = [
   'food-beverage',
@@ -15,33 +17,41 @@ export const INDUSTRY_CATEGORIES: IndustryCategory[] = [
   'pharma-health',
   'electronics-industrial',
   'eco-special',
+  'fresh_produce_packaging',
+  'print_design_services',
 ]
 
 export const INDUSTRY_CATEGORY_LABELS: Record<IndustryCategory, string> = {
-  'food-beverage':          '식품·음료 포장',
-  'ecommerce-shipping':     '이커머스·배송 포장',
-  'cosmetics-beauty':       '화장품·뷰티 포장',
-  'pharma-health':          '의약·건강 포장',
-  'electronics-industrial': '전자·산업 포장',
-  'eco-special':            '친환경·특수 포장',
+  'food-beverage':           '식품·음료 포장',
+  'ecommerce-shipping':      '이커머스·배송 포장',
+  'cosmetics-beauty':        '화장품·뷰티 포장',
+  'pharma-health':           '의약·건강 포장',
+  'electronics-industrial':  '전자·산업 포장',
+  'eco-special':             '친환경·특수 포장',
+  'fresh_produce_packaging': '농산물·신선 포장',
+  'print_design_services':   '인쇄·디자인 서비스',
 }
 
 export const INDUSTRY_CATEGORY_DESCRIPTIONS: Record<IndustryCategory, string> = {
-  'food-beverage':          '식품, 음료, 냉동식품용 포장재 및 용기',
-  'ecommerce-shipping':     '박스, 완충재, 테이프, 배송 포장',
-  'cosmetics-beauty':       '스킨케어, 메이크업, 헤어케어 포장',
-  'pharma-health':          '의약품, 건강기능식품, 의료기기 포장',
-  'electronics-industrial': '전자제품, 부품, 산업재 보호 포장',
-  'eco-special':            '친환경, 생분해, 특수 공정 포장',
+  'food-beverage':           '식품, 음료, 냉동식품용 포장재 및 용기',
+  'ecommerce-shipping':      '박스, 완충재, 테이프, 배송 포장',
+  'cosmetics-beauty':        '스킨케어, 메이크업, 헤어케어 포장',
+  'pharma-health':           '의약품, 건강기능식품, 의료기기 포장',
+  'electronics-industrial':  '전자제품, 부품, 산업재 보호 포장',
+  'eco-special':             '친환경, 생분해, 특수 공정 포장',
+  'fresh_produce_packaging': '신선도 유지·콜드체인 전용 포장재 전문 업체 — 농산물·냉장 식품 포장 공급사를 연결합니다',
+  'print_design_services':   '소량 맞춤 인쇄부터 패키지 디자인까지 — 스타트업·소규모 발주에 특화된 인쇄·디자인 업체를 연결합니다',
 }
 
 export const INDUSTRY_CATEGORY_ICONS: Record<IndustryCategory, string> = {
-  'food-beverage':          '🍱',
-  'ecommerce-shipping':     '📦',
-  'cosmetics-beauty':       '💄',
-  'pharma-health':          '💊',
-  'electronics-industrial': '⚙️',
-  'eco-special':            '🌿',
+  'food-beverage':           '🍱',
+  'ecommerce-shipping':      '📦',
+  'cosmetics-beauty':        '💄',
+  'pharma-health':           '💊',
+  'electronics-industrial':  '⚙️',
+  'eco-special':             '🌿',
+  'fresh_produce_packaging': '🥬',
+  'print_design_services':   '🖨️',
 }
 
 // ── Primary L2: Material filter (소재 필터) ──
@@ -70,6 +80,69 @@ export const MATERIAL_TYPE_LABELS: Record<MaterialType, string> = {
   'glass-metal':       '유리·금속',
   'label-print':       '라벨·인쇄물',
   'eco-material':      '친환경 소재',
+}
+
+// ── Delivery region filter (배달 가능 지역, 광역 17개 시·도) ──
+
+export type DeliveryRegion =
+  | '서울특별시'
+  | '부산광역시'
+  | '대구광역시'
+  | '인천광역시'
+  | '광주광역시'
+  | '대전광역시'
+  | '울산광역시'
+  | '세종특별자치시'
+  | '경기도'
+  | '강원특별자치도'
+  | '충청북도'
+  | '충청남도'
+  | '전북특별자치도'
+  | '전라남도'
+  | '경상북도'
+  | '경상남도'
+  | '제주특별자치도'
+  | '전국'
+
+export const DELIVERY_REGIONS: DeliveryRegion[] = [
+  '서울특별시',
+  '부산광역시',
+  '대구광역시',
+  '인천광역시',
+  '광주광역시',
+  '대전광역시',
+  '울산광역시',
+  '세종특별자치시',
+  '경기도',
+  '강원특별자치도',
+  '충청북도',
+  '충청남도',
+  '전북특별자치도',
+  '전라남도',
+  '경상북도',
+  '경상남도',
+  '제주특별자치도',
+]
+
+export const DELIVERY_REGION_LABELS: Record<DeliveryRegion, string> = {
+  '서울특별시': '서울',
+  '부산광역시': '부산',
+  '대구광역시': '대구',
+  '인천광역시': '인천',
+  '광주광역시': '광주',
+  '대전광역시': '대전',
+  '울산광역시': '울산',
+  '세종특별자치시': '세종',
+  '경기도': '경기',
+  '강원특별자치도': '강원',
+  '충청북도': '충북',
+  '충청남도': '충남',
+  '전북특별자치도': '전북',
+  '전라남도': '전남',
+  '경상북도': '경북',
+  '경상남도': '경남',
+  '제주특별자치도': '제주',
+  '전국': '전국',
 }
 
 // ── Legacy types (kept for crawler/classifier backward compat) ──
@@ -169,6 +242,7 @@ export interface Company {
   packaging_form: string | null
   city: string | null
   province: string | null
+  delivery_regions: string[]
   website: string | null
   logo_url: string | null
   icon_url: string | null
