@@ -161,7 +161,7 @@ export interface BlogPost {
   og_image_url: string | null
   category: IndustryCategory | null
   status: 'draft' | 'published'
-  author_name: string | null
+  author: string
   meta_title: string | null
   meta_description: string | null
   published_at: string | null

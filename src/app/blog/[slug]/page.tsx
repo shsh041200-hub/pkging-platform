@@ -106,7 +106,7 @@ export default async function BlogPostPage({ params }: Props) {
     dateModified: typedPost.updated_at,
     author: {
       '@type': 'Person',
-      name: typedPost.author_name ?? 'BOXTER 편집팀',
+      name: typedPost.author,
     },
     publisher: {
       '@type': 'Organization',
@@ -181,8 +181,8 @@ export default async function BlogPostPage({ params }: Props) {
               {formatDate(typedPost.published_at)}
             </time>
           )}
-          {typedPost.author_name && (
-            <span className="text-[12px] text-gray-400">by {typedPost.author_name}</span>
+          {typedPost.author && (
+            <span className="text-[12px] text-gray-400">by {typedPost.author}</span>
           )}
         </div>
 
