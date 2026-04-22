@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
+import { CERTIFICATION_TYPES } from '@/types'
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url)
@@ -9,6 +10,7 @@ export async function GET(request: NextRequest) {
   const packaging_form = searchParams.get('packaging_form')
   const category = searchParams.get('category')
   const tag = searchParams.get('tag')
+  const certification = searchParams.get('certification')
   const page = parseInt(searchParams.get('page') ?? '1', 10)
   const limit = Math.min(parseInt(searchParams.get('limit') ?? '20', 10), 50)
   const offset = (page - 1) * limit
@@ -49,6 +51,16 @@ export async function GET(request: NextRequest) {
   }
   if (category) query = query.eq('category', category)
   if (tag) query = query.contains('tags', [tag])
+  if (certification) {
+    // Expand canonical IDs to all known aliases so stored values like
+    // 'HACCP 인증' match a query for id 'haccp'. Unknown values pass through as-is.
+    const certIds = certification.split(',').filter(Boolean)
+    const aliases = certIds.flatMap(id => {
+      const found = CERTIFICATION_TYPES.find(c => c.id === id)
+      return found ? found.aliases : [id]
+    })
+    query = query.overlaps('certifications', aliases)
+  }
 
   const { data, count, error } = await query
 
