@@ -175,7 +175,6 @@ export interface Company {
   products: string[]
   certifications: string[]
   founded_year: number | null
-  employee_range: '1-10' | '11-50' | '51-200' | '200+' | null
   min_order_quantity: string | null
   service_capabilities: string[]
   target_industries: string[]

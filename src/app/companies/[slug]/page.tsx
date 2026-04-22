@@ -63,13 +63,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 }
 
-const EMPLOYEE_RANGE_LABELS: Record<string, string> = {
-  '1-10': '1~10명',
-  '11-50': '11~50명',
-  '51-200': '51~200명',
-  '200+': '200명 이상',
-}
-
 const DATA_SOURCE_LABELS: Record<string, string> = {
   naver_local: '출처: 네이버 지역 검색',
   public_data_portal: '출처: 공공데이터 포털',
@@ -175,7 +168,7 @@ export default async function CompanyPage({ params }: Props) {
     ],
   }
 
-  const hasExpandedInfo = company.founded_year || company.employee_range || company.min_order_quantity
+  const hasExpandedInfo = company.founded_year || company.min_order_quantity
   const hasServiceCapabilities = company.service_capabilities && company.service_capabilities.length > 0
   const hasKeyClients = company.key_clients && company.key_clients.length > 0
   const hasTargetIndustries = company.target_industries && company.target_industries.length > 0
@@ -305,14 +298,6 @@ export default async function CompanyPage({ params }: Props) {
                 <div>
                   <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-1">설립연도</p>
                   <p className="text-[14px] font-semibold text-gray-700">{company.founded_year}년</p>
-                </div>
-              )}
-              {company.employee_range && (
-                <div>
-                  <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-1">직원수</p>
-                  <p className="text-[14px] font-semibold text-gray-700">
-                    {EMPLOYEE_RANGE_LABELS[company.employee_range] ?? company.employee_range}
-                  </p>
                 </div>
               )}
               {company.min_order_quantity && (
