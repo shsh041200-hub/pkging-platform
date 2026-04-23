@@ -17,7 +17,7 @@ export default function manifest(): MetadataRoute.Manifest {
         purpose: "any",
       },
       {
-        src: "/packlinx-favicon-32.svg",
+        src: "/favicon.svg",
         sizes: "32x32",
         type: "image/svg+xml",
         purpose: "any",

@@ -31,9 +31,9 @@ export const metadata: Metadata = {
   icons: {
     icon: [
       { url: '/favicon.ico', sizes: 'any' },
-      { url: '/packlinx-favicon-32.svg', type: 'image/svg+xml' },
+      { url: '/favicon.svg', type: 'image/svg+xml' },
     ],
-    shortcut: '/packlinx-favicon-32.svg',
+    shortcut: '/favicon.svg',
   },
   alternates: {
     canonical: '/',
