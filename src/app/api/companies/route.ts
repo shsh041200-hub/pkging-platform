@@ -20,10 +20,11 @@ export async function GET(request: NextRequest) {
   let query = supabase
     .from('companies')
     .select(
-      'id, slug, name, description, category, industry_categories, material_type, packaging_form, subcategory, tags, is_verified, founded_year, min_order_quantity, service_capabilities, target_industries, products, certifications',
+      'id, slug, name, description, category, industry_categories, material_type, packaging_form, subcategory, tags, is_verified, cert_count, founded_year, min_order_quantity, service_capabilities, target_industries, products, certifications',
       { count: 'exact' }
     )
     .order('is_verified', { ascending: false })
+    .order('cert_count', { ascending: false })
     .order('name')
     .range(offset, offset + limit - 1)
 
