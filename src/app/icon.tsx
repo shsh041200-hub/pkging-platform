@@ -1,19 +1,12 @@
 import { ImageResponse } from 'next/og'
 
 export const runtime = 'edge'
-export const size = { width: 180, height: 180 }
+export const size = { width: 32, height: 32 }
 export const contentType = 'image/png'
 
-// Concept #7 — Underline: navy rounded rect, bold "pl", orange accent line
-export default function AppleIcon() {
-  const s = 180
-  // Proportionally scaled from 512×512 master SVG
-  const ulX = Math.round((80 / 512) * s)       // 28
-  const ulY = Math.round((400 / 512) * s)       // 141
-  const ulW = Math.round((352 / 512) * s)       // 124
-  const ulH = Math.max(8, Math.round((28 / 512) * s)) // 10
-  const ulR = Math.round((14 / 512) * s)        // 5
-
+// Concept #7 — Underline: navy rounded rect, bold "pl", orange accent line (32×32)
+export default function Icon() {
+  const s = 32
   return new ImageResponse(
     (
       <div
@@ -24,7 +17,7 @@ export default function AppleIcon() {
           display: 'flex',
           alignItems: 'flex-start',
           justifyContent: 'center',
-          borderRadius: Math.round((72 / 512) * s),
+          borderRadius: 4,
           position: 'relative',
           overflow: 'hidden',
         }}
@@ -32,23 +25,24 @@ export default function AppleIcon() {
         <span
           style={{
             color: '#F8FAFC',
-            fontSize: Math.round((310 / 512) * s),
+            fontSize: 19,
             fontWeight: 900,
             fontFamily: 'Arial, Helvetica, sans-serif',
             lineHeight: 1,
-            marginTop: Math.round((60 / 512) * s),
+            marginTop: 4,
           }}
         >
           pl
         </span>
+        {/* Orange underline: proportional to 512×512 master */}
         <div
           style={{
             position: 'absolute',
-            left: ulX,
-            top: ulY,
-            width: ulW,
-            height: ulH,
-            borderRadius: ulR,
+            left: 5,
+            top: 25,
+            width: 22,
+            height: 2,
+            borderRadius: 1,
             background: '#F97316',
           }}
         />
