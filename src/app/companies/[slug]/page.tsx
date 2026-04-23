@@ -120,7 +120,7 @@ export default async function CompanyPage({ params }: Props) {
 
   const { data: portfolios } = await supabase
     .from('company_portfolios')
-    .select('id, title, description, image_url, display_order')
+    .select('id, title, description, image_url, display_order, category_tag')
     .eq('company_id', company.id)
     .order('display_order', { ascending: true })
 
@@ -182,7 +182,7 @@ export default async function CompanyPage({ params }: Props) {
     ],
   }
 
-  const hasExpandedInfo = company.founded_year || company.min_order_quantity || company.moq_value != null || company.lead_time_standard_days != null || company.print_method || company.cold_packaging_available
+  const hasExpandedInfo = company.founded_year || company.min_order_quantity || company.moq_value != null || company.lead_time_standard_days != null || company.print_method || company.sample_available != null || company.cold_packaging_available
   const hasServiceCapabilities = company.service_capabilities && company.service_capabilities.length > 0
   const hasKeyClients = company.key_clients && company.key_clients.length > 0
   const hasTargetIndustries = company.target_industries && company.target_industries.length > 0
@@ -479,6 +479,13 @@ export default async function CompanyPage({ params }: Props) {
                       sizes="(max-width: 640px) 50vw, 33vw"
                       className="object-cover group-hover:scale-105 transition-transform duration-300"
                     />
+                    {item.category_tag && (
+                      <div className="absolute top-2 left-2 z-10">
+                        <span className="text-[11px] font-semibold text-white bg-black/50 backdrop-blur-sm px-2 py-0.5 rounded">
+                          {item.category_tag}
+                        </span>
+                      </div>
+                    )}
                     {item.title && (
                       <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-3">
                         <p className="text-white text-[12px] font-medium line-clamp-2">{item.title}</p>
