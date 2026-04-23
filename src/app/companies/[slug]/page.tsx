@@ -13,11 +13,13 @@ import {
   INDUSTRY_CATEGORY_ICONS,
   CERTIFICATION_TYPES,
   CERTIFICATION_CATEGORY_LABELS,
+  PRINT_METHOD_LABELS,
   type Category,
   type CompanyTag,
   type IndustryCategory,
   type CertificationCategory,
   type Portfolio,
+  type PrintMethod,
 } from '@/types'
 import { CompanyViewTracker } from './CompanyViewTracker'
 import { CompanyIcon } from '@/components/CompanyIcon'
@@ -180,7 +182,7 @@ export default async function CompanyPage({ params }: Props) {
     ],
   }
 
-  const hasExpandedInfo = company.founded_year || company.min_order_quantity
+  const hasExpandedInfo = company.founded_year || company.min_order_quantity || company.moq_value != null || company.lead_time_standard_days != null || company.print_method || company.cold_packaging_available
   const hasServiceCapabilities = company.service_capabilities && company.service_capabilities.length > 0
   const hasKeyClients = company.key_clients && company.key_clients.length > 0
   const hasTargetIndustries = company.target_industries && company.target_industries.length > 0
@@ -312,10 +314,55 @@ export default async function CompanyPage({ params }: Props) {
                   <p className="text-[14px] font-semibold text-gray-700">{company.founded_year}년</p>
                 </div>
               )}
-              {company.min_order_quantity && (
+              {(company.moq_value != null || company.min_order_quantity) && (
                 <div>
                   <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-1">최소 주문량 (MOQ)</p>
-                  <p className="text-[14px] font-semibold text-gray-700">{company.min_order_quantity}</p>
+                  <p className="text-[14px] font-semibold text-gray-700">
+                    {company.moq_value != null
+                      ? `${Number(company.moq_value).toLocaleString()} ${company.moq_unit ?? '개'}`
+                      : company.min_order_quantity
+                    }
+                  </p>
+                </div>
+              )}
+              {(company.lead_time_standard_days != null || company.lead_time_express_days != null) && (
+                <div>
+                  <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-1">납기</p>
+                  <p className="text-[14px] font-semibold text-gray-700">
+                    {company.lead_time_standard_days != null && company.lead_time_express_days != null
+                      ? `기본 ${company.lead_time_standard_days}일 / 급행 ${company.lead_time_express_days}일`
+                      : company.lead_time_standard_days != null
+                        ? `기본 ${company.lead_time_standard_days}일`
+                        : `급행 ${company.lead_time_express_days}일`
+                    }
+                  </p>
+                </div>
+              )}
+              {company.print_method && (
+                <div>
+                  <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-1">인쇄 방식</p>
+                  <p className="text-[14px] font-semibold text-gray-700">
+                    {PRINT_METHOD_LABELS[company.print_method as PrintMethod] ?? company.print_method}
+                  </p>
+                </div>
+              )}
+              {company.sample_available != null && (
+                <div>
+                  <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-1">샘플</p>
+                  <p className="text-[14px] font-semibold text-gray-700">
+                    {company.sample_available
+                      ? `샘플 가능${company.sample_cost ? ` (${company.sample_cost})` : ''}`
+                      : '확인 필요'
+                    }
+                  </p>
+                </div>
+              )}
+              {company.cold_packaging_available && (
+                <div>
+                  <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-1">특수 포장</p>
+                  <span className="inline-flex items-center gap-1 text-[13px] font-semibold text-teal-700 bg-teal-50 border border-teal-200 px-2.5 py-1 rounded">
+                    보냉 포장 가능
+                  </span>
                 </div>
               )}
             </div>

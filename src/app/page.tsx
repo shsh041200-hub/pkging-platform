@@ -11,10 +11,14 @@ import {
   PACKAGING_FORM_LABELS,
   CERTIFICATION_TYPES,
   CERTIFICATION_CATEGORY_LABELS,
+  MOQ_RANGES,
+  LEAD_TIME_RANGES,
+  PRINT_METHOD_LABELS,
   type IndustryCategory,
   type MaterialType,
   type PackagingForm,
   type CertificationCategory,
+  type PrintMethod,
 } from '@/types'
 import { createClient } from '@/lib/supabase/server'
 import { simplifyCompanyName } from '@/lib/simplify-company-name'
@@ -31,6 +35,10 @@ type SearchParams = Promise<{
   form?: string
   cert?: string
   sort?: string
+  moq?: string
+  leadtime?: string
+  cold?: string
+  print?: string
 }>
 
 export async function generateMetadata({
@@ -88,7 +96,7 @@ export default async function HomePage({
 }: {
   searchParams: SearchParams
 }) {
-  const { q, industry, material, form, cert, sort } = await searchParams
+  const { q, industry, material, form, cert, sort, moq, leadtime, cold, print } = await searchParams
   const supabase = await createClient()
 
   const activeCerts = cert ? cert.split(',').filter(Boolean) : []
@@ -101,7 +109,7 @@ export default async function HomePage({
 
   let query = supabase
     .from('companies')
-    .select('id, slug, name, description, category, industry_categories, material_type, packaging_form, tags, is_verified, cert_count, products, certifications, founded_year, website, icon_url, service_capabilities, target_industries, data_source, review_count, avg_rating')
+    .select('id, slug, name, description, category, industry_categories, material_type, packaging_form, tags, is_verified, cert_count, products, certifications, founded_year, website, icon_url, service_capabilities, target_industries, data_source, review_count, avg_rating, lead_time_standard_days, lead_time_express_days, moq_value, moq_unit, print_method, sample_available, cold_packaging_available')
     .order('is_verified', { ascending: false })
     .order('cert_count', { ascending: false })
     .limit(60)
@@ -124,6 +132,28 @@ export default async function HomePage({
   }
   if (activeCerts.length > 0) {
     query = query.overlaps('certifications', activeCerts)
+  }
+
+  type RangeEntry = { id: string; label: string; min?: number; max?: number }
+  if (moq) {
+    const range = (MOQ_RANGES as readonly RangeEntry[]).find(r => r.id === moq)
+    if (range) {
+      if (range.min !== undefined) query = query.gte('moq_value', range.min)
+      if (range.max !== undefined) query = query.lte('moq_value', range.max)
+    }
+  }
+  if (leadtime) {
+    const range = (LEAD_TIME_RANGES as readonly RangeEntry[]).find(r => r.id === leadtime)
+    if (range) {
+      if (range.min !== undefined) query = query.gte('lead_time_standard_days', range.min)
+      if (range.max !== undefined) query = query.lte('lead_time_standard_days', range.max)
+    }
+  }
+  if (cold === 'true') {
+    query = query.eq('cold_packaging_available', true)
+  }
+  if (print) {
+    query = query.eq('print_method', print)
   }
 
   if (sort === 'rating') {
@@ -155,6 +185,10 @@ export default async function HomePage({
     if (form) params.form = form
     if (cert) params.cert = cert
     if (sort) params.sort = sort
+    if (moq) params.moq = moq
+    if (leadtime) params.leadtime = leadtime
+    if (cold) params.cold = cold
+    if (print) params.print = print
     Object.assign(params, overrides)
     Object.keys(params).forEach((k) => { if (params[k] === undefined) delete params[k] })
     const qs = new URLSearchParams(params).toString()
@@ -172,7 +206,7 @@ export default async function HomePage({
     return buildUrl({ cert: certStr || undefined })
   }
 
-  const showingCategory = !q && !industry && selectedMaterials.length === 0 && selectedForms.length === 0 && activeCerts.length === 0
+  const showingCategory = !q && !industry && selectedMaterials.length === 0 && selectedForms.length === 0 && activeCerts.length === 0 && !moq && !leadtime && !cold && !print
 
   const buildMaterialUrl = (mat: MaterialType): string => {
     const current = new Set(selectedMaterials)
@@ -195,6 +229,11 @@ export default async function HomePage({
     const formStr = Array.from(current).join(',')
     return buildUrl({ form: formStr || undefined })
   }
+
+  const buildMoqUrl = (id: string): string => buildUrl({ moq: moq === id ? undefined : id })
+  const buildLeadTimeUrl = (id: string): string => buildUrl({ leadtime: leadtime === id ? undefined : id })
+  const buildPrintUrl = (method: string): string => buildUrl({ print: print === method ? undefined : method })
+  const buildColdUrl = (): string => buildUrl({ cold: cold === 'true' ? undefined : 'true' })
 
   // Group cert types by category for filter UI
   const certsByCategory = CERTIFICATION_TYPES.reduce<Record<CertificationCategory, typeof CERTIFICATION_TYPES>>((acc, ct) => {
@@ -453,6 +492,72 @@ export default async function HomePage({
               })}
             </div>
 
+            {/* Buyer criteria chips — MOQ / 납기 / 인쇄 / 보냉 */}
+            <div className="flex gap-1.5 py-2.5 overflow-x-auto scrollbar-none">
+              <span className="flex-shrink-0 text-[10px] font-semibold text-gray-300 uppercase tracking-widest self-center mr-1 hidden sm:inline">조건</span>
+              {MOQ_RANGES.map((range) => {
+                const isActive = moq === range.id
+                return (
+                  <Link
+                    key={range.id}
+                    href={buildMoqUrl(range.id)}
+                    className={`flex-shrink-0 px-2.5 py-1 rounded text-[11px] font-medium transition-all border ${
+                      isActive
+                        ? 'bg-[#0D9488] text-white border-[#0D9488]'
+                        : 'text-gray-500 border-gray-200 hover:text-gray-700 hover:border-gray-300 bg-white'
+                    }`}
+                  >
+                    {range.label}
+                  </Link>
+                )
+              })}
+              <span className="flex-shrink-0 w-px h-4 bg-gray-200 self-center mx-0.5" aria-hidden="true" />
+              {LEAD_TIME_RANGES.map((range) => {
+                const isActive = leadtime === range.id
+                return (
+                  <Link
+                    key={range.id}
+                    href={buildLeadTimeUrl(range.id)}
+                    className={`flex-shrink-0 px-2.5 py-1 rounded text-[11px] font-medium transition-all border ${
+                      isActive
+                        ? 'bg-[#0D9488] text-white border-[#0D9488]'
+                        : 'text-gray-500 border-gray-200 hover:text-gray-700 hover:border-gray-300 bg-white'
+                    }`}
+                  >
+                    {range.label}
+                  </Link>
+                )
+              })}
+              <span className="flex-shrink-0 w-px h-4 bg-gray-200 self-center mx-0.5" aria-hidden="true" />
+              {(['digital', 'offset'] as PrintMethod[]).map((method) => {
+                const isActive = print === method
+                return (
+                  <Link
+                    key={method}
+                    href={buildPrintUrl(method)}
+                    className={`flex-shrink-0 px-2.5 py-1 rounded text-[11px] font-medium transition-all border ${
+                      isActive
+                        ? 'bg-[#0D9488] text-white border-[#0D9488]'
+                        : 'text-gray-500 border-gray-200 hover:text-gray-700 hover:border-gray-300 bg-white'
+                    }`}
+                  >
+                    {PRINT_METHOD_LABELS[method]}
+                  </Link>
+                )
+              })}
+              <span className="flex-shrink-0 w-px h-4 bg-gray-200 self-center mx-0.5" aria-hidden="true" />
+              <Link
+                href={buildColdUrl()}
+                className={`flex-shrink-0 px-2.5 py-1 rounded text-[11px] font-medium transition-all border ${
+                  cold === 'true'
+                    ? 'bg-[#0D9488] text-white border-[#0D9488]'
+                    : 'text-gray-500 border-gray-200 hover:text-gray-700 hover:border-gray-300 bg-white'
+                }`}
+              >
+                보냉 포장
+              </Link>
+            </div>
+
             {/* Certification accordion filter */}
             <CertFilterAccordion
               certsByCategory={certsByCategory}
@@ -505,12 +610,48 @@ export default async function HomePage({
                 </span>
               )
             })}
+            {moq && (
+              <Link
+                href={buildUrl({ moq: undefined })}
+                className="text-[11px] bg-teal-50 text-teal-700 font-medium px-2.5 py-1 rounded-full flex items-center gap-1 border border-teal-200 hover:bg-teal-100 transition-colors"
+              >
+                {MOQ_RANGES.find(r => r.id === moq)?.label ?? moq}
+                <span className="text-teal-700/60 text-[10px] leading-none">×</span>
+              </Link>
+            )}
+            {leadtime && (
+              <Link
+                href={buildUrl({ leadtime: undefined })}
+                className="text-[11px] bg-teal-50 text-teal-700 font-medium px-2.5 py-1 rounded-full flex items-center gap-1 border border-teal-200 hover:bg-teal-100 transition-colors"
+              >
+                {LEAD_TIME_RANGES.find(r => r.id === leadtime)?.label ?? leadtime}
+                <span className="text-teal-700/60 text-[10px] leading-none">×</span>
+              </Link>
+            )}
+            {print && (
+              <Link
+                href={buildUrl({ print: undefined })}
+                className="text-[11px] bg-teal-50 text-teal-700 font-medium px-2.5 py-1 rounded-full flex items-center gap-1 border border-teal-200 hover:bg-teal-100 transition-colors"
+              >
+                {PRINT_METHOD_LABELS[print as PrintMethod] ?? print}
+                <span className="text-teal-700/60 text-[10px] leading-none">×</span>
+              </Link>
+            )}
+            {cold === 'true' && (
+              <Link
+                href={buildUrl({ cold: undefined })}
+                className="text-[11px] bg-teal-50 text-teal-700 font-medium px-2.5 py-1 rounded-full flex items-center gap-1 border border-teal-200 hover:bg-teal-100 transition-colors"
+              >
+                보냉 포장
+                <span className="text-teal-700/60 text-[10px] leading-none">×</span>
+              </Link>
+            )}
             {q && (
               <span className="text-[11px] bg-[#EBF2FF] text-[#005EFF] font-medium px-2.5 py-1 rounded-full">
                 &ldquo;{q}&rdquo;
               </span>
             )}
-            {(industry || selectedMaterials.length > 0 || selectedForms.length > 0 || q || activeCerts.length > 0) && (
+            {(industry || selectedMaterials.length > 0 || selectedForms.length > 0 || q || activeCerts.length > 0 || moq || leadtime || cold || print) && (
               <Link href="/" className="text-xs text-gray-400 hover:text-gray-600 ml-1">
                 초기화
               </Link>
