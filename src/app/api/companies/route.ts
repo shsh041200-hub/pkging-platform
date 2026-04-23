@@ -11,6 +11,7 @@ export async function GET(request: NextRequest) {
   const category = searchParams.get('category')
   const tag = searchParams.get('tag')
   const certification = searchParams.get('certification')
+  const use_case = searchParams.get('use_case')
   const page = parseInt(searchParams.get('page') ?? '1', 10)
   const limit = Math.min(parseInt(searchParams.get('limit') ?? '20', 10), 50)
   const offset = (page - 1) * limit
@@ -20,7 +21,7 @@ export async function GET(request: NextRequest) {
   let query = supabase
     .from('companies')
     .select(
-      'id, slug, name, description, category, industry_categories, material_type, packaging_form, subcategory, tags, is_verified, cert_count, founded_year, min_order_quantity, service_capabilities, target_industries, products, certifications',
+      'id, slug, name, description, category, industry_categories, material_type, packaging_form, subcategory, tags, use_case_tags, is_verified, cert_count, founded_year, min_order_quantity, service_capabilities, target_industries, products, certifications',
       { count: 'exact' }
     )
     .order('is_verified', { ascending: false })
@@ -52,6 +53,7 @@ export async function GET(request: NextRequest) {
   }
   if (category) query = query.eq('category', category)
   if (tag) query = query.contains('tags', [tag])
+  if (use_case) query = query.contains('use_case_tags', [use_case])
   if (certification) {
     // Expand canonical IDs to all known aliases so stored values like
     // 'HACCP 인증' match a query for id 'haccp'. Unknown values pass through as-is.
