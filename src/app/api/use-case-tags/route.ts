@@ -9,7 +9,7 @@ export async function GET(request: NextRequest) {
 
   let query = supabase
     .from('use_case_tags')
-    .select('id, slug, label, description, parent_industry, seo_title, seo_description, seo_slug, icon, sort_order')
+    .select('id, slug, label, description, parent_industry, seo_title, seo_description, seo_h1, seo_slug, icon, sort_order')
     .order('sort_order', { ascending: true })
     .order('label', { ascending: true })
 
