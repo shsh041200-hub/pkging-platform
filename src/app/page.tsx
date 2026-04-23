@@ -25,6 +25,7 @@ import { simplifyCompanyName } from '@/lib/simplify-company-name'
 import { CertFilterAccordion } from './CertFilterAccordion'
 import { CompanyIcon } from '@/components/CompanyIcon'
 import { WebsiteFavicon } from '@/components/WebsiteFavicon'
+import { CertBadge } from '@/components/CertBadge'
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://packlinx.com'
 
@@ -736,9 +737,7 @@ export default async function HomePage({
                   {(company.certifications as string[] | null)?.length! > 0 && (
                     <div className="flex flex-wrap gap-1.5 mb-3">
                       {(company.certifications as string[]).slice(0, 2).map((cert, i) => (
-                        <span key={i} className="text-[11px] font-medium text-green-700 bg-green-50 border border-green-200 px-2 py-0.5 rounded">
-                          {cert}
-                        </span>
+                        <CertBadge key={i} cert={cert} variant="compact" />
                       ))}
                       {(company.certifications as string[]).length > 2 && (
                         <span className="text-[11px] font-medium text-gray-500 bg-gray-100 px-2 py-0.5 rounded">
@@ -748,25 +747,37 @@ export default async function HomePage({
                     </div>
                   )}
 
-                  <div className="border-t border-gray-100 pt-3 mt-auto flex items-center justify-between gap-2">
-                    {company.website ? (
-                      <a
-                        href={company.website}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="relative z-10 text-[12px] text-gray-400 hover:text-gray-600 flex items-center gap-1.5 transition-colors min-w-0"
-                      >
-                        <WebsiteFavicon website={company.website} iconUrl={company.icon_url ?? null} className="w-4 h-4" />
-                        <span className="truncate max-w-[130px]">
-                          {company.website.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '')}
-                        </span>
-                      </a>
-                    ) : (
-                      <span className="text-[12px] text-gray-300">—</span>
+                  <div className="border-t border-gray-100 pt-3 mt-auto">
+                    <div className="flex items-center justify-between gap-2">
+                      {company.website ? (
+                        <a
+                          href={company.website}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="relative z-10 text-[12px] text-gray-400 hover:text-gray-600 flex items-center gap-1.5 transition-colors min-w-0"
+                        >
+                          <WebsiteFavicon website={company.website} iconUrl={company.icon_url ?? null} className="w-4 h-4" />
+                          <span className="truncate max-w-[130px]">
+                            {company.website.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '')}
+                          </span>
+                        </a>
+                      ) : (
+                        <span className="text-[12px] text-gray-300">—</span>
+                      )}
+                      <span className="text-[11px] text-gray-400">
+                        {company.material_type ? MATERIAL_TYPE_LABELS[company.material_type as MaterialType] : ''}
+                      </span>
+                    </div>
+                    {(company.moq_value != null || company.lead_time_standard_days != null) && (
+                      <div className="flex items-center gap-2 text-[11px] text-gray-400 mt-1">
+                        {company.moq_value != null && (
+                          <span>MOQ {Number(company.moq_value).toLocaleString()}{company.moq_unit ?? '개'}</span>
+                        )}
+                        {company.lead_time_standard_days != null && (
+                          <span>납기 {company.lead_time_standard_days}일</span>
+                        )}
+                      </div>
                     )}
-                    <span className="text-[11px] text-gray-400">
-                      {company.material_type ? MATERIAL_TYPE_LABELS[company.material_type as MaterialType] : ''}
-                    </span>
                   </div>
                 </div>
               </article>

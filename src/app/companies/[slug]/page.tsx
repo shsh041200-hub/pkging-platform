@@ -14,16 +14,19 @@ import {
   CERTIFICATION_TYPES,
   CERTIFICATION_CATEGORY_LABELS,
   PRINT_METHOD_LABELS,
+  PRICE_TIER_LABELS,
   type Category,
   type CompanyTag,
   type IndustryCategory,
   type CertificationCategory,
   type Portfolio,
   type PrintMethod,
+  type PriceTier,
 } from '@/types'
 import { CompanyViewTracker } from './CompanyViewTracker'
 import { CompanyIcon } from '@/components/CompanyIcon'
 import { CertificationCTABanner } from '@/components/CertificationCTABanner'
+import { CertBadge } from '@/components/CertBadge'
 
 type Props = {
   params: Promise<{ slug: string }>
@@ -70,14 +73,6 @@ const DATA_SOURCE_LABELS: Record<string, string> = {
   naver_local: '출처: 네이버 지역 검색',
   public_data_portal: '출처: 공공데이터 포털',
   website_crawl: '출처: 업체 웹사이트',
-}
-
-const CERT_CATEGORY_COLORS: Record<CertificationCategory, { bg: string; text: string; border: string }> = {
-  quality:       { bg: 'bg-blue-50',   text: 'text-blue-700',   border: 'border-blue-200' },
-  food_safety:   { bg: 'bg-green-50',  text: 'text-green-700',  border: 'border-green-200' },
-  environmental: { bg: 'bg-emerald-50', text: 'text-emerald-700', border: 'border-emerald-200' },
-  pharma:        { bg: 'bg-purple-50', text: 'text-purple-700', border: 'border-purple-200' },
-  general:       { bg: 'bg-gray-50',   text: 'text-gray-700',   border: 'border-gray-200' },
 }
 
 function resolveCertification(raw: string) {
@@ -228,7 +223,9 @@ export default async function CompanyPage({ params }: Props) {
       />
 
       {/* Track company_view on mount */}
-      <CompanyViewTracker companyId={company.id} />
+      <Suspense fallback={null}>
+        <CompanyViewTracker companyId={company.id} />
+      </Suspense>
 
       {/* Header */}
       <header className="bg-white sticky top-0 z-50 border-b border-gray-100">
@@ -365,6 +362,14 @@ export default async function CompanyPage({ params }: Props) {
                   </span>
                 </div>
               )}
+              {company.price_tier && (
+                <div>
+                  <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-1">가격대</p>
+                  <p className="text-[14px] font-semibold text-gray-700">
+                    {PRICE_TIER_LABELS[company.price_tier as PriceTier]}
+                  </p>
+                </div>
+              )}
             </div>
           )}
 
@@ -435,23 +440,14 @@ export default async function CompanyPage({ params }: Props) {
             </h2>
             {Object.entries(certsByCategory).map(([cat, items]) => {
               const catKey = cat as CertificationCategory
-              const colors = CERT_CATEGORY_COLORS[catKey]
               return (
                 <div key={cat} className="mb-4 last:mb-0">
                   <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-widest mb-2">
                     {CERTIFICATION_CATEGORY_LABELS[catKey]}
                   </p>
                   <div className="flex flex-wrap gap-2">
-                    {items.map(({ raw, resolved }, i) => (
-                      <span
-                        key={i}
-                        className={`inline-flex items-center gap-1.5 text-[12px] font-semibold px-3 py-1.5 rounded-md border ${colors.bg} ${colors.text} ${colors.border}`}
-                      >
-                        <svg className="w-3 h-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                        </svg>
-                        {resolved?.label ?? raw}
-                      </span>
+                    {items.map(({ raw }, i) => (
+                      <CertBadge key={i} cert={raw} variant="full" />
                     ))}
                   </div>
                 </div>
