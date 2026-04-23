@@ -37,7 +37,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const { data: tag } = await supabase
     .from('use_case_tags')
-    .select('seo_title, seo_description, seo_slug, label')
+    .select('seo_title, seo_description, seo_slug, label, seo_h1')
     .eq('seo_slug', slug)
     .single()
 
@@ -66,7 +66,7 @@ export default async function UseCaseLandingPage({ params }: Props) {
 
   const { data: tag } = await supabase
     .from('use_case_tags')
-    .select('id, slug, label, description, parent_industry, seo_title, seo_description, seo_slug, icon, sort_order')
+    .select('id, slug, label, description, parent_industry, seo_title, seo_description, seo_slug, seo_h1, icon, sort_order')
     .eq('seo_slug', slug)
     .single()
 
@@ -82,9 +82,10 @@ export default async function UseCaseLandingPage({ params }: Props) {
     .order('name')
 
   const categoryLabel = INDUSTRY_CATEGORY_LABELS[useCaseTag.parent_industry]
-  const categoryPath = `/categories/${useCaseTag.parent_industry}?use_case=${useCaseTag.slug}`
+  const categoryPath = `/categories/${useCaseTag.parent_industry}?use-case=${useCaseTag.slug}`
 
   const pageTitle = useCaseTag.seo_title ?? `${useCaseTag.label} 포장 업체 찾기`
+  const pageH1 = useCaseTag.seo_h1 ?? pageTitle
   const pageDescription = useCaseTag.seo_description ?? useCaseTag.description ?? `${useCaseTag.label} 전문 포장 업체를 Packlinx에서 찾아보세요.`
 
   const breadcrumbJsonLd = {
@@ -156,7 +157,7 @@ export default async function UseCaseLandingPage({ params }: Props) {
           <div className="flex items-center gap-3 mb-3">
             <span className="text-3xl">{useCaseTag.icon}</span>
             <h1 className="text-[32px] sm:text-[42px] font-extrabold text-gray-900 leading-[1.1] tracking-[-0.04em]">
-              {pageTitle}
+              {pageH1}
             </h1>
           </div>
           {pageDescription && (

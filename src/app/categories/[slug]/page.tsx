@@ -94,7 +94,7 @@ export function generateStaticParams() {
 
 type Props = {
   params: Promise<{ slug: string }>
-  searchParams: Promise<{ material?: string; form?: string; cert?: string; use_case?: string }>
+  searchParams: Promise<{ material?: string; form?: string; cert?: string; 'use-case'?: string }>
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -120,7 +120,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function CategoryPage({ params, searchParams }: Props) {
   const { slug } = await params
-  const { material, form, cert, use_case } = await searchParams
+  const sp = await searchParams
+  const { material, form, cert } = sp
+  const useCaseParam = sp['use-case']
   const categoryKey = slugToCategory(slug)
   if (!categoryKey) notFound()
 
@@ -140,7 +142,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
     ? cert.split(',').filter((c) => CERTIFICATION_TYPES.some((ct) => ct.id === c))
     : []
 
-  const selectedUseCase = use_case ?? null
+  const selectedUseCase = useCaseParam ?? null
 
   const buildMaterialUrl = (mat: MaterialType): string => {
     const current = new Set(selectedMaterials)
@@ -151,7 +153,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
     if (matStr) p.set('material', matStr)
     if (form) p.set('form', form)
     if (cert) p.set('cert', cert)
-    if (use_case) p.set('use_case', use_case)
+    if (useCaseParam) p.set('use-case', useCaseParam)
     return `/categories/${slug}${p.toString() ? `?${p}` : ''}`
   }
 
@@ -164,7 +166,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
     if (material) p.set('material', material)
     if (formStr) p.set('form', formStr)
     if (cert) p.set('cert', cert)
-    if (use_case) p.set('use_case', use_case)
+    if (useCaseParam) p.set('use-case', useCaseParam)
     return `/categories/${slug}${p.toString() ? `?${p}` : ''}`
   }
 
@@ -177,7 +179,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
     if (material) p.set('material', material)
     if (form) p.set('form', form)
     if (certStr) p.set('cert', certStr)
-    if (use_case) p.set('use_case', use_case)
+    if (useCaseParam) p.set('use-case', useCaseParam)
     return `/categories/${slug}${p.toString() ? `?${p}` : ''}`
   }
 
@@ -186,7 +188,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
     if (material) p.set('material', material)
     if (form) p.set('form', form)
     if (cert) p.set('cert', cert)
-    if (selectedUseCase !== tagSlug) p.set('use_case', tagSlug)
+    if (selectedUseCase !== tagSlug) p.set('use-case', tagSlug)
     return `/categories/${slug}${p.toString() ? `?${p}` : ''}`
   }
 

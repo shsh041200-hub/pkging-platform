@@ -331,6 +331,7 @@ export interface UseCaseTag {
   seo_title: string | null
   seo_description: string | null
   seo_slug: string | null
+  seo_h1: string | null
   icon: string
   sort_order: number
 }
