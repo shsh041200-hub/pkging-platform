@@ -40,8 +40,6 @@ export function BoxterLogo({
       aria-label="BOXTER"
       className={className}
     >
-      <title>BOXTER</title>
-
       {/* Icon background */}
       <rect width={s} height={s} rx={r(7)} fill="#F1F5F9" />
       <rect x={0.5 * scale} y={0.5 * scale} width={s - scale} height={s - scale} rx={r(6.5)} fill="none" stroke="#E2E8F0" strokeWidth={scale} />
