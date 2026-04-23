@@ -19,6 +19,7 @@ import {
   type CertificationCategory,
   type CertificationType,
   type BlogPost,
+  type UseCaseTag,
 } from '@/types'
 import { PackagingFormFilter } from './PackagingFormFilter'
 import { CertFilterAccordion } from '@/app/CertFilterAccordion'
@@ -93,7 +94,7 @@ export function generateStaticParams() {
 
 type Props = {
   params: Promise<{ slug: string }>
-  searchParams: Promise<{ material?: string; form?: string; cert?: string }>
+  searchParams: Promise<{ material?: string; form?: string; cert?: string; use_case?: string }>
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -119,7 +120,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function CategoryPage({ params, searchParams }: Props) {
   const { slug } = await params
-  const { material, form, cert } = await searchParams
+  const { material, form, cert, use_case } = await searchParams
   const categoryKey = slugToCategory(slug)
   if (!categoryKey) notFound()
 
@@ -139,6 +140,8 @@ export default async function CategoryPage({ params, searchParams }: Props) {
     ? cert.split(',').filter((c) => CERTIFICATION_TYPES.some((ct) => ct.id === c))
     : []
 
+  const selectedUseCase = use_case ?? null
+
   const buildMaterialUrl = (mat: MaterialType): string => {
     const current = new Set(selectedMaterials)
     if (current.has(mat)) current.delete(mat)
@@ -148,6 +151,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
     if (matStr) p.set('material', matStr)
     if (form) p.set('form', form)
     if (cert) p.set('cert', cert)
+    if (use_case) p.set('use_case', use_case)
     return `/categories/${slug}${p.toString() ? `?${p}` : ''}`
   }
 
@@ -160,6 +164,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
     if (material) p.set('material', material)
     if (formStr) p.set('form', formStr)
     if (cert) p.set('cert', cert)
+    if (use_case) p.set('use_case', use_case)
     return `/categories/${slug}${p.toString() ? `?${p}` : ''}`
   }
 
@@ -172,6 +177,16 @@ export default async function CategoryPage({ params, searchParams }: Props) {
     if (material) p.set('material', material)
     if (form) p.set('form', form)
     if (certStr) p.set('cert', certStr)
+    if (use_case) p.set('use_case', use_case)
+    return `/categories/${slug}${p.toString() ? `?${p}` : ''}`
+  }
+
+  const buildUseCaseUrl = (tagSlug: string): string => {
+    const p = new URLSearchParams()
+    if (material) p.set('material', material)
+    if (form) p.set('form', form)
+    if (cert) p.set('cert', cert)
+    if (selectedUseCase !== tagSlug) p.set('use_case', tagSlug)
     return `/categories/${slug}${p.toString() ? `?${p}` : ''}`
   }
 
@@ -186,6 +201,16 @@ export default async function CategoryPage({ params, searchParams }: Props) {
   }
 
   const supabase = await createClient()
+
+  const { data: useCaseTags } = await supabase
+    .from('use_case_tags')
+    .select('id, slug, label, icon, sort_order, seo_slug')
+    .eq('parent_industry', categoryKey)
+    .order('sort_order', { ascending: true })
+    .order('label', { ascending: true })
+
+  const useCaseTagList = (useCaseTags ?? []) as Pick<UseCaseTag, 'id' | 'slug' | 'label' | 'icon' | 'sort_order' | 'seo_slug'>[]
+
   let query = supabase
     .from('companies')
     .select('id, slug, name, description, category, industry_categories, material_type, packaging_form, tags, is_verified, products, certifications, founded_year, website, icon_url, service_capabilities, target_industries')
@@ -210,6 +235,9 @@ export default async function CategoryPage({ params, searchParams }: Props) {
       return found ? found.aliases : [id]
     })
     query = query.overlaps('certifications', certAliases)
+  }
+  if (selectedUseCase) {
+    query = query.contains('use_case_tags', [selectedUseCase])
   }
 
   const { data: companies } = await query
@@ -335,6 +363,48 @@ export default async function CategoryPage({ params, searchParams }: Props) {
             })}
           </div>
 
+          {/* Use-case filter chips — 태그가 있을 때만 노출 */}
+          {useCaseTagList.length > 0 && (
+            <div className="flex gap-1.5 py-2.5 flex-wrap items-center border-t border-gray-100">
+              <span className="flex-shrink-0 text-[10px] font-semibold text-gray-300 uppercase tracking-widest self-center mr-1 hidden sm:inline">
+                용도
+              </span>
+              <Link
+                href={(() => {
+                  const p = new URLSearchParams()
+                  if (material) p.set('material', material)
+                  if (form) p.set('form', form)
+                  if (cert) p.set('cert', cert)
+                  return `/categories/${slug}${p.toString() ? `?${p}` : ''}`
+                })()}
+                className={`flex-shrink-0 px-2.5 py-1 rounded text-[11px] font-medium transition-all border ${
+                  !selectedUseCase
+                    ? 'bg-[#005EFF] text-white border-[#005EFF]'
+                    : 'text-gray-500 border-gray-200 hover:text-gray-700 hover:border-gray-300 bg-white'
+                }`}
+              >
+                전체
+              </Link>
+              {useCaseTagList.map((tag) => {
+                const isActive = selectedUseCase === tag.slug
+                return (
+                  <Link
+                    key={tag.id}
+                    href={buildUseCaseUrl(tag.slug)}
+                    className={`flex-shrink-0 px-2.5 py-1 rounded text-[11px] font-medium transition-all border flex items-center gap-1 ${
+                      isActive
+                        ? 'bg-[#005EFF] text-white border-[#005EFF]'
+                        : 'text-gray-500 border-gray-200 hover:text-gray-700 hover:border-gray-300 bg-white'
+                    }`}
+                  >
+                    <span>{tag.icon}</span>
+                    {tag.label}
+                  </Link>
+                )
+              })}
+            </div>
+          )}
+
           {/* Packaging form filter chips — 더 보기 접이식 (Client Component) */}
           <PackagingFormFilter selectedForms={selectedForms} formUrls={formUrls} />
 
@@ -390,7 +460,21 @@ export default async function CategoryPage({ params, searchParams }: Props) {
                 </Link>
               )
             })}
-            {(selectedMaterials.length > 0 || selectedForms.length > 0 || selectedCerts.length > 0) && (
+            {selectedUseCase && (() => {
+              const tag = useCaseTagList.find((t) => t.slug === selectedUseCase)
+              if (!tag) return null
+              const clearUrl = buildUseCaseUrl(selectedUseCase)
+              return (
+                <Link
+                  href={clearUrl}
+                  className="text-[11px] bg-[#EBF2FF] text-[#005EFF] font-medium px-2.5 py-1 rounded-full flex items-center gap-1 hover:bg-[#D6E8FF] transition-colors"
+                >
+                  {tag.icon} {tag.label}
+                  <span className="text-[#005EFF]/60 text-[10px] leading-none">×</span>
+                </Link>
+              )
+            })()}
+            {(selectedMaterials.length > 0 || selectedForms.length > 0 || selectedCerts.length > 0 || selectedUseCase) && (
               <Link href={`/categories/${slug}`} className="text-xs text-gray-400 hover:text-gray-600">
                 초기화
               </Link>

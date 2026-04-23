@@ -3,11 +3,12 @@ import Link from 'next/link'
 import type { Metadata } from 'next'
 import { createClient } from '@/lib/supabase/server'
 import { PacklinxLogo } from '@/components/PacklinxLogo'
-import type { DeliveryRegion } from '@/types'
+import type { DeliveryRegion, UseCaseTag } from '@/types'
 import { CompanyDeliveryEditClient } from './CompanyDeliveryEditClient'
+import { UseCaseTagEditClient } from './UseCaseTagEditClient'
 
 export const metadata: Metadata = {
-  title: '배달 지역 편집 — 관리자',
+  title: '업체 편집 — 관리자',
   robots: { index: false, follow: false },
 }
 
@@ -30,13 +31,25 @@ export default async function CompanyDeliveryEditPage({ params }: PageProps) {
 
   const { data: company } = await supabase
     .from('companies')
-    .select('id, slug, name, delivery_regions')
+    .select('id, slug, name, delivery_regions, industry_categories, use_case_tags')
     .eq('slug', slug)
     .single()
 
   if (!company) notFound()
 
   const initialRegions = ((company.delivery_regions as string[] | null) ?? []) as DeliveryRegion[]
+  const initialUseCaseTags = (company.use_case_tags as string[] | null) ?? []
+  const industryCategories = (company.industry_categories as string[] | null) ?? []
+
+  const { data: allUseCaseTags } = await supabase
+    .from('use_case_tags')
+    .select('id, slug, label, description, parent_industry, seo_title, seo_description, seo_slug, icon, sort_order')
+    .order('sort_order', { ascending: true })
+    .order('label', { ascending: true })
+
+  const relevantUseCaseTags = ((allUseCaseTags ?? []) as UseCaseTag[]).filter(
+    (tag) => industryCategories.includes(tag.parent_industry)
+  )
 
   return (
     <div className="min-h-screen bg-[#F9FAFB]">
@@ -54,23 +67,38 @@ export default async function CompanyDeliveryEditPage({ params }: PageProps) {
         </div>
       </header>
 
-      <main className="max-w-4xl mx-auto px-5 sm:px-8 py-10">
-        <div className="mb-6">
+      <main className="max-w-4xl mx-auto px-5 sm:px-8 py-10 space-y-8">
+        <div className="mb-2">
           <p className="text-[12px] font-semibold text-gray-400 uppercase tracking-wider mb-1">
             관리자 편집
           </p>
           <h1 className="text-[22px] font-bold text-gray-900 tracking-[-0.025em]">
             {company.name}
           </h1>
-          <p className="text-[13px] text-gray-500 mt-0.5">배달 가능 지역 설정</p>
         </div>
 
-        <div className="bg-white border border-gray-200 rounded-xl p-6 md:p-8">
+        {/* 배달 가능 지역 */}
+        <section className="bg-white border border-gray-200 rounded-xl p-6 md:p-8">
+          <h2 className="text-[15px] font-semibold text-gray-800 mb-1">배달 가능 지역</h2>
+          <p className="text-[13px] text-gray-500 mb-5">배달 가능 지역을 설정합니다.</p>
           <CompanyDeliveryEditClient
             companyId={company.id}
             initialRegions={initialRegions}
           />
-        </div>
+        </section>
+
+        {/* Use-case 태그 관리 */}
+        <section className="bg-white border border-gray-200 rounded-xl p-6 md:p-8">
+          <h2 className="text-[15px] font-semibold text-gray-800 mb-1">용도(Use-case) 태그</h2>
+          <p className="text-[13px] text-gray-500 mb-5">
+            이 업체에 해당하는 용도 태그를 선택합니다. 태그가 적용된 업체는 SEO 랜딩 페이지와 카테고리 필터에 노출됩니다.
+          </p>
+          <UseCaseTagEditClient
+            companyId={company.id}
+            allTags={relevantUseCaseTags}
+            initialTags={initialUseCaseTags}
+          />
+        </section>
       </main>
     </div>
   )

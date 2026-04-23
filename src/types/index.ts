@@ -320,6 +320,21 @@ export const LEAD_TIME_RANGES = [
   { id: 'lt_15', label: '3주 이상',  min: 15 },
 ] as const
 
+// ── Use-case tag interface ──
+
+export interface UseCaseTag {
+  id: string
+  slug: string
+  label: string
+  description: string | null
+  parent_industry: IndustryCategory
+  seo_title: string | null
+  seo_description: string | null
+  seo_slug: string | null
+  icon: string
+  sort_order: number
+}
+
 // ── Company interface ──
 
 export interface Company {
@@ -367,6 +382,7 @@ export interface Company {
   reuse_model: ReuseModel | null
   spec_sheet_available: boolean | null
   seasonal_packaging_available: boolean | null
+  use_case_tags?: string[]
   created_at: string
   updated_at: string
 }
