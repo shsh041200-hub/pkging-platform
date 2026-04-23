@@ -1,9 +1,9 @@
 import Link from 'next/link'
 import type { Metadata } from 'next'
-import { BoxterLogo } from '@/components/BoxterLogo'
+import { PacklinxLogo } from '@/components/PacklinxLogo'
 
 export const metadata: Metadata = {
-  title: '요청 접수 완료 — BOXTER',
+  title: '요청 접수 완료 — Packlinx',
 }
 
 export default function OptOutThanksPage() {
@@ -12,7 +12,7 @@ export default function OptOutThanksPage() {
       <header className="bg-[#0d1d2e] sticky top-0 z-50">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2.5">
-            <BoxterLogo variant="dark" size="sm" />
+            <PacklinxLogo variant="dark" />
           </Link>
           <nav className="flex items-center gap-6">
             <Link href="/blog" className="text-white/70 hover:text-white text-[13px] font-medium transition-colors">

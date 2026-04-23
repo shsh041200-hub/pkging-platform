@@ -1,7 +1,7 @@
 import { ImageResponse } from 'next/og'
 
 export const runtime = 'edge'
-export const alt = 'BOXTER — 전국 패키징 파트너, 한 번에'
+export const alt = 'PACKLINX — 전국 패키징 파트너, 한 번에'
 export const size = { width: 1200, height: 630 }
 export const contentType = 'image/png'
 
@@ -68,16 +68,31 @@ export default function OgImage() {
             gap: 0,
           }}
         >
-          <div
-            style={{
-              fontSize: 48,
-              fontWeight: 800,
-              letterSpacing: 5,
-              color: '#0A0F1E',
-              lineHeight: 1,
-            }}
-          >
-            BOXTER
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 0 }}>
+            <div
+              style={{
+                fontFamily: "'Trebuchet MS', Avenir, 'Segoe UI', sans-serif",
+                fontSize: 52,
+                fontWeight: 900,
+                letterSpacing: 8,
+                color: '#0F172A',
+                lineHeight: 1,
+              }}
+            >
+              PACK
+            </div>
+            <div
+              style={{
+                fontFamily: "'Trebuchet MS', Avenir, 'Segoe UI', sans-serif",
+                fontSize: 52,
+                fontWeight: 200,
+                letterSpacing: 8,
+                color: '#F97316',
+                lineHeight: 1,
+              }}
+            >
+              LINX
+            </div>
           </div>
           <div
             style={{

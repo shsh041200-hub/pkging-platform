@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <rect width="32" height="32" fill="#0F172A" rx="4"/>
+  <text x="4" y="15" font-family="'Trebuchet MS', 'Avenir', sans-serif" font-size="10" font-weight="900" fill="#F8FAFC" letter-spacing="1">PACK</text>
+  <text x="4" y="26" font-family="'Trebuchet MS', 'Avenir', sans-serif" font-size="10" font-weight="200" fill="#F97316" letter-spacing="1">LINX</text>
+</svg>

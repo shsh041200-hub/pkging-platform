@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { BoxterLogo } from '@/components/BoxterLogo'
+import { PacklinxLogo } from '@/components/PacklinxLogo'
 import {
   INDUSTRY_CATEGORIES,
   INDUSTRY_CATEGORY_LABELS,
@@ -56,15 +56,15 @@ const CATEGORY_SEO_TITLE: Record<IndustryCategory, string> = {
 
 const CATEGORY_SEO_DESCRIPTION: Record<IndustryCategory, string> = {
   'food-beverage':
-    '식품 포장업체를 한눈에 비교하세요. HACCP·GMP 인증 식품 포장재 전문 업체를 BOXTER에서 찾아보세요.',
+    '식품 포장업체를 한눈에 비교하세요. HACCP·GMP 인증 식품 포장재 전문 업체를 Packlinx에서 찾아보세요.',
   'ecommerce-shipping':
     '택배박스, 완충재, 배송 포장재 업체를 비교하세요. 스마트스토어·쿠팡 셀러를 위한 포장 파트너를 찾아보세요.',
   'cosmetics-beauty':
-    '화장품 포장 업체를 한눈에 비교하세요. 소량 제작, OEM 포장, 파우치·용기 전문 업체를 BOXTER에서 찾아보세요.',
+    '화장품 포장 업체를 한눈에 비교하세요. 소량 제작, OEM 포장, 파우치·용기 전문 업체를 Packlinx에서 찾아보세요.',
   'pharma-health':
     '의약품, 건강기능식품 포장 업체를 비교하세요. GMP 인증 의약 포장재 전문 업체를 찾아보세요.',
   'electronics-industrial':
-    '전자제품, 부품, 산업재 보호 포장 업체를 비교하세요. 완충·정전기방지 포장재 전문 업체를 BOXTER에서 찾아보세요.',
+    '전자제품, 부품, 산업재 보호 포장 업체를 비교하세요. 완충·정전기방지 포장재 전문 업체를 Packlinx에서 찾아보세요.',
   'eco-special':
     '친환경 포장재 업체를 비교하세요. FSC 인증, 생분해 포장재, ESG 포장 솔루션 전문 업체를 찾아보세요.',
   'fresh_produce_packaging':
@@ -109,7 +109,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     description,
     alternates: { canonical: `/categories/${slug}` },
     openGraph: {
-      title: CATEGORY_OG_TITLE[categoryKey] ?? `${title} — BOXTER`,
+      title: CATEGORY_OG_TITLE[categoryKey] ?? `${title} — Packlinx`,
       description: CATEGORY_OG_DESCRIPTION[categoryKey] ?? description,
       url: `${siteUrl}/categories/${slug}`,
       type: 'website',
@@ -231,7 +231,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'BOXTER', item: siteUrl },
+      { '@type': 'ListItem', position: 1, name: 'Packlinx', item: siteUrl },
       { '@type': 'ListItem', position: 2, name: label, item: `${siteUrl}/categories/${slug}` },
     ],
   }
@@ -242,7 +242,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
     name: CATEGORY_SEO_TITLE[categoryKey],
     description: CATEGORY_SEO_DESCRIPTION[categoryKey],
     url: `${siteUrl}/categories/${slug}`,
-    isPartOf: { '@type': 'WebSite', name: 'BOXTER', url: siteUrl },
+    isPartOf: { '@type': 'WebSite', name: 'Packlinx', url: siteUrl },
     numberOfItems: companies?.length ?? 0,
   }
 
@@ -261,7 +261,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
       <header className="bg-white sticky top-0 z-50 border-b border-gray-100">
         <div className="max-w-7xl mx-auto px-5 sm:px-8 h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-3">
-            <BoxterLogo variant="light" size="sm" />
+            <PacklinxLogo variant="light" />
             <span className="hidden sm:inline text-gray-300 text-[11px] font-medium tracking-widest uppercase">전국 패키징 파트너, 한 번에</span>
           </Link>
           <nav className="flex items-center gap-6">
@@ -551,10 +551,13 @@ export default async function CategoryPage({ params, searchParams }: Props) {
       <footer className="border-t border-gray-100 bg-white mt-auto py-8">
         <div className="max-w-7xl mx-auto px-5 sm:px-8">
           <div className="flex flex-wrap items-center justify-between gap-4">
-            <p className="text-[12px] text-gray-400 leading-relaxed">
-              &copy; 2026 BOXTER. 본 서비스의 업체 정보는 공개된 출처에서 자동 수집되었습니다.<br className="hidden sm:inline" />
-              정보 오류·삭제 요청: privacy@pkging.kr
-            </p>
+            <div className="flex flex-col gap-2">
+              <PacklinxLogo variant="light" layout="horizontal" />
+              <p className="text-[12px] text-gray-400 leading-relaxed">
+                &copy; 2026 PACKLINX. 본 서비스의 업체 정보는 공개된 출처에서 자동 수집되었습니다.<br className="hidden sm:inline" />
+                정보 오류·삭제 요청: privacy@pkging.kr
+              </p>
+            </div>
             <div className="flex gap-5 text-[12px] text-gray-400">
               <Link href="/blog" className="hover:text-gray-600 transition-colors">패키징 가이드</Link>
               <Link href="/privacy" className="hover:text-gray-600 transition-colors">개인정보처리방침</Link>

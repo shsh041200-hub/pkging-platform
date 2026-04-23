@@ -2,12 +2,12 @@ import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import { createClient } from '@/lib/supabase/server'
-import { BoxterLogo } from '@/components/BoxterLogo'
+import { PacklinxLogo } from '@/components/PacklinxLogo'
 import { DashboardClient } from './DashboardClient'
 import { UtmAnalyticsSection, type UtmAnalyticsData } from './UtmAnalyticsSection'
 
 export const metadata: Metadata = {
-  title: '관리자 대시보드 — BOXTER',
+  title: '관리자 대시보드 — Packlinx',
   robots: { index: false, follow: false },
 }
 
@@ -100,7 +100,7 @@ export default async function AdminDashboardPage({ searchParams }: { searchParam
       <header className="bg-[#0A0F1E] sticky top-0 z-50 border-b border-white/[0.06]">
         <div className="max-w-7xl mx-auto px-5 sm:px-8 h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-3">
-            <BoxterLogo variant="dark" size="sm" />
+            <PacklinxLogo variant="dark" />
           </Link>
           <span className="text-white/50 text-[12px] font-medium">관리자 대시보드</span>
         </div>

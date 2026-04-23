@@ -1,11 +1,11 @@
 import Link from 'next/link'
 import type { Metadata } from 'next'
-import { BoxterLogo } from '@/components/BoxterLogo'
+import { PacklinxLogo } from '@/components/PacklinxLogo'
 import OptOutForm from './OptOutForm'
 
 export const metadata: Metadata = {
-  title: '정보 삭제·수정 요청 — BOXTER',
-  description: 'BOXTER에 등록된 업체 정보의 삭제 또는 수정을 요청하실 수 있습니다.',
+  title: '정보 삭제·수정 요청 — Packlinx',
+  description: 'Packlinx에 등록된 업체 정보의 삭제 또는 수정을 요청하실 수 있습니다.',
 }
 
 export default function OptOutPage() {
@@ -14,7 +14,7 @@ export default function OptOutPage() {
       <header className="bg-[#0d1d2e] sticky top-0 z-50">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2.5">
-            <BoxterLogo variant="dark" size="sm" />
+            <PacklinxLogo variant="dark" />
           </Link>
           <nav className="flex items-center gap-6">
             <Link href="/blog" className="text-white/70 hover:text-white text-[13px] font-medium transition-colors">
@@ -27,7 +27,7 @@ export default function OptOutPage() {
       <main className="max-w-2xl mx-auto px-4 sm:px-6 py-10 pb-16">
         <h1 className="text-2xl font-bold text-slate-900 mb-2">정보 삭제·수정 요청</h1>
         <p className="text-sm text-slate-500 mb-8">
-          BOXTER에 등록된 귀사 정보의 삭제 또는 수정을 요청하실 수 있습니다.
+          Packlinx에 등록된 귀사 정보의 삭제 또는 수정을 요청하실 수 있습니다.
           접수 후 10영업일 이내에 처리 결과를 이메일로 안내드립니다.
         </p>
 

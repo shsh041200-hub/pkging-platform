@@ -4,7 +4,7 @@ import Image from 'next/image'
 import { Suspense } from 'react'
 import type { Metadata } from 'next'
 import { createClient } from '@/lib/supabase/server'
-import { BoxterLogo } from '@/components/BoxterLogo'
+import { PacklinxLogo } from '@/components/PacklinxLogo'
 import { CompanyDetailCTA } from '@/components/CompanyDetailCTA'
 import {
   CATEGORY_LABELS,
@@ -48,7 +48,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   if (!company) return { title: '업체를 찾을 수 없습니다' }
 
-  const title = `${company.name} — BOXTER`
+  const title = `${company.name} — Packlinx`
   const description = company.description ?? `${company.name} 패키징 업체 상세 정보`
 
   return {
@@ -161,7 +161,7 @@ export default async function CompanyPage({ params }: Props) {
       {
         '@type': 'ListItem',
         position: 1,
-        name: 'BOXTER',
+        name: 'Packlinx',
         item: siteUrl,
       },
       {
@@ -233,7 +233,7 @@ export default async function CompanyPage({ params }: Props) {
       <header className="bg-white sticky top-0 z-50 border-b border-gray-100">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-3">
-            <BoxterLogo variant="light" size="sm" />
+            <PacklinxLogo variant="light" />
             <span className="hidden sm:inline text-gray-300 text-[11px] font-medium tracking-widest uppercase">전국 패키징 파트너, 한 번에</span>
           </Link>
           <nav className="flex items-center gap-6">
@@ -721,10 +721,13 @@ export default async function CompanyPage({ params }: Props) {
       <footer className="border-t border-gray-100 bg-white py-8">
         <div className="max-w-[800px] mx-auto px-4 sm:px-6">
           <div className="flex flex-wrap items-center justify-between gap-4">
-            <p className="text-[12px] text-gray-400">
-              © 2026 BOXTER. 업체 정보는 공개 출처에서 자동 수집되었습니다.
-              정보 오류·삭제 요청: privacy@pkging.kr
-            </p>
+            <div className="flex flex-col gap-2">
+              <PacklinxLogo variant="light" layout="horizontal" />
+              <p className="text-[12px] text-gray-400">
+                © 2026 PACKLINX. 업체 정보는 공개 출처에서 자동 수집되었습니다.
+                정보 오류·삭제 요청: privacy@pkging.kr
+              </p>
+            </div>
             <div className="flex gap-4 text-[12px] text-gray-400">
               <Link href="/privacy" className="hover:text-gray-600 transition-colors">개인정보처리방침</Link>
               <Link href="/terms" className="hover:text-gray-600 transition-colors">이용약관</Link>

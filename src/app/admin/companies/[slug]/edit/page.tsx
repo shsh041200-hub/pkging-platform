@@ -2,7 +2,7 @@ import { redirect, notFound } from 'next/navigation'
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import { createClient } from '@/lib/supabase/server'
-import { BoxterLogo } from '@/components/BoxterLogo'
+import { PacklinxLogo } from '@/components/PacklinxLogo'
 import type { DeliveryRegion } from '@/types'
 import { CompanyDeliveryEditClient } from './CompanyDeliveryEditClient'
 
@@ -43,7 +43,7 @@ export default async function CompanyDeliveryEditPage({ params }: PageProps) {
       <header className="bg-[#0A0F1E] sticky top-0 z-50 border-b border-white/[0.06]">
         <div className="max-w-4xl mx-auto px-5 sm:px-8 h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-3">
-            <BoxterLogo variant="dark" size="sm" />
+            <PacklinxLogo variant="dark" />
           </Link>
           <Link
             href="/admin/companies"

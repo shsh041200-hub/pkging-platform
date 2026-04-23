@@ -2,7 +2,7 @@ import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import { createClient } from '@/lib/supabase/server'
-import { BoxterLogo } from '@/components/BoxterLogo'
+import { PacklinxLogo } from '@/components/PacklinxLogo'
 import { DELIVERY_REGIONS } from '@/types'
 
 export const metadata: Metadata = {
@@ -36,7 +36,7 @@ export default async function AdminCompaniesPage() {
       <header className="bg-[#0A0F1E] sticky top-0 z-50 border-b border-white/[0.06]">
         <div className="max-w-7xl mx-auto px-5 sm:px-8 h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-3">
-            <BoxterLogo variant="dark" size="sm" />
+            <PacklinxLogo variant="dark" />
           </Link>
           <Link
             href="/admin/dashboard"

@@ -1,10 +1,10 @@
 import Link from 'next/link'
 import type { Metadata } from 'next'
-import { BoxterLogo } from '@/components/BoxterLogo'
+import { PacklinxLogo } from '@/components/PacklinxLogo'
 
 export const metadata: Metadata = {
-  title: '개인정보처리방침 — BOXTER',
-  description: 'BOXTER 개인정보처리방침',
+  title: '개인정보처리방침 — Packlinx',
+  description: 'Packlinx 개인정보처리방침',
 }
 
 export default function PrivacyPage() {
@@ -13,7 +13,7 @@ export default function PrivacyPage() {
       <header className="bg-[#0d1d2e] sticky top-0 z-50">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2.5">
-            <BoxterLogo variant="dark" size="sm" />
+            <PacklinxLogo variant="dark" />
           </Link>
           <nav className="flex items-center gap-6">
             <Link href="/blog" className="text-white/70 hover:text-white text-[13px] font-medium transition-colors">
@@ -32,7 +32,7 @@ export default function PrivacyPage() {
           <section>
             <h2 className="text-base font-semibold text-slate-900 mb-3">제1조 (목적)</h2>
             <p>
-              BOXTER(이하 &quot;서비스&quot;)은 「개인정보 보호법」, 「정보통신망 이용촉진 및 정보보호
+              Packlinx(이하 &quot;서비스&quot;)은 「개인정보 보호법」, 「정보통신망 이용촉진 및 정보보호
               등에 관한 법률」 등 관련 법령에 따라 이용자의 개인정보를 보호하고, 이와 관련한 고충을
               신속하고 원활하게 처리할 수 있도록 하기 위하여 다음과 같이 개인정보처리방침을 수립·공개합니다.
             </p>
