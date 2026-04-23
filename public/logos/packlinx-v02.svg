@@ -1,0 +1,13 @@
+<svg viewBox="0 0 280 80" width="280" height="80" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Packlinx v02">
+  <!-- v02: Node Network — 3 dots connected forming P, purple palette -->
+  <circle cx="14" cy="20" r="8" fill="#7C3AED"/>
+  <circle cx="14" cy="44" r="8" fill="#7C3AED"/>
+  <circle cx="38" cy="20" r="8" fill="#C4B5FD"/>
+  <circle cx="38" cy="44" r="8" fill="#7C3AED" opacity="0.4"/>
+  <circle cx="14" cy="60" r="5" fill="#7C3AED" opacity="0.3"/>
+  <line x1="14" y1="20" x2="38" y2="20" stroke="#7C3AED" stroke-width="2.5"/>
+  <line x1="14" y1="20" x2="14" y2="60" stroke="#7C3AED" stroke-width="2.5"/>
+  <line x1="38" y1="20" x2="38" y2="44" stroke="#C4B5FD" stroke-width="2.5"/>
+  <line x1="14" y1="44" x2="38" y2="44" stroke="#7C3AED" stroke-width="2.5"/>
+  <text x="62" y="51" font-family="'Helvetica Neue',Arial,sans-serif" font-weight="800" font-size="26" letter-spacing="1" fill="#1E1B4B">PACKLINX</text>
+</svg>

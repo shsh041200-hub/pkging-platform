@@ -1,0 +1,7 @@
+<svg viewBox="0 0 280 80" width="280" height="80" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Packlinx v10">
+  <!-- v10: Minimal Line — ultra-clean wordmark with single accent bar, monochrome + blue -->
+  <rect x="0" y="14" width="4" height="36" rx="2" fill="#3B82F6"/>
+  <text x="14" y="43" font-family="'Helvetica Neue',Arial,sans-serif" font-weight="200" font-size="30" letter-spacing="-1" fill="#111827">packlinx</text>
+  <circle cx="196" cy="43" r="3" fill="#3B82F6"/>
+  <text x="14" y="58" font-family="'Helvetica Neue',Arial,sans-serif" font-size="8" letter-spacing="5" fill="#9CA3AF">PACKAGING PLATFORM</text>
+</svg>

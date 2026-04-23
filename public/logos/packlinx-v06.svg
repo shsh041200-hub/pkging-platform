@@ -1,0 +1,7 @@
+<svg viewBox="0 0 280 80" width="280" height="80" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Packlinx v06">
+  <!-- v06: Stack Layers — layered box panels, cyan palette -->
+  <rect x="10" y="38" width="44" height="18" rx="3" fill="#0EA5E9"/>
+  <rect x="6" y="28" width="44" height="16" rx="3" fill="#38BDF8"/>
+  <rect x="2" y="18" width="44" height="16" rx="3" fill="#BAE6FD"/>
+  <text x="62" y="49" font-family="'Helvetica Neue',Arial,sans-serif" font-weight="800" font-size="28" fill="#0C4A6E">packlinx</text>
+</svg>
