@@ -39,8 +39,8 @@ export const INDUSTRY_CATEGORY_DESCRIPTIONS: Record<IndustryCategory, string> = 
   'pharma-health':           '의약품, 건강기능식품, 의료기기 포장',
   'electronics-industrial':  '전자제품, 부품, 산업재 보호 포장',
   'eco-special':             '친환경, 생분해, 특수 공정 포장',
-  'fresh_produce_packaging': '신선도 유지·콜드체인 전용 포장재 전문 업체 — 농산물·냉장 식품 포장 공급사를 연결합니다',
-  'print_design_services':   '소량 맞춤 인쇄부터 패키지 디자인까지 — 스타트업·소규모 발주에 특화된 인쇄·디자인 업체를 연결합니다',
+  'fresh_produce_packaging': '콜드체인·신선식품 전용 포장재 전문 공급사를 연결합니다',
+  'print_design_services':   '소량 맞춤 인쇄부터 패키지 디자인까지 — 스타트업·소규모 발주 특화',
 }
 
 export const INDUSTRY_CATEGORY_ICONS: Record<IndustryCategory, string> = {
@@ -264,7 +264,44 @@ export const CERTIFICATION_TYPES: CertificationType[] = [
   { id: 'kfda',          label: '식약처 인증',     category: 'pharma',        aliases: ['식약처 인증', '식약처', 'KFDA'] },
   { id: 'kc',            label: 'KC 인증',         category: 'general',       aliases: ['KC 인증', 'KC', 'kc'] },
   { id: 'food_grade',    label: '식품등급',         category: 'food_safety',   aliases: ['식품등급', '식품 등급', 'food grade'] },
+  { id: 'iso15378',     label: 'ISO 15378',       category: 'quality',       aliases: ['ISO 15378', 'iso15378', 'ISO15378'] },
+  { id: 'el724',        label: '환경표지 EL724',   category: 'environmental', aliases: ['EL724', 'el724', '환경표지 EL724', 'EL 724'] },
+  { id: 'el727',        label: '환경표지 EL727',   category: 'environmental', aliases: ['EL727', 'el727', '환경표지 EL727', 'EL 727'] },
 ]
+
+// ── Price tier type and constants ──
+
+export type PriceTier = 'budget' | 'mid' | 'premium' | 'negotiable'
+
+export const PRICE_TIER_LABELS: Record<PriceTier, string> = {
+  budget:     '저가',
+  mid:        '중가',
+  premium:    '고가',
+  negotiable: '협의',
+}
+
+// ── Buyer criteria types and constants ──
+
+export type PrintMethod = 'digital' | 'offset' | 'mixed'
+
+export const PRINT_METHOD_LABELS: Record<PrintMethod, string> = {
+  digital: '디지털 인쇄',
+  offset:  '오프셋 인쇄',
+  mixed:   '혼합 (디지털+오프셋)',
+}
+
+export const MOQ_RANGES = [
+  { id: 'moq_100',  label: '100개 이하',      max: 100 },
+  { id: 'moq_1000', label: '100~1,000개',     min: 101,  max: 1000 },
+  { id: 'moq_5000', label: '1,000~5,000개',   min: 1001, max: 5000 },
+  { id: 'moq_5001', label: '5,000개 이상',    min: 5001 },
+] as const
+
+export const LEAD_TIME_RANGES = [
+  { id: 'lt_3',  label: '3일 이내',  max: 3 },
+  { id: 'lt_14', label: '1~2주',     min: 4,  max: 14 },
+  { id: 'lt_15', label: '3주 이상',  min: 15 },
+] as const
 
 // ── Company interface ──
 
@@ -293,9 +330,21 @@ export interface Company {
   service_capabilities: string[]
   target_industries: string[]
   key_clients: string[]
+  lead_time_standard_days: number | null
+  lead_time_express_days: number | null
+  moq_value: number | null
+  moq_unit: string | null
+  print_method: PrintMethod | null
+  sample_available: boolean | null
+  sample_cost: string | null
+  cold_packaging_available: boolean | null
+  moq_max: number | null
+  cold_logistics_experience: boolean | null
+  greenwashing_verified: boolean
   review_count: number
   avg_rating: number | null
   is_verified: boolean
+  price_tier: PriceTier | null
   created_at: string
   updated_at: string
 }
@@ -307,6 +356,7 @@ export interface Portfolio {
   description: string | null
   image_url: string | null
   display_order: number
+  category_tag: string | null
   created_at: string
   updated_at: string
 }

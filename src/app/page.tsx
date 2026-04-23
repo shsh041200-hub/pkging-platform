@@ -131,7 +131,11 @@ export default async function HomePage({
     query = query.in('packaging_form', selectedForms)
   }
   if (activeCerts.length > 0) {
-    query = query.overlaps('certifications', activeCerts)
+    const expandedCerts = activeCerts.flatMap(id => {
+      const ct = CERTIFICATION_TYPES.find(c => c.id === id)
+      return ct ? ct.aliases : [id]
+    })
+    query = query.overlaps('certifications', expandedCerts)
   }
 
   type RangeEntry = { id: string; label: string; min?: number; max?: number }
