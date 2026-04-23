@@ -14,6 +14,7 @@ import {
   MOQ_RANGES,
   LEAD_TIME_RANGES,
   PRINT_METHOD_LABELS,
+  COLD_RETENTION_RANGES,
   type IndustryCategory,
   type MaterialType,
   type PackagingForm,
@@ -40,6 +41,8 @@ type SearchParams = Promise<{
   leadtime?: string
   cold?: string
   print?: string
+  coldretention?: string
+  dryice?: string
 }>
 
 export async function generateMetadata({
@@ -97,7 +100,7 @@ export default async function HomePage({
 }: {
   searchParams: SearchParams
 }) {
-  const { q, industry, material, form, cert, sort, moq, leadtime, cold, print } = await searchParams
+  const { q, industry, material, form, cert, sort, moq, leadtime, cold, print, coldretention, dryice } = await searchParams
   const supabase = await createClient()
 
   const activeCerts = cert ? cert.split(',').filter(Boolean) : []
@@ -110,7 +113,7 @@ export default async function HomePage({
 
   let query = supabase
     .from('companies')
-    .select('id, slug, name, description, category, industry_categories, material_type, packaging_form, tags, is_verified, cert_count, products, certifications, founded_year, website, icon_url, service_capabilities, target_industries, data_source, review_count, avg_rating, lead_time_standard_days, lead_time_express_days, moq_value, moq_unit, print_method, sample_available, cold_packaging_available')
+    .select('id, slug, name, description, category, industry_categories, material_type, packaging_form, tags, is_verified, cert_count, products, certifications, founded_year, website, icon_url, service_capabilities, target_industries, data_source, review_count, avg_rating, lead_time_standard_days, lead_time_express_days, moq_value, moq_unit, print_method, sample_available, cold_packaging_available, cold_retention_hours, dry_ice_available, reuse_model, spec_sheet_available, seasonal_packaging_available')
     .order('is_verified', { ascending: false })
     .order('cert_count', { ascending: false })
     .limit(60)
@@ -157,6 +160,13 @@ export default async function HomePage({
   if (cold === 'true') {
     query = query.eq('cold_packaging_available', true)
   }
+  if (coldretention) {
+    const range = (COLD_RETENTION_RANGES as readonly RangeEntry[]).find(r => r.id === coldretention)
+    if (range?.min !== undefined) query = query.gte('cold_retention_hours', range.min)
+  }
+  if (dryice === 'true') {
+    query = query.eq('dry_ice_available', true)
+  }
   if (print) {
     query = query.eq('print_method', print)
   }
@@ -194,6 +204,8 @@ export default async function HomePage({
     if (leadtime) params.leadtime = leadtime
     if (cold) params.cold = cold
     if (print) params.print = print
+    if (coldretention) params.coldretention = coldretention
+    if (dryice) params.dryice = dryice
     Object.assign(params, overrides)
     Object.keys(params).forEach((k) => { if (params[k] === undefined) delete params[k] })
     const qs = new URLSearchParams(params).toString()
@@ -211,7 +223,7 @@ export default async function HomePage({
     return buildUrl({ cert: certStr || undefined })
   }
 
-  const showingCategory = !q && !industry && selectedMaterials.length === 0 && selectedForms.length === 0 && activeCerts.length === 0 && !moq && !leadtime && !cold && !print
+  const showingCategory = !q && !industry && selectedMaterials.length === 0 && selectedForms.length === 0 && activeCerts.length === 0 && !moq && !leadtime && !cold && !print && !coldretention && !dryice
 
   const buildMaterialUrl = (mat: MaterialType): string => {
     const current = new Set(selectedMaterials)
@@ -239,6 +251,8 @@ export default async function HomePage({
   const buildLeadTimeUrl = (id: string): string => buildUrl({ leadtime: leadtime === id ? undefined : id })
   const buildPrintUrl = (method: string): string => buildUrl({ print: print === method ? undefined : method })
   const buildColdUrl = (): string => buildUrl({ cold: cold === 'true' ? undefined : 'true' })
+  const buildColdRetentionUrl = (id: string): string => buildUrl({ coldretention: coldretention === id ? undefined : id })
+  const buildDryIceUrl = (): string => buildUrl({ dryice: dryice === 'true' ? undefined : 'true' })
 
   // Group cert types by category for filter UI
   const certsByCategory = CERTIFICATION_TYPES.reduce<Record<CertificationCategory, typeof CERTIFICATION_TYPES>>((acc, ct) => {
@@ -561,6 +575,33 @@ export default async function HomePage({
               >
                 보냉 포장
               </Link>
+              <span className="flex-shrink-0 w-px h-4 bg-gray-200 self-center mx-0.5" aria-hidden="true" />
+              {COLD_RETENTION_RANGES.map((range) => {
+                const isActive = coldretention === range.id
+                return (
+                  <Link
+                    key={range.id}
+                    href={buildColdRetentionUrl(range.id)}
+                    className={`flex-shrink-0 px-2.5 py-1 rounded text-[11px] font-medium transition-all border ${
+                      isActive
+                        ? 'bg-[#0D9488] text-white border-[#0D9488]'
+                        : 'text-gray-500 border-gray-200 hover:text-gray-700 hover:border-gray-300 bg-white'
+                    }`}
+                  >
+                    보냉 {range.label}
+                  </Link>
+                )
+              })}
+              <Link
+                href={buildDryIceUrl()}
+                className={`flex-shrink-0 px-2.5 py-1 rounded text-[11px] font-medium transition-all border ${
+                  dryice === 'true'
+                    ? 'bg-[#0D9488] text-white border-[#0D9488]'
+                    : 'text-gray-500 border-gray-200 hover:text-gray-700 hover:border-gray-300 bg-white'
+                }`}
+              >
+                드라이아이스
+              </Link>
             </div>
 
             {/* Certification accordion filter */}
@@ -651,12 +692,30 @@ export default async function HomePage({
                 <span className="text-teal-700/60 text-[10px] leading-none">×</span>
               </Link>
             )}
+            {coldretention && (
+              <Link
+                href={buildUrl({ coldretention: undefined })}
+                className="text-[11px] bg-teal-50 text-teal-700 font-medium px-2.5 py-1 rounded-full flex items-center gap-1 border border-teal-200 hover:bg-teal-100 transition-colors"
+              >
+                보냉 {COLD_RETENTION_RANGES.find(r => r.id === coldretention)?.label ?? coldretention}
+                <span className="text-teal-700/60 text-[10px] leading-none">×</span>
+              </Link>
+            )}
+            {dryice === 'true' && (
+              <Link
+                href={buildUrl({ dryice: undefined })}
+                className="text-[11px] bg-teal-50 text-teal-700 font-medium px-2.5 py-1 rounded-full flex items-center gap-1 border border-teal-200 hover:bg-teal-100 transition-colors"
+              >
+                드라이아이스
+                <span className="text-teal-700/60 text-[10px] leading-none">×</span>
+              </Link>
+            )}
             {q && (
               <span className="text-[11px] bg-[#EBF2FF] text-[#005EFF] font-medium px-2.5 py-1 rounded-full">
                 &ldquo;{q}&rdquo;
               </span>
             )}
-            {(industry || selectedMaterials.length > 0 || selectedForms.length > 0 || q || activeCerts.length > 0 || moq || leadtime || cold || print) && (
+            {(industry || selectedMaterials.length > 0 || selectedForms.length > 0 || q || activeCerts.length > 0 || moq || leadtime || cold || print || coldretention || dryice) && (
               <Link href="/" className="text-xs text-gray-400 hover:text-gray-600 ml-1">
                 초기화
               </Link>

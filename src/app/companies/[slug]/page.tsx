@@ -15,6 +15,7 @@ import {
   CERTIFICATION_CATEGORY_LABELS,
   PRINT_METHOD_LABELS,
   PRICE_TIER_LABELS,
+  REUSE_MODEL_LABELS,
   type Category,
   type CompanyTag,
   type IndustryCategory,
@@ -22,6 +23,7 @@ import {
   type Portfolio,
   type PrintMethod,
   type PriceTier,
+  type ReuseModel,
 } from '@/types'
 import { CompanyViewTracker } from './CompanyViewTracker'
 import { CompanyIcon } from '@/components/CompanyIcon'
@@ -177,7 +179,7 @@ export default async function CompanyPage({ params }: Props) {
     ],
   }
 
-  const hasExpandedInfo = company.founded_year || company.min_order_quantity || company.moq_value != null || company.lead_time_standard_days != null || company.print_method || company.sample_available != null || company.cold_packaging_available || company.price_tier
+  const hasExpandedInfo = company.founded_year || company.min_order_quantity || company.moq_value != null || company.lead_time_standard_days != null || company.print_method || company.sample_available != null || company.cold_packaging_available || company.price_tier || company.cold_retention_hours != null || company.dry_ice_available != null || company.reuse_model || company.spec_sheet_available != null || company.seasonal_packaging_available
   const hasServiceCapabilities = company.service_capabilities && company.service_capabilities.length > 0
   const hasKeyClients = company.key_clients && company.key_clients.length > 0
   const hasTargetIndustries = company.target_industries && company.target_industries.length > 0
@@ -368,6 +370,48 @@ export default async function CompanyPage({ params }: Props) {
                   <p className="text-[14px] font-semibold text-gray-700">
                     {PRICE_TIER_LABELS[company.price_tier as PriceTier]}
                   </p>
+                </div>
+              )}
+              {company.cold_retention_hours != null && (
+                <div>
+                  <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-1">보냉 유지</p>
+                  <p className="text-[14px] font-semibold text-gray-700">{company.cold_retention_hours}시간</p>
+                </div>
+              )}
+              {company.dry_ice_available != null && (
+                <div>
+                  <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-1">드라이아이스</p>
+                  <span className={`inline-flex items-center gap-1 text-[13px] font-semibold px-2.5 py-1 rounded border ${
+                    company.dry_ice_available ? 'text-teal-700 bg-teal-50 border-teal-200' : 'text-gray-500 bg-gray-50 border-gray-200'
+                  }`}>
+                    {company.dry_ice_available ? '취급 가능' : '미취급'}
+                  </span>
+                </div>
+              )}
+              {company.reuse_model && (
+                <div>
+                  <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-1">박스 재사용</p>
+                  <p className="text-[14px] font-semibold text-gray-700">
+                    {REUSE_MODEL_LABELS[company.reuse_model as ReuseModel] ?? company.reuse_model}
+                  </p>
+                </div>
+              )}
+              {company.spec_sheet_available != null && (
+                <div>
+                  <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-1">규격서 발행</p>
+                  <span className={`inline-flex items-center gap-1 text-[13px] font-semibold px-2.5 py-1 rounded border ${
+                    company.spec_sheet_available ? 'text-teal-700 bg-teal-50 border-teal-200' : 'text-gray-500 bg-gray-50 border-gray-200'
+                  }`}>
+                    {company.spec_sheet_available ? '발행 가능' : '미지원'}
+                  </span>
+                </div>
+              )}
+              {company.seasonal_packaging_available && (
+                <div>
+                  <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-1">계절 대응</p>
+                  <span className="inline-flex items-center gap-1 text-[13px] font-semibold text-teal-700 bg-teal-50 border border-teal-200 px-2.5 py-1 rounded">
+                    계절별 포장 대응
+                  </span>
                 </div>
               )}
             </div>

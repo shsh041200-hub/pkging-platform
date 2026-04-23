@@ -280,6 +280,23 @@ export const PRICE_TIER_LABELS: Record<PriceTier, string> = {
   negotiable: '협의',
 }
 
+// ── Reuse model type and constants ──
+
+export type ReuseModel = 'single_use' | 'reusable' | 'returnable'
+
+export const REUSE_MODEL_LABELS: Record<ReuseModel, string> = {
+  single_use: '일회용',
+  reusable:   '재사용',
+  returnable: '회수형',
+}
+
+// ── Cold retention range filter ──
+
+export const COLD_RETENTION_RANGES = [
+  { id: 'cr_6',  label: '6시간 이상',  min: 6 },
+  { id: 'cr_24', label: '24시간 이상', min: 24 },
+] as const
+
 // ── Buyer criteria types and constants ──
 
 export type PrintMethod = 'digital' | 'offset' | 'mixed'
@@ -345,6 +362,11 @@ export interface Company {
   avg_rating: number | null
   is_verified: boolean
   price_tier: PriceTier | null
+  cold_retention_hours: number | null
+  dry_ice_available: boolean | null
+  reuse_model: ReuseModel | null
+  spec_sheet_available: boolean | null
+  seasonal_packaging_available: boolean | null
   created_at: string
   updated_at: string
 }
