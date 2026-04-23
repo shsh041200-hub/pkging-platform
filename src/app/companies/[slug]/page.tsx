@@ -98,6 +98,17 @@ export default async function CompanyPage({ params }: Props) {
 
   if (!company) notFound()
 
+  const { data: { user } } = await supabase.auth.getUser()
+  let isOwner = false
+  if (user) {
+    const { data: profile } = await supabase
+      .from('user_profiles')
+      .select('company_id')
+      .eq('id', user.id)
+      .single()
+    isOwner = profile?.company_id === company.id
+  }
+
   const { data: reviews } = await supabase
     .from('reviews')
     .select('id, rating, content, created_at')
@@ -400,9 +411,9 @@ export default async function CompanyPage({ params }: Props) {
               )
             })}
           </div>
-        ) : (
+        ) : isOwner ? (
           <CertificationCTABanner companyId={company.id} />
-        )}
+        ) : null}
 
         {/* Portfolio Gallery */}
         {hasPortfolios && (
