@@ -23,11 +23,11 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://packlinx.com'
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: 'BOXTER — 전국 패키징 파트너, 한 번에',
-    template: '%s | BOXTER',
+    default: 'Packlinx | 전국 패키징 업체 B2B 플랫폼',
+    template: '%s | Packlinx',
   },
   description: '전국 패키징 업체를 한눈에. 식품·산업용·친환경 포장재 B2B 파트너 찾기.',
-  keywords: '패키징, 포장재, 박스, 식품포장, 친환경포장, 산업용포장, BOXTER, 박스터, packlinx',
+  keywords: '패키징, 포장재, 박스, 식품포장, 친환경포장, 산업용포장, Packlinx, packlinx',
   icons: {
     icon: [
       { url: '/favicon.ico', sizes: 'any' },
@@ -39,16 +39,16 @@ export const metadata: Metadata = {
     canonical: '/',
   },
   openGraph: {
-    title: 'BOXTER — 전국 패키징 파트너, 한 번에',
+    title: 'Packlinx | 전국 패키징 업체 B2B 플랫폼',
     description: '전국 패키징 업체를 한눈에. 식품·산업용·친환경 포장재 B2B 파트너 찾기.',
     url: siteUrl,
-    siteName: 'BOXTER',
+    siteName: 'Packlinx',
     locale: 'ko_KR',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'BOXTER — 전국 패키징 파트너, 한 번에',
+    title: 'Packlinx | 전국 패키징 업체 B2B 플랫폼',
     description: '전국 패키징 업체를 한눈에. 식품·산업용·친환경 포장재 B2B 파트너 찾기.',
   },
   verification: {
