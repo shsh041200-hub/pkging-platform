@@ -27,6 +27,10 @@ import { CertFilterAccordion } from './CertFilterAccordion'
 import { CompanyIcon } from '@/components/CompanyIcon'
 import { WebsiteFavicon } from '@/components/WebsiteFavicon'
 import { CertBadge } from '@/components/CertBadge'
+import { SortDropdown } from '@/components/SortDropdown'
+import { Pagination } from '@/components/Pagination'
+
+const PAGE_SIZE = 30
 
 export const revalidate = 300
 
@@ -45,6 +49,7 @@ type SearchParams = Promise<{
   print?: string
   coldretention?: string
   dryice?: string
+  page?: string
 }>
 
 export async function generateMetadata({
@@ -102,7 +107,8 @@ export default async function HomePage({
 }: {
   searchParams: SearchParams
 }) {
-  const { q, industry, material, form, cert, sort, moq, leadtime, cold, print, coldretention, dryice } = await searchParams
+  const { q, industry, material, form, cert, sort, moq, leadtime, cold, print, coldretention, dryice, page } = await searchParams
+  const currentPage = Math.max(1, parseInt(page ?? '1', 10))
   const supabase = await createClient()
 
   const activeCerts = cert ? cert.split(',').filter(Boolean) : []
@@ -115,10 +121,7 @@ export default async function HomePage({
 
   let query = supabase
     .from('companies')
-    .select('id, slug, name, description, category, industry_categories, material_type, packaging_form, tags, is_verified, cert_count, products, certifications, founded_year, website, icon_url, service_capabilities, target_industries, data_source, review_count, avg_rating, lead_time_standard_days, lead_time_express_days, moq_value, moq_unit, print_method, sample_available, cold_packaging_available, cold_retention_hours, dry_ice_available, reuse_model, spec_sheet_available, seasonal_packaging_available')
-    .order('is_verified', { ascending: false })
-    .order('cert_count', { ascending: false })
-    .limit(60)
+    .select('id, slug, name, description, category, industry_categories, material_type, packaging_form, tags, is_verified, cert_count, products, certifications, founded_year, website, icon_url, service_capabilities, target_industries, data_source, review_count, avg_rating, lead_time_standard_days, lead_time_express_days, moq_value, moq_unit, print_method, sample_available, cold_packaging_available, cold_retention_hours, dry_ice_available, reuse_model, spec_sheet_available, seasonal_packaging_available', { count: 'exact' })
 
   if (q) {
     query = query.or(`name.ilike.%${q}%,description.ilike.%${q}%`)
@@ -173,13 +176,21 @@ export default async function HomePage({
     query = query.eq('print_method', print)
   }
 
-  if (sort === 'rating') {
-    query = query.order('avg_rating', { ascending: false, nullsFirst: false })
+  if (sort === 'name_asc') {
+    query = query.order('name', { ascending: true })
+  } else if (sort === 'est_asc') {
+    query = query.order('founded_year', { ascending: true, nullsFirst: false }).order('name')
+  } else if (sort === 'est_desc') {
+    query = query.order('founded_year', { ascending: false, nullsFirst: false }).order('name')
   } else {
-    query = query.order('name')
+    query = query.order('is_verified', { ascending: false }).order('cert_count', { ascending: false }).order('name')
   }
 
-  const { data: companies } = await query
+  const offset = (currentPage - 1) * PAGE_SIZE
+  query = query.range(offset, offset + PAGE_SIZE - 1)
+
+  const { data: companies, count: filteredCount } = await query
+  const totalPages = Math.ceil((filteredCount ?? 0) / PAGE_SIZE)
 
   const [{ count: totalCount }, ...categoryCountResults] = await Promise.all([
     supabase.from('companies').select('*', { count: 'exact', head: true }),
@@ -208,8 +219,30 @@ export default async function HomePage({
     if (coldretention) params.coldretention = coldretention
     if (dryice) params.dryice = dryice
     Object.assign(params, overrides)
-    Object.keys(params).forEach((k) => { if (params[k] === undefined) delete params[k] })
+    // always reset page when changing filters (except when page itself is the override)
+    if (!('page' in overrides)) delete params.page
+    Object.keys(params).forEach((k) => { if ((params as Record<string, string | undefined>)[k] === undefined) delete params[k] })
     const qs = new URLSearchParams(params).toString()
+    return qs ? `/?${qs}` : '/'
+  }
+
+  const buildPageUrl = (p: number): string => {
+    const params: Record<string, string | undefined> = {}
+    if (q) params.q = q
+    if (industry) params.industry = industry
+    if (material) params.material = material
+    if (form) params.form = form
+    if (cert) params.cert = cert
+    if (sort) params.sort = sort
+    if (moq) params.moq = moq
+    if (leadtime) params.leadtime = leadtime
+    if (cold) params.cold = cold
+    if (print) params.print = print
+    if (coldretention) params.coldretention = coldretention
+    if (dryice) params.dryice = dryice
+    if (p > 1) params.page = String(p)
+    Object.keys(params).forEach((k) => { if (params[k] === undefined) delete params[k] })
+    const qs = new URLSearchParams(params as Record<string, string>).toString()
     return qs ? `/?${qs}` : '/'
   }
 
@@ -622,7 +655,7 @@ export default async function HomePage({
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-2.5 flex-wrap">
             <p className="text-sm text-gray-500">
-              <span className="font-semibold text-gray-900">{companies?.length ?? 0}</span>개 업체
+              <span className="font-semibold text-gray-900">{filteredCount ?? 0}</span>개 업체
             </p>
             {industry && (
               <span className="text-[11px] bg-[#EBF2FF] text-[#005EFF] font-medium px-2.5 py-1 rounded-full">
@@ -723,28 +756,11 @@ export default async function HomePage({
             )}
           </div>
 
-          {/* Sort dropdown */}
-          <div className="flex items-center gap-2">
-            <Link
-              href={buildUrl({ sort: undefined })}
-              className={`text-[12px] font-medium px-2.5 py-1 rounded transition-colors ${
-                !sort ? 'text-gray-900 bg-gray-100' : 'text-gray-400 hover:text-gray-600'
-              }`}
-            >
-              기본순
-            </Link>
-            <Link
-              href={buildUrl({ sort: 'rating' })}
-              className={`text-[12px] font-medium px-2.5 py-1 rounded transition-colors ${
-                sort === 'rating' ? 'text-gray-900 bg-gray-100' : 'text-gray-400 hover:text-gray-600'
-              }`}
-            >
-              평점순
-            </Link>
-          </div>
+          <SortDropdown currentSort={sort ?? ''} />
         </div>
 
         {companies && companies.length > 0 ? (
+          <>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {companies.map((company) => (
               <article
@@ -843,6 +859,8 @@ export default async function HomePage({
               </article>
             ))}
           </div>
+          <Pagination currentPage={currentPage} totalPages={totalPages} buildPageUrl={buildPageUrl} />
+          </>
         ) : (
           <div className="text-center py-24">
             <div className="w-12 h-12 bg-gray-100 rounded-xl flex items-center justify-center mx-auto mb-4">

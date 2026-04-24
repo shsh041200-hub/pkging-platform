@@ -21,11 +21,16 @@ import {
   type BlogPost,
   type UseCaseTag,
 } from '@/types'
+import { CategoryGuideBlock } from '@/components/CategoryGuideBlock'
 import { PackagingFormFilter } from './PackagingFormFilter'
 import { CertFilterAccordion } from '@/app/CertFilterAccordion'
 import { createClient } from '@/lib/supabase/server'
 import { simplifyCompanyName } from '@/lib/simplify-company-name'
 import { WebsiteFavicon } from '@/components/WebsiteFavicon'
+import { SortDropdown } from '@/components/SortDropdown'
+import { Pagination } from '@/components/Pagination'
+
+const PAGE_SIZE = 30
 
 const CERT_CATEGORY_COLORS: Record<CertificationCategory, { active: string; inactive: string }> = {
   quality:       { active: 'bg-blue-600 text-white border-blue-600',    inactive: 'text-gray-500 border-gray-200 hover:text-gray-700 hover:border-gray-300 bg-white' },
@@ -117,7 +122,7 @@ export function generateStaticParams() {
 
 type Props = {
   params: Promise<{ slug: string }>
-  searchParams: Promise<{ material?: string; form?: string; cert?: string; 'use-case'?: string }>
+  searchParams: Promise<{ material?: string; form?: string; cert?: string; 'use-case'?: string; sort?: string; page?: string }>
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -144,8 +149,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function CategoryPage({ params, searchParams }: Props) {
   const { slug } = await params
   const sp = await searchParams
-  const { material, form, cert } = sp
+  const { material, form, cert, sort } = sp
   const useCaseParam = sp['use-case']
+  const currentPage = Math.max(1, parseInt(sp.page ?? '1', 10))
   const categoryKey = slugToCategory(slug)
   if (!categoryKey) notFound()
 
@@ -167,17 +173,28 @@ export default async function CategoryPage({ params, searchParams }: Props) {
 
   const selectedUseCase = useCaseParam ?? null
 
+  const buildFilterParams = (overrides: Record<string, string | undefined>) => {
+    const base: Record<string, string | undefined> = {
+      material,
+      form,
+      cert,
+      'use-case': useCaseParam,
+      sort: sort || undefined,
+    }
+    const merged = { ...base, ...overrides, page: undefined }
+    const p = new URLSearchParams()
+    for (const [k, v] of Object.entries(merged)) {
+      if (v) p.set(k, v)
+    }
+    return `/categories/${slug}${p.toString() ? `?${p}` : ''}`
+  }
+
   const buildMaterialUrl = (mat: MaterialType): string => {
     const current = new Set(selectedMaterials)
     if (current.has(mat)) current.delete(mat)
     else current.add(mat)
     const matStr = Array.from(current).join(',')
-    const p = new URLSearchParams()
-    if (matStr) p.set('material', matStr)
-    if (form) p.set('form', form)
-    if (cert) p.set('cert', cert)
-    if (useCaseParam) p.set('use-case', useCaseParam)
-    return `/categories/${slug}${p.toString() ? `?${p}` : ''}`
+    return buildFilterParams({ material: matStr || undefined })
   }
 
   const buildFormUrl = (pf: PackagingForm): string => {
@@ -185,12 +202,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
     if (current.has(pf)) current.delete(pf)
     else current.add(pf)
     const formStr = Array.from(current).join(',')
-    const p = new URLSearchParams()
-    if (material) p.set('material', material)
-    if (formStr) p.set('form', formStr)
-    if (cert) p.set('cert', cert)
-    if (useCaseParam) p.set('use-case', useCaseParam)
-    return `/categories/${slug}${p.toString() ? `?${p}` : ''}`
+    return buildFilterParams({ form: formStr || undefined })
   }
 
   const buildCertUrl = (certId: string): string => {
@@ -198,20 +210,21 @@ export default async function CategoryPage({ params, searchParams }: Props) {
     if (current.has(certId)) current.delete(certId)
     else current.add(certId)
     const certStr = Array.from(current).join(',')
-    const p = new URLSearchParams()
-    if (material) p.set('material', material)
-    if (form) p.set('form', form)
-    if (certStr) p.set('cert', certStr)
-    if (useCaseParam) p.set('use-case', useCaseParam)
-    return `/categories/${slug}${p.toString() ? `?${p}` : ''}`
+    return buildFilterParams({ cert: certStr || undefined })
   }
 
   const buildUseCaseUrl = (tagSlug: string): string => {
+    return buildFilterParams({ 'use-case': selectedUseCase !== tagSlug ? tagSlug : undefined })
+  }
+
+  const buildPageUrl = (page: number): string => {
     const p = new URLSearchParams()
     if (material) p.set('material', material)
     if (form) p.set('form', form)
     if (cert) p.set('cert', cert)
-    if (selectedUseCase !== tagSlug) p.set('use-case', tagSlug)
+    if (useCaseParam) p.set('use-case', useCaseParam)
+    if (sort) p.set('sort', sort)
+    if (page > 1) p.set('page', String(page))
     return `/categories/${slug}${p.toString() ? `?${p}` : ''}`
   }
 
@@ -238,10 +251,8 @@ export default async function CategoryPage({ params, searchParams }: Props) {
 
   let query = supabase
     .from('companies')
-    .select('id, slug, name, description, category, industry_categories, material_type, packaging_form, tags, is_verified, products, certifications, founded_year, website, icon_url, service_capabilities, target_industries')
+    .select('id, slug, name, description, category, industry_categories, material_type, packaging_form, tags, is_verified, products, certifications, founded_year, website, icon_url, service_capabilities, target_industries', { count: 'exact' })
     .contains('industry_categories', [categoryKey])
-    .order('is_verified', { ascending: false })
-    .order('name')
 
   if (selectedMaterials.length === 1) {
     query = query.eq('material_type', selectedMaterials[0])
@@ -265,7 +276,21 @@ export default async function CategoryPage({ params, searchParams }: Props) {
     query = query.contains('use_case_tags', [selectedUseCase])
   }
 
-  const { data: companies } = await query
+  if (sort === 'name_asc') {
+    query = query.order('name', { ascending: true })
+  } else if (sort === 'est_asc') {
+    query = query.order('founded_year', { ascending: true, nullsFirst: false }).order('name')
+  } else if (sort === 'est_desc') {
+    query = query.order('founded_year', { ascending: false, nullsFirst: false }).order('name')
+  } else {
+    query = query.order('is_verified', { ascending: false }).order('name')
+  }
+
+  const offset = (currentPage - 1) * PAGE_SIZE
+  query = query.range(offset, offset + PAGE_SIZE - 1)
+
+  const { data: companies, count: filteredCount } = await query
+  const totalPages = Math.ceil((filteredCount ?? 0) / PAGE_SIZE)
 
   const { count: totalInCategory } = await supabase
     .from('companies')
@@ -361,11 +386,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
           <div className="flex gap-1.5 py-3 overflow-x-auto scrollbar-none">
             <span className="flex-shrink-0 text-[10px] font-semibold text-gray-300 uppercase tracking-widest self-center mr-2">소재</span>
             <Link
-              href={(() => {
-                const p = new URLSearchParams()
-                if (form) p.set('form', form)
-                return `/categories/${slug}${p.toString() ? `?${p}` : ''}`
-              })()}
+              href={buildFilterParams({ material: undefined })}
               className={`flex-shrink-0 px-3 py-1.5 rounded-md text-[13px] font-medium transition-all ${
                 selectedMaterials.length === 0
                   ? 'bg-gray-900 text-white'
@@ -399,13 +420,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
                 용도
               </span>
               <Link
-                href={(() => {
-                  const p = new URLSearchParams()
-                  if (material) p.set('material', material)
-                  if (form) p.set('form', form)
-                  if (cert) p.set('cert', cert)
-                  return `/categories/${slug}${p.toString() ? `?${p}` : ''}`
-                })()}
+                href={buildFilterParams({ 'use-case': undefined })}
                 className={`flex-shrink-0 px-2.5 py-1.5 rounded text-[11px] font-medium transition-all border ${
                   !selectedUseCase
                     ? 'bg-[#005EFF] text-white border-[#005EFF]'
@@ -453,7 +468,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-2.5 flex-wrap">
             <p className="text-sm text-gray-500">
-              <span className="font-semibold text-gray-900">{companies?.length ?? 0}</span>개 업체
+              <span className="font-semibold text-gray-900">{filteredCount ?? 0}</span>개 업체
             </p>
             {selectedMaterials.map((mat) => (
               <Link
@@ -509,9 +524,11 @@ export default async function CategoryPage({ params, searchParams }: Props) {
               </Link>
             )}
           </div>
+          <SortDropdown currentSort={sort ?? ''} />
         </div>
 
         {companies && companies.length > 0 ? (
+          <>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {companies.map((company) => (
               <article
@@ -580,6 +597,8 @@ export default async function CategoryPage({ params, searchParams }: Props) {
               </article>
             ))}
           </div>
+          <Pagination currentPage={currentPage} totalPages={totalPages} buildPageUrl={buildPageUrl} />
+          </>
         ) : (
           <div className="text-center py-24">
             <div className="w-12 h-12 bg-gray-100 rounded-xl flex items-center justify-center mx-auto mb-4">
