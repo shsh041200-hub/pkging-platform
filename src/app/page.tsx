@@ -377,7 +377,7 @@ export default async function HomePage({
             <span className="hidden sm:inline text-gray-300 text-[11px] font-medium tracking-widest uppercase">패키징 업체 검색 플랫폼</span>
           </Link>
           <nav className="flex items-center gap-6">
-            <Link href="/blog" className="text-gray-500 hover:text-gray-900 text-[13px] font-medium transition-colors">
+            <Link href="/guides" className="text-gray-500 hover:text-gray-900 text-[13px] font-medium transition-colors">
               가이드
             </Link>
           </nav>
@@ -912,7 +912,7 @@ export default async function HomePage({
               </p>
             </div>
             <div className="flex gap-5 text-[12px] text-gray-400">
-              <Link href="/blog" className="hover:text-gray-600 transition-colors">패키징 가이드</Link>
+              <Link href="/guides" className="hover:text-gray-600 transition-colors">패키징 가이드</Link>
               <Link href="/privacy" className="hover:text-gray-600 transition-colors">개인정보처리방침</Link>
               <Link href="/terms" className="hover:text-gray-600 transition-colors">이용약관</Link>
             </div>

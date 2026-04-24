@@ -302,6 +302,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
     .select('id, slug, title, excerpt, published_at')
     .eq('category', categoryKey)
     .eq('status', 'published')
+    .eq('content_type', 'guide')
     .order('published_at', { ascending: false })
     .limit(3)
 
@@ -348,7 +349,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
             <span className="hidden sm:inline text-gray-300 text-[11px] font-medium tracking-widest uppercase">전국 패키징 파트너, 한 번에</span>
           </Link>
           <nav className="flex items-center gap-6">
-            <Link href="/blog" className="text-gray-500 hover:text-gray-900 text-[13px] font-medium transition-colors">
+            <Link href="/guides" className="text-gray-500 hover:text-gray-900 text-[13px] font-medium transition-colors">
               가이드
             </Link>
           </nav>
@@ -632,15 +633,15 @@ export default async function CategoryPage({ params, searchParams }: Props) {
         <section className="max-w-7xl mx-auto px-5 sm:px-8 pb-12">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-[13px] font-semibold text-gray-400 uppercase tracking-wider">관련 가이드</h2>
-            <Link href="/blog" className="text-[12px] text-[#2563EB] hover:text-[#1D4ED8] font-medium transition-colors">
-              블로그 전체 보기 →
+            <Link href="/guides" className="text-[12px] text-[#2563EB] hover:text-[#1D4ED8] font-medium transition-colors">
+              가이드 전체 보기 →
             </Link>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {relatedPosts.map((post: Pick<BlogPost, 'id' | 'slug' | 'title' | 'excerpt' | 'published_at'>) => (
               <Link
                 key={post.id}
-                href={`/blog/${post.slug}`}
+                href={`/guides/${post.slug}`}
                 className="bg-white border border-gray-200 rounded-xl p-5 hover:border-gray-300 hover:shadow-sm transition-all group"
               >
                 <p className="text-[11px] text-gray-400 mb-2">
@@ -705,7 +706,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
               </p>
             </div>
             <div className="flex gap-5 text-[12px] text-gray-400">
-              <Link href="/blog" className="hover:text-gray-600 transition-colors">패키징 가이드</Link>
+              <Link href="/guides" className="hover:text-gray-600 transition-colors">패키징 가이드</Link>
               <Link href="/privacy" className="hover:text-gray-600 transition-colors">개인정보처리방침</Link>
               <Link href="/terms" className="hover:text-gray-600 transition-colors">이용약관</Link>
             </div>

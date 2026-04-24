@@ -93,9 +93,6 @@ export default async function GuidesListPage({ searchParams }: Props) {
             <Link href="/guides" className="text-gray-900 text-[13px] font-semibold">
               가이드
             </Link>
-            <Link href="/blog" className="text-gray-500 hover:text-gray-900 text-[13px] font-medium transition-colors">
-              블로그
-            </Link>
           </nav>
         </div>
       </header>
@@ -231,7 +228,6 @@ export default async function GuidesListPage({ searchParams }: Props) {
             </div>
             <div className="flex gap-5 text-[12px] text-gray-400">
               <Link href="/guides" className="hover:text-gray-600 transition-colors">패키징 완전 가이드</Link>
-              <Link href="/blog" className="hover:text-gray-600 transition-colors">블로그</Link>
               <Link href="/privacy" className="hover:text-gray-600 transition-colors">개인정보처리방침</Link>
               <Link href="/terms" className="hover:text-gray-600 transition-colors">이용약관</Link>
             </div>
