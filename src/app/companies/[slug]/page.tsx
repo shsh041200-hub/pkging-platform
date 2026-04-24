@@ -37,6 +37,10 @@ type Props = {
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://packlinx.com'
 
+// Auth cookie access makes this page inherently dynamic; ISR requires separating auth into a
+// client-side fetch. Declare intent explicitly rather than relying on implicit opt-out.
+export const dynamic = 'force-dynamic'
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug: rawSlug } = await params
   const slug = decodeURIComponent(rawSlug)
@@ -98,37 +102,39 @@ export default async function CompanyPage({ params }: Props) {
 
   if (!company) notFound()
 
-  const { data: { user } } = await supabase.auth.getUser()
-  let isOwner = false
-  if (user) {
-    const { data: profile } = await supabase
-      .from('user_profiles')
-      .select('company_id')
-      .eq('id', user.id)
-      .single()
-    isOwner = profile?.company_id === company.id
-  }
-
-  const { data: portfolios } = await supabase
-    .from('company_portfolios')
-    .select('id, title, description, image_url, display_order, category_tag')
-    .eq('company_id', company.id)
-    .order('display_order', { ascending: true })
-
   const industryCatsForQuery = (company.industry_categories as string[] | null) ?? []
   const primaryCatForRelated = industryCatsForQuery[0] as IndustryCategory | undefined
 
-  const relatedCompaniesData = primaryCatForRelated
-    ? await supabase
-        .from('companies')
-        .select('id, slug, name, description, icon_url, category, industry_categories, is_verified')
-        .contains('industry_categories', [primaryCatForRelated])
-        .neq('id', company.id)
-        .order('is_verified', { ascending: false })
-        .order('name')
-        .limit(6)
-    : { data: null }
-  const relatedCompanies = relatedCompaniesData.data ?? []
+  const [isOwner, portfoliosResult, relatedCompaniesResult] = await Promise.all([
+    (async (): Promise<boolean> => {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) return false
+      const { data: profile } = await supabase
+        .from('user_profiles')
+        .select('company_id')
+        .eq('id', user.id)
+        .single()
+      return profile?.company_id === company.id
+    })(),
+    supabase
+      .from('company_portfolios')
+      .select('id, title, description, image_url, display_order, category_tag')
+      .eq('company_id', company.id)
+      .order('display_order', { ascending: true }),
+    primaryCatForRelated
+      ? supabase
+          .from('companies')
+          .select('id, slug, name, description, icon_url, category, industry_categories, is_verified')
+          .contains('industry_categories', [primaryCatForRelated])
+          .neq('id', company.id)
+          .order('is_verified', { ascending: false })
+          .order('name')
+          .limit(6)
+      : Promise.resolve({ data: null }),
+  ])
+
+  const portfolios = portfoliosResult.data
+  const relatedCompanies = relatedCompaniesResult.data ?? []
 
   const companyJsonLd = {
     '@context': 'https://schema.org',
@@ -218,8 +224,6 @@ export default async function CompanyPage({ params }: Props) {
   const moqUnit = (company.moq_unit as string | null) ?? '개'
   const leadTimeDays = company.lead_time_standard_days ?? company.lead_time_express_days
 
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL ?? ''
-
   function getPortfolioImageUrl(rawUrl: string) {
     if (!rawUrl) return rawUrl
     if (rawUrl.includes('/storage/v1/object/public/')) {
@@ -227,8 +231,6 @@ export default async function CompanyPage({ params }: Props) {
     }
     return rawUrl
   }
-
-  void supabaseUrl
 
   return (
     <div className="min-h-screen bg-[#F9FAFB]">
@@ -446,7 +448,7 @@ export default async function CompanyPage({ params }: Props) {
                 companyName={company.name}
                 website={company.website ?? null}
                 iconUrl={company.icon_url ?? null}
-                kakaoUrl={(company as Record<string, unknown>).kakao_url as string | null ?? null}
+                kakaoUrl={null}
               />
             </Suspense>
           </div>
