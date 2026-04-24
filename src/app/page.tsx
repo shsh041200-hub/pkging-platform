@@ -230,6 +230,8 @@ export default async function HomePage({
 
     if (sort === 'name_asc') {
       dbQuery = dbQuery.order('name', { ascending: true })
+    } else if (sort === 'moq_asc') {
+      dbQuery = dbQuery.order('moq_value', { ascending: true, nullsFirst: false }).order('name')
     } else if (sort === 'est_asc') {
       dbQuery = dbQuery.order('founded_year', { ascending: true, nullsFirst: false }).order('name')
     } else if (sort === 'est_desc') {
