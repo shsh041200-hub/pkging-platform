@@ -80,7 +80,7 @@ export function CompanyDeliveryEditClient({
         <button
           type="submit"
           disabled={saving}
-          className="w-full sm:w-auto px-6 py-2.5 rounded-lg bg-[#005EFF] text-white text-[14px] font-semibold hover:bg-[#0047CC] transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
+          className="w-full sm:w-auto px-6 py-2.5 rounded-lg bg-[#C2410C] text-white text-[14px] font-semibold hover:bg-[#9A3412] transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
         >
           {saving ? '저장 중...' : '저장'}
         </button>

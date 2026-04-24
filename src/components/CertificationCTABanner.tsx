@@ -21,7 +21,7 @@ export function CertificationCTABanner({ companyId }: Props) {
       <button
         type="button"
         onClick={() => setIsModalOpen(true)}
-        className="w-full text-left bg-blue-50 border border-blue-200 rounded-xl p-4 sm:p-5 flex items-start sm:items-center gap-4 hover:bg-blue-100/70 transition-colors group focus:outline-none focus:ring-2 focus:ring-[#005EFF]/40"
+        className="w-full text-left bg-blue-50 border border-blue-200 rounded-xl p-4 sm:p-5 flex items-start sm:items-center gap-4 hover:bg-blue-100/70 transition-colors group focus:outline-none focus:ring-2 focus:ring-[#FED7AA]/60"
         aria-label={UI_TEXT.bannerCta}
       >
         {/* Icon */}

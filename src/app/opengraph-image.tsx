@@ -35,7 +35,7 @@ export default function OgImage() {
 
         {/* Row 3 */}
         <div style={{ position: 'absolute', left: 120, top: 336, width: 140, height: 90, border: '1.2px solid #CBD5E1', borderRadius: 5 }} />
-        <div style={{ position: 'absolute', left: 268, top: 336, width: 60, height: 90, background: '#0A0F1E', borderRadius: 5 }} />
+        <div style={{ position: 'absolute', left: 268, top: 336, width: 60, height: 90, background: '#0F172A', borderRadius: 5 }} />
         <div style={{ position: 'absolute', left: 336, top: 336, width: 100, height: 90, border: '1.8px solid #94A3B8', borderRadius: 5 }} />
         <div style={{ position: 'absolute', left: 444, top: 336, width: 112, height: 90, background: '#E2E8F0', borderRadius: 5 }} />
 

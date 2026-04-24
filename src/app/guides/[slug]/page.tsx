@@ -285,7 +285,7 @@ export default async function GuidePostPage({ params }: Props) {
 
       {/* CTA — 관련 업체 찾기 */}
       {typedPost.category && (
-        <section className="bg-[#0A0F1E] py-12 px-5 mt-4">
+        <section className="bg-[#0F172A] py-12 px-5 mt-4">
           <div className="max-w-3xl mx-auto text-center">
             <p className="text-white/50 text-[12px] font-semibold uppercase tracking-widest mb-3">
               {categoryLabel} 업체 탐색

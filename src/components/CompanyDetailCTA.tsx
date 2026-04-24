@@ -46,7 +46,7 @@ export function CompanyDetailCTA({ companyId, website, kakaoUrl, phone, email }:
                 <a
                   href={`tel:${phone}`}
                   onClick={handlePhoneClick}
-                  className="text-[14px] font-semibold text-gray-800 hover:text-[#005EFF] hover:underline active:text-[#0047CC] transition-colors"
+                  className="text-[14px] font-semibold text-gray-800 hover:text-[#2563EB] hover:underline active:text-[#1D4ED8] transition-colors"
                 >
                   {phone}
                 </a>
@@ -58,7 +58,7 @@ export function CompanyDetailCTA({ companyId, website, kakaoUrl, phone, email }:
                 <a
                   href={`mailto:${email}`}
                   onClick={handleEmailClick}
-                  className="text-[14px] font-semibold text-gray-800 hover:text-[#005EFF] hover:underline active:text-[#0047CC] transition-colors"
+                  className="text-[14px] font-semibold text-gray-800 hover:text-[#2563EB] hover:underline active:text-[#1D4ED8] transition-colors"
                 >
                   {email}
                 </a>
@@ -75,7 +75,7 @@ export function CompanyDetailCTA({ companyId, website, kakaoUrl, phone, email }:
             target="_blank"
             rel="noopener noreferrer"
             onClick={handleWebsiteClick}
-            className="flex items-center justify-center gap-2 w-full bg-[#005EFF] hover:bg-[#0047CC] text-white text-[15px] font-semibold py-3.5 rounded-lg transition-colors"
+            className="flex items-center justify-center gap-2 w-full bg-[#C2410C] hover:bg-[#9A3412] text-white text-[15px] font-semibold py-3.5 rounded-lg transition-colors"
           >
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />

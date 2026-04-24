@@ -64,7 +64,7 @@ export function UtmAnalyticsSection({ data }: { data: UtmAnalyticsData }) {
 
         <div className="bg-white border border-gray-200 rounded-xl p-5">
           <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-1">세션 전환율</p>
-          <p className="text-[32px] font-extrabold text-[#005EFF] tracking-[-0.03em]">
+          <p className="text-[32px] font-extrabold text-[#C2410C] tracking-[-0.03em]">
             {(conversionRate * 100).toFixed(1)}%
           </p>
           <p className="text-[12px] text-gray-400 mt-1">카카오 문의 / 유입 세션</p>
@@ -103,9 +103,9 @@ export function UtmAnalyticsSection({ data }: { data: UtmAnalyticsData }) {
                 type="monotone"
                 dataKey="sessions"
                 name="유입 세션"
-                stroke="#005EFF"
+                stroke="#F97316"
                 strokeWidth={2}
-                dot={{ r: 3, fill: '#005EFF' }}
+                dot={{ r: 3, fill: '#F97316' }}
                 activeDot={{ r: 5 }}
               />
             </LineChart>

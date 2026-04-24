@@ -168,7 +168,7 @@ export default async function UseCaseLandingPage({ params }: Props) {
             </p>
           )}
           {companies != null && (
-            <p className="text-[13px] text-[#005EFF] font-semibold mt-3">
+            <p className="text-[13px] text-[#C2410C] font-semibold mt-3">
               {companies.length.toLocaleString()}개 업체
             </p>
           )}
@@ -217,7 +217,7 @@ export default async function UseCaseLandingPage({ params }: Props) {
                   {(company.service_capabilities as string[] | null)?.length ? (
                     <div className="mb-3 flex flex-wrap gap-1">
                       {(company.service_capabilities as string[]).slice(0, 3).map((cap, i) => (
-                        <span key={i} className="text-[11px] font-medium bg-[#EBF2FF] text-[#005EFF] px-2 py-0.5 rounded">
+                        <span key={i} className="text-[11px] font-medium bg-[#EFF6FF] text-[#2563EB] px-2 py-0.5 rounded">
                           {cap}
                         </span>
                       ))}
@@ -273,7 +273,7 @@ export default async function UseCaseLandingPage({ params }: Props) {
           </div>
           <Link
             href={categoryPath}
-            className="flex-shrink-0 px-5 py-2.5 bg-[#005EFF] text-white text-[13px] font-semibold rounded-lg hover:bg-[#0047CC] transition-colors"
+            className="flex-shrink-0 px-5 py-2.5 bg-[#C2410C] text-white text-[13px] font-semibold rounded-lg hover:bg-[#9A3412] transition-colors"
           >
             전체 {categoryLabel} 업체 보기 →
           </Link>

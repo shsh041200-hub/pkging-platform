@@ -209,7 +209,7 @@ export default async function BlogPostPage({ params }: Props) {
         {/* Meta */}
         <div className="flex items-center gap-3 mb-4 flex-wrap">
           {categoryLabel && (
-            <span className="text-[11px] font-semibold text-[#005EFF] bg-[#EBF2FF] px-2.5 py-1 rounded-full">
+            <span className="text-[11px] font-semibold text-[#2563EB] bg-[#EFF6FF] px-2.5 py-1 rounded-full">
               {categoryLabel}
             </span>
           )}
@@ -228,7 +228,7 @@ export default async function BlogPostPage({ params }: Props) {
         </h1>
 
         {typedPost.excerpt && (
-          <p className="text-[17px] text-gray-500 leading-relaxed border-l-4 border-[#005EFF] pl-4 mb-8 italic">
+          <p className="text-[17px] text-gray-500 leading-relaxed border-l-4 border-[#C2410C] pl-4 mb-8 italic">
             {typedPost.excerpt}
           </p>
         )}
@@ -255,10 +255,10 @@ export default async function BlogPostPage({ params }: Props) {
               prose-h2:text-[22px] prose-h2:mt-10 prose-h2:mb-4
               prose-h3:text-[18px] prose-h3:mt-8 prose-h3:mb-3
               prose-p:text-[15px] prose-p:leading-[1.8] prose-p:text-gray-700
-              prose-a:text-[#005EFF] prose-a:no-underline hover:prose-a:underline
+              prose-a:text-[#2563EB] prose-a:no-underline hover:prose-a:underline
               prose-strong:text-gray-900
               prose-li:text-[15px] prose-li:text-gray-700
-              prose-blockquote:border-l-4 prose-blockquote:border-[#005EFF] prose-blockquote:bg-[#F8FAFF] prose-blockquote:py-1 prose-blockquote:rounded-r-lg"
+              prose-blockquote:border-l-4 prose-blockquote:border-[#C2410C] prose-blockquote:bg-[#FFF7ED] prose-blockquote:py-1 prose-blockquote:rounded-r-lg"
             dangerouslySetInnerHTML={{ __html: contentHtml }}
           />
         ) : (
@@ -268,7 +268,7 @@ export default async function BlogPostPage({ params }: Props) {
 
       {/* CTA — 관련 업체 찾기 */}
       {typedPost.category && (
-        <section className="bg-[#0A0F1E] py-12 px-5 mt-4">
+        <section className="bg-[#0F172A] py-12 px-5 mt-4">
           <div className="max-w-3xl mx-auto text-center">
             <p className="text-white/50 text-[12px] font-semibold uppercase tracking-widest mb-3">
               {categoryLabel} 업체 탐색
@@ -281,7 +281,7 @@ export default async function BlogPostPage({ params }: Props) {
             </p>
             <Link
               href={`/categories/${typedPost.category}`}
-              className="inline-flex items-center gap-2 bg-[#005EFF] hover:bg-[#0047CC] text-white font-bold px-8 py-3.5 rounded-xl transition-colors text-[15px]"
+              className="inline-flex items-center gap-2 bg-[#C2410C] hover:bg-[#9A3412] text-white font-bold px-8 py-3.5 rounded-xl transition-colors text-[15px]"
             >
               관련 업체 찾기 &rarr;
             </Link>
@@ -312,7 +312,7 @@ export default async function BlogPostPage({ params }: Props) {
                     />
                   </div>
                 ) : (
-                  <div className="w-full aspect-[16/9] bg-gradient-to-br from-[#EBF2FF] to-[#F0F4FF] flex items-center justify-center">
+                  <div className="w-full aspect-[16/9] bg-gradient-to-br from-[#EFF6FF] to-[#F0F4FF] flex items-center justify-center">
                     <span className="text-3xl opacity-40">📦</span>
                   </div>
                 )}
@@ -321,7 +321,7 @@ export default async function BlogPostPage({ params }: Props) {
                     <p className="text-[11px] text-gray-400 mb-1.5">{formatDate(related.published_at)}</p>
                   )}
                   <h3 className="text-[14px] font-bold text-gray-900 leading-snug line-clamp-2 mb-1">
-                    <Link href={`/blog/${related.slug}`} className="hover:text-[#005EFF] transition-colors">
+                    <Link href={`/blog/${related.slug}`} className="hover:text-[#C2410C] transition-colors">
                       {related.title}
                     </Link>
                   </h3>

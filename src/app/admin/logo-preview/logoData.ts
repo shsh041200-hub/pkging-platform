@@ -20,8 +20,8 @@ export const LOGO_CONCEPTS: LogoConcept[] = [
     lightSrc: '/logos/packlinx-v01.svg',
     darkSrc: null,
     palette: [
-      { hex: '#005EFF', label: '애저 블루' },
-      { hex: '#0A0F1E', label: '딥 네이비' },
+      { hex: '#F97316', label: 'LINX 오렌지 (브랜드)' },
+      { hex: '#0F172A', label: '딥 네이비' },
       { hex: '#FFFFFF', label: '화이트' },
     ],
   },

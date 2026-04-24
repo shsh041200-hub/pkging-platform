@@ -36,7 +36,7 @@ export default async function OgImage({ params }: Props) {
         style={{
           width: 1200,
           height: 630,
-          background: '#0A0F1E',
+          background: '#0F172A',
           display: 'flex',
           position: 'relative',
           fontFamily: 'sans-serif',
@@ -50,7 +50,7 @@ export default async function OgImage({ params }: Props) {
             left: 0,
             width: 600,
             height: 630,
-            background: 'linear-gradient(135deg, #001a4d 0%, #0A0F1E 60%)',
+            background: 'linear-gradient(135deg, #1e293b 0%, #0F172A 60%)',
           }}
         />
         <div
@@ -61,7 +61,7 @@ export default async function OgImage({ params }: Props) {
             width: 400,
             height: 400,
             borderRadius: '50%',
-            background: 'radial-gradient(circle, rgba(0,94,255,0.15) 0%, transparent 70%)',
+            background: 'radial-gradient(circle, rgba(249,115,22,0.15) 0%, transparent 70%)',
           }}
         />
 
@@ -73,7 +73,7 @@ export default async function OgImage({ params }: Props) {
             top: 0,
             width: 8,
             height: 630,
-            background: '#005EFF',
+            background: '#C2410C',
           }}
         />
 
@@ -97,7 +97,7 @@ export default async function OgImage({ params }: Props) {
               fontSize: 14,
               fontWeight: 700,
               letterSpacing: 4,
-              color: '#005EFF',
+              color: '#F97316',
               textTransform: 'uppercase',
               marginBottom: 24,
             }}
@@ -168,7 +168,7 @@ export default async function OgImage({ params }: Props) {
               fontSize: 40,
               fontWeight: 200,
               letterSpacing: 6,
-              color: '#005EFF',
+              color: '#F97316',
               lineHeight: 1,
             }}
           >

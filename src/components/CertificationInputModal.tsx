@@ -144,7 +144,7 @@ export function CertificationInputModal({ companyId, onClose }: Props) {
                 id="cert-type"
                 value={certType}
                 onChange={(e) => { setCertType(e.target.value); setError(null) }}
-                className="w-full text-[14px] text-gray-900 border border-gray-200 rounded-lg px-3.5 py-2.5 bg-white focus:outline-none focus:ring-2 focus:ring-[#005EFF]/30 focus:border-[#005EFF] transition-colors appearance-none"
+                className="w-full text-[14px] text-gray-900 border border-gray-200 rounded-lg px-3.5 py-2.5 bg-white focus:outline-none focus:ring-2 focus:ring-[#FED7AA]/50 focus:border-[#C2410C] transition-colors appearance-none"
                 disabled={isSubmitting}
               >
                 <option value="" disabled>{UI_TEXT.certTypePlaceholder}</option>
@@ -174,7 +174,7 @@ export function CertificationInputModal({ companyId, onClose }: Props) {
                 onChange={(e) => setCertNumber(e.target.value)}
                 placeholder={UI_TEXT.certNumberPlaceholder}
                 maxLength={100}
-                className="w-full text-[14px] text-gray-900 border border-gray-200 rounded-lg px-3.5 py-2.5 bg-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#005EFF]/30 focus:border-[#005EFF] transition-colors"
+                className="w-full text-[14px] text-gray-900 border border-gray-200 rounded-lg px-3.5 py-2.5 bg-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#FED7AA]/50 focus:border-[#C2410C] transition-colors"
                 disabled={isSubmitting}
               />
             </div>
@@ -201,7 +201,7 @@ export function CertificationInputModal({ companyId, onClose }: Props) {
               </button>
               <button
                 type="submit"
-                className="flex-1 text-[14px] font-semibold text-white bg-[#005EFF] hover:bg-[#0047CC] disabled:opacity-50 disabled:cursor-not-allowed rounded-lg px-4 py-2.5 transition-colors flex items-center justify-center gap-2"
+                className="flex-1 text-[14px] font-semibold text-white bg-[#C2410C] hover:bg-[#9A3412] disabled:opacity-50 disabled:cursor-not-allowed rounded-lg px-4 py-2.5 transition-colors flex items-center justify-center gap-2"
                 disabled={isSubmitting}
               >
                 {isSubmitting && (

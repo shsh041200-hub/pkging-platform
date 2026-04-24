@@ -1,38 +1,101 @@
 @import "tailwindcss";
 
+@theme {
+  /* Brand (LINX Orange) — Tailwind v4 color tokens */
+  --color-brand-50:  #FFF7ED;
+  --color-brand-100: #FFEDD5;
+  --color-brand-200: #FED7AA;
+  --color-brand-300: #FDBA74;
+  --color-brand-400: #FB923C;
+  --color-brand-500: #F97316;
+  --color-brand-600: #EA580C;
+  --color-brand-700: #C2410C;
+  --color-brand-800: #9A3412;
+  --color-brand-900: #7C2D12;
+
+  /* Neutral (PACK Slate) */
+  --color-neutral-50:  #F8FAFC;
+  --color-neutral-100: #F1F5F9;
+  --color-neutral-200: #E2E8F0;
+  --color-neutral-300: #CBD5E1;
+  --color-neutral-400: #94A3B8;
+  --color-neutral-500: #64748B;
+  --color-neutral-600: #475569;
+  --color-neutral-700: #334155;
+  --color-neutral-800: #1E293B;
+  --color-neutral-900: #0F172A;
+  --color-neutral-950: #020617;
+
+  /* Semantic: Success */
+  --color-success-50:  #F0FDF4;
+  --color-success-100: #DCFCE7;
+  --color-success-200: #BBF7D0;
+  --color-success-600: #16A34A;
+  --color-success-700: #15803D;
+  --color-success-800: #166534;
+
+  /* Semantic: Error */
+  --color-error-50:  #FEF2F2;
+  --color-error-100: #FEE2E2;
+  --color-error-200: #FECACA;
+  --color-error-600: #DC2626;
+  --color-error-700: #B91C1C;
+
+  /* Semantic: Warning */
+  --color-warning-50:  #FFFBEB;
+  --color-warning-100: #FEF3C7;
+  --color-warning-200: #FDE68A;
+  --color-warning-700: #B45309;
+  --color-warning-800: #92400E;
+
+  /* Semantic: Info (legacy blue — functional only, not brand) */
+  --color-info-50:  #EFF6FF;
+  --color-info-100: #DBEAFE;
+  --color-info-200: #BFDBFE;
+  --color-info-600: #2563EB;
+  --color-info-700: #1D4ED8;
+}
+
 :root {
   --font-primary: var(--font-pretendard), -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 
-  /* Brand */
-  --color-navy:         #0A0F1E;
-  --color-navy-800:     #1A2236;
-  --color-accent:       #005EFF;
-  --color-accent-hover: #0047CC;
-  --color-accent-light: #EBF2FF;
+  /* Brand (LINX Orange) */
+  --color-brand:         #C2410C;
+  --color-brand-hover:   #9A3412;
+  --color-brand-light:   #FFF7ED;
 
-  /* Base */
+  /* Neutral (PACK Slate — logo-exact values) */
+  --color-navy:          #0F172A;
+  --color-navy-800:      #1E293B;
+
+  /* Base surfaces */
   --color-bg:            #FFFFFF;
-  --color-bg-subtle:     #F9FAFB;
+  --color-bg-subtle:     #F8FAFC;
   --color-surface:       #FFFFFF;
-  --color-surface-raised: #F3F4F6;
-  --color-border:        #E5E7EB;
-  --color-border-subtle: #F3F4F6;
-  --color-border-strong: #D1D5DB;
+  --color-surface-raised: #F1F5F9;
+  --color-border:        #E2E8F0;
+  --color-border-subtle: #F1F5F9;
+  --color-border-strong: #CBD5E1;
 
   /* Text */
-  --color-text-primary:   #111827;
-  --color-text-secondary: #6B7280;
-  --color-text-muted:     #9CA3AF;
+  --color-text-primary:   #0F172A;
+  --color-text-secondary: #64748B;
+  --color-text-muted:     #94A3B8;
 
   /* Semantic */
   --color-verified:        #16A34A;
   --color-verified-bg:     #F0FDF4;
   --color-verified-border: #BBF7D0;
 
-  /* Glow (hero background accents) */
-  --glow-primary:     rgba(0, 94, 255, 0.04);
-  --glow-primary-mid: rgba(0, 94, 255, 0.015);
-  --glow-secondary:   rgba(0, 94, 255, 0.025);
+  /* Info (blue — functional affordances only, not brand) */
+  --color-info:       #2563EB;
+  --color-info-hover: #1D4ED8;
+  --color-info-light: #EFF6FF;
+
+  /* Glow (hero background accents — brand orange) */
+  --glow-primary:     rgba(249, 115, 22, 0.04);
+  --glow-primary-mid: rgba(249, 115, 22, 0.015);
+  --glow-secondary:   rgba(249, 115, 22, 0.025);
 
   /* Shadows */
   --shadow-xs:   0 1px 2px rgba(0, 0, 0, 0.05);
@@ -44,7 +107,7 @@
 
 @layer base {
   *:focus-visible {
-    outline: 2px solid var(--color-accent);
+    outline: 2px solid var(--color-brand);
     outline-offset: 2px;
   }
 
@@ -80,7 +143,7 @@
   }
 
   .bg-dot-grid {
-    background-image: radial-gradient(circle, #D1D5DB 0.75px, transparent 0.75px);
+    background-image: radial-gradient(circle, #CBD5E1 0.75px, transparent 0.75px);
     background-size: 24px 24px;
   }
 }

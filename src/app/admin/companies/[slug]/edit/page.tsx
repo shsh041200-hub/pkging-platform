@@ -53,7 +53,7 @@ export default async function CompanyDeliveryEditPage({ params }: PageProps) {
 
   return (
     <div className="min-h-screen bg-[#F9FAFB]">
-      <header className="bg-[#0A0F1E] sticky top-0 z-50 border-b border-white/[0.06]">
+      <header className="bg-[#0F172A] sticky top-0 z-50 border-b border-white/[0.06]">
         <div className="max-w-4xl mx-auto px-5 sm:px-8 h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-3">
             <PacklinxLogo variant="dark" />

@@ -11,7 +11,7 @@ export function SupplierLink({ slug, name, children }: SupplierLinkProps) {
   return (
     <Link
       href={`/companies/${slug}`}
-      className="text-[#005EFF] hover:underline underline-offset-2 font-medium transition-colors"
+      className="text-[#2563EB] hover:underline underline-offset-2 font-medium transition-colors"
     >
       {children ?? name}
     </Link>

@@ -397,10 +397,10 @@ export default async function HomePage({
         <div className="relative z-10 flex flex-col items-center text-center px-6 sm:px-8 py-16 lg:py-24">
           {/* Text content */}
           <div className="max-w-3xl mx-auto w-full">
-            <div className="inline-block text-[11px] font-semibold tracking-widest uppercase text-[#005EFF] bg-[#005EFF]/[0.08] border border-[#005EFF]/[0.15] px-3 py-1.5 rounded-full mb-5">
+            <div className="inline-block text-[11px] font-semibold tracking-widest uppercase text-[#C2410C] bg-[#C2410C]/[0.08] border border-[#C2410C]/[0.15] px-3 py-1.5 rounded-full mb-5">
               패키징 파트너 검색의 시작점
             </div>
-            <h1 className="text-[32px] sm:text-[40px] lg:text-[48px] font-extrabold text-[#0A0F1E] leading-[1.15] tracking-[-0.03em] mb-4">
+            <h1 className="text-[32px] sm:text-[40px] lg:text-[48px] font-extrabold text-[#0F172A] leading-[1.15] tracking-[-0.03em] mb-4">
               패키징에 필요한 모든 업체,<br />여기서 한 번에 찾으세요
             </h1>
             <p className="text-[15px] sm:text-[16px] text-[#64748B] leading-relaxed max-w-[520px] mx-auto">
@@ -412,7 +412,7 @@ export default async function HomePage({
 
           {/* Search bar */}
           <div className="max-w-[560px] w-full mx-auto mt-8">
-            <form method="GET" className="flex rounded-xl overflow-hidden border border-gray-200 shadow-[0_2px_8px_rgba(0,0,0,0.06)] focus-within:border-[#005EFF] focus-within:shadow-[0_2px_8px_rgba(0,0,0,0.06),0_0_0_3px_rgba(0,94,255,0.12)] transition-shadow">
+            <form method="GET" className="flex rounded-xl overflow-hidden border border-gray-200 shadow-[0_2px_8px_rgba(0,0,0,0.06)] focus-within:border-[#C2410C] focus-within:shadow-[0_2px_8px_rgba(0,0,0,0.06),0_0_0_3px_rgba(194,65,12,0.12)] transition-shadow">
               <input
                 name="q"
                 defaultValue={q}
@@ -421,7 +421,7 @@ export default async function HomePage({
               />
               <button
                 type="submit"
-                className="bg-[#005EFF] hover:bg-[#0047CC] text-white font-semibold px-6 py-3 transition-colors text-sm flex-shrink-0 m-1.5 rounded-lg"
+                className="bg-[#C2410C] hover:bg-[#9A3412] text-white font-semibold px-6 py-3 transition-colors text-sm flex-shrink-0 m-1.5 rounded-lg"
               >
                 검색
               </button>
@@ -447,11 +447,11 @@ export default async function HomePage({
                   <form key={cat} action={`/categories/${categoryToSlug(cat)}`} className="contents">
                     <button
                       type="submit"
-                      className="group flex items-center gap-2.5 bg-white border border-gray-200 rounded-lg px-3 py-2.5 hover:border-[#005EFF]/30 hover:bg-[#F8FAFF] transition-all duration-150"
+                      className="group flex items-center gap-2.5 bg-white border border-gray-200 rounded-lg px-3 py-2.5 hover:border-[#C2410C]/30 hover:bg-[#FFF7ED] transition-all duration-150"
                     >
                       <span className="text-base flex-shrink-0">{INDUSTRY_CATEGORY_ICONS[cat]}</span>
                       <div className="min-w-0 text-left">
-                        <span className="text-[13px] font-semibold text-gray-900 group-hover:text-[#005EFF] transition-colors block truncate">
+                        <span className="text-[13px] font-semibold text-gray-900 group-hover:text-[#C2410C] transition-colors block truncate">
                           {INDUSTRY_CATEGORY_LABELS[cat]}
                         </span>
                         <span className="text-[11px] text-gray-400">{categoryCounts[cat]}개</span>
@@ -510,7 +510,7 @@ export default async function HomePage({
                     href={buildMaterialUrl(mat)}
                     className={`flex-shrink-0 px-2.5 py-1.5 rounded text-[11px] font-medium transition-all border ${
                       isActive
-                        ? 'bg-[#005EFF] text-white border-[#005EFF]'
+                        ? 'bg-[#C2410C] text-white border-[#C2410C]'
                         : 'text-gray-500 border-gray-200 hover:text-gray-700 hover:border-gray-300 bg-white'
                     }`}
                   >
@@ -654,7 +654,7 @@ export default async function HomePage({
               <span className="font-semibold text-gray-900">{filteredCount ?? 0}</span>개 업체
             </p>
             {industry && (
-              <span className="text-[11px] bg-[#EBF2FF] text-[#005EFF] font-medium px-2.5 py-1 rounded-full">
+              <span className="text-[11px] bg-[#EFF6FF] text-[#2563EB] font-medium px-2.5 py-1 rounded-full">
                 {INDUSTRY_CATEGORY_LABELS[industry as IndustryCategory]}
               </span>
             )}
@@ -662,10 +662,10 @@ export default async function HomePage({
               <Link
                 key={mat}
                 href={buildMaterialUrl(mat)}
-                className="text-[11px] bg-[#EBF2FF] text-[#005EFF] font-medium px-2.5 py-1 rounded-full flex items-center gap-1 hover:bg-[#D6E8FF] transition-colors"
+                className="text-[11px] bg-[#EFF6FF] text-[#2563EB] font-medium px-2.5 py-1 rounded-full flex items-center gap-1 hover:bg-[#DBEAFE] transition-colors"
               >
                 {MATERIAL_TYPE_LABELS[mat]}
-                <span className="text-[#005EFF]/60 text-[10px] leading-none">×</span>
+                <span className="text-[#2563EB]/60 text-[10px] leading-none">×</span>
               </Link>
             ))}
             {selectedForms.map((pf) => (
@@ -741,7 +741,7 @@ export default async function HomePage({
               </Link>
             )}
             {q && (
-              <span className="text-[11px] bg-[#EBF2FF] text-[#005EFF] font-medium px-2.5 py-1 rounded-full">
+              <span className="text-[11px] bg-[#EFF6FF] text-[#2563EB] font-medium px-2.5 py-1 rounded-full">
                 &ldquo;{q}&rdquo;
               </span>
             )}

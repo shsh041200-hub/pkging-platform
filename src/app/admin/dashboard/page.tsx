@@ -97,7 +97,7 @@ export default async function AdminDashboardPage({ searchParams }: { searchParam
   return (
     <div className="min-h-screen bg-[#F9FAFB]">
       {/* Header */}
-      <header className="bg-[#0A0F1E] sticky top-0 z-50 border-b border-white/[0.06]">
+      <header className="bg-[#0F172A] sticky top-0 z-50 border-b border-white/[0.06]">
         <div className="max-w-7xl mx-auto px-5 sm:px-8 h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-3">
             <PacklinxLogo variant="dark" />
@@ -123,7 +123,7 @@ export default async function AdminDashboardPage({ searchParams }: { searchParam
                 // Progressive enhancement — form submit on change
                 e.currentTarget.form?.submit()
               }}
-              className="h-10 px-3 text-[13px] border border-gray-200 rounded-lg focus:outline-none focus:border-[#005EFF] focus:ring-1 focus:ring-[#005EFF]/20 transition-colors bg-white"
+              className="h-10 px-3 text-[13px] border border-gray-200 rounded-lg focus:outline-none focus:border-[#C2410C] focus:ring-1 focus:ring-[#C2410C]/20 transition-colors bg-white"
             >
               {monthOptions.map((m) => {
                 const [y, mo] = m.split('-')

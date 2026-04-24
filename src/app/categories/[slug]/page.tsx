@@ -366,7 +366,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
               {CATEGORY_H1_OVERRIDE[categoryKey] ?? `${label} 업체`}
             </h1>
             {heroCount != null && (
-              <span className="text-[14px] text-[#005EFF] font-medium">
+              <span className="text-[14px] text-[#2563EB] font-medium">
                 {heroCount.toLocaleString()}개
               </span>
             )}
@@ -398,7 +398,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
                   href={buildMaterialUrl(mat)}
                   className={`flex-shrink-0 px-2.5 py-1.5 rounded text-[11px] font-medium transition-all border ${
                     isActive
-                      ? 'bg-[#005EFF] text-white border-[#005EFF]'
+                      ? 'bg-[#C2410C] text-white border-[#C2410C]'
                       : 'text-gray-500 border-gray-200 hover:text-gray-700 hover:border-gray-300 bg-white'
                   }`}
                 >
@@ -418,7 +418,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
                 href={buildFilterParams({ 'use-case': undefined })}
                 className={`flex-shrink-0 px-2.5 py-1.5 rounded text-[11px] font-medium transition-all border ${
                   !selectedUseCase
-                    ? 'bg-[#005EFF] text-white border-[#005EFF]'
+                    ? 'bg-[#C2410C] text-white border-[#C2410C]'
                     : 'text-gray-500 border-gray-200 hover:text-gray-700 hover:border-gray-300 bg-white'
                 }`}
               >
@@ -432,7 +432,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
                     href={buildUseCaseUrl(tag.slug)}
                     className={`flex-shrink-0 px-2.5 py-1.5 rounded text-[11px] font-medium transition-all border flex items-center gap-1 ${
                       isActive
-                        ? 'bg-[#005EFF] text-white border-[#005EFF]'
+                        ? 'bg-[#C2410C] text-white border-[#C2410C]'
                         : 'text-gray-500 border-gray-200 hover:text-gray-700 hover:border-gray-300 bg-white'
                     }`}
                   >
@@ -466,10 +466,10 @@ export default async function CategoryPage({ params, searchParams }: Props) {
               <Link
                 key={mat}
                 href={buildMaterialUrl(mat)}
-                className="text-[11px] bg-[#EBF2FF] text-[#005EFF] font-medium px-2.5 py-1 rounded-full flex items-center gap-1 hover:bg-[#D6E8FF] transition-colors"
+                className="text-[11px] bg-[#EFF6FF] text-[#2563EB] font-medium px-2.5 py-1 rounded-full flex items-center gap-1 hover:bg-[#DBEAFE] transition-colors"
               >
                 {MATERIAL_TYPE_LABELS[mat]}
-                <span className="text-[#005EFF]/60 text-[10px] leading-none">×</span>
+                <span className="text-[#2563EB]/60 text-[10px] leading-none">×</span>
               </Link>
             ))}
             {selectedForms.map((pf) => (
@@ -503,10 +503,10 @@ export default async function CategoryPage({ params, searchParams }: Props) {
               return (
                 <Link
                   href={clearUrl}
-                  className="text-[11px] bg-[#EBF2FF] text-[#005EFF] font-medium px-2.5 py-1 rounded-full flex items-center gap-1 hover:bg-[#D6E8FF] transition-colors"
+                  className="text-[11px] bg-[#EFF6FF] text-[#2563EB] font-medium px-2.5 py-1 rounded-full flex items-center gap-1 hover:bg-[#DBEAFE] transition-colors"
                 >
                   {tag.icon} {tag.label}
-                  <span className="text-[#005EFF]/60 text-[10px] leading-none">×</span>
+                  <span className="text-[#2563EB]/60 text-[10px] leading-none">×</span>
                 </Link>
               )
             })()}
@@ -556,7 +556,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
                       {(company.service_capabilities as string[] | null)?.length! > 0 && (
                         <div className="flex flex-wrap gap-1 mb-1">
                           {(company.service_capabilities as string[]).slice(0, 3).map((cap, i) => (
-                            <span key={i} className="text-[11px] font-medium bg-[#EBF2FF] text-[#005EFF] px-2 py-0.5 rounded">
+                            <span key={i} className="text-[11px] font-medium bg-[#EFF6FF] text-[#2563EB] px-2 py-0.5 rounded">
                               {cap}
                             </span>
                           ))}
@@ -632,7 +632,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
         <section className="max-w-7xl mx-auto px-5 sm:px-8 pb-12">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-[13px] font-semibold text-gray-400 uppercase tracking-wider">관련 가이드</h2>
-            <Link href="/blog" className="text-[12px] text-[#005EFF] hover:text-[#0047CC] font-medium transition-colors">
+            <Link href="/blog" className="text-[12px] text-[#2563EB] hover:text-[#1D4ED8] font-medium transition-colors">
               블로그 전체 보기 →
             </Link>
           </div>
@@ -648,7 +648,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
                     ? new Date(post.published_at).toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' })
                     : ''}
                 </p>
-                <h3 className="text-[14px] font-semibold text-gray-900 leading-snug mb-2 line-clamp-2 group-hover:text-[#005EFF] transition-colors">
+                <h3 className="text-[14px] font-semibold text-gray-900 leading-snug mb-2 line-clamp-2 group-hover:text-[#C2410C] transition-colors">
                   {post.title}
                 </h3>
                 {post.excerpt && (
@@ -668,7 +668,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
             <Link
               key={key}
               href={`/categories/${key}`}
-              className="inline-flex items-center gap-2 text-[13px] font-medium text-gray-700 bg-white border border-gray-200 hover:border-[#005EFF] hover:text-[#005EFF] px-4 py-2 rounded-xl transition-all shadow-sm"
+              className="inline-flex items-center gap-2 text-[13px] font-medium text-gray-700 bg-white border border-gray-200 hover:border-[#C2410C] hover:text-[#C2410C] px-4 py-2 rounded-xl transition-all shadow-sm"
             >
               <span className="text-base">{INDUSTRY_CATEGORY_ICONS[key]}</span>
               <span>{INDUSTRY_CATEGORY_LABELS[key]}</span>

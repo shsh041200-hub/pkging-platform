@@ -267,7 +267,7 @@ export default async function CompanyPage({ params }: Props) {
 
       {/* Breadcrumb */}
       <div className="max-w-[800px] mx-auto px-4 sm:px-6 pt-5 pb-0">
-        <Link href="/" className="text-sm text-[#005EFF] hover:text-[#0047CC] inline-flex items-center gap-1 transition-colors">
+        <Link href="/" className="text-sm text-[#2563EB] hover:text-[#1D4ED8] inline-flex items-center gap-1 transition-colors">
           ← 목록으로
         </Link>
       </div>
@@ -333,29 +333,29 @@ export default async function CompanyPage({ params }: Props) {
               <p className="text-[11px] font-semibold text-gray-500 uppercase tracking-wider mb-2">핵심 거래 정보</p>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 {(company.moq_value != null || company.min_order_quantity) && (
-                  <div className="bg-[#0a0f1e]/[0.03] border border-[#0a0f1e]/[0.08] rounded-lg p-3.5 text-center">
-                    <p className="text-[10px] font-semibold text-[#0a0f1e]/40 uppercase tracking-wider mb-1">최소주문량</p>
+                  <div className="bg-[#0f172a]/[0.03] border border-[#0f172a]/[0.08] rounded-lg p-3.5 text-center">
+                    <p className="text-[10px] font-semibold text-[#0f172a]/40 uppercase tracking-wider mb-1">최소주문량</p>
                     {moqValue != null ? (
-                      <p className="text-[18px] font-bold text-[#0a0f1e] tracking-tight">
+                      <p className="text-[18px] font-bold text-[#0f172a] tracking-tight">
                         {moqValue}<span className="text-[13px] font-medium text-gray-500 ml-0.5">{moqUnit}</span>
                       </p>
                     ) : (
-                      <p className="text-[15px] font-bold text-[#0a0f1e] tracking-tight">{company.min_order_quantity}</p>
+                      <p className="text-[15px] font-bold text-[#0f172a] tracking-tight">{company.min_order_quantity}</p>
                     )}
                   </div>
                 )}
                 {(company.lead_time_standard_days != null || company.lead_time_express_days != null) && (
-                  <div className="bg-[#0a0f1e]/[0.03] border border-[#0a0f1e]/[0.08] rounded-lg p-3.5 text-center">
-                    <p className="text-[10px] font-semibold text-[#0a0f1e]/40 uppercase tracking-wider mb-1">납기</p>
-                    <p className="text-[18px] font-bold text-[#0a0f1e] tracking-tight">
+                  <div className="bg-[#0f172a]/[0.03] border border-[#0f172a]/[0.08] rounded-lg p-3.5 text-center">
+                    <p className="text-[10px] font-semibold text-[#0f172a]/40 uppercase tracking-wider mb-1">납기</p>
+                    <p className="text-[18px] font-bold text-[#0f172a] tracking-tight">
                       {leadTimeDays}<span className="text-[13px] font-medium text-gray-500 ml-0.5">일</span>
                     </p>
                   </div>
                 )}
                 {company.sample_available != null && (
-                  <div className="bg-[#0a0f1e]/[0.03] border border-[#0a0f1e]/[0.08] rounded-lg p-3.5 text-center">
-                    <p className="text-[10px] font-semibold text-[#0a0f1e]/40 uppercase tracking-wider mb-1">샘플</p>
-                    <p className="text-[16px] font-bold text-[#0a0f1e] tracking-tight">
+                  <div className="bg-[#0f172a]/[0.03] border border-[#0f172a]/[0.08] rounded-lg p-3.5 text-center">
+                    <p className="text-[10px] font-semibold text-[#0f172a]/40 uppercase tracking-wider mb-1">샘플</p>
+                    <p className="text-[16px] font-bold text-[#0f172a] tracking-tight">
                       {company.sample_available ? '가능' : '확인 필요'}
                     </p>
                   </div>
@@ -640,7 +640,7 @@ export default async function CompanyPage({ params }: Props) {
               </h2>
               <Link
                 href={`/categories/${primaryCatForRelated}`}
-                className="text-[12px] text-[#005EFF] hover:text-[#0047CC] font-medium transition-colors"
+                className="text-[12px] text-[#2563EB] hover:text-[#1D4ED8] font-medium transition-colors"
               >
                 전체 보기 →
               </Link>
@@ -660,7 +660,7 @@ export default async function CompanyPage({ params }: Props) {
                       size="sm"
                       linkUrl={null}
                     />
-                    <span className="text-[13px] font-semibold text-gray-900 group-hover:text-[#005EFF] transition-colors line-clamp-1">
+                    <span className="text-[13px] font-semibold text-gray-900 group-hover:text-[#C2410C] transition-colors line-clamp-1">
                       {simplifyCompanyName(rel.name)}
                     </span>
                   </div>
@@ -690,7 +690,7 @@ export default async function CompanyPage({ params }: Props) {
                   <Link
                     key={cat}
                     href={`/categories/${cat}`}
-                    className="inline-flex items-center gap-1.5 text-[13px] font-medium text-[#005EFF] bg-[#EBF2FF] hover:bg-[#dbeafe] px-3 py-2 rounded-lg transition-colors"
+                    className="inline-flex items-center gap-1.5 text-[13px] font-medium text-[#2563EB] bg-[#EFF6FF] hover:bg-[#dbeafe] px-3 py-2 rounded-lg transition-colors"
                   >
                     <span>{INDUSTRY_CATEGORY_ICONS[catKey]}</span>
                     <span>{catLabel} 업체 보기</span>

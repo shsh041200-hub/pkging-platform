@@ -108,7 +108,7 @@ export default async function BlogListPage({ searchParams }: Props) {
             <span className="mx-2">&rsaquo;</span>
             <span className="text-gray-700 font-medium">블로그</span>
           </nav>
-          <div className="inline-block text-[11px] font-semibold tracking-widest uppercase text-[#005EFF] bg-[#EBF2FF] px-3 py-1.5 rounded-full mb-4">
+          <div className="inline-block text-[11px] font-semibold tracking-widest uppercase text-[#2563EB] bg-[#EFF6FF] px-3 py-1.5 rounded-full mb-4">
             B2B 패키징 인사이트
           </div>
           <h1 className="text-[32px] sm:text-[42px] font-extrabold text-gray-900 leading-[1.1] tracking-[-0.04em] mb-3">
@@ -165,14 +165,14 @@ export default async function BlogListPage({ searchParams }: Props) {
                     />
                   </div>
                 ) : (
-                  <div className="w-full aspect-[16/9] bg-gradient-to-br from-[#EBF2FF] to-[#F0F4FF] flex items-center justify-center">
+                  <div className="w-full aspect-[16/9] bg-gradient-to-br from-[#EFF6FF] to-[#F0F4FF] flex items-center justify-center">
                     <span className="text-4xl opacity-40">📦</span>
                   </div>
                 )}
                 <div className="p-5">
                   <div className="flex items-center gap-2 mb-2.5">
                     {post.category && (
-                      <span className="text-[11px] font-semibold text-[#005EFF] bg-[#EBF2FF] px-2 py-0.5 rounded">
+                      <span className="text-[11px] font-semibold text-[#2563EB] bg-[#EFF6FF] px-2 py-0.5 rounded">
                         {INDUSTRY_CATEGORY_LABELS[post.category as IndustryCategory]}
                       </span>
                     )}
@@ -181,7 +181,7 @@ export default async function BlogListPage({ searchParams }: Props) {
                     )}
                   </div>
                   <h2 className="text-[15px] font-bold text-gray-900 leading-snug tracking-[-0.02em] line-clamp-2 mb-2">
-                    <Link href={`/blog/${post.slug}`} className="hover:text-[#005EFF] transition-colors">
+                    <Link href={`/blog/${post.slug}`} className="hover:text-[#C2410C] transition-colors">
                       {post.title}
                     </Link>
                   </h2>
@@ -193,7 +193,7 @@ export default async function BlogListPage({ searchParams }: Props) {
                   <div className="mt-4">
                     <Link
                       href={`/blog/${post.slug}`}
-                      className="text-[12px] font-semibold text-[#005EFF] hover:underline underline-offset-2"
+                      className="text-[12px] font-semibold text-[#2563EB] hover:underline underline-offset-2"
                     >
                       자세히 보기 &rarr;
                     </Link>

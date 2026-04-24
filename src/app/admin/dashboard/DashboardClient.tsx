@@ -69,7 +69,7 @@ export function DashboardClient({ data }: { data: DashboardData }) {
                 type="monotone"
                 dataKey="count"
                 name="리드"
-                stroke="#005EFF"
+                stroke="#F97316"
                 strokeWidth={2}
                 dot={false}
                 activeDot={{ r: 4 }}
@@ -90,7 +90,7 @@ export function DashboardClient({ data }: { data: DashboardData }) {
                 contentStyle={{ fontSize: 12, borderRadius: 8, border: '1px solid #e5e7eb' }}
                 labelStyle={{ color: '#374151', fontWeight: 600 }}
               />
-              <Bar dataKey="count" name="리드 수" fill="#005EFF" radius={[4, 4, 0, 0]} />
+              <Bar dataKey="count" name="리드 수" fill="#F97316" radius={[4, 4, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>
@@ -119,7 +119,7 @@ export function DashboardClient({ data }: { data: DashboardData }) {
                       </span>
                       <a
                         href={`/companies/${co.slug}`}
-                        className="font-medium text-gray-900 hover:text-[#005EFF] transition-colors"
+                        className="font-medium text-gray-900 hover:text-[#2563EB] transition-colors"
                       >
                         {co.name}
                       </a>

@@ -39,7 +39,7 @@ export function Pagination({ currentPage, totalPages, buildPageUrl }: Pagination
             aria-current={page === currentPage ? 'page' : undefined}
             className={`w-10 h-10 rounded-lg flex items-center justify-center text-[14px] font-medium transition-colors ${
               page === currentPage
-                ? 'bg-[#005EFF] text-white font-semibold'
+                ? 'bg-[#C2410C] text-white font-semibold'
                 : 'text-gray-500 hover:bg-gray-100'
             }`}
           >

@@ -34,7 +34,7 @@ function HeaderMock({ src, alt, dark }: { src: string; alt: string; dark: boolea
   return (
     <div
       className={`rounded-md overflow-hidden border ${dark ? 'border-white/10' : 'border-gray-200'}`}
-      style={{ backgroundColor: dark ? '#0A0F1E' : '#FFFFFF' }}
+      style={{ backgroundColor: dark ? '#0F172A' : '#FFFFFF' }}
     >
       <div className="flex items-center justify-between px-4 h-10">
         <div className="relative h-5 w-28">
@@ -69,7 +69,7 @@ function MobileMock({ src, alt, dark }: { src: string; alt: string; dark: boolea
       className="w-[200px] rounded-md overflow-hidden border"
       style={{
         borderColor: dark ? 'rgba(255,255,255,0.1)' : '#E5E7EB',
-        backgroundColor: dark ? '#0A0F1E' : '#FFFFFF',
+        backgroundColor: dark ? '#0F172A' : '#FFFFFF',
       }}
     >
       <div className="flex items-center justify-between px-3 h-10">
@@ -105,7 +105,7 @@ function MobileMock({ src, alt, dark }: { src: string; alt: string; dark: boolea
 function LogoCard({ concept }: { concept: LogoConcept }) {
   const [dark, setDark] = useState(false);
 
-  const bg = dark ? '#0A0F1E' : '#FFFFFF';
+  const bg = dark ? '#0F172A' : '#FFFFFF';
   const cardBorder = dark ? 'border-white/10' : 'border-gray-200';
 
   return (
@@ -176,7 +176,7 @@ function LogoCard({ concept }: { concept: LogoConcept }) {
               </p>
               <div
                 className="w-8 h-8 rounded-sm border border-gray-200 flex items-center justify-center overflow-hidden"
-                style={{ backgroundColor: dark ? '#0A0F1E' : '#FFFFFF' }}
+                style={{ backgroundColor: dark ? '#0F172A' : '#FFFFFF' }}
               >
                 <div className="relative w-7 h-7">
                   <Image

@@ -33,7 +33,7 @@ export default async function AdminCompaniesPage() {
 
   return (
     <div className="min-h-screen bg-[#F9FAFB]">
-      <header className="bg-[#0A0F1E] sticky top-0 z-50 border-b border-white/[0.06]">
+      <header className="bg-[#0F172A] sticky top-0 z-50 border-b border-white/[0.06]">
         <div className="max-w-7xl mx-auto px-5 sm:px-8 h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-3">
             <PacklinxLogo variant="dark" />
@@ -90,7 +90,7 @@ export default async function AdminCompaniesPage() {
                       <td className="px-5 py-3.5 text-right">
                         <Link
                           href={`/admin/companies/${co.slug}/edit`}
-                          className="text-[12px] font-semibold text-[#005EFF] hover:underline"
+                          className="text-[12px] font-semibold text-[#2563EB] hover:underline"
                         >
                           편집
                         </Link>

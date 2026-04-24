@@ -73,8 +73,8 @@ export function DeliveryRegionSelector({ value, onChange, error }: DeliveryRegio
           aria-checked={nationwideMode}
           aria-label="전국 배송 토글"
           onClick={handleNationwideToggle}
-          className={`relative flex-shrink-0 w-11 h-6 rounded-full transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#005EFF] focus-visible:ring-offset-2 ${
-            nationwideMode ? 'bg-[#005EFF]' : 'bg-gray-300'
+          className={`relative flex-shrink-0 w-11 h-6 rounded-full transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C2410C] focus-visible:ring-offset-2 ${
+            nationwideMode ? 'bg-[#C2410C]' : 'bg-gray-300'
           }`}
         >
           <span
@@ -106,8 +106,8 @@ export function DeliveryRegionSelector({ value, onChange, error }: DeliveryRegio
                     className={`px-3 py-2 rounded-lg text-[13px] font-medium border transition-all duration-150 ${
                       isSelected
                         ? isDisabled
-                          ? 'bg-[#EBF2FF] border-[rgba(0,94,255,0.25)] text-[rgba(0,94,255,0.5)] opacity-70 cursor-default'
-                          : 'bg-[#EBF2FF] border-[#005EFF] text-[#005EFF] font-semibold'
+                          ? 'bg-[#EFF6FF] border-[#CBD5E1] text-[#94A3B8] opacity-70 cursor-default'
+                          : 'bg-[#EFF6FF] border-[#2563EB] text-[#2563EB] font-semibold'
                         : isDisabled
                         ? 'bg-white border-gray-200 text-gray-300 cursor-default'
                         : 'bg-white border-gray-200 text-gray-700 hover:border-gray-300 hover:text-gray-900'
