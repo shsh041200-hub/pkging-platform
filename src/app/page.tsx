@@ -49,6 +49,7 @@ type SearchParams = Promise<{
   print?: string
   coldretention?: string
   dryice?: string
+  sample?: string
   page?: string
 }>
 
@@ -107,7 +108,7 @@ export default async function HomePage({
 }: {
   searchParams: SearchParams
 }) {
-  const { q, industry, material, form, cert, sort, moq, leadtime, cold, print, coldretention, dryice, page } = await searchParams
+  const { q, industry, material, form, cert, sort, moq, leadtime, cold, print, coldretention, dryice, sample, page } = await searchParams
   const currentPage = Math.max(1, parseInt(page ?? '1', 10))
   const supabase = await createClient()
 
@@ -226,6 +227,7 @@ export default async function HomePage({
       if (range?.min !== undefined) dbQuery = dbQuery.gte('cold_retention_hours', range.min)
     }
     if (dryice === 'true') dbQuery = dbQuery.eq('dry_ice_available', true)
+    if (sample === 'true') dbQuery = dbQuery.eq('sample_available', true)
     if (print) dbQuery = dbQuery.eq('print_method', print)
 
     if (sort === 'name_asc') {
@@ -274,6 +276,7 @@ export default async function HomePage({
     if (print) params.print = print
     if (coldretention) params.coldretention = coldretention
     if (dryice) params.dryice = dryice
+    if (sample) params.sample = sample
     Object.assign(params, overrides)
     // always reset page when changing filters (except when page itself is the override)
     if (!('page' in overrides)) delete params.page
@@ -296,6 +299,7 @@ export default async function HomePage({
     if (print) params.print = print
     if (coldretention) params.coldretention = coldretention
     if (dryice) params.dryice = dryice
+    if (sample) params.sample = sample
     if (p > 1) params.page = String(p)
     Object.keys(params).forEach((k) => { if (params[k] === undefined) delete params[k] })
     const qs = new URLSearchParams(params as Record<string, string>).toString()
@@ -313,7 +317,7 @@ export default async function HomePage({
     return buildUrl({ cert: certStr || undefined })
   }
 
-  const showingCategory = !q && !industry && selectedMaterials.length === 0 && selectedForms.length === 0 && activeCerts.length === 0 && !moq && !leadtime && !cold && !print && !coldretention && !dryice
+  const showingCategory = !q && !industry && selectedMaterials.length === 0 && selectedForms.length === 0 && activeCerts.length === 0 && !moq && !leadtime && !cold && !print && !coldretention && !dryice && !sample
 
   const buildMaterialUrl = (mat: MaterialType): string => {
     const current = new Set(selectedMaterials)
@@ -343,6 +347,7 @@ export default async function HomePage({
   const buildColdUrl = (): string => buildUrl({ cold: cold === 'true' ? undefined : 'true' })
   const buildColdRetentionUrl = (id: string): string => buildUrl({ coldretention: coldretention === id ? undefined : id })
   const buildDryIceUrl = (): string => buildUrl({ dryice: dryice === 'true' ? undefined : 'true' })
+  const buildSampleUrl = (): string => buildUrl({ sample: sample === 'true' ? undefined : 'true' })
 
   // Group cert types by category for filter UI
   const certsByCategory = CERTIFICATION_TYPES.reduce<Record<CertificationCategory, typeof CERTIFICATION_TYPES>>((acc, ct) => {
@@ -634,6 +639,17 @@ export default async function HomePage({
               >
                 드라이아이스
               </Link>
+              <span className="flex-shrink-0 w-px h-4 bg-gray-200 self-center mx-0.5" aria-hidden="true" />
+              <Link
+                href={buildSampleUrl()}
+                className={`flex-shrink-0 px-2.5 py-1.5 rounded text-[11px] font-medium transition-all border ${
+                  sample === 'true'
+                    ? 'bg-[#0D9488] text-white border-[#0D9488]'
+                    : 'text-gray-500 border-gray-200 hover:text-gray-700 hover:border-gray-300 bg-white'
+                }`}
+              >
+                샘플 제작
+              </Link>
             </div>
 
             {/* Certification accordion filter */}
@@ -715,6 +731,15 @@ export default async function HomePage({
                 <span className="text-teal-700/60 text-[10px] leading-none">×</span>
               </Link>
             )}
+            {sample === 'true' && (
+              <Link
+                href={buildUrl({ sample: undefined })}
+                className="text-[11px] bg-teal-50 text-teal-700 font-medium px-2.5 py-1 rounded-full flex items-center gap-1 border border-teal-200 hover:bg-teal-100 transition-colors"
+              >
+                샘플 제작
+                <span className="text-teal-700/60 text-[10px] leading-none">×</span>
+              </Link>
+            )}
             {cold === 'true' && (
               <Link
                 href={buildUrl({ cold: undefined })}
@@ -747,7 +772,7 @@ export default async function HomePage({
                 &ldquo;{q}&rdquo;
               </span>
             )}
-            {(industry || selectedMaterials.length > 0 || selectedForms.length > 0 || q || activeCerts.length > 0 || moq || leadtime || cold || print || coldretention || dryice) && (
+            {(industry || selectedMaterials.length > 0 || selectedForms.length > 0 || q || activeCerts.length > 0 || moq || leadtime || cold || print || coldretention || dryice || sample) && (
               <Link href="/" className="text-xs text-gray-400 hover:text-gray-600 ml-1">
                 초기화
               </Link>
