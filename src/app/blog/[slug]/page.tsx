@@ -127,7 +127,7 @@ export default async function BlogPostPage({ params }: Props) {
     '@type': 'BreadcrumbList',
     itemListElement: [
       { '@type': 'ListItem', position: 1, name: 'Packlinx', item: siteUrl },
-      { '@type': 'ListItem', position: 2, name: '패키징 가이드', item: `${siteUrl}/blog` },
+      { '@type': 'ListItem', position: 2, name: '블로그', item: `${siteUrl}/blog` },
       { '@type': 'ListItem', position: 3, name: typedPost.title, item: `${siteUrl}/blog/${slug}` },
     ],
   }
@@ -167,7 +167,7 @@ export default async function BlogPostPage({ params }: Props) {
           <nav className="text-sm text-gray-400">
             <Link href="/" className="hover:text-gray-600 transition-colors">홈</Link>
             <span className="mx-2">&rsaquo;</span>
-            <Link href="/blog" className="hover:text-gray-600 transition-colors">패키징 가이드</Link>
+            <Link href="/blog" className="hover:text-gray-600 transition-colors">블로그</Link>
             <span className="mx-2">&rsaquo;</span>
             <span className="text-gray-700 font-medium line-clamp-1">{typedPost.title}</span>
           </nav>

@@ -13,12 +13,12 @@ import { createClient } from '@/lib/supabase/server'
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://packlinx.com'
 
 export const metadata: Metadata = {
-  title: '패키징 가이드 — 포장재 선택부터 업체 찾기까지',
-  description: '포장재 종류, 업체 선정, 가격 비교 등 B2B 패키징의 모든 것을 안내합니다.',
+  title: '패키징 인사이트 블로그 — 트렌드·뉴스·구매 팁',
+  description: '패키징 업계 동향, 구매 팁, 업체 소개 등 B2B 패키징 인사이트를 전달합니다.',
   alternates: { canonical: '/blog' },
   openGraph: {
-    title: '패키징 가이드 — 포장재 선택부터 업체 찾기까지 | Packlinx',
-    description: '포장재 종류, 업체 선정, 가격 비교 등 B2B 패키징의 모든 것을 안내합니다.',
+    title: '패키징 인사이트 블로그 — 트렌드·뉴스·구매 팁 | Packlinx',
+    description: '패키징 업계 동향, 구매 팁, 업체 소개 등 B2B 패키징 인사이트를 전달합니다.',
     url: `${siteUrl}/blog`,
     type: 'website',
   },
@@ -27,8 +27,8 @@ export const metadata: Metadata = {
 const blogJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Blog',
-  name: '패키징 가이드',
-  description: '포장재 종류, 업체 선정, 가격 비교 등 B2B 패키징의 모든 것을 안내합니다.',
+  name: '패키징 인사이트 블로그',
+  description: '패키징 업계 동향, 구매 팁, 업체 소개 등 B2B 패키징 인사이트를 전달합니다.',
   url: `${siteUrl}/blog`,
   publisher: {
     '@type': 'Organization',
@@ -106,16 +106,16 @@ export default async function BlogListPage({ searchParams }: Props) {
           <nav className="text-sm text-gray-400 mb-6">
             <Link href="/" className="hover:text-gray-600 transition-colors">홈</Link>
             <span className="mx-2">&rsaquo;</span>
-            <span className="text-gray-700 font-medium">패키징 가이드</span>
+            <span className="text-gray-700 font-medium">블로그</span>
           </nav>
           <div className="inline-block text-[11px] font-semibold tracking-widest uppercase text-[#005EFF] bg-[#EBF2FF] px-3 py-1.5 rounded-full mb-4">
             B2B 패키징 인사이트
           </div>
           <h1 className="text-[32px] sm:text-[42px] font-extrabold text-gray-900 leading-[1.1] tracking-[-0.04em] mb-3">
-            패키징 가이드
+            패키징 인사이트
           </h1>
           <p className="text-gray-500 text-[16px] leading-relaxed max-w-lg">
-            포장재 선택, 업체 비교, 트렌드까지 — B2B 패키징의 모든 것을 안내합니다.
+            패키징 업계 트렌드, 구매 팁, 업체 소개 — B2B 패키징 인사이트를 전달합니다.
           </p>
         </div>
       </section>
