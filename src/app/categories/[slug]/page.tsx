@@ -269,11 +269,13 @@ export default async function CategoryPage({ params, searchParams }: Props) {
   const collectionJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
+    '@id': `${siteUrl}/categories/${slug}`,
     name: CATEGORY_SEO_TITLE[categoryKey],
     description: CATEGORY_SEO_DESCRIPTION[categoryKey],
     url: `${siteUrl}/categories/${slug}`,
+    inLanguage: 'ko',
     isPartOf: { '@type': 'WebSite', name: 'Packlinx', url: siteUrl },
-    numberOfItems: companies?.length ?? 0,
+    numberOfItems: totalInCategory ?? companies?.length ?? 0,
   }
 
   return (

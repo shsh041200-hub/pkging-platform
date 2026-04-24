@@ -103,19 +103,25 @@ export default async function BlogPostPage({ params }: Props) {
   const blogPostingJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'BlogPosting',
+    '@id': `${siteUrl}/blog/${slug}`,
     headline: typedPost.title,
-    description: typedPost.excerpt ?? '',
+    ...(typedPost.excerpt ? { description: typedPost.excerpt } : {}),
     url: `${siteUrl}/blog/${slug}`,
+    mainEntityOfPage: { '@type': 'WebPage', '@id': `${siteUrl}/blog/${slug}` },
     datePublished: typedPost.published_at ?? typedPost.created_at,
-    dateModified: typedPost.updated_at,
+    ...(typedPost.updated_at ? { dateModified: typedPost.updated_at } : {}),
     author: {
       '@type': 'Person',
-      name: typedPost.author,
+      name: typedPost.author ?? 'Packlinx',
     },
     publisher: {
       '@type': 'Organization',
       name: 'Packlinx',
       url: siteUrl,
+      logo: {
+        '@type': 'ImageObject',
+        url: `${siteUrl}/packlinx-logo-light.svg`,
+      },
     },
     ...(typedPost.og_image_url || typedPost.cover_image_url
       ? { image: typedPost.og_image_url ?? typedPost.cover_image_url }

@@ -138,12 +138,22 @@ export default async function CompanyPage({ params }: Props) {
   const companyJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'LocalBusiness',
+    '@id': `${siteUrl}/companies/${slug}`,
     name: company.name,
-    description: company.description ?? '',
+    ...(company.description ? { description: company.description } : {}),
     url: `${siteUrl}/companies/${slug}`,
+    ...(company.icon_url ? { image: company.icon_url } : {}),
     ...(company.website && { sameAs: [company.website] }),
     ...(company.founded_year && { foundingDate: String(company.founded_year) }),
-    ...(avgRating && { aggregateRating: { '@type': 'AggregateRating', ratingValue: avgRating, reviewCount: reviews?.length ?? 0 } }),
+    ...(avgRating && {
+      aggregateRating: {
+        '@type': 'AggregateRating',
+        ratingValue: parseFloat(avgRating),
+        reviewCount: reviews?.length ?? 0,
+        bestRating: 5,
+        worstRating: 1,
+      },
+    }),
   }
 
   const industryCats = (company.industry_categories as string[] | null) ?? []
