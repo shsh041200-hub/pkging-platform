@@ -376,6 +376,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
               {totalInCategory.toLocaleString()}개 업체 등록됨
             </p>
           )}
+          <CategoryGuideBlock categoryId={categoryKey} />
         </div>
       </section>
 
