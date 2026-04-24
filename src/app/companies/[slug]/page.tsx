@@ -109,13 +109,6 @@ export default async function CompanyPage({ params }: Props) {
     isOwner = profile?.company_id === company.id
   }
 
-  const { data: reviews } = await supabase
-    .from('reviews')
-    .select('id, rating, content, created_at')
-    .eq('company_id', company.id)
-    .order('created_at', { ascending: false })
-    .limit(10)
-
   const { data: portfolios } = await supabase
     .from('company_portfolios')
     .select('id, title, description, image_url, display_order, category_tag')
@@ -137,20 +130,6 @@ export default async function CompanyPage({ params }: Props) {
     : { data: null }
   const relatedCompanies = relatedCompaniesData.data ?? []
 
-  const avgRating =
-    reviews && reviews.length > 0
-      ? (reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length).toFixed(1)
-      : null
-
-  // Rating distribution (5 → 1)
-  const ratingDist: Record<number, number> = { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 }
-  if (reviews) {
-    for (const r of reviews) {
-      if (r.rating >= 1 && r.rating <= 5) ratingDist[r.rating]++
-    }
-  }
-  const maxDist = Math.max(...Object.values(ratingDist), 1)
-
   const companyJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'LocalBusiness',
@@ -161,15 +140,6 @@ export default async function CompanyPage({ params }: Props) {
     ...(company.icon_url ? { image: company.icon_url } : {}),
     ...(company.website && { sameAs: [company.website] }),
     ...(company.founded_year && { foundingDate: String(company.founded_year) }),
-    ...(avgRating && {
-      aggregateRating: {
-        '@type': 'AggregateRating',
-        ratingValue: parseFloat(avgRating),
-        reviewCount: reviews?.length ?? 0,
-        bestRating: 5,
-        worstRating: 1,
-      },
-    }),
   }
 
   const industryCats = (company.industry_categories as string[] | null) ?? []
@@ -205,7 +175,24 @@ export default async function CompanyPage({ params }: Props) {
     ],
   }
 
-  const hasExpandedInfo = company.founded_year || company.min_order_quantity || company.moq_value != null || company.lead_time_standard_days != null || company.print_method || company.sample_available != null || company.cold_packaging_available || company.price_tier || company.cold_retention_hours != null || company.dry_ice_available != null || company.reuse_model || company.spec_sheet_available != null || company.seasonal_packaging_available
+  const hasCoreCommerce =
+    company.moq_value != null ||
+    !!company.min_order_quantity ||
+    company.lead_time_standard_days != null ||
+    company.lead_time_express_days != null ||
+    company.sample_available != null
+
+  const hasAdditionalInfo =
+    !!company.founded_year ||
+    !!company.print_method ||
+    !!company.cold_packaging_available ||
+    !!company.price_tier ||
+    company.cold_retention_hours != null ||
+    company.dry_ice_available != null ||
+    !!company.reuse_model ||
+    company.spec_sheet_available != null ||
+    !!company.seasonal_packaging_available
+
   const hasServiceCapabilities = company.service_capabilities && company.service_capabilities.length > 0
   const hasKeyClients = company.key_clients && company.key_clients.length > 0
   const hasTargetIndustries = company.target_industries && company.target_industries.length > 0
@@ -220,7 +207,6 @@ export default async function CompanyPage({ params }: Props) {
       }))
     : []
 
-  // Group certs by category for display
   const certsByCategory = certItems.reduce<Record<CertificationCategory, typeof certItems>>((acc, item) => {
     const cat = item.resolved?.category ?? 'general'
     if (!acc[cat]) acc[cat] = []
@@ -228,16 +214,21 @@ export default async function CompanyPage({ params }: Props) {
     return acc
   }, {} as Record<CertificationCategory, typeof certItems>)
 
+  const moqValue = company.moq_value != null ? Number(company.moq_value).toLocaleString() : null
+  const moqUnit = (company.moq_unit as string | null) ?? '개'
+  const leadTimeDays = company.lead_time_standard_days ?? company.lead_time_express_days
+
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL ?? ''
 
   function getPortfolioImageUrl(rawUrl: string) {
     if (!rawUrl) return rawUrl
-    // Apply Supabase image transform for webp conversion
     if (rawUrl.includes('/storage/v1/object/public/')) {
       return `${rawUrl}?width=800&format=webp`
     }
     return rawUrl
   }
+
+  void supabaseUrl
 
   return (
     <div className="min-h-screen bg-[#F9FAFB]">
@@ -279,7 +270,7 @@ export default async function CompanyPage({ params }: Props) {
 
       <main className="max-w-[800px] mx-auto px-4 sm:px-6 pt-5 pb-20 md:pb-16 space-y-4">
         {/* Company Hero Card */}
-        <div className="bg-white border border-gray-200 rounded-xl p-6 sm:p-10">
+        <div className="bg-white border border-gray-200 rounded-xl p-5 sm:p-7 xl:p-10">
           <div className="flex items-start gap-4 mb-6">
             <CompanyIcon
               iconUrl={company.icon_url ?? null}
@@ -298,20 +289,22 @@ export default async function CompanyPage({ params }: Props) {
                   {CATEGORY_LABELS[company.category as Category]}
                 </span>
                 {company.founded_year && (
-                  <span className="text-[12px] text-gray-400">est. {company.founded_year}</span>
-                )}
-                {avgRating && (
-                  <div className="flex items-center gap-1.5">
-                    <span className="text-sm font-bold text-gray-900">{avgRating}</span>
-                    <div className="flex gap-0.5">
-                      {[1,2,3,4,5].map(n => (
-                        <div key={n} className={`w-2.5 h-2.5 rounded-sm ${n <= Math.round(Number(avgRating)) ? 'bg-amber-400' : 'bg-gray-200'}`} />
-                      ))}
-                    </div>
-                    <span className="text-[12px] text-gray-400">{reviews?.length}개 리뷰</span>
-                  </div>
+                  <span className="text-[12px] font-medium text-gray-600 bg-gray-100 px-2 py-0.5 rounded">
+                    {new Date().getFullYear() - (company.founded_year as number)}년 전통
+                  </span>
                 )}
               </div>
+              {/* Inline cert badges — top 3 */}
+              {hasCertifications && (
+                <div className="flex flex-wrap items-center gap-1.5 mt-2">
+                  {certItems.slice(0, 3).map(({ raw }, i) => (
+                    <CertBadge key={i} cert={raw} variant="compact" />
+                  ))}
+                  {certItems.length > 3 && (
+                    <span className="text-[11px] text-gray-400">+{certItems.length - 3}</span>
+                  )}
+                </div>
+              )}
             </div>
           </div>
 
@@ -330,84 +323,86 @@ export default async function CompanyPage({ params }: Props) {
             </div>
           )}
 
-          {/* Expanded Info Grid */}
-          {hasExpandedInfo && (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 mb-6 p-4 bg-gray-50 border border-gray-100 rounded-lg">
+          {/* 1단: 핵심 거래 정보 — MOQ, 납기, 샘플 */}
+          {hasCoreCommerce && (
+            <div className="mb-4">
+              <p className="text-[11px] font-semibold text-gray-500 uppercase tracking-wider mb-2">핵심 거래 정보</p>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                {(company.moq_value != null || company.min_order_quantity) && (
+                  <div className="bg-[#0a0f1e]/[0.03] border border-[#0a0f1e]/[0.08] rounded-lg p-3.5 text-center">
+                    <p className="text-[10px] font-semibold text-[#0a0f1e]/40 uppercase tracking-wider mb-1">최소주문량</p>
+                    {moqValue != null ? (
+                      <p className="text-[18px] font-bold text-[#0a0f1e] tracking-tight">
+                        {moqValue}<span className="text-[13px] font-medium text-gray-500 ml-0.5">{moqUnit}</span>
+                      </p>
+                    ) : (
+                      <p className="text-[15px] font-bold text-[#0a0f1e] tracking-tight">{company.min_order_quantity}</p>
+                    )}
+                  </div>
+                )}
+                {(company.lead_time_standard_days != null || company.lead_time_express_days != null) && (
+                  <div className="bg-[#0a0f1e]/[0.03] border border-[#0a0f1e]/[0.08] rounded-lg p-3.5 text-center">
+                    <p className="text-[10px] font-semibold text-[#0a0f1e]/40 uppercase tracking-wider mb-1">납기</p>
+                    <p className="text-[18px] font-bold text-[#0a0f1e] tracking-tight">
+                      {leadTimeDays}<span className="text-[13px] font-medium text-gray-500 ml-0.5">일</span>
+                    </p>
+                  </div>
+                )}
+                {company.sample_available != null && (
+                  <div className="bg-[#0a0f1e]/[0.03] border border-[#0a0f1e]/[0.08] rounded-lg p-3.5 text-center">
+                    <p className="text-[10px] font-semibold text-[#0a0f1e]/40 uppercase tracking-wider mb-1">샘플</p>
+                    <p className="text-[16px] font-bold text-[#0a0f1e] tracking-tight">
+                      {company.sample_available ? '가능' : '확인 필요'}
+                    </p>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* 2단: 추가 정보 — 설립연도, 인쇄방식, 가격대, 보냉 등 */}
+          {hasAdditionalInfo && (
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-6 p-3.5 bg-gray-50 border border-gray-100 rounded-lg">
               {company.founded_year && (
                 <div>
-                  <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-1">설립연도</p>
-                  <p className="text-[14px] font-semibold text-gray-700">{company.founded_year}년</p>
-                </div>
-              )}
-              {(company.moq_value != null || company.min_order_quantity) && (
-                <div>
-                  <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-1">최소 주문량 (MOQ)</p>
-                  <p className="text-[14px] font-semibold text-gray-700">
-                    {company.moq_value != null
-                      ? `${Number(company.moq_value).toLocaleString()} ${company.moq_unit ?? '개'}`
-                      : company.min_order_quantity
-                    }
-                  </p>
-                </div>
-              )}
-              {(company.lead_time_standard_days != null || company.lead_time_express_days != null) && (
-                <div>
-                  <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-1">납기</p>
-                  <p className="text-[14px] font-semibold text-gray-700">
-                    {company.lead_time_standard_days != null && company.lead_time_express_days != null
-                      ? `기본 ${company.lead_time_standard_days}일 / 급행 ${company.lead_time_express_days}일`
-                      : company.lead_time_standard_days != null
-                        ? `기본 ${company.lead_time_standard_days}일`
-                        : `급행 ${company.lead_time_express_days}일`
-                    }
-                  </p>
+                  <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-1">설립연도</p>
+                  <p className="text-[13px] font-semibold text-gray-600">{company.founded_year as number}년</p>
                 </div>
               )}
               {company.print_method && (
                 <div>
-                  <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-1">인쇄 방식</p>
-                  <p className="text-[14px] font-semibold text-gray-700">
+                  <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-1">인쇄 방식</p>
+                  <p className="text-[13px] font-semibold text-gray-600">
                     {PRINT_METHOD_LABELS[company.print_method as PrintMethod] ?? company.print_method}
                   </p>
                 </div>
               )}
-              {company.sample_available != null && (
+              {company.price_tier && (
                 <div>
-                  <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-1">샘플</p>
-                  <p className="text-[14px] font-semibold text-gray-700">
-                    {company.sample_available
-                      ? `샘플 가능${company.sample_cost ? ` (${company.sample_cost})` : ''}`
-                      : '확인 필요'
-                    }
+                  <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-1">가격대</p>
+                  <p className="text-[13px] font-semibold text-gray-600">
+                    {PRICE_TIER_LABELS[company.price_tier as PriceTier]}
                   </p>
                 </div>
               )}
               {company.cold_packaging_available && (
                 <div>
-                  <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-1">특수 포장</p>
-                  <span className="inline-flex items-center gap-1 text-[13px] font-semibold text-teal-700 bg-teal-50 border border-teal-200 px-2.5 py-1 rounded">
+                  <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-1">특수 포장</p>
+                  <span className="inline-flex items-center gap-1 text-[12px] font-semibold text-teal-700 bg-teal-50 border border-teal-200 px-2.5 py-1 rounded">
                     보냉 포장 가능
                   </span>
                 </div>
               )}
-              {company.price_tier && (
-                <div>
-                  <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-1">가격대</p>
-                  <p className="text-[14px] font-semibold text-gray-700">
-                    {PRICE_TIER_LABELS[company.price_tier as PriceTier]}
-                  </p>
-                </div>
-              )}
               {company.cold_retention_hours != null && (
                 <div>
-                  <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-1">보냉 유지</p>
-                  <p className="text-[14px] font-semibold text-gray-700">{company.cold_retention_hours}시간</p>
+                  <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-1">보냉 유지</p>
+                  <p className="text-[13px] font-semibold text-gray-600">{company.cold_retention_hours as number}시간</p>
                 </div>
               )}
               {company.dry_ice_available != null && (
                 <div>
-                  <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-1">드라이아이스</p>
-                  <span className={`inline-flex items-center gap-1 text-[13px] font-semibold px-2.5 py-1 rounded border ${
+                  <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-1">드라이아이스</p>
+                  <span className={`inline-flex items-center gap-1 text-[12px] font-semibold px-2.5 py-1 rounded border ${
                     company.dry_ice_available ? 'text-teal-700 bg-teal-50 border-teal-200' : 'text-gray-500 bg-gray-50 border-gray-200'
                   }`}>
                     {company.dry_ice_available ? '취급 가능' : '미취급'}
@@ -416,16 +411,16 @@ export default async function CompanyPage({ params }: Props) {
               )}
               {company.reuse_model && (
                 <div>
-                  <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-1">박스 재사용</p>
-                  <p className="text-[14px] font-semibold text-gray-700">
+                  <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-1">박스 재사용</p>
+                  <p className="text-[13px] font-semibold text-gray-600">
                     {REUSE_MODEL_LABELS[company.reuse_model as ReuseModel] ?? company.reuse_model}
                   </p>
                 </div>
               )}
               {company.spec_sheet_available != null && (
                 <div>
-                  <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-1">규격서 발행</p>
-                  <span className={`inline-flex items-center gap-1 text-[13px] font-semibold px-2.5 py-1 rounded border ${
+                  <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-1">규격서 발행</p>
+                  <span className={`inline-flex items-center gap-1 text-[12px] font-semibold px-2.5 py-1 rounded border ${
                     company.spec_sheet_available ? 'text-teal-700 bg-teal-50 border-teal-200' : 'text-gray-500 bg-gray-50 border-gray-200'
                   }`}>
                     {company.spec_sheet_available ? '발행 가능' : '미지원'}
@@ -434,8 +429,8 @@ export default async function CompanyPage({ params }: Props) {
               )}
               {company.seasonal_packaging_available && (
                 <div>
-                  <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-1">계절 대응</p>
-                  <span className="inline-flex items-center gap-1 text-[13px] font-semibold text-teal-700 bg-teal-50 border border-teal-200 px-2.5 py-1 rounded">
+                  <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-1">계절 대응</p>
+                  <span className="inline-flex items-center gap-1 text-[12px] font-semibold text-teal-700 bg-teal-50 border border-teal-200 px-2.5 py-1 rounded">
                     계절별 포장 대응
                   </span>
                 </div>
@@ -443,7 +438,7 @@ export default async function CompanyPage({ params }: Props) {
             </div>
           )}
 
-          {/* CTA */}
+          {/* CTA — full-width branded buttons */}
           <div className="pt-5 border-t border-gray-100">
             <Suspense fallback={null}>
               <CompanyDetailCTA
@@ -469,13 +464,13 @@ export default async function CompanyPage({ params }: Props) {
           )}
         </div>
 
-        {/* Company Description */}
+        {/* Company Description — no left border */}
         {company.description && (
           <div className="bg-white border border-gray-200 rounded-xl p-6 sm:p-8">
-            <h2 className="text-[13px] font-semibold text-gray-700 uppercase tracking-wider mb-4">
+            <h2 className="text-[14px] font-semibold text-gray-800 mb-3">
               업체 소개
             </h2>
-            <div className="border-l-2 border-[#005EFF]/20 pl-5">
+            <div>
               <p className="text-[15px] text-gray-700 leading-[1.8] whitespace-pre-line">
                 {company.description}
               </p>
@@ -483,55 +478,58 @@ export default async function CompanyPage({ params }: Props) {
           </div>
         )}
 
-        {/* Products section */}
-        {company.products && company.products.length > 0 && (
+        {/* 취급 제품 + 보유 인증 — 하나의 카드로 통합 */}
+        {(company.products && (company.products as string[]).length > 0) || hasCertifications || isOwner ? (
           <div className="bg-white border border-gray-200 rounded-xl p-5">
-            <h2 className="text-[13px] font-semibold text-gray-700 uppercase tracking-wider mb-3">
-              취급 제품
-            </h2>
-            <div className="flex flex-wrap gap-2">
-              {company.products.map((product: string, i: number) => (
-                <span
-                  key={i}
-                  className="text-[12px] font-medium bg-gray-100 text-gray-700 px-3 py-1.5 rounded"
-                >
-                  {product}
-                </span>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Certifications — badge UI with category color coding */}
-        {hasCertifications ? (
-          <div className="bg-white border border-gray-200 rounded-xl p-5">
-            <h2 className="text-[13px] font-semibold text-gray-700 uppercase tracking-wider mb-4">
-              보유 인증
-            </h2>
-            {Object.entries(certsByCategory).map(([cat, items]) => {
-              const catKey = cat as CertificationCategory
-              return (
-                <div key={cat} className="mb-4 last:mb-0">
-                  <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-widest mb-2">
-                    {CERTIFICATION_CATEGORY_LABELS[catKey]}
-                  </p>
-                  <div className="flex flex-wrap gap-2">
-                    {items.map(({ raw }, i) => (
-                      <CertBadge key={i} cert={raw} variant="full" />
-                    ))}
-                  </div>
+            {/* 취급 제품 */}
+            {company.products && (company.products as string[]).length > 0 && (
+              <>
+                <h2 className="text-[14px] font-semibold text-gray-800 mb-3">취급 제품</h2>
+                <div className="flex flex-wrap gap-2 mb-5">
+                  {(company.products as string[]).map((product: string, i: number) => (
+                    <span
+                      key={i}
+                      className="text-[12px] font-medium bg-gray-100 text-gray-700 px-3 py-1.5 rounded"
+                    >
+                      {product}
+                    </span>
+                  ))}
                 </div>
-              )
-            })}
+              </>
+            )}
+
+            {/* 보유 인증 */}
+            {hasCertifications ? (
+              <div className={company.products && (company.products as string[]).length > 0 ? 'border-t border-gray-100 pt-5' : ''}>
+                <h2 className="text-[14px] font-semibold text-gray-800 mb-3">보유 인증</h2>
+                {Object.entries(certsByCategory).map(([cat, items]) => {
+                  const catKey = cat as CertificationCategory
+                  return (
+                    <div key={cat} className="mb-4 last:mb-0">
+                      <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-widest mb-2">
+                        {CERTIFICATION_CATEGORY_LABELS[catKey]}
+                      </p>
+                      <div className="flex flex-wrap gap-2">
+                        {items.map(({ raw }, i) => (
+                          <CertBadge key={i} cert={raw} variant="full" />
+                        ))}
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+            ) : isOwner ? (
+              <div className={company.products && (company.products as string[]).length > 0 ? 'border-t border-gray-100 pt-5' : ''}>
+                <CertificationCTABanner companyId={company.id} />
+              </div>
+            ) : null}
           </div>
-        ) : isOwner ? (
-          <CertificationCTABanner companyId={company.id} />
         ) : null}
 
         {/* Portfolio Gallery */}
         {hasPortfolios && (
           <div className="bg-white border border-gray-200 rounded-xl p-5">
-            <h2 className="text-[13px] font-semibold text-gray-700 uppercase tracking-wider mb-4">
+            <h2 className="text-[14px] font-semibold text-gray-800 mb-3">
               포트폴리오
             </h2>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
@@ -564,19 +562,21 @@ export default async function CompanyPage({ params }: Props) {
           </div>
         )}
 
-        {/* Service Capabilities */}
+        {/* Service Capabilities — neutral gray */}
         {hasServiceCapabilities && (
           <div className="bg-white border border-gray-200 rounded-xl p-5">
-            <h2 className="text-[13px] font-semibold text-gray-700 uppercase tracking-wider mb-4">
+            <h2 className="text-[14px] font-semibold text-gray-800 mb-3">
               서비스 역량
             </h2>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
               {(company.service_capabilities as string[]).map((cap: string, i: number) => (
                 <div
                   key={i}
-                  className="flex items-center gap-2 text-[13px] text-[#005EFF] bg-[#EBF2FF] rounded-lg px-3 py-2.5"
+                  className="flex items-center gap-2 text-[13px] text-gray-700 bg-gray-50 border border-gray-100 rounded-lg px-3 py-2.5"
                 >
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#005EFF] flex-shrink-0" />
+                  <svg className="w-3.5 h-3.5 text-gray-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
                   {cap}
                 </div>
               ))}
@@ -589,7 +589,7 @@ export default async function CompanyPage({ params }: Props) {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {hasTargetIndustries && (
               <div className="bg-white border border-gray-200 rounded-xl p-5">
-                <h2 className="text-[13px] font-semibold text-gray-700 uppercase tracking-wider mb-3">
+                <h2 className="text-[14px] font-semibold text-gray-800 mb-3">
                   주요 납품 산업
                 </h2>
                 <div className="flex flex-wrap gap-2">
@@ -607,7 +607,7 @@ export default async function CompanyPage({ params }: Props) {
 
             {hasKeyClients && (
               <div className="bg-white border border-gray-200 rounded-xl p-5">
-                <h2 className="text-[13px] font-semibold text-gray-700 uppercase tracking-wider mb-3">
+                <h2 className="text-[14px] font-semibold text-gray-800 mb-3">
                   주요 납품처
                 </h2>
                 <div className="flex flex-wrap gap-2">
@@ -625,85 +625,11 @@ export default async function CompanyPage({ params }: Props) {
           </div>
         )}
 
-        {/* Reviews */}
-        <div className="bg-white border border-gray-200 rounded-xl p-5">
-          <div className="flex items-center justify-between mb-5">
-            <h2 className="text-[13px] font-semibold text-gray-700 uppercase tracking-wider">
-              바이어 리뷰
-            </h2>
-            {avgRating && (
-              <div className="flex items-center gap-2">
-                <span className="text-[28px] font-extrabold text-gray-900 tracking-[-0.03em]">{avgRating}</span>
-                <div>
-                  <div className="flex gap-0.5">
-                    {[1,2,3,4,5].map(n => (
-                      <div key={n} className={`w-3 h-3 rounded-sm ${n <= Math.round(Number(avgRating)) ? 'bg-amber-400' : 'bg-gray-200'}`} />
-                    ))}
-                  </div>
-                  <div className="text-[12px] text-gray-400 mt-0.5">{reviews?.length}개 리뷰</div>
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* Rating distribution histogram */}
-          {reviews && reviews.length > 0 && (
-            <div className="mb-5 space-y-1.5">
-              {[5, 4, 3, 2, 1].map((star) => (
-                <div key={star} className="flex items-center gap-2">
-                  <span className="text-[11px] text-gray-400 w-4 text-right flex-shrink-0">{star}</span>
-                  <svg className="w-3 h-3 text-amber-400 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                  </svg>
-                  <div className="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
-                    <div
-                      className="h-full bg-amber-400 rounded-full"
-                      style={{ width: `${(ratingDist[star] / maxDist) * 100}%` }}
-                    />
-                  </div>
-                  <span className="text-[11px] text-gray-400 w-4 flex-shrink-0">{ratingDist[star]}</span>
-                </div>
-              ))}
-            </div>
-          )}
-
-          {reviews && reviews.length > 0 ? (
-            <div className="divide-y divide-gray-100">
-              {reviews.map((review) => (
-                <div key={review.id} className="py-4 first:pt-0 last:pb-0">
-                  <div className="flex items-center gap-2 mb-1.5">
-                    <div className="flex gap-0.5">
-                      {[1,2,3,4,5].map(n => (
-                        <div key={n} className={`w-2.5 h-2.5 rounded-sm ${n <= review.rating ? 'bg-amber-400' : 'bg-gray-200'}`} />
-                      ))}
-                    </div>
-                    <span className="text-[12px] text-gray-400">
-                      {new Date(review.created_at).toLocaleDateString('ko-KR')}
-                    </span>
-                  </div>
-                  {review.content && (
-                    <p className="text-[13px] text-gray-600 leading-relaxed">{review.content}</p>
-                  )}
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div className="text-center py-10">
-              <div className="w-10 h-10 bg-gray-100 rounded-xl flex items-center justify-center mx-auto mb-3">
-                <svg className="w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
-                </svg>
-              </div>
-              <p className="text-[13px] text-gray-400">아직 리뷰가 없습니다.</p>
-            </div>
-          )}
-        </div>
-
         {/* Related Companies — same primary category */}
         {relatedCompanies.length > 0 && primaryCatForRelated && (
           <div className="bg-white border border-gray-200 rounded-xl p-5">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-[13px] font-semibold text-gray-700 uppercase tracking-wider">
+              <h2 className="text-[14px] font-semibold text-gray-800">
                 관련 업체
               </h2>
               <Link
@@ -746,7 +672,7 @@ export default async function CompanyPage({ params }: Props) {
         {/* Category links — same industry category pages */}
         {industryCats.length > 0 && (
           <div className="bg-white border border-gray-200 rounded-xl p-5">
-            <h2 className="text-[13px] font-semibold text-gray-700 uppercase tracking-wider mb-4">
+            <h2 className="text-[14px] font-semibold text-gray-800 mb-4">
               같은 카테고리의 다른 업체 보기
             </h2>
             <div className="flex flex-wrap gap-2">
