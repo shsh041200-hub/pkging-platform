@@ -11,7 +11,7 @@ export type SortOption = {
 const SORT_OPTIONS: SortOption[] = [
   { value: '', label: '기본순' },
   { value: 'name_asc', label: '가나다순' },
-  { value: 'moq_asc', label: 'MOQ 낮은순' },
+  { value: 'moq_asc', label: '최소주문수량(MOQ) 낮은순' },
   { value: 'est_asc', label: '설립연도 오래된순' },
   { value: 'est_desc', label: '설립연도 최신순' },
 ]
