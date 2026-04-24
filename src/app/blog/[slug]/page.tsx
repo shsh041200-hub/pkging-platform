@@ -16,8 +16,8 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://packlinx.com'
 
 const BLOG_SEO_OVERRIDES: Record<string, { title: string; description: string }> = {
   '이사박스-대량구매-가이드': {
-    title: '이사박스 대량구매 완벽 가이드 — 소재·채널 비교 (2026) | Packlinx',
-    description: '이사박스 대량구매 시 골판지 vs 단프라 선택법, 제조사 직거래 vs 도매상 장단점을 실무 관점으로 정리했습니다.',
+    title: '이사박스 대량구매 완벽 가이드 — 골판지 vs 단프라 비교 (2026) | Packlinx',
+    description: '이사업체·물류 담당자를 위한 이사박스 대량구매 실무 가이드. 골판지 vs 단프라 비교, 채널별 단가표 수록. Packlinx에서 공급업체를 비교하세요.',
   },
   '이사박스-사이즈-규격': {
     title: '이사박스 사이즈 1호~7호 규격 완전 정리 (치수·하중 포함) | Packlinx',
@@ -35,6 +35,23 @@ const BLOG_SEO_OVERRIDES: Record<string, { title: string; description: string }>
     title: '스마트스토어 셀러 포장재 체크리스트 — 반품률 줄이는 포장 전략 | Packlinx',
     description: '스마트스토어 셀러를 위한 포장재 체크리스트. 배송박스·완충재·테이프·브랜드 경험 요소별 선택 기준과 전략 정리.',
   },
+}
+
+const BLOG_FAQ_DATA: Record<string, Array<{ question: string; answer: string }>> = {
+  '이사박스-대량구매-가이드': [
+    {
+      question: '이사박스 대량구매 시 골판지와 단프라 중 어떤 소재를 선택해야 하나요?',
+      answer: '1회성 이사나 단발성 운송에는 골판지(800~2,500원/개)가, 50회 이상 반복 사용하는 물류·창고 운영에는 단프라(3,000~8,000원/개)가 적합합니다. 사용 목적과 빈도에 따라 선택하세요.',
+    },
+    {
+      question: '이사박스 대량구매 시 제조사 직거래와 도매상 중 어디서 구매하는 것이 유리한가요?',
+      answer: '월 500개 이상 정기 발주라면 제조사 직거래가 도매상 대비 10~30% 단가 절감에 유리합니다. 50~200개 소량·혼합 발주나 급발주가 필요하면 도매상이 적합합니다.',
+    },
+    {
+      question: '이사박스 대량구매 발주 전 반드시 확인해야 할 사항은 무엇인가요?',
+      answer: '소재 결정(골판지/단프라), 수량 산정, 규격 혼합 비율, 골판지 등급(DW/TW) 명시, 납기 여유 확보(성수기 최소 2주 전), 인쇄 유무, 공급사 복수화(2~3개사), 결제 조건을 확인해야 합니다.',
+    },
+  ],
 }
 
 type Props = {
@@ -162,6 +179,22 @@ export default async function BlogPostPage({ params }: Props) {
     ],
   }
 
+  const faqItems = BLOG_FAQ_DATA[slug]
+  const faqJsonLd = faqItems
+    ? {
+        '@context': 'https://schema.org',
+        '@type': 'FAQPage',
+        mainEntity: faqItems.map((item) => ({
+          '@type': 'Question',
+          name: item.question,
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: item.answer,
+          },
+        })),
+      }
+    : null
+
   return (
     <div className="min-h-screen bg-white">
       <script
@@ -172,6 +205,12 @@ export default async function BlogPostPage({ params }: Props) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
+      {faqJsonLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+        />
+      )}
 
       {/* Header */}
       <header className="bg-white sticky top-0 z-50 border-b border-gray-100">
