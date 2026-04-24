@@ -17,9 +17,16 @@ interface TagRule {
   keywords: string[]
 }
 
-interface IndustryRule {
+interface WeightedIndustryRule {
   industry: IndustryCategory
   keywords: string[]
+  weight: number
+}
+
+export interface IndustryClassificationResult {
+  categories: IndustryCategory[]
+  confidence: number
+  method: 'rule' | 'ai' | 'none'
 }
 
 const CATEGORY_RULES: CategoryRule[] = [
@@ -90,14 +97,79 @@ const TAG_RULES: TagRule[] = [
   { tag: 'ecommerce', keywords: ['이커머스', '온라인 쇼핑', '언박싱', 'D2C', '배송박스', '쿠팡', '스마트스토어'] },
 ]
 
-const INDUSTRY_RULES: IndustryRule[] = [
-  { industry: 'food-beverage', keywords: ['식품', '음료', 'HACCP', 'haccp', '냉동', '냉장', '밀키트', '농산물', '수산물', '식품포장', '식품등급'] },
-  { industry: 'ecommerce-shipping', keywords: ['이커머스', '택배', '배송', '온라인', '쇼핑', '박스', '골판지', '완충재', '배송박스', '포장박스'] },
-  { industry: 'cosmetics-beauty', keywords: ['화장품', '뷰티', '코스메틱', '스킨케어', '향수', '메이크업', '화장품용기'] },
-  { industry: 'pharma-health', keywords: ['의약', '제약', '건강', '의료', 'GMP', '건강기능', '블리스터'] },
-  { industry: 'electronics-industrial', keywords: ['전자', '산업', '부품', '공업', '방청', 'ESD', '팔레트', '정밀', '산업포장'] },
-  { industry: 'eco-special', keywords: ['친환경', '생분해', '재활용', 'FSC', 'fsc', 'PLA', '업사이클', 'GRS', '바이오'] },
+const WEIGHTED_INDUSTRY_RULES: WeightedIndustryRule[] = [
+  {
+    industry: 'food-beverage',
+    keywords: [
+      '식품', '음료', '냉동', 'HACCP', 'haccp', '밀키트', '냉장', '베이커리',
+      '제과', '쌀', '김치', '반찬', '즉석식품', '식자재', '커피', '과자', '스낵',
+      '라면', '주류', '와인', '맥주', '소주', '유제품', '도시락', '카페',
+    ],
+    weight: 2,
+  },
+  {
+    industry: 'cosmetics-beauty',
+    keywords: [
+      '화장품', '뷰티', '코스메틱', '스킨케어', '메이크업', '향수', '크림자',
+      '펌프보틀', '에어리스', '화장품용기', '화장품 포장', '뷰티 패키징',
+    ],
+    weight: 3,
+  },
+  {
+    industry: 'pharma-health',
+    keywords: [
+      '의약', '제약', '의료', '약품', 'GMP', '블리스터', '건강보조', '건강기능',
+      '한방', '약국', '의료기기', '수액', '캡슐', '연고', '멸균', 'ISO 13485',
+      'ISO 15378', 'pharma',
+    ],
+    weight: 3,
+  },
+  {
+    industry: 'electronics-industrial',
+    keywords: [
+      '전자', '반도체', 'PCB', 'ESD', 'LED', '디스플레이', '전자부품',
+      '산업용', '공업용', '방청', '팔레트', '물류', '크레이트', '중공업',
+      '석유화학', '화학', '드럼', '화물', '자동차', '자동차부품',
+    ],
+    weight: 2,
+  },
+  {
+    industry: 'ecommerce-shipping',
+    keywords: [
+      '택배', '배송', '이커머스', 'D2C', '언박싱', '택배박스', '온라인 쇼핑',
+      '물류 포장', '쇼핑몰 포장',
+    ],
+    weight: 2,
+  },
+  {
+    industry: 'eco-special',
+    keywords: [
+      '친환경', '생분해', 'FSC', 'fsc', 'PLA', '업사이클', '재활용', 'GRS',
+      '바이오', '천연소재', '생분해성', '친환경포장',
+    ],
+    weight: 3,
+  },
+  {
+    industry: 'fresh_produce_packaging',
+    keywords: [
+      '신선', '신선식품', '콜드체인', '농산물', '청과', '산지', '보냉',
+      'CA포장', 'MAP포장', '저온유통', '신선도유지', '에어캡포장',
+      '스티로폼박스', '신선 포장',
+    ],
+    weight: 3,
+  },
+  {
+    industry: 'print_design_services',
+    keywords: [
+      '그래픽디자인', '패키지디자인', '인쇄소', '소량인쇄',
+      '라벨인쇄', '스티커인쇄', '박스디자인', '포장디자인', '오프셋인쇄',
+      '디지털인쇄', '포장인쇄',
+    ],
+    weight: 2,
+  },
 ]
+
+const ABBREV_RE = /^[A-Z]{2,5}$/
 
 function detectSubcategory(text: string, rule: CategoryRule): string | null {
   for (const [sub, kws] of Object.entries(rule.subcategoryMap)) {
@@ -112,11 +184,38 @@ function detectTags(text: string): CompanyTag[] {
     .map((rule) => rule.tag)
 }
 
-function detectIndustryCategories(text: string): IndustryCategory[] {
-  const matched = INDUSTRY_RULES
-    .filter((rule) => rule.keywords.some((kw) => text.includes(kw)))
-    .map((rule) => rule.industry)
-  return matched.length > 0 ? matched : ['ecommerce-shipping']
+function matchesKeyword(text: string, kw: string): boolean {
+  if (ABBREV_RE.test(kw)) {
+    return new RegExp('(?<![A-Za-z])' + kw + '(?![A-Za-z])', 'i').test(text)
+  }
+  return text.toLowerCase().includes(kw.toLowerCase())
+}
+
+export function detectIndustryCategories(text: string): IndustryClassificationResult {
+  const scores: Record<string, number> = {}
+  for (const rule of WEIGHTED_INDUSTRY_RULES) {
+    let score = 0
+    for (const kw of rule.keywords) {
+      if (matchesKeyword(text, kw)) {
+        score += rule.weight
+      }
+    }
+    if (score > 0) scores[rule.industry] = score
+  }
+
+  const entries = Object.entries(scores)
+  if (entries.length === 0) {
+    return { categories: [], confidence: 0, method: 'rule' }
+  }
+
+  const maxScore = Math.max(...entries.map(([, s]) => s))
+  const categories = entries
+    .filter(([, s]) => s >= maxScore * 0.6)
+    .sort((a, b) => b[1] - a[1])
+    .map(([cat]) => cat as IndustryCategory)
+
+  const confidence = Math.min(maxScore / 10, 1)
+  return { categories, confidence, method: 'rule' }
 }
 
 export interface ClassificationResult {
@@ -124,7 +223,7 @@ export interface ClassificationResult {
   subcategory: string | null
   confidence: number
   tags: CompanyTag[]
-  industryCategories: IndustryCategory[]
+  industryClassification: IndustryClassificationResult
   materialType: MaterialType
 }
 
@@ -209,7 +308,7 @@ export function classifyCompany(text: string): ClassificationResult {
   const best = scores[0]
 
   const tags = detectTags(text)
-  const industryCategories = detectIndustryCategories(text)
+  const industryClassification = detectIndustryCategories(text)
 
   if (best.score === 0) {
     return {
@@ -217,7 +316,7 @@ export function classifyCompany(text: string): ClassificationResult {
       subcategory: null,
       confidence: 0,
       tags,
-      industryCategories,
+      industryClassification,
       materialType: 'plastic-container',
     }
   }
@@ -230,7 +329,7 @@ export function classifyCompany(text: string): ClassificationResult {
     subcategory: detectSubcategory(text, best.rule),
     confidence,
     tags,
-    industryCategories,
+    industryClassification,
     materialType: CATEGORY_TO_MATERIAL[best.rule.category],
   }
 }

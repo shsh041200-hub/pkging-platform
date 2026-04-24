@@ -2,6 +2,8 @@ import { createServiceClient } from '@/lib/supabase/service'
 import { fetchHtml } from './fetcher'
 import { extractCompanyInfo } from './extractor'
 import { classifyCompany, isPackagingRelevant, isCompanyHomepage, extractHomepage } from './classifier'
+import type { IndustryClassificationResult } from './classifier'
+import { classifyWithAI } from './ai-classifier'
 
 function slugify(name: string): string {
   return name
@@ -19,10 +21,19 @@ export interface PipelineResult {
   error?: string
 }
 
+async function resolveIndustryCategories(
+  ruleResult: IndustryClassificationResult,
+  fullText: string,
+): Promise<IndustryClassificationResult> {
+  if (ruleResult.categories.length > 0) {
+    return ruleResult
+  }
+  return classifyWithAI(fullText)
+}
+
 export async function runCrawlJob(jobId: string): Promise<PipelineResult> {
   const db = createServiceClient()
 
-  // Mark job running
   await db
     .from('crawl_jobs')
     .update({ status: 'running', updated_at: new Date().toISOString() })
@@ -38,7 +49,6 @@ export async function runCrawlJob(jobId: string): Promise<PipelineResult> {
     return { jobId, status: 'failed', error: 'Job not found' }
   }
 
-  // 1. Skip known non-homepage URL patterns at the job level before fetching
   const jobUrl = job.url
   if (!isCompanyHomepage(jobUrl)) {
     const homepage = extractHomepage(jobUrl)
@@ -49,7 +59,6 @@ export async function runCrawlJob(jobId: string): Promise<PipelineResult> {
     return { jobId, status: 'skipped' }
   }
 
-  // 2. Fetch
   const fetched = await fetchHtml(job.url)
   if (!fetched.ok) {
     await db
@@ -59,10 +68,8 @@ export async function runCrawlJob(jobId: string): Promise<PipelineResult> {
     return { jobId, status: 'failed', error: fetched.error }
   }
 
-  // 3. Extract
   const extracted = extractCompanyInfo(fetched.html, fetched.finalUrl)
 
-  // 4. Relevance check — skip pages unrelated to packaging
   const fullText = [extracted.name, extracted.description, extracted.rawText]
     .filter(Boolean)
     .join(' ')
@@ -75,10 +82,14 @@ export async function runCrawlJob(jobId: string): Promise<PipelineResult> {
     return { jobId, status: 'skipped' }
   }
 
-  // 5. Classify
   const classification = classifyCompany(fullText)
 
-  // 6. Build company record
+  const industryResult = await resolveIndustryCategories(
+    classification.industryClassification,
+    fullText,
+  )
+
+  const needsReview = industryResult.categories.length === 0
   const name = extracted.name ?? new URL(fetched.finalUrl).hostname
   const slug = slugify(name)
 
@@ -93,26 +104,34 @@ export async function runCrawlJob(jobId: string): Promise<PipelineResult> {
     website: extracted.website,
     products: extracted.products,
     certifications: extracted.certifications,
-    industry_categories: classification.industryCategories,
+    industry_categories: industryResult.categories,
     material_type: classification.materialType,
+    classification_method: industryResult.method,
+    needs_category_review: needsReview,
     data_source: 'website_crawl',
     is_verified: false,
     updated_at: new Date().toISOString(),
   }
 
-  // 7. Upsert to companies (by slug)
   const { data: existing } = await db
     .from('companies')
-    .select('id')
+    .select('id, industry_categories')
     .eq('slug', slug)
     .maybeSingle()
 
   let companyId: string
 
   if (existing) {
+    const existingCats = existing.industry_categories as string[] | null
+    const hasCategories = existingCats && existingCats.length > 0
+
+    const updateData = hasCategories
+      ? { ...companyData, industry_categories: existingCats, classification_method: undefined, needs_category_review: undefined }
+      : companyData
+
     const { error } = await db
       .from('companies')
-      .update(companyData)
+      .update(updateData)
       .eq('id', existing.id)
     if (error) {
       await db
@@ -139,7 +158,6 @@ export async function runCrawlJob(jobId: string): Promise<PipelineResult> {
     companyId = inserted.id
   }
 
-  // 8. Mark job done
   await db
     .from('crawl_jobs')
     .update({
