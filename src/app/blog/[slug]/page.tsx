@@ -3,6 +3,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { notFound } from 'next/navigation'
 import { remark } from 'remark'
+import remarkGfm from 'remark-gfm'
 import remarkHtml from 'remark-html'
 import { PacklinxLogo } from '@/components/PacklinxLogo'
 import {
@@ -152,6 +153,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 async function markdownToHtml(markdown: string): Promise<string> {
   const result = await remark()
+    .use(remarkGfm)
     .use(remarkHtml, { sanitize: true })
     .process(markdown)
   return result.toString()
