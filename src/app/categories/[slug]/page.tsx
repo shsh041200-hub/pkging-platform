@@ -84,6 +84,17 @@ const CATEGORY_OG_DESCRIPTION: Partial<Record<IndustryCategory, string>> = {
   'print_design_services':   '소량 맞춤 인쇄부터 패키지 디자인까지. 스타트업·소규모 발주에 특화된 인쇄·디자인 업체 목록.',
 }
 
+const RELATED_CATEGORIES: Record<IndustryCategory, IndustryCategory[]> = {
+  'food-beverage':           ['fresh_produce_packaging', 'eco-special', 'pharma-health'],
+  'ecommerce-shipping':      ['eco-special', 'print_design_services', 'electronics-industrial'],
+  'cosmetics-beauty':        ['pharma-health', 'eco-special', 'print_design_services'],
+  'pharma-health':           ['cosmetics-beauty', 'food-beverage', 'eco-special'],
+  'electronics-industrial':  ['ecommerce-shipping', 'eco-special'],
+  'eco-special':             ['food-beverage', 'ecommerce-shipping', 'fresh_produce_packaging'],
+  'fresh_produce_packaging': ['food-beverage', 'eco-special', 'ecommerce-shipping'],
+  'print_design_services':   ['cosmetics-beauty', 'ecommerce-shipping', 'food-beverage'],
+}
+
 function slugToCategory(slug: string): IndustryCategory | undefined {
   return INDUSTRY_CATEGORIES.find((k) => k === slug)
 }
@@ -619,11 +630,28 @@ export default async function CategoryPage({ params, searchParams }: Props) {
         </section>
       )}
 
+      {/* Related Categories — curated */}
+      <section className="max-w-7xl mx-auto px-5 sm:px-8 pb-6">
+        <h2 className="text-[13px] font-semibold text-gray-400 uppercase tracking-wider mb-4">관련 카테고리</h2>
+        <div className="flex flex-wrap gap-3">
+          {RELATED_CATEGORIES[categoryKey].map((key) => (
+            <Link
+              key={key}
+              href={`/categories/${key}`}
+              className="inline-flex items-center gap-2 text-[13px] font-medium text-gray-700 bg-white border border-gray-200 hover:border-[#005EFF] hover:text-[#005EFF] px-4 py-2 rounded-xl transition-all shadow-sm"
+            >
+              <span className="text-base">{INDUSTRY_CATEGORY_ICONS[key]}</span>
+              <span>{INDUSTRY_CATEGORY_LABELS[key]}</span>
+            </Link>
+          ))}
+        </div>
+      </section>
+
       {/* Other Categories */}
       <section className="max-w-7xl mx-auto px-5 sm:px-8 pb-12">
         <h2 className="text-[13px] font-semibold text-gray-400 uppercase tracking-wider mb-4">다른 카테고리</h2>
         <div className="flex flex-wrap gap-2">
-          {INDUSTRY_CATEGORIES.filter((k) => k !== categoryKey).map((key) => (
+          {INDUSTRY_CATEGORIES.filter((k) => k !== categoryKey && !RELATED_CATEGORIES[categoryKey].includes(k)).map((key) => (
             <Link
               key={key}
               href={`/categories/${key}`}

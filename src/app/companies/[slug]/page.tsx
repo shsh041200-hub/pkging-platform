@@ -29,6 +29,7 @@ import { CompanyViewTracker } from './CompanyViewTracker'
 import { CompanyIcon } from '@/components/CompanyIcon'
 import { CertificationCTABanner } from '@/components/CertificationCTABanner'
 import { CertBadge } from '@/components/CertBadge'
+import { simplifyCompanyName } from '@/lib/simplify-company-name'
 
 type Props = {
   params: Promise<{ slug: string }>
@@ -120,6 +121,21 @@ export default async function CompanyPage({ params }: Props) {
     .select('id, title, description, image_url, display_order, category_tag')
     .eq('company_id', company.id)
     .order('display_order', { ascending: true })
+
+  const industryCatsForQuery = (company.industry_categories as string[] | null) ?? []
+  const primaryCatForRelated = industryCatsForQuery[0] as IndustryCategory | undefined
+
+  const relatedCompaniesData = primaryCatForRelated
+    ? await supabase
+        .from('companies')
+        .select('id, slug, name, description, icon_url, category, industry_categories, is_verified')
+        .contains('industry_categories', [primaryCatForRelated])
+        .neq('id', company.id)
+        .order('is_verified', { ascending: false })
+        .order('name')
+        .limit(6)
+    : { data: null }
+  const relatedCompanies = relatedCompaniesData.data ?? []
 
   const avgRating =
     reviews && reviews.length > 0
@@ -683,7 +699,51 @@ export default async function CompanyPage({ params }: Props) {
           )}
         </div>
 
-        {/* Related Categories */}
+        {/* Related Companies — same primary category */}
+        {relatedCompanies.length > 0 && primaryCatForRelated && (
+          <div className="bg-white border border-gray-200 rounded-xl p-5">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-[13px] font-semibold text-gray-700 uppercase tracking-wider">
+                관련 업체
+              </h2>
+              <Link
+                href={`/categories/${primaryCatForRelated}`}
+                className="text-[12px] text-[#005EFF] hover:text-[#0047CC] font-medium transition-colors"
+              >
+                전체 보기 →
+              </Link>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+              {relatedCompanies.map((rel) => (
+                <Link
+                  key={rel.id}
+                  href={`/companies/${rel.slug}`}
+                  className="group flex flex-col gap-1.5 p-3 rounded-lg border border-gray-100 hover:border-gray-300 hover:shadow-sm transition-all"
+                >
+                  <div className="flex items-center gap-2.5">
+                    <CompanyIcon
+                      iconUrl={rel.icon_url ?? null}
+                      name={rel.name}
+                      category={(rel.industry_categories as string[] | null)?.[0] ?? rel.category}
+                      size="sm"
+                      linkUrl={null}
+                    />
+                    <span className="text-[13px] font-semibold text-gray-900 group-hover:text-[#005EFF] transition-colors line-clamp-1">
+                      {simplifyCompanyName(rel.name)}
+                    </span>
+                  </div>
+                  {rel.description && (
+                    <p className="text-[12px] text-gray-500 leading-relaxed line-clamp-2 pl-0.5">
+                      {rel.description}
+                    </p>
+                  )}
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Category links — same industry category pages */}
         {industryCats.length > 0 && (
           <div className="bg-white border border-gray-200 rounded-xl p-5">
             <h2 className="text-[13px] font-semibold text-gray-700 uppercase tracking-wider mb-4">
