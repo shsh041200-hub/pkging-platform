@@ -23,10 +23,10 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://packlinx.com'
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: 'Packlinx | 전국 패키징 업체 B2B 플랫폼',
+    default: '전국 패키징 업체 찾기 — B2B 포장재 플랫폼 | Packlinx',
     template: '%s | Packlinx',
   },
-  description: '전국 패키징 업체를 한눈에. 식품·산업용·친환경 포장재 B2B 파트너 찾기.',
+  description: '국내 1,396개 패키징 업체를 무료로 검색·비교하세요. 식품·화장품·이커머스·친환경 포장재 B2B 플랫폼 Packlinx.',
   keywords: '패키징, 포장재, 박스, 식품포장, 친환경포장, 산업용포장, Packlinx, packlinx',
   icons: {
     icon: [
@@ -39,8 +39,8 @@ export const metadata: Metadata = {
     canonical: '/',
   },
   openGraph: {
-    title: 'Packlinx | 전국 패키징 업체 B2B 플랫폼',
-    description: '전국 패키징 업체를 한눈에. 식품·산업용·친환경 포장재 B2B 파트너 찾기.',
+    title: '전국 패키징 업체 찾기 — B2B 포장재 플랫폼 | Packlinx',
+    description: '국내 1,396개 패키징 업체를 무료로 검색·비교하세요. 식품·화장품·이커머스·친환경 포장재 B2B 플랫폼 Packlinx.',
     url: siteUrl,
     siteName: 'Packlinx',
     locale: 'ko_KR',
@@ -48,8 +48,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Packlinx | 전국 패키징 업체 B2B 플랫폼',
-    description: '전국 패키징 업체를 한눈에. 식품·산업용·친환경 포장재 B2B 파트너 찾기.',
+    title: '전국 패키징 업체 찾기 — B2B 포장재 플랫폼 | Packlinx',
+    description: '국내 1,396개 패키징 업체를 무료로 검색·비교하세요. 식품·화장품·이커머스·친환경 포장재 B2B 플랫폼 Packlinx.',
   },
   verification: {
     google: '_GGnVSZzAe6F2EM9dnt4z7PIMimex08aUukQZzAxN7c',

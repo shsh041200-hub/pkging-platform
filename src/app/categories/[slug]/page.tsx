@@ -59,22 +59,32 @@ const CATEGORY_SEO_TITLE: Record<IndustryCategory, string> = {
 
 const CATEGORY_SEO_DESCRIPTION: Record<IndustryCategory, string> = {
   'food-beverage':
-    '식품 포장업체를 한눈에 비교하세요. HACCP·GMP 인증 식품 포장재 전문 업체를 Packlinx에서 찾아보세요.',
+    '전국 210개 식품·음료 포장 업체를 한 번에 찾으세요. 냉동식품·HMR·음료용 포장재 B2B 공급업체 비교 Packlinx.',
   'ecommerce-shipping':
-    '택배박스, 완충재, 배송 포장재 업체를 비교하세요. 스마트스토어·쿠팡 셀러를 위한 포장 파트너를 찾아보세요.',
+    '전국 237개 이커머스·배송 포장 업체를 한 번에 비교하세요. 택배박스, 완충재, 배송봉투 전문 B2B 공급업체 Packlinx.',
   'cosmetics-beauty':
-    '화장품 포장 업체를 한눈에 비교하세요. 소량 제작, OEM 포장, 파우치·용기 전문 업체를 Packlinx에서 찾아보세요.',
+    '전국 170개 화장품·뷰티 포장 업체를 비교하세요. 스킨케어·메이크업·헤어케어용 병·파우치·박스 B2B 공급업체 Packlinx.',
   'pharma-health':
     '의약품, 건강기능식품 포장 업체를 비교하세요. GMP 인증 의약 포장재 전문 업체를 찾아보세요.',
   'electronics-industrial':
     '전자제품, 부품, 산업재 보호 포장 업체를 비교하세요. 완충·정전기방지 포장재 전문 업체를 Packlinx에서 찾아보세요.',
   'eco-special':
-    '친환경 포장재 업체를 비교하세요. FSC 인증, 생분해 포장재, ESG 포장 솔루션 전문 업체를 찾아보세요.',
+    'FSC·생분해 인증 친환경 포장재 업체 41개를 비교하세요. 재활용·OK Compost 인증 B2B 포장재 공급업체 Packlinx.',
   'fresh_produce_packaging':
     '신선식품·농산물 포장 전문 업체를 찾으시나요? 콜드체인, 냉장·냉동 포장재, CA/MAP 포장 업체를 packlinx.com에서 한 번에 비교하세요.',
   'print_design_services':
     '소량 주문 가능한 인쇄·패키지 디자인 업체를 찾으시나요? 박스 디자인, 라벨 인쇄, 맞춤 포장 전문 업체를 packlinx.com에서 바로 비교하세요.',
 }
+
+const CATEGORY_H1_OVERRIDE: Partial<Record<IndustryCategory, string>> = {
+  'ecommerce-shipping': '이커머스·택배 포장 업체',
+}
+
+const HIDE_ICON_CATEGORIES = new Set<IndustryCategory>([
+  'ecommerce-shipping',
+  'cosmetics-beauty',
+  'eco-special',
+])
 
 const CATEGORY_OG_TITLE: Partial<Record<IndustryCategory, string>> = {
   'fresh_produce_packaging': '농산물·신선 포장 전문 업체 — packlinx',
@@ -326,9 +336,11 @@ export default async function CategoryPage({ params, searchParams }: Props) {
             <span className="text-gray-700 font-medium">{label}</span>
           </nav>
           <div className="flex items-center gap-3 mb-3">
-            <span className="text-3xl">{icon}</span>
+            {!HIDE_ICON_CATEGORIES.has(categoryKey) && (
+              <span className="text-3xl">{icon}</span>
+            )}
             <h1 className="text-[32px] sm:text-[42px] font-extrabold text-gray-900 leading-[1.1] tracking-[-0.04em]">
-              {label} 업체
+              {CATEGORY_H1_OVERRIDE[categoryKey] ?? `${label} 업체`}
             </h1>
           </div>
           <h2 className="text-gray-500 text-[16px] leading-relaxed max-w-lg font-normal">

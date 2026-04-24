@@ -14,6 +14,29 @@ import { createClient } from '@/lib/supabase/server'
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://packlinx.com'
 
+const BLOG_SEO_OVERRIDES: Record<string, { title: string; description: string }> = {
+  '이사박스-대량구매-가이드': {
+    title: '이사박스 대량구매 완벽 가이드 — 소재·채널 비교 (2026) | Packlinx',
+    description: '이사박스 대량구매 시 골판지 vs 단프라 선택법, 제조사 직거래 vs 도매상 장단점을 실무 관점으로 정리했습니다.',
+  },
+  '이사박스-사이즈-규격': {
+    title: '이사박스 사이즈 1호~7호 규격 완전 정리 (치수·하중 포함) | Packlinx',
+    description: '이사박스 1호~7호 규격과 치수를 정확하게 정리했습니다. 용도별 사이즈 선택 가이드와 실무 체크리스트 포함.',
+  },
+  '이사박스-제조사-리스트': {
+    title: '전국 이사박스 제조사 리스트 2026 — B2B 구매 가이드 | Packlinx',
+    description: '전국 이사박스 제조사를 유형별(골판지·단프라)로 정리했습니다. B2B 직발주를 위한 선정 기준 5가지와 검증 체크리스트 포함.',
+  },
+  'packaging-material-complete-guide': {
+    title: '포장재 종류 완전 가이드 — 소재별 특징과 선택법 | Packlinx',
+    description: '종이·골판지, 플라스틱, 필름·파우치, 친환경 소재까지 포장재 종류별 특징과 올바른 선택법. B2B 구매담당자 필독.',
+  },
+  'smartstore-seller-packaging-checklist': {
+    title: '스마트스토어 셀러 포장재 체크리스트 — 반품률 줄이는 포장 전략 | Packlinx',
+    description: '스마트스토어 셀러를 위한 포장재 체크리스트. 배송박스·완충재·테이프·브랜드 경험 요소별 선택 기준과 전략 정리.',
+  },
+}
+
 type Props = {
   params: Promise<{ slug: string }>
 }
@@ -21,6 +44,7 @@ type Props = {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug: rawSlug } = await params
   const slug = decodeURIComponent(rawSlug)
+  const seoOverride = BLOG_SEO_OVERRIDES[slug]
   const supabase = await createClient()
   const { data: post } = await supabase
     .from('blog_posts')
@@ -31,16 +55,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   if (!post) return { title: '글을 찾을 수 없습니다' }
 
-  const title = post.meta_title ?? post.title
-  const description = post.meta_description ?? post.excerpt ?? ''
+  const title = seoOverride?.title ?? post.meta_title ?? post.title
+  const description = seoOverride?.description ?? post.meta_description ?? post.excerpt ?? ''
   const ogImage = post.og_image_url ?? post.cover_image_url
 
   return {
-    title,
+    title: seoOverride ? { absolute: title } : title,
     description,
     alternates: { canonical: `/blog/${slug}` },
     openGraph: {
-      title: `${title} | Packlinx`,
+      title,
       description,
       url: `${siteUrl}/blog/${slug}`,
       type: 'article',
