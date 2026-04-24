@@ -332,7 +332,7 @@ export default async function CompanyPage({ params }: Props) {
 
           {/* Expanded Info Grid */}
           {hasExpandedInfo && (
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-6 p-4 bg-gray-50 border border-gray-100 rounded-lg">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 mb-6 p-4 bg-gray-50 border border-gray-100 rounded-lg">
               {company.founded_year && (
                 <div>
                   <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-1">설립연도</p>

@@ -345,7 +345,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
         <div className="max-w-7xl mx-auto px-5 sm:px-8">
           {/* Material filter chips */}
           <div className="flex gap-1.5 py-3 overflow-x-auto scrollbar-none">
-            <span className="flex-shrink-0 text-[10px] font-semibold text-gray-300 uppercase tracking-widest self-center mr-2 hidden sm:inline">소재</span>
+            <span className="flex-shrink-0 text-[10px] font-semibold text-gray-300 uppercase tracking-widest self-center mr-2">소재</span>
             <Link
               href={(() => {
                 const p = new URLSearchParams()
@@ -366,7 +366,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
                 <Link
                   key={mat}
                   href={buildMaterialUrl(mat)}
-                  className={`flex-shrink-0 px-2.5 py-1 rounded text-[11px] font-medium transition-all border ${
+                  className={`flex-shrink-0 px-2.5 py-1.5 rounded text-[11px] font-medium transition-all border ${
                     isActive
                       ? 'bg-[#005EFF] text-white border-[#005EFF]'
                       : 'text-gray-500 border-gray-200 hover:text-gray-700 hover:border-gray-300 bg-white'
@@ -381,7 +381,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
           {/* Use-case filter chips — 태그가 있을 때만 노출 */}
           {useCaseTagList.length > 0 && (
             <div className="flex gap-1.5 py-2.5 flex-wrap items-center border-t border-gray-100">
-              <span className="flex-shrink-0 text-[10px] font-semibold text-gray-300 uppercase tracking-widest self-center mr-1 hidden sm:inline">
+              <span className="flex-shrink-0 text-[10px] font-semibold text-gray-300 uppercase tracking-widest self-center mr-1">
                 용도
               </span>
               <Link
@@ -392,7 +392,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
                   if (cert) p.set('cert', cert)
                   return `/categories/${slug}${p.toString() ? `?${p}` : ''}`
                 })()}
-                className={`flex-shrink-0 px-2.5 py-1 rounded text-[11px] font-medium transition-all border ${
+                className={`flex-shrink-0 px-2.5 py-1.5 rounded text-[11px] font-medium transition-all border ${
                   !selectedUseCase
                     ? 'bg-[#005EFF] text-white border-[#005EFF]'
                     : 'text-gray-500 border-gray-200 hover:text-gray-700 hover:border-gray-300 bg-white'
@@ -406,7 +406,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
                   <Link
                     key={tag.id}
                     href={buildUseCaseUrl(tag.slug)}
-                    className={`flex-shrink-0 px-2.5 py-1 rounded text-[11px] font-medium transition-all border flex items-center gap-1 ${
+                    className={`flex-shrink-0 px-2.5 py-1.5 rounded text-[11px] font-medium transition-all border flex items-center gap-1 ${
                       isActive
                         ? 'bg-[#005EFF] text-white border-[#005EFF]'
                         : 'text-gray-500 border-gray-200 hover:text-gray-700 hover:border-gray-300 bg-white'

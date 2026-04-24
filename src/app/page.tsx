@@ -471,14 +471,14 @@ export default async function HomePage({
 
             {/* Material chips */}
             <div className="flex gap-1.5 py-2.5 overflow-x-auto scrollbar-none">
-              <span className="flex-shrink-0 text-[10px] font-semibold text-gray-300 uppercase tracking-widest self-center mr-1 hidden sm:inline">소재</span>
+              <span className="flex-shrink-0 text-[10px] font-semibold text-gray-300 uppercase tracking-widest self-center mr-1">소재</span>
               {MATERIAL_TYPES.map((mat) => {
                 const isActive = selectedMaterials.includes(mat)
                 return (
                   <Link
                     key={mat}
                     href={buildMaterialUrl(mat)}
-                    className={`flex-shrink-0 px-2.5 py-1 rounded text-[11px] font-medium transition-all border ${
+                    className={`flex-shrink-0 px-2.5 py-1.5 rounded text-[11px] font-medium transition-all border ${
                       isActive
                         ? 'bg-[#005EFF] text-white border-[#005EFF]'
                         : 'text-gray-500 border-gray-200 hover:text-gray-700 hover:border-gray-300 bg-white'
@@ -492,14 +492,14 @@ export default async function HomePage({
 
             {/* Packaging form chips */}
             <div className="flex gap-1.5 py-2.5 overflow-x-auto scrollbar-none">
-              <span className="flex-shrink-0 text-[10px] font-semibold text-gray-300 uppercase tracking-widest self-center mr-1 hidden sm:inline">형태</span>
+              <span className="flex-shrink-0 text-[10px] font-semibold text-gray-300 uppercase tracking-widest self-center mr-1">형태</span>
               {PACKAGING_FORMS.map((pf) => {
                 const isActive = selectedForms.includes(pf)
                 return (
                   <Link
                     key={pf}
                     href={buildFormUrl(pf)}
-                    className={`flex-shrink-0 px-2.5 py-1 rounded text-[11px] font-medium transition-all border ${
+                    className={`flex-shrink-0 px-2.5 py-1.5 rounded text-[11px] font-medium transition-all border ${
                       isActive
                         ? 'bg-[#7C3AED] text-white border-[#7C3AED]'
                         : 'text-gray-500 border-gray-200 hover:text-gray-700 hover:border-gray-300 bg-white'
@@ -513,14 +513,14 @@ export default async function HomePage({
 
             {/* Buyer criteria chips — MOQ / 납기 / 인쇄 / 보냉 */}
             <div className="flex gap-1.5 py-2.5 overflow-x-auto scrollbar-none">
-              <span className="flex-shrink-0 text-[10px] font-semibold text-gray-300 uppercase tracking-widest self-center mr-1 hidden sm:inline">조건</span>
+              <span className="flex-shrink-0 text-[10px] font-semibold text-gray-300 uppercase tracking-widest self-center mr-1">조건</span>
               {MOQ_RANGES.map((range) => {
                 const isActive = moq === range.id
                 return (
                   <Link
                     key={range.id}
                     href={buildMoqUrl(range.id)}
-                    className={`flex-shrink-0 px-2.5 py-1 rounded text-[11px] font-medium transition-all border ${
+                    className={`flex-shrink-0 px-2.5 py-1.5 rounded text-[11px] font-medium transition-all border ${
                       isActive
                         ? 'bg-[#0D9488] text-white border-[#0D9488]'
                         : 'text-gray-500 border-gray-200 hover:text-gray-700 hover:border-gray-300 bg-white'
@@ -537,7 +537,7 @@ export default async function HomePage({
                   <Link
                     key={range.id}
                     href={buildLeadTimeUrl(range.id)}
-                    className={`flex-shrink-0 px-2.5 py-1 rounded text-[11px] font-medium transition-all border ${
+                    className={`flex-shrink-0 px-2.5 py-1.5 rounded text-[11px] font-medium transition-all border ${
                       isActive
                         ? 'bg-[#0D9488] text-white border-[#0D9488]'
                         : 'text-gray-500 border-gray-200 hover:text-gray-700 hover:border-gray-300 bg-white'
@@ -554,7 +554,7 @@ export default async function HomePage({
                   <Link
                     key={method}
                     href={buildPrintUrl(method)}
-                    className={`flex-shrink-0 px-2.5 py-1 rounded text-[11px] font-medium transition-all border ${
+                    className={`flex-shrink-0 px-2.5 py-1.5 rounded text-[11px] font-medium transition-all border ${
                       isActive
                         ? 'bg-[#0D9488] text-white border-[#0D9488]'
                         : 'text-gray-500 border-gray-200 hover:text-gray-700 hover:border-gray-300 bg-white'
@@ -567,7 +567,7 @@ export default async function HomePage({
               <span className="flex-shrink-0 w-px h-4 bg-gray-200 self-center mx-0.5" aria-hidden="true" />
               <Link
                 href={buildColdUrl()}
-                className={`flex-shrink-0 px-2.5 py-1 rounded text-[11px] font-medium transition-all border ${
+                className={`flex-shrink-0 px-2.5 py-1.5 rounded text-[11px] font-medium transition-all border ${
                   cold === 'true'
                     ? 'bg-[#0D9488] text-white border-[#0D9488]'
                     : 'text-gray-500 border-gray-200 hover:text-gray-700 hover:border-gray-300 bg-white'
@@ -582,7 +582,7 @@ export default async function HomePage({
                   <Link
                     key={range.id}
                     href={buildColdRetentionUrl(range.id)}
-                    className={`flex-shrink-0 px-2.5 py-1 rounded text-[11px] font-medium transition-all border ${
+                    className={`flex-shrink-0 px-2.5 py-1.5 rounded text-[11px] font-medium transition-all border ${
                       isActive
                         ? 'bg-[#0D9488] text-white border-[#0D9488]'
                         : 'text-gray-500 border-gray-200 hover:text-gray-700 hover:border-gray-300 bg-white'
@@ -594,7 +594,7 @@ export default async function HomePage({
               })}
               <Link
                 href={buildDryIceUrl()}
-                className={`flex-shrink-0 px-2.5 py-1 rounded text-[11px] font-medium transition-all border ${
+                className={`flex-shrink-0 px-2.5 py-1.5 rounded text-[11px] font-medium transition-all border ${
                   dryice === 'true'
                     ? 'bg-[#0D9488] text-white border-[#0D9488]'
                     : 'text-gray-500 border-gray-200 hover:text-gray-700 hover:border-gray-300 bg-white'

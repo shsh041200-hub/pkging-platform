@@ -18,7 +18,7 @@ export function PackagingFormFilter({ selectedForms, formUrls }: Props) {
 
   return (
     <div className="flex gap-1.5 py-2.5 flex-wrap items-center">
-      <span className="flex-shrink-0 text-[10px] font-semibold text-gray-300 uppercase tracking-widest self-center mr-1 hidden sm:inline">
+      <span className="flex-shrink-0 text-[10px] font-semibold text-gray-300 uppercase tracking-widest self-center mr-1">
         형태
       </span>
       {visibleForms.map((pf) => {
@@ -27,7 +27,7 @@ export function PackagingFormFilter({ selectedForms, formUrls }: Props) {
           <Link
             key={pf}
             href={formUrls[pf] ?? '#'}
-            className={`flex-shrink-0 px-2.5 py-1 rounded text-[11px] font-medium transition-all border ${
+            className={`flex-shrink-0 px-2.5 py-1.5 rounded text-[11px] font-medium transition-all border ${
               isActive
                 ? 'bg-[#7C3AED] text-white border-[#7C3AED]'
                 : 'text-gray-500 border-gray-200 hover:text-gray-700 hover:border-gray-300 bg-white'
