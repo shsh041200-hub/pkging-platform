@@ -305,6 +305,9 @@ export default async function CategoryPage({ params, searchParams }: Props) {
     .order('published_at', { ascending: false })
     .limit(3)
 
+  const hasFilters = selectedMaterials.length > 0 || selectedForms.length > 0 || selectedCerts.length > 0 || !!selectedUseCase
+  const heroCount = hasFilters ? filteredCount : totalInCategory
+
   const breadcrumbJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
@@ -352,36 +355,27 @@ export default async function CategoryPage({ params, searchParams }: Props) {
         </div>
       </header>
 
-      {/* Category Hero */}
-      <section className="bg-[#F8FAFC] bg-dot-grid border-b border-gray-100 pt-12 pb-14 sm:pt-16 sm:pb-18 px-5">
-        <div className="max-w-3xl mx-auto">
-          <nav className="text-sm text-gray-400 mb-6">
-            <Link href="/" className="hover:text-gray-600 transition-colors">홈</Link>
-            <span className="mx-2">&rsaquo;</span>
-            <span className="text-gray-700 font-medium">{label}</span>
-          </nav>
-          <div className="flex items-center gap-3 mb-3">
+      {/* Category Hero - compact one-line */}
+      <section className="bg-white border-b border-gray-100 px-5">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex items-center gap-3 py-4 flex-wrap">
             {!HIDE_ICON_CATEGORIES.has(categoryKey) && (
-              <span className="text-3xl">{icon}</span>
+              <span className="text-[24px] leading-none flex-shrink-0">{icon}</span>
             )}
-            <h1 className="text-[32px] sm:text-[42px] font-extrabold text-gray-900 leading-[1.1] tracking-[-0.04em]">
+            <h1 className="text-[20px] font-bold text-gray-900 leading-tight">
               {CATEGORY_H1_OVERRIDE[categoryKey] ?? `${label} 업체`}
             </h1>
+            {heroCount != null && (
+              <span className="text-[14px] text-[#005EFF] font-medium">
+                {heroCount.toLocaleString()}개
+              </span>
+            )}
           </div>
-          <h2 className="text-gray-500 text-[16px] leading-relaxed max-w-lg font-normal">
-            {description}
-          </h2>
-          {totalInCategory != null && (
-            <p className="text-[13px] text-[#005EFF] font-semibold mt-3">
-              {totalInCategory.toLocaleString()}개 업체 등록됨
-            </p>
-          )}
-          <CategoryGuideBlock categoryId={categoryKey} />
         </div>
       </section>
 
       {/* Filters */}
-      <div className="bg-white border-b border-gray-100 sticky top-16 z-40">
+      <div className="bg-white/95 backdrop-blur-sm border-b border-gray-100 sticky top-16 z-40">
         <div className="max-w-7xl mx-auto px-5 sm:px-8">
           {/* Material filter chips */}
           <div className="flex gap-1.5 py-3 overflow-x-auto scrollbar-none">
@@ -468,9 +462,6 @@ export default async function CategoryPage({ params, searchParams }: Props) {
       <section className="max-w-7xl mx-auto px-5 sm:px-8 py-8">
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-2.5 flex-wrap">
-            <p className="text-sm text-gray-500">
-              <span className="font-semibold text-gray-900">{filteredCount ?? 0}</span>개 업체
-            </p>
             {selectedMaterials.map((mat) => (
               <Link
                 key={mat}
@@ -629,6 +620,11 @@ export default async function CategoryPage({ params, searchParams }: Props) {
             </Link>
           </div>
         )}
+      </section>
+
+      {/* Category Guide */}
+      <section className="max-w-7xl mx-auto px-5 sm:px-8 pb-8">
+        <CategoryGuideBlock categoryId={categoryKey} />
       </section>
 
       {/* Related Blog Posts */}

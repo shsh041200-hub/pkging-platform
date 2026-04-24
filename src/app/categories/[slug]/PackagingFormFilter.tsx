@@ -4,7 +4,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { PACKAGING_FORMS, PACKAGING_FORM_LABELS, type PackagingForm } from '@/types'
 
-const INITIAL_VISIBLE = 6
+const INITIAL_VISIBLE = 10
 
 interface Props {
   selectedForms: PackagingForm[]
