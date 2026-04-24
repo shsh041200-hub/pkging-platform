@@ -383,6 +383,8 @@ export interface Company {
   reuse_model: ReuseModel | null
   spec_sheet_available: boolean | null
   seasonal_packaging_available: boolean | null
+  phone: string | null
+  email: string | null
   use_case_tags?: string[]
   created_at: string
   updated_at: string

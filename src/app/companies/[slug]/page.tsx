@@ -146,6 +146,8 @@ export default async function CompanyPage({ params }: Props) {
     ...(company.icon_url ? { image: company.icon_url } : {}),
     ...(company.website && { sameAs: [company.website] }),
     ...(company.founded_year && { foundingDate: String(company.founded_year) }),
+    ...(company.phone && { telephone: company.phone }),
+    ...(company.email && { email: company.email }),
   }
 
   const industryCats = (company.industry_categories as string[] | null) ?? []
@@ -449,6 +451,8 @@ export default async function CompanyPage({ params }: Props) {
                 website={company.website ?? null}
                 iconUrl={company.icon_url ?? null}
                 kakaoUrl={null}
+                phone={company.phone ?? null}
+                email={company.email ?? null}
               />
             </Suspense>
           </div>
