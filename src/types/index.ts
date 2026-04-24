@@ -412,6 +412,13 @@ export interface ConversionEvent {
   created_at: string
 }
 
+export type BlogContentType = 'blog' | 'guide'
+
+export interface FaqItem {
+  question: string
+  answer: string
+}
+
 export interface BlogPost {
   id: string
   slug: string
@@ -421,10 +428,12 @@ export interface BlogPost {
   cover_image_url: string | null
   og_image_url: string | null
   category: IndustryCategory | null
+  content_type: BlogContentType
   status: 'draft' | 'published'
   author: string
   meta_title: string | null
   meta_description: string | null
+  faq_items: FaqItem[] | null
   published_at: string | null
   created_at: string
   updated_at: string
