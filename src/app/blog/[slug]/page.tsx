@@ -28,8 +28,8 @@ const BLOG_SEO_OVERRIDES: Record<string, { title: string; description: string }>
     description: '전국 이사박스 제조사를 유형별(골판지·단프라)로 정리했습니다. B2B 직발주를 위한 선정 기준 5가지와 검증 체크리스트 포함.',
   },
   'packaging-material-complete-guide': {
-    title: '포장재 종류 완전 가이드 — 소재별 특징과 선택법 | Packlinx',
-    description: '종이·골판지, 플라스틱, 필름·파우치, 친환경 소재까지 포장재 종류별 특징과 올바른 선택법. B2B 구매담당자 필독.',
+    title: '포장재 종류 완전 가이드 — 소재별 특징과 B2B 구매 선택법 (2026) | Packlinx',
+    description: '골판지·단프라·OPP 필름·친환경 소재 특징을 B2B 구매 담당자 기준으로 정리했습니다. 소재별 MOQ·비용·재사용성 비교표 수록. Packlinx에서 공급업체를 비교하세요.',
   },
   'smartstore-seller-packaging-checklist': {
     title: '스마트스토어 포장재 체크리스트 — 반품률 줄이는 배송 포장 전략 (2026) | Packlinx',
@@ -50,6 +50,24 @@ const BLOG_FAQ_DATA: Record<string, Array<{ question: string; answer: string }>>
     {
       question: '이사박스 대량구매 발주 전 반드시 확인해야 할 사항은 무엇인가요?',
       answer: '소재 결정(골판지/단프라), 수량 산정, 규격 혼합 비율, 골판지 등급(DW/TW) 명시, 납기 여유 확보(성수기 최소 2주 전), 인쇄 유무, 공급사 복수화(2~3개사), 결제 조건을 확인해야 합니다.',
+    },
+  ],
+  'packaging-material-complete-guide': [
+    {
+      question: '골판지와 단프라 중 어느 것이 더 경제적인가요?',
+      answer: '단순 단가는 골판지가 낮지만, 재사용 횟수를 고려하면 회수 가능한 물류 용기 용도에서는 단프라가 장기 비용에서 유리합니다. 사용 환경과 회수율을 먼저 파악하는 것이 선택의 핵심입니다.',
+    },
+    {
+      question: '친환경 포장재로 전환하면 비용이 얼마나 늘어나나요?',
+      answer: '소재와 규격에 따라 다르지만, 동일 규격의 일반 골판지 대비 크라프트지 기반 친환경 소재는 통상 10~30% 높은 단가를 형성합니다(시장 참고치). 대량 발주 시 공급업체와 직접 협의하시기 바랍니다.',
+    },
+    {
+      question: '식품 포장재를 선택할 때 가장 중요한 기준은 무엇인가요?',
+      answer: '식품위생법에 따른 재질 적합성(제조사 성적서 확인)이 최우선입니다. 그 다음으로 내용물의 보관 온도, 유통 기간, 진열 방식에 따라 소재를 결정합니다.',
+    },
+    {
+      question: 'OPP 필름과 PE 필름의 차이는 무엇인가요?',
+      answer: 'OPP는 투명도·광택이 높아 제품을 보여주는 포장에 적합하며, PE는 유연성이 좋아 완충재·봉투 용도에 많이 쓰입니다. 인쇄가 필요하면 OPP, 충격 완충이 주목적이면 PE를 선택하는 것이 일반적입니다.',
     },
   ],
   'smartstore-seller-packaging-checklist': [
