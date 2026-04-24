@@ -313,7 +313,7 @@ export default async function HomePage({
         <div className="max-w-7xl mx-auto px-5 sm:px-8 h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-3">
             <PacklinxLogo variant="light" />
-            <span className="hidden sm:inline text-gray-300 text-[11px] font-medium tracking-widest uppercase">전국 패키징 파트너, 한 번에</span>
+            <span className="hidden sm:inline text-gray-300 text-[11px] font-medium tracking-widest uppercase">패키징 업체 검색 플랫폼</span>
           </Link>
           <nav className="flex items-center gap-6">
             <Link href="/blog" className="text-gray-500 hover:text-gray-900 text-[13px] font-medium transition-colors">
@@ -323,149 +323,91 @@ export default async function HomePage({
         </div>
       </header>
 
-      {/* Hero — unified background with radial glow accents */}
+      {/* Hero — Variation B: center-aligned */}
       <section className="relative bg-[#F9FAFB] border-b border-gray-100 overflow-hidden">
         {/* Radial glow — top-left */}
         <div
-          className="absolute -top-[20%] -left-[10%] w-[60%] h-[120%] max-md:w-[80%] max-md:h-[80%] max-md:-top-[10%] max-md:-left-[20%] pointer-events-none z-0"
+          className="absolute -top-[20%] -left-[20%] w-[80%] h-[120%] max-md:w-[80%] max-md:h-[80%] max-md:-top-[10%] max-md:-left-[20%] pointer-events-none z-0"
           style={{
             background: 'radial-gradient(ellipse at center, var(--glow-primary) 0%, var(--glow-primary-mid) 40%, transparent 70%)'
           }}
         />
         {/* Radial glow — bottom-right */}
         <div
-          className="absolute -bottom-[30%] -right-[5%] w-[50%] h-[100%] max-md:w-[70%] max-md:h-[60%] max-md:-bottom-[10%] max-md:-right-[15%] pointer-events-none z-0"
+          className="absolute -bottom-[30%] -right-[10%] w-[60%] h-[100%] max-md:w-[70%] max-md:h-[60%] max-md:-bottom-[10%] max-md:-right-[15%] pointer-events-none z-0"
           style={{
             background: 'radial-gradient(ellipse at center, var(--glow-secondary) 0%, transparent 60%)'
           }}
         />
-        <div className="relative z-10 flex flex-col lg:flex-row lg:min-h-[calc(100vh-64px)]">
 
-          {/* Left: Visual hero panel */}
-          <div className="relative lg:w-[52%] flex flex-col justify-center px-8 sm:px-12 lg:px-16 py-14 lg:py-20">
-            {/* Concept #10 — Modular grid pattern (slate on light, decorative background) */}
-            <svg
-              className="absolute bottom-0 right-0 w-[340px] h-[340px] lg:w-[420px] lg:h-[420px] opacity-[0.18] pointer-events-none select-none"
-              viewBox="0 0 420 420"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-              aria-hidden="true"
-            >
-              {/* Row 1 */}
-              <rect x="40" y="40" width="130" height="85" rx="4" stroke="#94A3B8" strokeWidth="1.5"/>
-              <rect x="178" y="40" width="90" height="85" rx="4" fill="#CBD5E1"/>
-              <rect x="276" y="40" width="110" height="85" rx="4" fill="#E2E8F0"/>
-              {/* Row 2 */}
-              <rect x="40" y="133" width="85" height="120" rx="4" fill="#CBD5E1"/>
-              <rect x="133" y="133" width="70" height="55" rx="4" stroke="#94A3B8" strokeWidth="1.5"/>
-              <rect x="133" y="196" width="70" height="57" rx="4" fill="#94A3B8"/>
-              <rect x="211" y="133" width="110" height="120" rx="4" stroke="#CBD5E1" strokeWidth="1.2"/>
-              <rect x="329" y="133" width="90" height="120" rx="4" fill="#E2E8F0"/>
-              {/* Row 3 */}
-              <rect x="40" y="261" width="120" height="85" rx="4" stroke="#CBD5E1" strokeWidth="1.2"/>
-              <rect x="168" y="261" width="50" height="85" rx="4" fill="#0A0F1E"/>
-              <rect x="226" y="261" width="90" height="85" rx="4" stroke="#94A3B8" strokeWidth="1.5"/>
-              <rect x="324" y="261" width="90" height="85" rx="4" fill="#E2E8F0"/>
-              {/* Row 4 */}
-              <rect x="40" y="354" width="65" height="55" rx="4" fill="#94A3B8"/>
-              <rect x="113" y="354" width="100" height="55" rx="4" stroke="#CBD5E1" strokeWidth="1.2"/>
-              <rect x="221" y="354" width="85" height="55" rx="4" fill="#E2E8F0"/>
-              <rect x="314" y="354" width="55" height="55" rx="4" stroke="#94A3B8" strokeWidth="1.5"/>
-              <rect x="377" y="354" width="40" height="55" rx="4" fill="#CBD5E1"/>
-            </svg>
+        <div className="relative z-10 flex flex-col items-center text-center px-6 sm:px-8 py-16 lg:py-24">
+          {/* Text content */}
+          <div className="max-w-3xl mx-auto w-full">
+            <div className="inline-block text-[11px] font-semibold tracking-widest uppercase text-[#005EFF] bg-[#005EFF]/[0.08] border border-[#005EFF]/[0.15] px-3 py-1.5 rounded-full mb-5">
+              패키징 파트너 검색의 시작점
+            </div>
+            <h1 className="text-[32px] sm:text-[40px] lg:text-[48px] font-extrabold text-[#0A0F1E] leading-[1.15] tracking-[-0.03em] mb-4">
+              패키징에 필요한 모든 업체,<br />여기서 한 번에 찾으세요
+            </h1>
+            <p className="text-[15px] sm:text-[16px] text-[#64748B] leading-relaxed max-w-[520px] mx-auto">
+              박스 제작부터 인쇄·디자인, 친환경 소재까지 —<br className="hidden sm:inline" />
+              전국 1,300+ 패키징 업체를 카테고리별로 비교하고<br className="hidden sm:inline" />
+              내 제품에 딱 맞는 파트너를 찾으세요.
+            </p>
+          </div>
 
-            {/* Content */}
-            <div className="relative z-10">
-              <div className="inline-block text-[11px] font-semibold tracking-widest uppercase text-[#F97316] bg-[#F97316]/10 border border-[#F97316]/20 px-3 py-1.5 rounded-full mb-5">
-                국내 패키징 플랫폼
+          {/* Search bar */}
+          <div className="max-w-[560px] w-full mx-auto mt-8">
+            <form method="GET" className="flex rounded-xl overflow-hidden border border-gray-200 shadow-[0_2px_8px_rgba(0,0,0,0.06)] focus-within:border-[#005EFF] focus-within:shadow-[0_2px_8px_rgba(0,0,0,0.06),0_0_0_3px_rgba(0,94,255,0.12)] transition-shadow">
+              <input
+                name="q"
+                defaultValue={q}
+                placeholder="업체명, 제품, 인증으로 검색..."
+                className="flex-1 px-5 py-3.5 text-[15px] text-gray-900 bg-white placeholder:text-gray-400 focus:outline-none"
+              />
+              <button
+                type="submit"
+                className="bg-[#005EFF] hover:bg-[#0047CC] text-white font-semibold px-6 py-3 transition-colors text-sm flex-shrink-0 m-1.5 rounded-lg"
+              >
+                검색
+              </button>
+            </form>
+
+            {totalCount != null && (
+              <div className="flex items-center justify-center gap-3 mt-3 text-[12px] text-gray-400 font-medium text-center">
+                <span>{totalCount.toLocaleString()}개 업체 등록됨</span>
+                <span className="text-gray-200">·</span>
+                <span>무료 이용</span>
               </div>
-              <h1 className="text-[34px] sm:text-[44px] lg:text-[52px] font-extrabold text-[#0A0F1E] leading-[1.1] tracking-[-0.04em] mb-4">
-                전국 패키징<br />파트너, 한 번에
-              </h1>
-              <p className="text-[#64748B] text-[15px] leading-relaxed mb-10 max-w-[400px]">
-                검증된 B2B 포장 파트너를 바로 찾으세요.<br className="hidden sm:inline" />
-                식품·산업·친환경 전 분야 커버.
-              </p>
-              {totalCount != null && (
-                <div className="flex items-center gap-6 sm:gap-8 flex-wrap">
-                  <div>
-                    <div className="text-[26px] sm:text-[30px] font-black text-[#0A0F1E] tracking-[-0.03em] leading-none">
-                      {totalCount.toLocaleString()}
-                    </div>
-                    <div className="text-[11px] text-[#94A3B8] font-medium mt-1.5">등록 업체</div>
-                  </div>
-                  <div className="w-px h-10 bg-[#CBD5E1] self-center" />
-                  <div>
-                    <div className="text-[26px] sm:text-[30px] font-black text-[#0A0F1E] tracking-[-0.03em] leading-none">{INDUSTRY_CATEGORIES.length}</div>
-                    <div className="text-[11px] text-[#94A3B8] font-medium mt-1.5">산업 카테고리</div>
-                  </div>
-                  <div className="w-px h-10 bg-[#CBD5E1] self-center" />
-                  <div>
-                    <div className="text-[26px] sm:text-[30px] font-black text-[#F97316] tracking-[-0.03em] leading-none">무료</div>
-                    <div className="text-[11px] text-[#94A3B8] font-medium mt-1.5">이용 가능</div>
-                  </div>
-                </div>
-              )}
-            </div>
+            )}
           </div>
 
-          {/* Right: Search + 6 category buttons panel */}
-          <div className="lg:w-[48%] flex items-center px-8 sm:px-12 py-12 lg:py-20">
-            <div className="w-full max-w-[440px] mx-auto lg:mx-0">
-              <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-widest mb-4">업체 검색</p>
-
-              <form method="GET" className="flex rounded-xl overflow-hidden border border-gray-200 shadow-[0_2px_8px_rgba(0,0,0,0.06)] focus-within:border-[#005EFF] focus-within:shadow-[0_2px_8px_rgba(0,0,0,0.06),0_0_0_3px_rgba(0,94,255,0.12)] transition-shadow">
-                <input
-                  name="q"
-                  defaultValue={q}
-                  placeholder="업체명, 제품, 인증으로 검색..."
-                  className="flex-1 px-5 py-3.5 text-[15px] text-gray-900 bg-white placeholder:text-gray-400 focus:outline-none"
-                />
-                <button
-                  type="submit"
-                  className="bg-[#005EFF] hover:bg-[#0047CC] text-white font-semibold px-6 py-3 transition-colors text-sm flex-shrink-0 m-1.5 rounded-lg"
-                >
-                  검색
-                </button>
-              </form>
-
-              {totalCount != null && (
-                <div className="flex items-center gap-3 mt-3 text-[12px] text-gray-400 font-medium">
-                  <span>{totalCount.toLocaleString()}개 업체 등록됨</span>
-                  <span className="text-gray-200">·</span>
-                  <span>무료 이용</span>
-                </div>
-              )}
-
-              {/* 6 category buttons */}
-              {showingCategory && (
-                <>
-                  <div className="flex items-center mt-7 mb-4">
-                    <span className="text-[11px] font-semibold text-gray-400 uppercase tracking-widest">카테고리 탐색</span>
-                  </div>
-                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                    {INDUSTRY_CATEGORIES.filter((cat) => categoryCounts[cat] > 0).map((cat) => (
-                      <form key={cat} action={`/categories/${categoryToSlug(cat)}`} className="contents">
-                        <button
-                          type="submit"
-                          className="group flex items-center gap-2.5 bg-white border border-gray-200 rounded-lg px-3 py-2.5 hover:border-[#005EFF]/30 hover:bg-[#F8FAFF] transition-all duration-150"
-                        >
-                          <span className="text-base flex-shrink-0">{INDUSTRY_CATEGORY_ICONS[cat]}</span>
-                          <div className="min-w-0 text-left">
-                            <span className="text-[13px] font-semibold text-gray-900 group-hover:text-[#005EFF] transition-colors block truncate">
-                              {INDUSTRY_CATEGORY_LABELS[cat]}
-                            </span>
-                            <span className="text-[11px] text-gray-400">{categoryCounts[cat]}개</span>
-                          </div>
-                        </button>
-                      </form>
-                    ))}
-                  </div>
-                </>
-              )}
+          {/* Category grid */}
+          {showingCategory && (
+            <div className="max-w-[560px] mx-auto w-full mt-8">
+              <div className="flex items-center justify-center mb-4">
+                <span className="text-[11px] font-semibold text-gray-400 uppercase tracking-widest">카테고리 탐색</span>
+              </div>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                {INDUSTRY_CATEGORIES.filter((cat) => categoryCounts[cat] > 0).map((cat) => (
+                  <form key={cat} action={`/categories/${categoryToSlug(cat)}`} className="contents">
+                    <button
+                      type="submit"
+                      className="group flex items-center gap-2.5 bg-white border border-gray-200 rounded-lg px-3 py-2.5 hover:border-[#005EFF]/30 hover:bg-[#F8FAFF] transition-all duration-150"
+                    >
+                      <span className="text-base flex-shrink-0">{INDUSTRY_CATEGORY_ICONS[cat]}</span>
+                      <div className="min-w-0 text-left">
+                        <span className="text-[13px] font-semibold text-gray-900 group-hover:text-[#005EFF] transition-colors block truncate">
+                          {INDUSTRY_CATEGORY_LABELS[cat]}
+                        </span>
+                        <span className="text-[11px] text-gray-400">{categoryCounts[cat]}개</span>
+                      </div>
+                    </button>
+                  </form>
+                ))}
+              </div>
             </div>
-          </div>
-
+          )}
         </div>
       </section>
 
