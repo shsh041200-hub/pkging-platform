@@ -9,6 +9,7 @@ import {
   INDUSTRY_CATEGORY_LABELS,
   type IndustryCategory,
   type BlogPost,
+  type FaqItem,
 } from '@/types'
 import { createClient } from '@/lib/supabase/server'
 
@@ -27,9 +28,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     .select('title, excerpt, meta_title, meta_description, og_image_url, cover_image_url')
     .eq('slug', slug)
     .eq('status', 'published')
+    .eq('content_type', 'guide')
     .single()
 
-  if (!post) return { title: '글을 찾을 수 없습니다' }
+  if (!post) return { title: '가이드를 찾을 수 없습니다' }
 
   const title = post.meta_title ?? post.title
   const description = post.meta_description ?? post.excerpt ?? ''
@@ -38,11 +40,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title,
     description,
-    alternates: { canonical: `/blog/${slug}` },
+    alternates: { canonical: `/guides/${slug}` },
     openGraph: {
       title: `${title} | Packlinx`,
       description,
-      url: `${siteUrl}/blog/${slug}`,
+      url: `${siteUrl}/guides/${slug}`,
       type: 'article',
       ...(ogImage ? { images: [{ url: ogImage }] } : {}),
     },
@@ -64,7 +66,7 @@ function formatDate(dateStr: string): string {
   })
 }
 
-export default async function BlogPostPage({ params }: Props) {
+export default async function GuidePostPage({ params }: Props) {
   const { slug: rawSlug } = await params
   const slug = decodeURIComponent(rawSlug)
   const supabase = await createClient()
@@ -74,7 +76,7 @@ export default async function BlogPostPage({ params }: Props) {
     .select('*')
     .eq('slug', slug)
     .eq('status', 'published')
-    .eq('content_type', 'blog')
+    .eq('content_type', 'guide')
     .single()
 
   if (!post) notFound()
@@ -83,13 +85,12 @@ export default async function BlogPostPage({ params }: Props) {
 
   const contentHtml = typedPost.body ? await markdownToHtml(typedPost.body) : ''
 
-  // Related posts (same category, excluding current)
-  const { data: relatedPosts } = typedPost.category
+  const { data: relatedGuides } = typedPost.category
     ? await supabase
         .from('blog_posts')
         .select('id, slug, title, excerpt, cover_image_url, published_at')
         .eq('status', 'published')
-        .eq('content_type', 'blog')
+        .eq('content_type', 'guide')
         .eq('category', typedPost.category)
         .neq('slug', slug)
         .order('published_at', { ascending: false })
@@ -100,12 +101,12 @@ export default async function BlogPostPage({ params }: Props) {
     ? INDUSTRY_CATEGORY_LABELS[typedPost.category as IndustryCategory]
     : null
 
-  const blogPostingJsonLd = {
+  const articleJsonLd = {
     '@context': 'https://schema.org',
-    '@type': 'BlogPosting',
+    '@type': 'Article',
     headline: typedPost.title,
     description: typedPost.excerpt ?? '',
-    url: `${siteUrl}/blog/${slug}`,
+    url: `${siteUrl}/guides/${slug}`,
     datePublished: typedPost.published_at ?? typedPost.created_at,
     dateModified: typedPost.updated_at,
     author: {
@@ -127,21 +128,43 @@ export default async function BlogPostPage({ params }: Props) {
     '@type': 'BreadcrumbList',
     itemListElement: [
       { '@type': 'ListItem', position: 1, name: 'Packlinx', item: siteUrl },
-      { '@type': 'ListItem', position: 2, name: '패키징 가이드', item: `${siteUrl}/blog` },
-      { '@type': 'ListItem', position: 3, name: typedPost.title, item: `${siteUrl}/blog/${slug}` },
+      { '@type': 'ListItem', position: 2, name: '패키징 완전 가이드', item: `${siteUrl}/guides` },
+      { '@type': 'ListItem', position: 3, name: typedPost.title, item: `${siteUrl}/guides/${slug}` },
     ],
   }
+
+  const faqItems = typedPost.faq_items as FaqItem[] | null
+  const faqJsonLd = faqItems && faqItems.length > 0
+    ? {
+        '@context': 'https://schema.org',
+        '@type': 'FAQPage',
+        mainEntity: faqItems.map((item) => ({
+          '@type': 'Question',
+          name: item.question,
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: item.answer,
+          },
+        })),
+      }
+    : null
 
   return (
     <div className="min-h-screen bg-white">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(blogPostingJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
       />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
+      {faqJsonLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+        />
+      )}
 
       {/* Header */}
       <header className="bg-white sticky top-0 z-50 border-b border-gray-100">
@@ -151,10 +174,10 @@ export default async function BlogPostPage({ params }: Props) {
             <span className="hidden sm:inline text-gray-300 text-[11px] font-medium tracking-widest uppercase">전국 패키징 파트너, 한 번에</span>
           </Link>
           <nav className="flex items-center gap-6">
-            <Link href="/guides" className="text-gray-500 hover:text-gray-900 text-[13px] font-medium transition-colors">
+            <Link href="/guides" className="text-gray-900 text-[13px] font-semibold">
               가이드
             </Link>
-            <Link href="/blog" className="text-gray-900 text-[13px] font-semibold">
+            <Link href="/blog" className="text-gray-500 hover:text-gray-900 text-[13px] font-medium transition-colors">
               블로그
             </Link>
           </nav>
@@ -162,12 +185,12 @@ export default async function BlogPostPage({ params }: Props) {
       </header>
 
       {/* Breadcrumb */}
-      <div className="bg-[#F8FAFC] border-b border-gray-100 px-5 py-3">
+      <div className="bg-[#FFF8F3] border-b border-orange-100 px-5 py-3">
         <div className="max-w-3xl mx-auto">
           <nav className="text-sm text-gray-400">
             <Link href="/" className="hover:text-gray-600 transition-colors">홈</Link>
             <span className="mx-2">&rsaquo;</span>
-            <Link href="/blog" className="hover:text-gray-600 transition-colors">패키징 가이드</Link>
+            <Link href="/guides" className="hover:text-gray-600 transition-colors">패키징 완전 가이드</Link>
             <span className="mx-2">&rsaquo;</span>
             <span className="text-gray-700 font-medium line-clamp-1">{typedPost.title}</span>
           </nav>
@@ -179,10 +202,13 @@ export default async function BlogPostPage({ params }: Props) {
         {/* Meta */}
         <div className="flex items-center gap-3 mb-4 flex-wrap">
           {categoryLabel && (
-            <span className="text-[11px] font-semibold text-[#005EFF] bg-[#EBF2FF] px-2.5 py-1 rounded-full">
+            <span className="text-[11px] font-semibold text-[#F97316] bg-[#FFF3E8] px-2.5 py-1 rounded-full">
               {categoryLabel}
             </span>
           )}
+          <span className="text-[11px] font-semibold text-[#F97316] bg-[#FFF3E8] px-2.5 py-1 rounded-full">
+            심층 가이드
+          </span>
           {typedPost.published_at && (
             <time className="text-[12px] text-gray-400" dateTime={typedPost.published_at}>
               {formatDate(typedPost.published_at)}
@@ -198,13 +224,13 @@ export default async function BlogPostPage({ params }: Props) {
         </h1>
 
         {typedPost.excerpt && (
-          <p className="text-[17px] text-gray-500 leading-relaxed border-l-4 border-[#005EFF] pl-4 mb-8 italic">
+          <p className="text-[17px] text-gray-500 leading-relaxed border-l-4 border-[#F97316] pl-4 mb-8 italic">
             {typedPost.excerpt}
           </p>
         )}
 
         {/* Cover Image */}
-        {(typedPost.cover_image_url) && (
+        {typedPost.cover_image_url && (
           <div className="relative w-full aspect-[16/9] rounded-xl overflow-hidden mb-8 bg-gray-100">
             <Image
               src={typedPost.cover_image_url}
@@ -225,14 +251,35 @@ export default async function BlogPostPage({ params }: Props) {
               prose-h2:text-[22px] prose-h2:mt-10 prose-h2:mb-4
               prose-h3:text-[18px] prose-h3:mt-8 prose-h3:mb-3
               prose-p:text-[15px] prose-p:leading-[1.8] prose-p:text-gray-700
-              prose-a:text-[#005EFF] prose-a:no-underline hover:prose-a:underline
+              prose-a:text-[#F97316] prose-a:no-underline hover:prose-a:underline
               prose-strong:text-gray-900
               prose-li:text-[15px] prose-li:text-gray-700
-              prose-blockquote:border-l-4 prose-blockquote:border-[#005EFF] prose-blockquote:bg-[#F8FAFF] prose-blockquote:py-1 prose-blockquote:rounded-r-lg"
+              prose-blockquote:border-l-4 prose-blockquote:border-[#F97316] prose-blockquote:bg-[#FFFAF5] prose-blockquote:py-1 prose-blockquote:rounded-r-lg"
             dangerouslySetInnerHTML={{ __html: contentHtml }}
           />
         ) : (
           <p className="text-gray-400 text-center py-12">본문 콘텐츠가 없습니다.</p>
+        )}
+
+        {/* FAQ Section */}
+        {faqItems && faqItems.length > 0 && (
+          <section className="mt-12 border-t border-gray-100 pt-10">
+            <h2 className="text-[20px] font-extrabold text-gray-900 tracking-tight mb-6">
+              자주 묻는 질문
+            </h2>
+            <dl className="space-y-5">
+              {faqItems.map((item, index) => (
+                <div key={index} className="border border-gray-200 rounded-xl p-5">
+                  <dt className="text-[15px] font-bold text-gray-900 mb-2">
+                    Q. {item.question}
+                  </dt>
+                  <dd className="text-[14px] text-gray-600 leading-relaxed">
+                    {item.answer}
+                  </dd>
+                </div>
+              ))}
+            </dl>
+          </section>
         )}
       </article>
 
@@ -251,7 +298,7 @@ export default async function BlogPostPage({ params }: Props) {
             </p>
             <Link
               href={`/categories/${typedPost.category}`}
-              className="inline-flex items-center gap-2 bg-[#005EFF] hover:bg-[#0047CC] text-white font-bold px-8 py-3.5 rounded-xl transition-colors text-[15px]"
+              className="inline-flex items-center gap-2 bg-[#F97316] hover:bg-[#EA6B0A] text-white font-bold px-8 py-3.5 rounded-xl transition-colors text-[15px]"
             >
               관련 업체 찾기 &rarr;
             </Link>
@@ -259,14 +306,14 @@ export default async function BlogPostPage({ params }: Props) {
         </section>
       )}
 
-      {/* Related Posts */}
-      {relatedPosts && relatedPosts.length > 0 && (
+      {/* Related Guides */}
+      {relatedGuides && relatedGuides.length > 0 && (
         <section className="max-w-7xl mx-auto px-5 sm:px-8 py-12">
           <h2 className="text-[18px] font-extrabold text-gray-900 tracking-tight mb-6">
             관련 가이드
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            {relatedPosts.map((related: Pick<BlogPost, 'id' | 'slug' | 'title' | 'excerpt' | 'cover_image_url' | 'published_at'>) => (
+            {relatedGuides.map((related: Pick<BlogPost, 'id' | 'slug' | 'title' | 'excerpt' | 'cover_image_url' | 'published_at'>) => (
               <article
                 key={related.id}
                 className="bg-white border border-gray-200 rounded-xl overflow-hidden hover:border-gray-300 hover:shadow-[0_4px_16px_rgba(0,0,0,0.06)] transition-all duration-200"
@@ -282,8 +329,8 @@ export default async function BlogPostPage({ params }: Props) {
                     />
                   </div>
                 ) : (
-                  <div className="w-full aspect-[16/9] bg-gradient-to-br from-[#EBF2FF] to-[#F0F4FF] flex items-center justify-center">
-                    <span className="text-3xl opacity-40">📦</span>
+                  <div className="w-full aspect-[16/9] bg-gradient-to-br from-[#FFF3E8] to-[#FFF8F3] flex items-center justify-center">
+                    <span className="text-3xl opacity-40">📚</span>
                   </div>
                 )}
                 <div className="p-4">
@@ -291,7 +338,7 @@ export default async function BlogPostPage({ params }: Props) {
                     <p className="text-[11px] text-gray-400 mb-1.5">{formatDate(related.published_at)}</p>
                   )}
                   <h3 className="text-[14px] font-bold text-gray-900 leading-snug line-clamp-2 mb-1">
-                    <Link href={`/blog/${related.slug}`} className="hover:text-[#005EFF] transition-colors">
+                    <Link href={`/guides/${related.slug}`} className="hover:text-[#F97316] transition-colors">
                       {related.title}
                     </Link>
                   </h3>
