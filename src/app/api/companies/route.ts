@@ -12,6 +12,7 @@ export async function GET(request: NextRequest) {
   const tag = searchParams.get('tag')
   const certification = searchParams.get('certification')
   const use_case = searchParams.get('use_case')
+  const sample = searchParams.get('sample')
   const page = parseInt(searchParams.get('page') ?? '1', 10)
   const limit = Math.min(parseInt(searchParams.get('limit') ?? '20', 10), 50)
   const offset = (page - 1) * limit
@@ -113,6 +114,7 @@ export async function GET(request: NextRequest) {
     })
     query = query.overlaps('certifications', aliases)
   }
+  if (sample === 'true') query = query.eq('sample_available', true)
 
   const { data, count, error } = await query
 
