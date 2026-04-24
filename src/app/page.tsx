@@ -124,7 +124,8 @@ export default async function HomePage({
     .select('id, slug, name, description, category, industry_categories, material_type, packaging_form, tags, is_verified, cert_count, products, certifications, founded_year, website, icon_url, service_capabilities, target_industries, data_source, review_count, avg_rating, lead_time_standard_days, lead_time_express_days, moq_value, moq_unit, print_method, sample_available, cold_packaging_available, cold_retention_hours, dry_ice_available, reuse_model, spec_sheet_available, seasonal_packaging_available', { count: 'exact' })
 
   if (q) {
-    query = query.or(`name.ilike.%${q}%,description.ilike.%${q}%`)
+    const sanitized = q.replace(/[,().]/g, '')
+    query = query.or(`name.ilike.%${sanitized}%,description.ilike.%${sanitized}%`)
   }
   if (industry) {
     query = query.contains('industry_categories', [industry])
