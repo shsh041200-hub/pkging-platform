@@ -47,7 +47,7 @@ export function CompanyDetailCTA({ companyId, website, iconUrl, kakaoUrl }: Prop
           onClick={handleWebsiteClick}
           className="inline-flex items-center gap-1.5 text-gray-500 hover:text-gray-700 text-[13px] underline underline-offset-4 transition-colors"
         >
-          <WebsiteFavicon website={website!} iconUrl={iconUrl} className="w-4 h-4" />
+          <WebsiteFavicon iconUrl={iconUrl} className="w-4 h-4" />
           웹사이트 방문하기 →
         </a>
       )}

@@ -42,6 +42,8 @@ for (const ct of CERTIFICATION_TYPES) {
   CERTS_BY_CATEGORY[ct.category].push(ct)
 }
 
+export const revalidate = 300
+
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://packlinx.com'
 
 const CATEGORY_SEO_TITLE: Record<IndustryCategory, string> = {
@@ -550,7 +552,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
                         rel="noopener noreferrer"
                         className="relative z-10 text-[12px] text-gray-400 hover:text-gray-600 flex items-center gap-1.5 transition-colors min-w-0"
                       >
-                        <WebsiteFavicon website={company.website} iconUrl={company.icon_url ?? null} className="w-4 h-4" />
+                        <WebsiteFavicon iconUrl={company.icon_url ?? null} className="w-4 h-4" />
                         <span className="truncate max-w-[130px]">
                           {company.website.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '')}
                         </span>

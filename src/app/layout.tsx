@@ -1,14 +1,14 @@
 import type { Metadata } from 'next'
-import { Noto_Sans_KR } from 'next/font/google'
+import localFont from 'next/font/local'
 import { Suspense } from 'react'
 import { PageViewTracker } from '@/components/PageViewTracker'
 import './globals.css'
 
-const notoSansKR = Noto_Sans_KR({
-  subsets: ['latin'],
-  weight: ['400', '500', '600', '700', '800'],
+const pretendard = localFont({
+  src: '../../public/fonts/PretendardVariable.woff2',
   display: 'swap',
-  preload: true,
+  weight: '100 900',
+  variable: '--font-pretendard',
   fallback: [
     '-apple-system',
     'BlinkMacSystemFont',
@@ -61,7 +61,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="ko" className={`h-full ${notoSansKR.className}`}>
+    <html lang="ko" className={`h-full ${pretendard.variable}`}>
       <body className="min-h-full flex flex-col antialiased">
         <Suspense fallback={null}>
           <PageViewTracker />

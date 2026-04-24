@@ -232,7 +232,7 @@ export default async function UseCaseLandingPage({ params }: Props) {
                         rel="noopener noreferrer"
                         className="relative z-10 text-[12px] text-gray-400 hover:text-gray-600 flex items-center gap-1.5 transition-colors min-w-0"
                       >
-                        <WebsiteFavicon website={company.website} iconUrl={company.icon_url ?? null} className="w-4 h-4" />
+                        <WebsiteFavicon iconUrl={company.icon_url ?? null} className="w-4 h-4" />
                         <span className="truncate max-w-[130px]">
                           {company.website.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '')}
                         </span>

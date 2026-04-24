@@ -28,6 +28,8 @@ import { CompanyIcon } from '@/components/CompanyIcon'
 import { WebsiteFavicon } from '@/components/WebsiteFavicon'
 import { CertBadge } from '@/components/CertBadge'
 
+export const revalidate = 300
+
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://packlinx.com'
 
 type SearchParams = Promise<{
@@ -179,18 +181,17 @@ export default async function HomePage({
 
   const { data: companies } = await query
 
-  const { count: totalCount } = await supabase
-    .from('companies')
-    .select('*', { count: 'exact', head: true })
+  const [{ count: totalCount }, ...categoryCountResults] = await Promise.all([
+    supabase.from('companies').select('*', { count: 'exact', head: true }),
+    ...INDUSTRY_CATEGORIES.map(cat =>
+      supabase.from('companies').select('*', { count: 'exact', head: true }).contains('industry_categories', [cat])
+    ),
+  ])
 
   const categoryCounts: Record<string, number> = {}
-  for (const cat of INDUSTRY_CATEGORIES) {
-    const { count } = await supabase
-      .from('companies')
-      .select('*', { count: 'exact', head: true })
-      .contains('industry_categories', [cat])
-    categoryCounts[cat] = count ?? 0
-  }
+  INDUSTRY_CATEGORIES.forEach((cat, i) => {
+    categoryCounts[cat] = categoryCountResults[i].count ?? 0
+  })
 
   const buildUrl = (overrides: Record<string, string | undefined>) => {
     const params: Record<string, string> = {}
@@ -815,7 +816,7 @@ export default async function HomePage({
                           rel="noopener noreferrer"
                           className="relative z-10 text-[12px] text-gray-400 hover:text-gray-600 flex items-center gap-1.5 transition-colors min-w-0"
                         >
-                          <WebsiteFavicon website={company.website} iconUrl={company.icon_url ?? null} className="w-4 h-4" />
+                          <WebsiteFavicon iconUrl={company.icon_url ?? null} className="w-4 h-4" />
                           <span className="truncate max-w-[130px]">
                             {company.website.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '')}
                           </span>
