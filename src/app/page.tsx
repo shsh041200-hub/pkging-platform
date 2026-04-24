@@ -119,78 +119,131 @@ export default async function HomePage({
     ? (form.split(',').filter((f): f is PackagingForm => PACKAGING_FORMS.includes(f as PackagingForm)))
     : []
 
-  let query = supabase
-    .from('companies')
-    .select('id, slug, name, description, category, industry_categories, material_type, packaging_form, tags, is_verified, cert_count, products, certifications, founded_year, website, icon_url, service_capabilities, target_industries, data_source, review_count, avg_rating, lead_time_standard_days, lead_time_express_days, moq_value, moq_unit, print_method, sample_available, cold_packaging_available, cold_retention_hours, dry_ice_available, reuse_model, spec_sheet_available, seasonal_packaging_available', { count: 'exact' })
+  const COMPANY_SELECT = 'id, slug, name, description, category, industry_categories, material_type, packaging_form, tags, is_verified, cert_count, products, certifications, founded_year, website, icon_url, service_capabilities, target_industries, data_source, review_count, avg_rating, lead_time_standard_days, lead_time_express_days, moq_value, moq_unit, print_method, sample_available, cold_packaging_available, cold_retention_hours, dry_ice_available, reuse_model, spec_sheet_available, seasonal_packaging_available'
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let companies: any[] = []
+  let filteredCount: number | null = 0
+  const offset = (currentPage - 1) * PAGE_SIZE
 
   if (q) {
+    // ── Korean full-text search path ──────────────────────────────────────────
+    // Delegates to search_companies_korean RPC (migration 037) which:
+    //   1. Expands synonyms via korean_search_synonyms
+    //   2. Searches using weighted tsvector (name A > products/subcategory B > description D)
+    //   3. Includes ilike fallback for compound Korean words not split by spaces
+    //   4. Ranks results by relevance, verified status, and cert count
     const sanitized = q.replace(/[,().]/g, '')
-    query = query.or(`name.ilike.%${sanitized}%,description.ilike.%${sanitized}%`)
-  }
-  if (industry) {
-    query = query.contains('industry_categories', [industry])
-  }
-  if (selectedMaterials.length === 1) {
-    query = query.eq('material_type', selectedMaterials[0])
-  } else if (selectedMaterials.length > 1) {
-    query = query.in('material_type', selectedMaterials)
-  }
-  if (selectedForms.length === 1) {
-    query = query.eq('packaging_form', selectedForms[0])
-  } else if (selectedForms.length > 1) {
-    query = query.in('packaging_form', selectedForms)
-  }
-  if (activeCerts.length > 0) {
-    const expandedCerts = activeCerts.flatMap(id => {
+    const rpcCertAlias = activeCerts.flatMap(id => {
       const ct = CERTIFICATION_TYPES.find(c => c.id === id)
       return ct ? ct.aliases : [id]
+    })[0] ?? null
+
+    const { data: rpcRows, error: rpcErr } = await supabase.rpc('search_companies_korean', {
+      p_query:          sanitized,
+      p_limit:          PAGE_SIZE,
+      p_offset:         offset,
+      p_industry:       industry ?? null,
+      p_material_type:  selectedMaterials.length === 1 ? selectedMaterials[0] : null,
+      p_packaging_form: selectedForms.length === 1 ? selectedForms[0] : null,
+      p_category:       null,
+      p_tag:            null,
+      p_use_case:       null,
+      p_certification:  rpcCertAlias,
     })
-    query = query.overlaps('certifications', expandedCerts)
-  }
 
-  type RangeEntry = { id: string; label: string; min?: number; max?: number }
-  if (moq) {
-    const range = (MOQ_RANGES as readonly RangeEntry[]).find(r => r.id === moq)
-    if (range) {
-      if (range.min !== undefined) query = query.gte('moq_value', range.min)
-      if (range.max !== undefined) query = query.lte('moq_value', range.max)
-    }
-  }
-  if (leadtime) {
-    const range = (LEAD_TIME_RANGES as readonly RangeEntry[]).find(r => r.id === leadtime)
-    if (range) {
-      if (range.min !== undefined) query = query.gte('lead_time_standard_days', range.min)
-      if (range.max !== undefined) query = query.lte('lead_time_standard_days', range.max)
-    }
-  }
-  if (cold === 'true') {
-    query = query.eq('cold_packaging_available', true)
-  }
-  if (coldretention) {
-    const range = (COLD_RETENTION_RANGES as readonly RangeEntry[]).find(r => r.id === coldretention)
-    if (range?.min !== undefined) query = query.gte('cold_retention_hours', range.min)
-  }
-  if (dryice === 'true') {
-    query = query.eq('dry_ice_available', true)
-  }
-  if (print) {
-    query = query.eq('print_method', print)
-  }
+    if (!rpcErr && rpcRows) {
+      const ranked = rpcRows as Array<{ id: string; total_count: number }>
+      const rankedIds = ranked.map(r => r.id)
+      filteredCount = ranked.length > 0 ? Number(ranked[0].total_count) : 0
 
-  if (sort === 'name_asc') {
-    query = query.order('name', { ascending: true })
-  } else if (sort === 'est_asc') {
-    query = query.order('founded_year', { ascending: true, nullsFirst: false }).order('name')
-  } else if (sort === 'est_desc') {
-    query = query.order('founded_year', { ascending: false, nullsFirst: false }).order('name')
+      if (rankedIds.length > 0) {
+        // Fetch full display fields for the ranked IDs (RPC only returns core columns)
+        const { data: fullData } = await supabase
+          .from('companies')
+          .select(COMPANY_SELECT)
+          .in('id', rankedIds)
+        const byId = new Map((fullData ?? []).map(c => [c.id, c]))
+        // Preserve RPC-determined rank order
+        companies = rankedIds.map(id => byId.get(id)).filter(Boolean)
+      }
+    } else {
+      // RPC unavailable (migration not applied locally) — fallback to ilike
+      const { data, count } = await supabase
+        .from('companies')
+        .select(COMPANY_SELECT, { count: 'exact' })
+        .or(`name.ilike.%${sanitized}%,description.ilike.%${sanitized}%`)
+        .order('is_verified', { ascending: false })
+        .order('cert_count', { ascending: false })
+        .order('name')
+        .range(offset, offset + PAGE_SIZE - 1)
+      companies = data ?? []
+      filteredCount = count ?? 0
+    }
   } else {
-    query = query.order('is_verified', { ascending: false }).order('cert_count', { ascending: false }).order('name')
+    // ── Filter-only path (no text query) ────────────────────────────────────
+    let dbQuery = supabase
+      .from('companies')
+      .select(COMPANY_SELECT, { count: 'exact' })
+
+    if (industry) dbQuery = dbQuery.contains('industry_categories', [industry])
+    if (selectedMaterials.length === 1) {
+      dbQuery = dbQuery.eq('material_type', selectedMaterials[0])
+    } else if (selectedMaterials.length > 1) {
+      dbQuery = dbQuery.in('material_type', selectedMaterials)
+    }
+    if (selectedForms.length === 1) {
+      dbQuery = dbQuery.eq('packaging_form', selectedForms[0])
+    } else if (selectedForms.length > 1) {
+      dbQuery = dbQuery.in('packaging_form', selectedForms)
+    }
+    if (activeCerts.length > 0) {
+      const expandedCerts = activeCerts.flatMap(id => {
+        const ct = CERTIFICATION_TYPES.find(c => c.id === id)
+        return ct ? ct.aliases : [id]
+      })
+      dbQuery = dbQuery.overlaps('certifications', expandedCerts)
+    }
+
+    type RangeEntry = { id: string; label: string; min?: number; max?: number }
+    if (moq) {
+      const range = (MOQ_RANGES as readonly RangeEntry[]).find(r => r.id === moq)
+      if (range) {
+        if (range.min !== undefined) dbQuery = dbQuery.gte('moq_value', range.min)
+        if (range.max !== undefined) dbQuery = dbQuery.lte('moq_value', range.max)
+      }
+    }
+    if (leadtime) {
+      const range = (LEAD_TIME_RANGES as readonly RangeEntry[]).find(r => r.id === leadtime)
+      if (range) {
+        if (range.min !== undefined) dbQuery = dbQuery.gte('lead_time_standard_days', range.min)
+        if (range.max !== undefined) dbQuery = dbQuery.lte('lead_time_standard_days', range.max)
+      }
+    }
+    if (cold === 'true') dbQuery = dbQuery.eq('cold_packaging_available', true)
+    if (coldretention) {
+      const range = (COLD_RETENTION_RANGES as readonly RangeEntry[]).find(r => r.id === coldretention)
+      if (range?.min !== undefined) dbQuery = dbQuery.gte('cold_retention_hours', range.min)
+    }
+    if (dryice === 'true') dbQuery = dbQuery.eq('dry_ice_available', true)
+    if (print) dbQuery = dbQuery.eq('print_method', print)
+
+    if (sort === 'name_asc') {
+      dbQuery = dbQuery.order('name', { ascending: true })
+    } else if (sort === 'est_asc') {
+      dbQuery = dbQuery.order('founded_year', { ascending: true, nullsFirst: false }).order('name')
+    } else if (sort === 'est_desc') {
+      dbQuery = dbQuery.order('founded_year', { ascending: false, nullsFirst: false }).order('name')
+    } else {
+      dbQuery = dbQuery.order('is_verified', { ascending: false }).order('cert_count', { ascending: false }).order('name')
+    }
+
+    dbQuery = dbQuery.range(offset, offset + PAGE_SIZE - 1)
+
+    const { data, count } = await dbQuery
+    companies = data ?? []
+    filteredCount = count ?? 0
   }
-
-  const offset = (currentPage - 1) * PAGE_SIZE
-  query = query.range(offset, offset + PAGE_SIZE - 1)
-
-  const { data: companies, count: filteredCount } = await query
   const totalPages = Math.ceil((filteredCount ?? 0) / PAGE_SIZE)
 
   const [{ count: totalCount }, ...categoryCountResults] = await Promise.all([
