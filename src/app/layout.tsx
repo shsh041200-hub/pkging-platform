@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import localFont from 'next/font/local'
 import { Suspense } from 'react'
 import { SpeedInsights } from '@vercel/speed-insights/next'
+import { Analytics } from '@vercel/analytics/next'
 import { PageViewTracker } from '@/components/PageViewTracker'
 import { TermsNoticeBanner } from '@/components/TermsNoticeBanner'
 import './globals.css'
@@ -73,6 +74,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </Suspense>
         {children}
         <SpeedInsights />
+        <Analytics />
       </body>
     </html>
   )
