@@ -295,10 +295,6 @@ export default function TermsPage() {
             <h2 className="text-base font-semibold text-neutral-900 mb-3">부칙</h2>
             <ol className="list-decimal list-inside space-y-1 ml-2">
               <li>본 약관은 2026년 4월 26일 0시(KST)부터 적용합니다.</li>
-              <li>
-                본 약관은 임시 시행안이며, 사업자 등록 절차 완료 시(또는 그에 준하는 회사 신원 확정 시)
-                즉시 정식 갱신·재공지합니다.
-              </li>
             </ol>
           </section>
 
