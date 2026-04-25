@@ -7,6 +7,7 @@ import { createClient } from '@/lib/supabase/server'
 import { PacklinxLogo } from '@/components/PacklinxLogo'
 import { CompanyDetailCTA } from '@/components/CompanyDetailCTA'
 import { TermsNoticeFooterLine } from '@/components/TermsNoticeFooterLine'
+import { BusinessRegistrationInfo } from '@/components/BusinessRegistrationInfo'
 import {
   CATEGORY_LABELS,
   TAG_LABELS,
@@ -750,6 +751,7 @@ export default async function CompanyPage({ params }: Props) {
                 © 2026 PACKLINX. 업체 정보는 공개 출처에서 자동 수집되었습니다.
                 정보 오류·삭제 요청: rpdla041200@gmail.com
               </p>
+              <BusinessRegistrationInfo theme="dark" />
             </div>
             <div className="flex gap-4 text-[12px] text-slate-400">
               <Link href="/privacy" className="hover:text-slate-200 transition-colors">개인정보처리방침</Link>

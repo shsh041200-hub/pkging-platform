@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import { PacklinxLogo } from '@/components/PacklinxLogo'
+import { BusinessRegistrationInfo } from '@/components/BusinessRegistrationInfo'
 
 export const metadata: Metadata = {
   title: '요청 접수 완료 — Packlinx',
@@ -40,12 +41,17 @@ export default function OptOutThanksPage() {
       </main>
 
       <footer className="border-t border-slate-200 bg-white py-6">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 flex flex-wrap gap-4 text-xs text-slate-400 justify-center">
-          <Link href="/" className="hover:text-slate-600">홈</Link>
-          <Link href="/privacy" className="hover:text-slate-600">개인정보처리방침</Link>
-          <Link href="/terms" className="hover:text-slate-600">이용약관</Link>
-          <Link href="/opt-out" className="hover:text-slate-600">정보 삭제·수정 요청</Link>
-          <Link href="/opt-out?type=takedown" className="hover:text-slate-600">권리침해 신고</Link>
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
+          <div className="flex flex-wrap gap-4 text-xs text-slate-400 justify-center mb-3">
+            <Link href="/" className="hover:text-slate-600">홈</Link>
+            <Link href="/privacy" className="hover:text-slate-600">개인정보처리방침</Link>
+            <Link href="/terms" className="hover:text-slate-600">이용약관</Link>
+            <Link href="/opt-out" className="hover:text-slate-600">정보 삭제·수정 요청</Link>
+            <Link href="/opt-out?type=takedown" className="hover:text-slate-600">권리침해 신고</Link>
+          </div>
+          <div className="flex justify-center">
+            <BusinessRegistrationInfo theme="light" />
+          </div>
         </div>
       </footer>
     </div>

@@ -33,6 +33,7 @@ import { CertBadge } from '@/components/CertBadge'
 import { SortDropdown } from '@/components/SortDropdown'
 import { Pagination } from '@/components/Pagination'
 import { TermsNoticeFooterLine } from '@/components/TermsNoticeFooterLine'
+import { BusinessRegistrationInfo } from '@/components/BusinessRegistrationInfo'
 
 const PAGE_SIZE = 30
 
@@ -1042,6 +1043,7 @@ export default async function HomePage({
                 © 2026 PACKLINX. 본 서비스의 업체 정보는 공개된 출처에서 자동 수집되었습니다.<br className="hidden sm:inline" />
                 정보 오류·삭제 요청: rpdla041200@gmail.com
               </p>
+              <BusinessRegistrationInfo theme="dark" />
             </div>
             <div className="flex gap-5 text-[12px] text-slate-400">
               <Link href="/guides" className="hover:text-slate-200 transition-colors">패키징 가이드</Link>

@@ -3,6 +3,7 @@ import type { Metadata } from 'next'
 import { PacklinxLogo } from '@/components/PacklinxLogo'
 import OptOutForm from './OptOutForm'
 import { TermsNoticeFooterLine } from '@/components/TermsNoticeFooterLine'
+import { BusinessRegistrationInfo } from '@/components/BusinessRegistrationInfo'
 
 export const metadata: Metadata = {
   title: '정보 삭제·수정·권리침해 신고 — Packlinx',
@@ -72,12 +73,17 @@ export default async function OptOutPage({ searchParams }: Props) {
 
       <footer className="border-t border-slate-200 bg-white">
         <TermsNoticeFooterLine theme="light" />
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6 flex flex-wrap gap-4 text-xs text-slate-400 justify-center">
-          <Link href="/" className="hover:text-slate-600">홈</Link>
-          <Link href="/privacy" className="hover:text-slate-600">개인정보처리방침</Link>
-          <Link href="/terms" className="hover:text-slate-600">이용약관</Link>
-          <Link href="/opt-out" className="hover:text-slate-600 font-medium text-slate-600">정보 삭제·수정 요청</Link>
-          <Link href="/opt-out?type=takedown" className="hover:text-slate-600">권리침해 신고</Link>
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6">
+          <div className="flex flex-wrap gap-4 text-xs text-slate-400 justify-center mb-3">
+            <Link href="/" className="hover:text-slate-600">홈</Link>
+            <Link href="/privacy" className="hover:text-slate-600">개인정보처리방침</Link>
+            <Link href="/terms" className="hover:text-slate-600">이용약관</Link>
+            <Link href="/opt-out" className="hover:text-slate-600 font-medium text-slate-600">정보 삭제·수정 요청</Link>
+            <Link href="/opt-out?type=takedown" className="hover:text-slate-600">권리침해 신고</Link>
+          </div>
+          <div className="flex justify-center">
+            <BusinessRegistrationInfo theme="light" />
+          </div>
         </div>
       </footer>
     </div>

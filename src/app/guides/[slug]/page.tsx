@@ -5,6 +5,7 @@ import { remark } from 'remark'
 import remarkGfm from 'remark-gfm'
 import remarkHtml from 'remark-html'
 import { PacklinxLogo } from '@/components/PacklinxLogo'
+import { BusinessRegistrationInfo } from '@/components/BusinessRegistrationInfo'
 import { GuideTocDesktop, GuideTocMobile, type TocItem } from '@/components/GuideToc'
 import {
   INDUSTRY_CATEGORY_LABELS,
@@ -517,6 +518,7 @@ export default async function GuidePostPage({ params }: Props) {
               <p className="text-[12px] text-slate-400">
                 © 2026 PACKLINX. 본 서비스의 업체 정보는 공개된 출처에서 자동 수집되었습니다.
               </p>
+              <BusinessRegistrationInfo theme="dark" />
             </div>
             <div className="flex gap-4 text-[12px] text-slate-400">
               <Link href="/guides" className="hover:text-slate-200 transition-colors">패키징 완전 가이드</Link>
