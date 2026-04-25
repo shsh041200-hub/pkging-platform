@@ -1,8 +1,8 @@
--- KOR-531: Clear companies.phone and block future writes — KOR-371 compliance
--- Option C applied: NULL all existing phone values + DB trigger to prevent re-introduction
--- Prior art: KOR-103 cleared address/email; this migration extends same pattern to phone
+-- KOR-531: Clear companies.phone and block future writes (KOR-371 compliance)
+-- Option C: NULL all existing phone values + DB trigger to prevent re-introduction
+-- Prior art: KOR-103 cleared address/email. This migration extends same pattern to phone.
 
--- Step 1: NULL out all existing phone data (571 rows: 286 association, 285 manual)
+-- Step 1: NULL out all existing phone data (571 rows: 286 association + 285 manual)
 UPDATE companies SET phone = NULL WHERE phone IS NOT NULL;
 
 -- Step 2: Trigger function that blocks any future INSERT or UPDATE of phone
