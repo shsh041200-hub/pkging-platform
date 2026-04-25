@@ -288,7 +288,7 @@ export default async function GuidePostPage({ params }: Props) {
       )}
 
       {/* Header */}
-      <header className="bg-[#0F172A] sticky top-0 z-50" style={{ height: 56 }}>
+      <header className="bg-[#0F172A] sticky top-0 z-50 border-b border-white/[0.06]" style={{ height: 56 }}>
         <div className="max-w-[1120px] mx-auto px-6 h-full flex items-center justify-between">
           <Link href="/" className="flex items-baseline gap-1">
             <PacklinxLogo variant="dark" />
@@ -509,19 +509,19 @@ export default async function GuidePostPage({ params }: Props) {
       )}
 
       {/* Footer */}
-      <footer className="border-t border-slate-100 bg-slate-50 py-8">
+      <footer className="border-t border-white/[0.06] bg-[#0F172A] py-8">
         <div className="max-w-[1120px] mx-auto px-6">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div className="flex flex-col gap-1.5">
-              <PacklinxLogo variant="light" />
+              <PacklinxLogo variant="dark" />
               <p className="text-[12px] text-slate-400">
                 © 2026 PACKLINX. 본 서비스의 업체 정보는 공개된 출처에서 자동 수집되었습니다.
               </p>
             </div>
             <div className="flex gap-4 text-[12px] text-slate-400">
-              <Link href="/guides" className="hover:text-slate-600 transition-colors">패키징 완전 가이드</Link>
-              <Link href="/privacy" className="hover:text-slate-600 transition-colors">개인정보처리방침</Link>
-              <Link href="/terms" className="hover:text-slate-600 transition-colors">이용약관</Link>
+              <Link href="/guides" className="hover:text-slate-200 transition-colors">패키징 완전 가이드</Link>
+              <Link href="/privacy" className="hover:text-slate-200 transition-colors">개인정보처리방침</Link>
+              <Link href="/terms" className="hover:text-slate-200 transition-colors">이용약관</Link>
             </div>
           </div>
         </div>
