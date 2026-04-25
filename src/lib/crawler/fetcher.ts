@@ -1,5 +1,5 @@
 const FETCH_TIMEOUT_MS = 10_000
-const USER_AGENT = 'Mozilla/5.0 (compatible; PkgingBot/1.0; +https://pkging.kr/bot)'
+const USER_AGENT = 'Mozilla/5.0 (compatible; PkgingBot/1.0; +https://packlinx.com/bot)'
 const BOT_NAME = 'pkgingbot'
 
 export interface FetchResult {
