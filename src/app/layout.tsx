@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import localFont from 'next/font/local'
 import { Suspense } from 'react'
 import { PageViewTracker } from '@/components/PageViewTracker'
+import { TermsNoticeBanner } from '@/components/TermsNoticeBanner'
 import './globals.css'
 
 const pretendard = localFont({
@@ -65,6 +66,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="min-h-full flex flex-col antialiased">
         <Suspense fallback={null}>
           <PageViewTracker />
+        </Suspense>
+        <Suspense fallback={null}>
+          <TermsNoticeBanner />
         </Suspense>
         {children}
       </body>

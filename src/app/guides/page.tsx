@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { PacklinxLogo } from '@/components/PacklinxLogo'
+import { TermsNoticeFooterLine } from '@/components/TermsNoticeFooterLine'
 import {
   INDUSTRY_CATEGORIES,
   INDUSTRY_CATEGORY_LABELS,
@@ -285,8 +286,9 @@ export default async function GuidesListPage() {
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-white/[0.06] bg-[#0F172A] py-8">
-        <div className="max-w-[1120px] mx-auto px-6">
+      <footer className="border-t border-white/[0.06] bg-[#0F172A]">
+        <TermsNoticeFooterLine theme="dark" />
+        <div className="max-w-[1120px] mx-auto px-6 py-8">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div className="flex flex-col gap-1.5">
               <PacklinxLogo variant="dark" />

@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { PacklinxLogo } from '@/components/PacklinxLogo'
+import { TermsNoticeFooterLine } from '@/components/TermsNoticeFooterLine'
 import {
   INDUSTRY_CATEGORIES,
   INDUSTRY_CATEGORY_LABELS,
@@ -793,8 +794,9 @@ export default async function CategoryPage({ params, searchParams }: Props) {
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-white/[0.06] bg-[#0F172A] mt-auto py-8">
-        <div className="max-w-7xl mx-auto px-5 sm:px-8">
+      <footer className="border-t border-white/[0.06] bg-[#0F172A] mt-auto">
+        <TermsNoticeFooterLine theme="dark" />
+        <div className="max-w-7xl mx-auto px-5 sm:px-8 py-8">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div className="flex flex-col gap-2">
               <PacklinxLogo variant="dark" layout="horizontal" />

@@ -6,6 +6,7 @@ import type { Metadata } from 'next'
 import { createClient } from '@/lib/supabase/server'
 import { PacklinxLogo } from '@/components/PacklinxLogo'
 import { CompanyDetailCTA } from '@/components/CompanyDetailCTA'
+import { TermsNoticeFooterLine } from '@/components/TermsNoticeFooterLine'
 import {
   CATEGORY_LABELS,
   TAG_LABELS,
@@ -739,8 +740,9 @@ export default async function CompanyPage({ params }: Props) {
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-white/[0.06] bg-[#0F172A] py-8">
-        <div className="max-w-[800px] mx-auto px-4 sm:px-6">
+      <footer className="border-t border-white/[0.06] bg-[#0F172A]">
+        <TermsNoticeFooterLine theme="dark" />
+        <div className="max-w-[800px] mx-auto px-4 sm:px-6 py-8">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div className="flex flex-col gap-2">
               <PacklinxLogo variant="dark" layout="horizontal" />

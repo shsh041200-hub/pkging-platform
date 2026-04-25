@@ -2,6 +2,7 @@ import Link from 'next/link'
 import type { Metadata } from 'next'
 import { PacklinxLogo } from '@/components/PacklinxLogo'
 import OptOutForm from './OptOutForm'
+import { TermsNoticeFooterLine } from '@/components/TermsNoticeFooterLine'
 
 export const metadata: Metadata = {
   title: '정보 삭제·수정·권리침해 신고 — Packlinx',
@@ -69,8 +70,9 @@ export default async function OptOutPage({ searchParams }: Props) {
         <OptOutForm initialType={initialType} />
       </main>
 
-      <footer className="border-t border-slate-200 bg-white py-6">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 flex flex-wrap gap-4 text-xs text-slate-400 justify-center">
+      <footer className="border-t border-slate-200 bg-white">
+        <TermsNoticeFooterLine theme="light" />
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6 flex flex-wrap gap-4 text-xs text-slate-400 justify-center">
           <Link href="/" className="hover:text-slate-600">홈</Link>
           <Link href="/privacy" className="hover:text-slate-600">개인정보처리방침</Link>
           <Link href="/terms" className="hover:text-slate-600">이용약관</Link>

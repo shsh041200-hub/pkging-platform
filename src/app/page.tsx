@@ -32,6 +32,7 @@ import { WebsiteFavicon } from '@/components/WebsiteFavicon'
 import { CertBadge } from '@/components/CertBadge'
 import { SortDropdown } from '@/components/SortDropdown'
 import { Pagination } from '@/components/Pagination'
+import { TermsNoticeFooterLine } from '@/components/TermsNoticeFooterLine'
 
 const PAGE_SIZE = 30
 
@@ -1031,8 +1032,9 @@ export default async function HomePage({
       </section>}
 
       {/* Footer */}
-      <footer className="border-t border-white/[0.06] bg-[#0F172A] mt-auto py-8">
-        <div className="max-w-7xl mx-auto px-5 sm:px-8">
+      <footer className="border-t border-white/[0.06] bg-[#0F172A] mt-auto">
+        <TermsNoticeFooterLine theme="dark" />
+        <div className="max-w-7xl mx-auto px-5 sm:px-8 py-8">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div className="flex flex-col gap-2">
               <PacklinxLogo variant="dark" layout="horizontal" />
