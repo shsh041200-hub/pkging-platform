@@ -140,7 +140,7 @@ export default function OptOutForm({ initialType }: Props) {
         <div className="rounded-lg bg-amber-50 border border-amber-200 p-4 space-y-4">
           <p className="text-xs text-amber-800 leading-relaxed">
             정보통신망법 제44조의2에 따른 권리침해 임시조치를 요청합니다.
-            신고 접수 후 10영업일 이내에 검토하여 처리 결과를 안내드립니다.
+            신고 접수 후 24시간 이내에 임시조치(비공개) 여부를 결정하고, 30일 이내에 종결 결과를 안내드립니다.
           </p>
 
           <div>

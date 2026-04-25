@@ -44,7 +44,7 @@ export default async function OptOutPage({ searchParams }: Props) {
             <h1 className="text-2xl font-bold text-slate-900 mb-2">권리침해 신고</h1>
             <p className="text-sm text-slate-500 mb-8">
               정보통신망법 제44조의2에 따른 권리침해 임시조치를 신청하실 수 있습니다.
-              신고 접수 후 10영업일 이내에 처리 결과를 이메일로 안내드립니다.
+              신고 접수 후 24시간 이내에 임시조치(비공개) 여부를 결정하고, 30일 이내에 종결 결과를 안내드립니다.
             </p>
           </>
         ) : (
@@ -60,8 +60,8 @@ export default async function OptOutPage({ searchParams }: Props) {
         <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 mb-8 text-sm text-amber-800">
           <p className="font-medium mb-1">이메일로 직접 요청하실 수 있습니다</p>
           <p>
-            <a href="mailto:rpdla041200@gmail.com" className="underline font-medium">
-              rpdla041200@gmail.com
+            <a href="mailto:legal@pkging.kr" className="underline font-medium">
+              legal@pkging.kr
             </a>
             으로 업체명과 요청 내용을 보내주시면 동일하게 처리해 드립니다.
           </p>
