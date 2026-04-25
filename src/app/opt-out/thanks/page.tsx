@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 export default function OptOutThanksPage() {
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col">
-      <header className="bg-[#0d1d2e] sticky top-0 z-50">
+      <header className="bg-[#0F172A] sticky top-0 z-50">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2.5">
             <PacklinxLogo variant="dark" />
@@ -32,7 +32,7 @@ export default function OptOutThanksPage() {
           </p>
           <Link
             href="/"
-            className="inline-block rounded-lg bg-[#0d1d2e] text-white font-medium px-6 py-2.5 text-sm hover:bg-slate-700 transition-colors"
+            className="inline-block rounded-lg bg-[#0F172A] text-white font-medium px-6 py-2.5 text-sm hover:bg-slate-700 transition-colors"
           >
             홈으로 돌아가기
           </Link>

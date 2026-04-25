@@ -370,14 +370,14 @@ export default async function HomePage({
       />
 
       {/* Header */}
-      <header className="bg-white sticky top-0 z-50 border-b border-gray-100">
+      <header className="bg-[#0F172A] sticky top-0 z-50 border-b border-white/[0.06]">
         <div className="max-w-7xl mx-auto px-5 sm:px-8 h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-3">
-            <PacklinxLogo variant="light" />
-            <span className="hidden sm:inline text-gray-300 text-[11px] font-medium tracking-widest uppercase">패키징 업체 검색 플랫폼</span>
+            <PacklinxLogo variant="dark" />
+            <span className="hidden sm:inline text-slate-400 text-[11px] font-medium tracking-widest uppercase">패키징 업체 검색 플랫폼</span>
           </Link>
           <nav className="flex items-center gap-6">
-            <Link href="/guides" className="text-gray-500 hover:text-gray-900 text-[13px] font-medium transition-colors">
+            <Link href="/guides" className="text-slate-300 hover:text-white text-[13px] font-medium transition-colors">
               가이드
             </Link>
           </nav>
@@ -901,20 +901,20 @@ export default async function HomePage({
       </section>}
 
       {/* Footer */}
-      <footer className="border-t border-gray-100 bg-white mt-auto py-8">
+      <footer className="border-t border-white/[0.06] bg-[#0F172A] mt-auto py-8">
         <div className="max-w-7xl mx-auto px-5 sm:px-8">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div className="flex flex-col gap-2">
-              <PacklinxLogo variant="light" layout="horizontal" />
-              <p className="text-[12px] text-gray-400 leading-relaxed">
+              <PacklinxLogo variant="dark" layout="horizontal" />
+              <p className="text-[12px] text-slate-400 leading-relaxed">
                 © 2026 PACKLINX. 본 서비스의 업체 정보는 공개된 출처에서 자동 수집되었습니다.<br className="hidden sm:inline" />
                 정보 오류·삭제 요청: privacy@pkging.kr
               </p>
             </div>
-            <div className="flex gap-5 text-[12px] text-gray-400">
-              <Link href="/guides" className="hover:text-gray-600 transition-colors">패키징 가이드</Link>
-              <Link href="/privacy" className="hover:text-gray-600 transition-colors">개인정보처리방침</Link>
-              <Link href="/terms" className="hover:text-gray-600 transition-colors">이용약관</Link>
+            <div className="flex gap-5 text-[12px] text-slate-400">
+              <Link href="/guides" className="hover:text-slate-200 transition-colors">패키징 가이드</Link>
+              <Link href="/privacy" className="hover:text-slate-200 transition-colors">개인정보처리방침</Link>
+              <Link href="/terms" className="hover:text-slate-200 transition-colors">이용약관</Link>
             </div>
           </div>
         </div>

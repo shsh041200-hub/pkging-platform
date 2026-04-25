@@ -88,7 +88,7 @@ export default function OptOutForm() {
               required
               checked={form.request_type === 'delete'}
               onChange={() => setForm(f => ({ ...f, request_type: 'delete' }))}
-              className="accent-[#0d1d2e]"
+              className="accent-[#0F172A]"
             />
             <span className="text-sm text-slate-700">정보 삭제</span>
           </label>
@@ -99,7 +99,7 @@ export default function OptOutForm() {
               value="update"
               checked={form.request_type === 'update'}
               onChange={() => setForm(f => ({ ...f, request_type: 'update' }))}
-              className="accent-[#0d1d2e]"
+              className="accent-[#0F172A]"
             />
             <span className="text-sm text-slate-700">정보 수정</span>
           </label>
@@ -155,7 +155,7 @@ export default function OptOutForm() {
         <button
           type="submit"
           disabled={loading}
-          className="w-full rounded-lg bg-[#0d1d2e] text-white font-medium py-2.5 text-sm hover:bg-slate-700 transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
+          className="w-full rounded-lg bg-[#0F172A] text-white font-medium py-2.5 text-sm hover:bg-slate-700 transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
         >
           {loading ? '처리 중...' : '요청 제출'}
         </button>
