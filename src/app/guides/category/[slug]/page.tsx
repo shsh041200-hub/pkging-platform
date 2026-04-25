@@ -11,6 +11,7 @@ import {
   type BlogPost,
 } from '@/types'
 import { createClient } from '@/lib/supabase/server'
+import { getActiveGuideCategories } from '@/lib/guides'
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://packlinx.com'
 
@@ -83,13 +84,16 @@ export default async function GuideCategoryPage({ params }: Props) {
   const badgeStyle = CATEGORY_BADGE_STYLES[cat]
 
   const supabase = await createClient()
-  const { data } = await supabase
-    .from('blog_posts')
-    .select('id, slug, title, excerpt, body, category, published_at')
-    .eq('status', 'published')
-    .eq('content_type', 'guide')
-    .eq('category', cat)
-    .order('published_at', { ascending: false })
+  const [{ data }, activeCategories] = await Promise.all([
+    supabase
+      .from('blog_posts')
+      .select('id, slug, title, excerpt, body, category, published_at')
+      .eq('status', 'published')
+      .eq('content_type', 'guide')
+      .eq('category', cat)
+      .order('published_at', { ascending: false }),
+    getActiveGuideCategories(),
+  ])
 
   const guides = (data ?? []) as GuideRow[]
 
@@ -182,7 +186,7 @@ export default async function GuideCategoryPage({ params }: Props) {
         )}
       </section>
 
-      {/* Other categories nav */}
+      {/* Other categories nav — mirrors the chips on /guides using the same active-category source */}
       <div
         className="border-b border-slate-100 bg-white sticky z-40"
         style={{ top: 56 }}
@@ -194,7 +198,7 @@ export default async function GuideCategoryPage({ params }: Props) {
           >
             전체
           </Link>
-          {INDUSTRY_CATEGORIES.map((c) => {
+          {activeCategories.map(({ category: c, count }) => {
             const isActive = c === cat
             return (
               <Link
@@ -208,6 +212,12 @@ export default async function GuideCategoryPage({ params }: Props) {
                 ].join(' ')}
               >
                 {INDUSTRY_CATEGORY_LABELS[c]}
+                <span className={[
+                  'ml-1.5 text-[12px]',
+                  isActive ? 'text-white/60' : 'text-slate-400',
+                ].join(' ')}>
+                  ({count})
+                </span>
               </Link>
             )
           })}

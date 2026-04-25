@@ -10,6 +10,7 @@ import {
   type BlogPost,
 } from '@/types'
 import { createClient } from '@/lib/supabase/server'
+import { getActiveGuideCategories } from '@/lib/guides'
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://packlinx.com'
 
@@ -131,12 +132,15 @@ function EmptyState() {
 
 export default async function GuidesListPage() {
   const supabase = await createClient()
-  const { data } = await supabase
-    .from('blog_posts')
-    .select('id, slug, title, excerpt, body, category, published_at')
-    .eq('status', 'published')
-    .eq('content_type', 'guide')
-    .order('published_at', { ascending: false })
+  const [{ data }, activeCategories] = await Promise.all([
+    supabase
+      .from('blog_posts')
+      .select('id, slug, title, excerpt, body, category, published_at')
+      .eq('status', 'published')
+      .eq('content_type', 'guide')
+      .order('published_at', { ascending: false }),
+    getActiveGuideCategories(),
+  ])
 
   const guides = (data ?? []) as GuideRow[]
 
@@ -151,7 +155,7 @@ export default async function GuidesListPage() {
   const uncategorized = guides.filter((g) => !g.category || !INDUSTRY_CATEGORIES.includes(g.category as IndustryCategory))
 
   const totalCount = guides.length
-  const categoryCount = grouped.size
+  const categoryCount = activeCategories.length
 
   return (
     <div className="min-h-screen bg-white">
@@ -198,20 +202,20 @@ export default async function GuidesListPage() {
       </section>
 
       {/* Category navigation chips */}
-      {grouped.size > 0 && (
+      {activeCategories.length > 0 && (
         <div
           className="border-b border-slate-100 bg-white sticky z-40"
           style={{ top: 56 }}
         >
           <div className="max-w-[1120px] mx-auto px-6 py-3 flex gap-2 overflow-x-auto scrollbar-none">
-            {Array.from(grouped.entries()).map(([cat, items]) => (
+            {activeCategories.map(({ category: cat, count }) => (
               <Link
                 key={cat}
                 href={`/guides/category/${cat}`}
                 className="flex-shrink-0 px-4 py-2 text-[14px] font-medium rounded-md transition-all whitespace-nowrap text-[#475569] hover:bg-slate-50"
               >
                 {INDUSTRY_CATEGORY_LABELS[cat]}
-                <span className="ml-1.5 text-[12px] text-slate-400">({items.length})</span>
+                <span className="ml-1.5 text-[12px] text-slate-400">({count})</span>
               </Link>
             ))}
           </div>
