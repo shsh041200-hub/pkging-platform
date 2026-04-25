@@ -102,10 +102,7 @@ export default async function CompanyPage({ params }: Props) {
 
   if (!company) notFound()
 
-  const industryCatsForQuery = (company.industry_categories as string[] | null) ?? []
-  const primaryCatForRelated = industryCatsForQuery[0] as IndustryCategory | undefined
-
-  const [isOwner, portfoliosResult, relatedCompaniesResult] = await Promise.all([
+  const [isOwner, portfoliosResult, similarCompaniesResult] = await Promise.all([
     (async (): Promise<boolean> => {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) return false
@@ -121,20 +118,18 @@ export default async function CompanyPage({ params }: Props) {
       .select('id, title, description, image_url, display_order, category_tag')
       .eq('company_id', company.id)
       .order('display_order', { ascending: true }),
-    primaryCatForRelated
-      ? supabase
-          .from('companies')
-          .select('id, slug, name, description, icon_url, category, industry_categories, is_verified')
-          .contains('industry_categories', [primaryCatForRelated])
-          .neq('id', company.id)
-          .order('is_verified', { ascending: false })
-          .order('name')
-          .limit(6)
-      : Promise.resolve({ data: null }),
+    supabase.rpc('get_similar_companies', {
+      target_company_id: company.id,
+      result_limit: 6,
+    }),
   ])
 
   const portfolios = portfoliosResult.data
-  const relatedCompanies = relatedCompaniesResult.data ?? []
+  const similarCompanies = (similarCompaniesResult.data ?? []) as Array<{
+    id: string; slug: string; name: string; description: string | null;
+    icon_url: string | null; category: string; industry_categories: string[];
+    is_verified: boolean; similarity_score: number;
+  }>
 
   const companyJsonLd = {
     '@context': 'https://schema.org',
@@ -631,22 +626,29 @@ export default async function CompanyPage({ params }: Props) {
           </div>
         )}
 
-        {/* Related Companies — same primary category */}
-        {relatedCompanies.length > 0 && primaryCatForRelated && (
+        {/* Similar Companies — multi-signal similarity (KOR-530) */}
+        {similarCompanies.length > 0 && (
           <div className="bg-white border border-gray-200 rounded-xl p-5">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-[14px] font-semibold text-gray-800">
-                관련 업체
-              </h2>
-              <Link
-                href={`/categories/${primaryCatForRelated}`}
-                className="text-[12px] text-[#2563EB] hover:text-[#1D4ED8] font-medium transition-colors"
-              >
-                전체 보기 →
-              </Link>
+            <div className="mb-4">
+              <div className="flex items-center justify-between">
+                <h2 className="text-[14px] font-semibold text-gray-800">
+                  비슷한 업체
+                </h2>
+                {industryCats[0] && (
+                  <Link
+                    href={`/categories/${industryCats[0]}`}
+                    className="text-[12px] text-[#2563EB] hover:text-[#1D4ED8] font-medium transition-colors"
+                  >
+                    전체 보기 →
+                  </Link>
+                )}
+              </div>
+              <p className="text-[11px] text-gray-400 mt-1">
+                ※ 같은 산업카테고리 기준 자동 노출이며, Packlinx의 추천·인증·보증을 의미하지 않습니다.
+              </p>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-              {relatedCompanies.map((rel) => (
+              {similarCompanies.map((rel) => (
                 <Link
                   key={rel.id}
                   href={`/companies/${rel.slug}`}
@@ -656,7 +658,7 @@ export default async function CompanyPage({ params }: Props) {
                     <CompanyIcon
                       iconUrl={rel.icon_url ?? null}
                       name={rel.name}
-                      category={(rel.industry_categories as string[] | null)?.[0] ?? rel.category}
+                      category={rel.industry_categories?.[0] ?? rel.category}
                       size="sm"
                       linkUrl={null}
                     />
