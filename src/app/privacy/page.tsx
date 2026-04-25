@@ -6,7 +6,7 @@ import { BusinessRegistrationInfo } from '@/components/BusinessRegistrationInfo'
 
 export const metadata: Metadata = {
   title: '개인정보처리방침 — Packlinx',
-  description: 'Packlinx 개인정보처리방침 — 시행일 2026년 4월 26일',
+  description: 'Packlinx 개인정보처리방침 — 최종 개정일 2026년 5월 2일',
 }
 
 export default function PrivacyPage() {
@@ -27,11 +27,11 @@ export default function PrivacyPage() {
 
       <main className="max-w-3xl mx-auto px-4 sm:px-6 py-10 pb-16">
         <h1 className="text-2xl font-bold text-neutral-900 mb-2">개인정보처리방침</h1>
-        <p className="text-sm text-neutral-500 mb-1">시행일: 2026년 4월 26일 0시 (KST)</p>
-        <p className="text-sm text-neutral-500 mb-6">최종 개정일: 2026년 4월 26일</p>
+        <p className="text-sm text-neutral-500 mb-1">최초 시행일: 2026년 4월 19일</p>
+        <p className="text-sm text-neutral-500 mb-6">시행일: 2026년 5월 2일 (개정 2회)</p>
 
         <div className="bg-brand-50 border-l-4 border-brand-700 px-4 py-3 mb-8 rounded-r">
-          <p className="text-sm text-neutral-900">본 문서는 2026-04-26 0시 (KST) 부터 시행됩니다.</p>
+          <p className="text-sm text-neutral-900">본 문서는 2026-05-02 부터 시행됩니다.</p>
         </div>
 
         <div className="space-y-8 text-sm text-neutral-700 leading-relaxed">
@@ -85,6 +85,13 @@ export default function PrivacyPage() {
             <p className="mb-2">회사는 다음 목적을 위하여 개인정보를 처리합니다.</p>
             <ol className="list-decimal list-inside space-y-1 ml-2">
               <li>B2B 패키징 업체 디렉토리 서비스 제공 (검색·열람·비교)</li>
+              <li>
+                업체 상세 페이지 내 동일 산업 카테고리의 다른 업체 자동 노출
+                <br />
+                <span className="ml-4 text-neutral-500">
+                  (입력 피처는 사업자 식별 정보로 한정하며, 자연인 식별 가능 정보는 사용하지 않습니다)
+                </span>
+              </li>
               <li>서비스 이용 통계 분석 및 서비스 개선</li>
               <li>광고·마케팅 캠페인 효과 측정 (UTM 파라미터 분석)</li>
               <li>정보주체의 권리 행사(열람·정정·삭제·처리정지) 처리</li>
@@ -183,6 +190,13 @@ export default function PrivacyPage() {
               <li>오류 등이 있을 경우 정정 요구 (법 제36조)</li>
               <li>삭제 요구 (법 제36조)</li>
               <li>처리 정지 요구 (법 제37조)</li>
+              <li>
+                자기 업체가 다른 업체 페이지에 자동 노출되지 않도록 거부할 권리
+                <br />
+                <span className="ml-4 text-neutral-500">
+                  (이하 &quot;노출 옵트아웃&quot;. 행사 방법은 이용약관 제12조 ②항 참조)
+                </span>
+              </li>
             </ol>
             <p className="mb-2">권리 행사는 다음 경로 중 하나로 신청하실 수 있습니다.</p>
             <ul className="list-disc list-inside space-y-1 ml-2">
@@ -195,7 +209,10 @@ export default function PrivacyPage() {
               <li>개인정보 보호책임자 이메일 (제10조 참조)</li>
             </ul>
             <p className="mt-2 text-neutral-600">
-              회사는 요청 접수 후 10일 이내에 처리 결과를 회신합니다(「개인정보 보호법 시행령」 제43조 제3항).
+              권리 행사는 아래 개인정보 보호책임자에게 이메일로 요청하시면 처리합니다.
+              요청 접수 후 영업일 기준 24시간 이내에 답변 드립니다.
+              단, 정당한 사유가 있는 경우 「개인정보 보호법 시행령」 제42조에 따라
+              그 사유와 연장 기간을 정보 주체에게 통지하고 처리 기간을 연장할 수 있습니다.
             </p>
           </section>
 
@@ -252,8 +269,8 @@ export default function PrivacyPage() {
                   <tr>
                     <td className="border border-neutral-200 px-3 py-2 font-medium">이메일</td>
                     <td className="border border-neutral-200 px-3 py-2">
-                      <a href="mailto:privacy@packlinx.com" className="underline text-neutral-700 hover:text-neutral-900">
-                        privacy@packlinx.com
+                      <a href="mailto:rpdla041200@gmail.com" className="underline text-neutral-700 hover:text-neutral-900">
+                        rpdla041200@gmail.com
                       </a>
                     </td>
                   </tr>
@@ -323,9 +340,21 @@ export default function PrivacyPage() {
           <section>
             <h2 className="text-base font-semibold text-neutral-900 mb-3">부칙</h2>
             <ol className="list-decimal list-inside space-y-1 ml-2">
-              <li>본 처리방침은 2026년 4월 26일 0시(KST)부터 적용합니다.</li>
+              <li>본 처리방침은 2026년 5월 2일부터 적용합니다.</li>
               <li>이전 처리방침은 별도 보관하며, 요청 시 제공합니다.</li>
             </ol>
+          </section>
+
+          <section>
+            <h2 className="text-base font-semibold text-neutral-900 mb-3">변경 이력</h2>
+            <ul className="list-disc list-inside space-y-1 ml-2">
+              <li>2026년 4월 19일: 최초 제정·시행</li>
+              <li>
+                2026년 5월 2일: &quot;비슷한 업체&quot; 자동 노출 관련 조항 신설·보완
+                <br />
+                <span className="ml-4 text-neutral-500">(이용약관 제4조·제12조, 개인정보처리방침 제3조·제7조)</span>
+              </li>
+            </ul>
           </section>
 
         </div>

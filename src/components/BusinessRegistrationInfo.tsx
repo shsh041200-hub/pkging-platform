@@ -6,7 +6,7 @@ const ITEMS = [
   { label: '상호', value: '팩린스' },
   { label: '대표자', value: '김선혁' },
   { label: '사업자등록번호', value: '896-20-02557' },
-  { label: '대표 이메일', value: 'privacy@packlinx.com' },
+  { label: '대표 이메일', value: 'rpdla041200@gmail.com' },
 ] as const
 
 export function BusinessRegistrationInfo({ theme = 'dark' }: BusinessRegistrationInfoProps) {

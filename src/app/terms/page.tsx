@@ -6,7 +6,7 @@ import { BusinessRegistrationInfo } from '@/components/BusinessRegistrationInfo'
 
 export const metadata: Metadata = {
   title: '이용약관 — Packlinx',
-  description: 'Packlinx 이용약관 — 시행일 2026년 4월 26일',
+  description: 'Packlinx 이용약관 — 최종 개정일 2026년 5월 2일',
 }
 
 export default function TermsPage() {
@@ -27,10 +27,11 @@ export default function TermsPage() {
 
       <main className="max-w-3xl mx-auto px-4 sm:px-6 py-10 pb-16">
         <h1 className="text-2xl font-bold text-neutral-900 mb-2">이용약관</h1>
-        <p className="text-sm text-neutral-500 mb-6">시행일: 2026년 4월 26일 0시 (KST)</p>
+        <p className="text-sm text-neutral-500 mb-1">최초 시행일: 2026년 4월 19일</p>
+        <p className="text-sm text-neutral-500 mb-6">시행일: 2026년 5월 2일 (개정 2회)</p>
 
         <div className="bg-brand-50 border-l-4 border-brand-700 px-4 py-3 mb-8 rounded-r">
-          <p className="text-sm text-neutral-900">본 문서는 2026-04-26 0시 (KST) 부터 시행됩니다.</p>
+          <p className="text-sm text-neutral-900">본 문서는 2026-05-02 부터 시행됩니다.</p>
         </div>
 
         <div className="space-y-8 text-sm text-neutral-700 leading-relaxed">
@@ -92,6 +93,7 @@ export default function TermsPage() {
                 )
               </li>
               <li>패키징 산업 가이드·블로그 콘텐츠 제공</li>
+              <li>업체 상세 페이지 내 동일 산업 카테고리의 다른 업체 자동 노출</li>
             </ol>
             <p className="text-neutral-600">
               회사는 서비스에 등록 업체의 <strong>전화번호·주소·이메일</strong>을 게재하지 않습니다.
@@ -116,13 +118,13 @@ export default function TermsPage() {
                   </li>
                   <li>
                     이메일:{' '}
-                    <a href="mailto:privacy@packlinx.com" className="underline text-neutral-700 hover:text-neutral-900">
-                      privacy@packlinx.com
+                    <a href="mailto:rpdla041200@gmail.com" className="underline text-neutral-700 hover:text-neutral-900">
+                      rpdla041200@gmail.com
                     </a>
                   </li>
                 </ul>
               </li>
-              <li>회사는 요청 접수 후 10일 이내에 처리 결과를 회신합니다.</li>
+              <li>회사는 요청 접수 후 영업일 기준 24시간 이내에 처리 결과를 회신합니다.</li>
             </ol>
           </section>
 
@@ -218,7 +220,50 @@ export default function TermsPage() {
           </section>
 
           <section>
-            <h2 className="text-base font-semibold text-neutral-900 mb-3">제12조 (분쟁 해결 및 준거법·관할)</h2>
+            <h2 className="text-base font-semibold text-neutral-900 mb-3">제12조 (업체 정보 노출 및 추천 알고리즘)</h2>
+            <ol className="list-decimal list-inside space-y-3 ml-2">
+              <li>
+                서비스는 등록 업체의 상세 페이지에 같은 산업 카테고리의 다른 업체를
+                자동으로 노출할 수 있습니다(&quot;비슷한 업체&quot; 등). 본 노출은 객관적 카테고리
+                기준에 의한 자동화된 노출이며, 서비스의 추천·인증·보증을 의미하지 않습니다.
+              </li>
+              <li>
+                등록 업체는 자기 업체가 다른 업체의 상세 페이지에 노출되지 않도록
+                요청할 수 있습니다(이하 &quot;노출 옵트아웃&quot;). 옵트아웃은 다음 방법으로
+                신청할 수 있으며, 서비스는 영업일 기준 24시간 이내에 처리합니다.
+                <ol className="list-decimal list-inside space-y-1 mt-2 ml-4">
+                  <li>
+                    서비스 내{' '}
+                    <Link href="/opt-out" className="underline text-neutral-700 hover:text-neutral-900">
+                      정보 삭제·수정 요청
+                    </Link>{' '}
+                    페이지를 통한 신청
+                  </li>
+                  <li>
+                    <a href="mailto:rpdla041200@gmail.com" className="underline text-neutral-700 hover:text-neutral-900">
+                      rpdla041200@gmail.com
+                    </a>{' '}
+                    이메일 신청
+                  </li>
+                </ol>
+              </li>
+              <li>
+                등록 업체 또는 제3자는 자기에 관한 정보가 「정보통신망 이용촉진 및
+                정보보호 등에 관한 법률」 제44조의2에 따른 권리 침해(명예훼손, 영업
+                방해, 부정확한 정보 게재 등)에 해당한다고 판단되는 경우, 위 ②항의
+                연락처로 권리 침해 신고를 할 수 있습니다.
+              </li>
+              <li>
+                서비스는 ③항에 따른 신고 접수 후 24시간 이내에 해당 정보를 임시
+                비노출 처리하고, 「정보통신망법 시행령」 제13조에 따라 30일 이내에
+                신고자·피신고자의 의견을 청취하여 영구 비노출 또는 노출 복원 여부를
+                결정합니다.
+              </li>
+            </ol>
+          </section>
+
+          <section>
+            <h2 className="text-base font-semibold text-neutral-900 mb-3">제13조 (분쟁 해결 및 준거법·관할)</h2>
             <ol className="list-decimal list-inside space-y-2 ml-2">
               <li>본 약관과 서비스 이용에 관한 분쟁에는 대한민국 법을 적용합니다.</li>
               <li>
@@ -233,7 +278,7 @@ export default function TermsPage() {
           </section>
 
           <section>
-            <h2 className="text-base font-semibold text-neutral-900 mb-3">제13조 (회사 정보)</h2>
+            <h2 className="text-base font-semibold text-neutral-900 mb-3">제14조 (회사 정보)</h2>
             <div className="overflow-x-auto mb-4">
               <table className="w-full text-sm border-collapse">
                 <thead>
@@ -273,8 +318,8 @@ export default function TermsPage() {
                   <tr>
                     <td className="border border-neutral-200 px-3 py-2 font-medium">대표 이메일</td>
                     <td className="border border-neutral-200 px-3 py-2">
-                      <a href="mailto:privacy@packlinx.com" className="underline text-neutral-700 hover:text-neutral-900">
-                        privacy@packlinx.com
+                      <a href="mailto:rpdla041200@gmail.com" className="underline text-neutral-700 hover:text-neutral-900">
+                        rpdla041200@gmail.com
                       </a>
                     </td>
                   </tr>
@@ -282,8 +327,8 @@ export default function TermsPage() {
                     <td className="border border-neutral-200 px-3 py-2 font-medium">개인정보 보호책임자</td>
                     <td className="border border-neutral-200 px-3 py-2">
                       김선혁 (대표·운영자) /{' '}
-                      <a href="mailto:privacy@packlinx.com" className="underline text-neutral-700 hover:text-neutral-900">
-                        privacy@packlinx.com
+                      <a href="mailto:rpdla041200@gmail.com" className="underline text-neutral-700 hover:text-neutral-900">
+                        rpdla041200@gmail.com
                       </a>
                     </td>
                   </tr>
@@ -295,8 +340,20 @@ export default function TermsPage() {
           <section>
             <h2 className="text-base font-semibold text-neutral-900 mb-3">부칙</h2>
             <ol className="list-decimal list-inside space-y-1 ml-2">
-              <li>본 약관은 2026년 4월 26일 0시(KST)부터 적용합니다.</li>
+              <li>본 약관은 2026년 5월 2일부터 적용합니다.</li>
             </ol>
+          </section>
+
+          <section>
+            <h2 className="text-base font-semibold text-neutral-900 mb-3">변경 이력</h2>
+            <ul className="list-disc list-inside space-y-1 ml-2">
+              <li>2026년 4월 19일: 최초 제정·시행</li>
+              <li>
+                2026년 5월 2일: &quot;비슷한 업체&quot; 자동 노출 관련 조항 신설·보완
+                <br />
+                <span className="ml-4 text-neutral-500">(이용약관 제4조·제12조, 개인정보처리방침 제3조·제7조)</span>
+              </li>
+            </ul>
           </section>
 
         </div>

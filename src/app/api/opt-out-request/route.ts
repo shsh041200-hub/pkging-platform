@@ -51,7 +51,7 @@ export async function POST(request: NextRequest) {
 
   // Notify legal team on takedown submissions — proper email routing pending KOR-540
   if (request_type === 'takedown') {
-    console.warn('[TAKEDOWN] 권리침해 신고 접수 → legal@pkging.kr 전달 필요', {
+    console.warn('[TAKEDOWN] 권리침해 신고 접수 → rpdla041200@gmail.com 전달 필요', {
       company_name: (company_name as string).trim(),
       requester_email: (requester_email as string).trim().toLowerCase(),
       takedown_url: typeof takedown_url === 'string' ? takedown_url.trim() : null,

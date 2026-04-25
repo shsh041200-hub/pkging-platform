@@ -177,7 +177,7 @@ export default function OptOutForm({ initialType }: Props) {
             <p className="font-medium text-slate-700 mb-0.5">권리 입증 자료 첨부</p>
             <p>
               권리 입증 자료(저작권 등록증, 계약서 등)는{' '}
-              <a href="mailto:legal@pkging.kr" className="underline font-medium">legal@pkging.kr</a>
+              <a href="mailto:rpdla041200@gmail.com" className="underline font-medium">rpdla041200@gmail.com</a>
               {' '}로 이메일 첨부하여 보내주세요.
               이메일 제목에 신청인 이름과 신고 대상 URL을 포함해 주시면 빠른 처리가 가능합니다.
             </p>
