@@ -12,6 +12,7 @@ import {
   type IndustryCategory,
   type BlogPost,
   type FaqItem,
+  type HowToStep,
 } from '@/types'
 import { createClient } from '@/lib/supabase/server'
 
@@ -55,7 +56,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 async function markdownToHtml(markdown: string): Promise<string> {
   const result = await remark()
-    .use(remarkGfm)
+    .use(remarkGfm, { singleTilde: false })
     .use(remarkHtml, { sanitize: false })
     .process(markdown)
   return result.toString()
@@ -199,12 +200,31 @@ export default async function GuidePostPage({ params }: Props) {
       }
     : null
 
+  const howtoSteps = typedPost.howto_steps as HowToStep[] | null
+  const howtoJsonLd = howtoSteps && howtoSteps.length > 0
+    ? {
+        '@context': 'https://schema.org',
+        '@type': 'HowTo',
+        name: typedPost.title,
+        description: typedPost.excerpt ?? '',
+        step: howtoSteps.map((step, i) => ({
+          '@type': 'HowToStep',
+          position: i + 1,
+          name: step.name,
+          text: step.text,
+        })),
+      }
+    : null
+
   return (
     <div className="min-h-screen bg-white">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
       {faqJsonLd && (
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
+      )}
+      {howtoJsonLd && (
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(howtoJsonLd) }} />
       )}
 
       {/* Header */}
