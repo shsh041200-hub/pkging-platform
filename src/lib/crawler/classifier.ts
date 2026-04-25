@@ -3,6 +3,8 @@ import {
   type CompanyTag,
   type IndustryCategory,
   type MaterialType,
+  type PrintDesignSubtype,
+  PRINT_DESIGN_SUBTYPES,
   CATEGORY_TO_MATERIAL,
 } from '@/types'
 
@@ -169,6 +171,60 @@ const WEIGHTED_INDUSTRY_RULES: WeightedIndustryRule[] = [
   },
 ]
 
+// ── Print/Design subtype detection ──────────────────────────────────────────
+
+interface PrintDesignSubtypeRule {
+  subtype: PrintDesignSubtype
+  keywords: string[]
+}
+
+const PRINT_DESIGN_SUBTYPE_RULES: PrintDesignSubtypeRule[] = [
+  {
+    subtype: 'package-printing',
+    keywords: ['패키지인쇄', '박스인쇄', '골판지인쇄', '단상자인쇄', '박스제작', '패키지 인쇄', '박스 인쇄', '포장박스 인쇄', '포장인쇄'],
+  },
+  {
+    subtype: 'label-sticker',
+    keywords: ['라벨인쇄', '스티커인쇄', '라벨 인쇄', '스티커 인쇄', '라벨제작', '스티커제작', '바코드라벨', '바코드 라벨', '라벨지', '제품라벨'],
+  },
+  {
+    subtype: 'brochure-catalog',
+    keywords: ['브로셔', '카탈로그', '리플릿', '팸플릿', '전단지', '브로셔인쇄', '카탈로그인쇄', '리플릿인쇄', '팸플릿인쇄'],
+  },
+  {
+    subtype: 'business-stationery',
+    keywords: ['명함', '봉투인쇄', '레터헤드', '사무인쇄', '명함인쇄', '명함제작', '사무용 인쇄', '사무 인쇄'],
+  },
+  {
+    subtype: 'signage-display',
+    keywords: ['현수막', '배너', '대형출력', '사인물', '간판', 'X배너', '롤업배너', '현수막인쇄', '배너인쇄', '대형 인쇄', '실사출력'],
+  },
+  {
+    subtype: 'package-design',
+    keywords: ['패키지 디자인', '패키징 디자인', '박스 디자인', '포장 디자인', '패키지디자인', '패키징디자인', '박스디자인', '포장디자인', '브랜딩 디자인', '라벨 디자인'],
+  },
+  {
+    subtype: 'finishing-postpress',
+    keywords: ['후가공', '형압', '박가공', '에폭시', '특수인쇄', '코팅', '라미네이팅', 'UV코팅', '에폭시가공', '형광인쇄', '금박', '은박', '음각', '양각'],
+  },
+]
+
+export function detectPrintDesignSubtype(text: string): PrintDesignSubtype | null {
+  const scores: Partial<Record<PrintDesignSubtype, number>> = {}
+  for (const rule of PRINT_DESIGN_SUBTYPE_RULES) {
+    let score = 0
+    for (const kw of rule.keywords) {
+      if (text.includes(kw)) score++
+    }
+    if (score > 0) scores[rule.subtype] = score
+  }
+  const entries = Object.entries(scores) as [PrintDesignSubtype, number][]
+  if (entries.length === 0) return null
+  entries.sort((a, b) => b[1] - a[1])
+  const winner = entries[0][0]
+  return PRINT_DESIGN_SUBTYPES.includes(winner) ? winner : null
+}
+
 const ABBREV_RE = /^[A-Z]{2,5}$/
 
 function detectSubcategory(text: string, rule: CategoryRule): string | null {
@@ -225,6 +281,7 @@ export interface ClassificationResult {
   tags: CompanyTag[]
   industryClassification: IndustryClassificationResult
   materialType: MaterialType
+  printDesignSubtype: PrintDesignSubtype | null
 }
 
 const PACKAGING_RELEVANCE_KEYWORDS = [
@@ -309,27 +366,32 @@ export function classifyCompany(text: string): ClassificationResult {
 
   const tags = detectTags(text)
   const industryClassification = detectIndustryCategories(text)
+  const isPrintDesign = industryClassification.categories.includes('print_design_services')
+  const printDesignSubtype = isPrintDesign ? detectPrintDesignSubtype(text) : null
 
   if (best.score === 0) {
     return {
       category: 'plastic',
-      subcategory: null,
+      subcategory: printDesignSubtype,
       confidence: 0,
       tags,
       industryClassification,
       materialType: 'plastic-container',
+      printDesignSubtype,
     }
   }
 
   const total = scores.reduce((s, x) => s + x.score, 0)
   const confidence = total > 0 ? best.score / total : 0
+  const legacySubcategory = detectSubcategory(text, best.rule)
 
   return {
     category: best.rule.category,
-    subcategory: detectSubcategory(text, best.rule),
+    subcategory: printDesignSubtype ?? legacySubcategory,
     confidence,
     tags,
     industryClassification,
     materialType: CATEGORY_TO_MATERIAL[best.rule.category],
+    printDesignSubtype,
   }
 }

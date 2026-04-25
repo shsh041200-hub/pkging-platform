@@ -11,11 +11,14 @@ import {
   MATERIAL_TYPE_LABELS,
   PACKAGING_FORMS,
   PACKAGING_FORM_LABELS,
+  PRINT_DESIGN_SUBTYPES,
+  PRINT_DESIGN_SUBTYPE_LABELS,
   CERTIFICATION_TYPES,
   CERTIFICATION_CATEGORY_LABELS,
   type IndustryCategory,
   type MaterialType,
   type PackagingForm,
+  type PrintDesignSubtype,
   type CertificationCategory,
   type CertificationType,
   type BlogPost,
@@ -122,7 +125,7 @@ export function generateStaticParams() {
 
 type Props = {
   params: Promise<{ slug: string }>
-  searchParams: Promise<{ material?: string; form?: string; cert?: string; 'use-case'?: string; sort?: string; sample?: string; page?: string }>
+  searchParams: Promise<{ material?: string; form?: string; cert?: string; 'use-case'?: string; sort?: string; sample?: string; page?: string; subtype?: string }>
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -155,15 +158,21 @@ export default async function CategoryPage({ params, searchParams }: Props) {
   const categoryKey = slugToCategory(slug)
   if (!categoryKey) notFound()
 
+  const isPrintDesign = categoryKey === 'print_design_services'
+
   const label = INDUSTRY_CATEGORY_LABELS[categoryKey]
   const description = INDUSTRY_CATEGORY_DESCRIPTIONS[categoryKey]
   const icon = INDUSTRY_CATEGORY_ICONS[categoryKey]
 
-  const selectedMaterials: MaterialType[] = material
+  const selectedSubtype: PrintDesignSubtype | null = isPrintDesign && sp.subtype
+    ? (PRINT_DESIGN_SUBTYPES.includes(sp.subtype as PrintDesignSubtype) ? sp.subtype as PrintDesignSubtype : null)
+    : null
+
+  const selectedMaterials: MaterialType[] = !isPrintDesign && material
     ? (material.split(',').filter((m): m is MaterialType => MATERIAL_TYPES.includes(m as MaterialType)))
     : []
 
-  const selectedForms: PackagingForm[] = form
+  const selectedForms: PackagingForm[] = !isPrintDesign && form
     ? (form.split(',').filter((f): f is PackagingForm => PACKAGING_FORMS.includes(f as PackagingForm)))
     : []
 
@@ -175,12 +184,13 @@ export default async function CategoryPage({ params, searchParams }: Props) {
 
   const buildFilterParams = (overrides: Record<string, string | undefined>) => {
     const base: Record<string, string | undefined> = {
-      material,
-      form,
+      material: isPrintDesign ? undefined : material,
+      form: isPrintDesign ? undefined : form,
       cert,
       'use-case': useCaseParam,
       sort: sort || undefined,
       sample: sample || undefined,
+      subtype: isPrintDesign ? (selectedSubtype ?? undefined) : undefined,
     }
     const merged = { ...base, ...overrides, page: undefined }
     const p = new URLSearchParams()
@@ -188,6 +198,10 @@ export default async function CategoryPage({ params, searchParams }: Props) {
       if (v) p.set(k, v)
     }
     return `/categories/${slug}${p.toString() ? `?${p}` : ''}`
+  }
+
+  const buildSubtypeUrl = (sub: PrintDesignSubtype): string => {
+    return buildFilterParams({ subtype: selectedSubtype === sub ? undefined : sub })
   }
 
   const buildMaterialUrl = (mat: MaterialType): string => {
@@ -224,8 +238,9 @@ export default async function CategoryPage({ params, searchParams }: Props) {
 
   const buildPageUrl = (page: number): string => {
     const p = new URLSearchParams()
-    if (material) p.set('material', material)
-    if (form) p.set('form', form)
+    if (!isPrintDesign && material) p.set('material', material)
+    if (!isPrintDesign && form) p.set('form', form)
+    if (isPrintDesign && selectedSubtype) p.set('subtype', selectedSubtype)
     if (cert) p.set('cert', cert)
     if (useCaseParam) p.set('use-case', useCaseParam)
     if (sort) p.set('sort', sort)
@@ -260,15 +275,19 @@ export default async function CategoryPage({ params, searchParams }: Props) {
     .select('id, slug, name, description, category, industry_categories, material_type, packaging_form, tags, is_verified, products, certifications, founded_year, website, icon_url, service_capabilities, target_industries, sample_available', { count: 'exact' })
     .contains('industry_categories', [categoryKey])
 
-  if (selectedMaterials.length === 1) {
-    query = query.eq('material_type', selectedMaterials[0])
-  } else if (selectedMaterials.length > 1) {
-    query = query.in('material_type', selectedMaterials)
-  }
-  if (selectedForms.length === 1) {
-    query = query.eq('packaging_form', selectedForms[0])
-  } else if (selectedForms.length > 1) {
-    query = query.in('packaging_form', selectedForms)
+  if (isPrintDesign) {
+    if (selectedSubtype) query = query.eq('subcategory', selectedSubtype)
+  } else {
+    if (selectedMaterials.length === 1) {
+      query = query.eq('material_type', selectedMaterials[0])
+    } else if (selectedMaterials.length > 1) {
+      query = query.in('material_type', selectedMaterials)
+    }
+    if (selectedForms.length === 1) {
+      query = query.eq('packaging_form', selectedForms[0])
+    } else if (selectedForms.length > 1) {
+      query = query.in('packaging_form', selectedForms)
+    }
   }
   if (selectedCerts.length > 0) {
     // Expand canonical IDs to all known aliases so stored values like 'HACCP 인증' match 'haccp'
@@ -313,7 +332,9 @@ export default async function CategoryPage({ params, searchParams }: Props) {
     .order('published_at', { ascending: false })
     .limit(3)
 
-  const hasFilters = selectedMaterials.length > 0 || selectedForms.length > 0 || selectedCerts.length > 0 || !!selectedUseCase || sample === 'true'
+  const hasFilters = isPrintDesign
+    ? (!!selectedSubtype || selectedCerts.length > 0 || !!selectedUseCase || sample === 'true')
+    : (selectedMaterials.length > 0 || selectedForms.length > 0 || selectedCerts.length > 0 || !!selectedUseCase || sample === 'true')
   const heroCount = hasFilters ? filteredCount : totalInCategory
 
   const breadcrumbJsonLd = {
@@ -385,36 +406,69 @@ export default async function CategoryPage({ params, searchParams }: Props) {
       {/* Filters */}
       <div className="bg-white/95 backdrop-blur-sm border-b border-gray-100 sticky top-16 z-40">
         <div className="max-w-7xl mx-auto px-5 sm:px-8">
-          {/* Material filter chips */}
-          <div className="flex gap-1.5 py-3 overflow-x-auto scrollbar-none">
-            <span className="flex-shrink-0 text-[10px] font-semibold text-gray-300 uppercase tracking-widest self-center mr-2">소재</span>
-            <Link
-              href={buildFilterParams({ material: undefined })}
-              className={`flex-shrink-0 px-3 py-1.5 rounded-md text-[13px] font-medium transition-all ${
-                selectedMaterials.length === 0
-                  ? 'bg-gray-900 text-white'
-                  : 'text-gray-500 hover:text-gray-800 hover:bg-gray-50'
-              }`}
-            >
-              전체
-            </Link>
-            {MATERIAL_TYPES.map((mat) => {
-              const isActive = selectedMaterials.includes(mat)
-              return (
-                <Link
-                  key={mat}
-                  href={buildMaterialUrl(mat)}
-                  className={`flex-shrink-0 px-2.5 py-1.5 rounded text-[11px] font-medium transition-all border ${
-                    isActive
-                      ? 'bg-[#C2410C] text-white border-[#C2410C]'
-                      : 'text-gray-500 border-gray-200 hover:text-gray-700 hover:border-gray-300 bg-white'
-                  }`}
-                >
-                  {MATERIAL_TYPE_LABELS[mat]}
-                </Link>
-              )
-            })}
-          </div>
+          {/* Print/Design subtype filter — print_design_services 전용 */}
+          {isPrintDesign ? (
+            <div className="flex gap-1.5 py-3 overflow-x-auto scrollbar-none">
+              <span className="flex-shrink-0 text-[10px] font-semibold text-gray-300 uppercase tracking-widest self-center mr-2">유형</span>
+              <Link
+                href={buildFilterParams({ subtype: undefined })}
+                className={`flex-shrink-0 px-3 py-1.5 rounded-md text-[13px] font-medium transition-all ${
+                  !selectedSubtype
+                    ? 'bg-gray-900 text-white'
+                    : 'text-gray-500 hover:text-gray-800 hover:bg-gray-50'
+                }`}
+              >
+                전체
+              </Link>
+              {PRINT_DESIGN_SUBTYPES.map((sub) => {
+                const isActive = selectedSubtype === sub
+                return (
+                  <Link
+                    key={sub}
+                    href={buildSubtypeUrl(sub)}
+                    className={`flex-shrink-0 px-2.5 py-1.5 rounded text-[11px] font-medium transition-all border ${
+                      isActive
+                        ? 'bg-[#C2410C] text-white border-[#C2410C]'
+                        : 'text-gray-500 border-gray-200 hover:text-gray-700 hover:border-gray-300 bg-white'
+                    }`}
+                  >
+                    {PRINT_DESIGN_SUBTYPE_LABELS[sub]}
+                  </Link>
+                )
+              })}
+            </div>
+          ) : (
+            /* Material filter chips — 다른 카테고리에서만 표시 */
+            <div className="flex gap-1.5 py-3 overflow-x-auto scrollbar-none">
+              <span className="flex-shrink-0 text-[10px] font-semibold text-gray-300 uppercase tracking-widest self-center mr-2">소재</span>
+              <Link
+                href={buildFilterParams({ material: undefined })}
+                className={`flex-shrink-0 px-3 py-1.5 rounded-md text-[13px] font-medium transition-all ${
+                  selectedMaterials.length === 0
+                    ? 'bg-gray-900 text-white'
+                    : 'text-gray-500 hover:text-gray-800 hover:bg-gray-50'
+                }`}
+              >
+                전체
+              </Link>
+              {MATERIAL_TYPES.map((mat) => {
+                const isActive = selectedMaterials.includes(mat)
+                return (
+                  <Link
+                    key={mat}
+                    href={buildMaterialUrl(mat)}
+                    className={`flex-shrink-0 px-2.5 py-1.5 rounded text-[11px] font-medium transition-all border ${
+                      isActive
+                        ? 'bg-[#C2410C] text-white border-[#C2410C]'
+                        : 'text-gray-500 border-gray-200 hover:text-gray-700 hover:border-gray-300 bg-white'
+                    }`}
+                  >
+                    {MATERIAL_TYPE_LABELS[mat]}
+                  </Link>
+                )
+              })}
+            </div>
+          )}
 
           {/* Use-case filter chips — 태그가 있을 때만 노출 */}
           {useCaseTagList.length > 0 && (
@@ -452,8 +506,10 @@ export default async function CategoryPage({ params, searchParams }: Props) {
             </div>
           )}
 
-          {/* Packaging form filter chips — 더 보기 접이식 (Client Component) */}
-          <PackagingFormFilter selectedForms={selectedForms} formUrls={formUrls} />
+          {/* Packaging form filter chips — 인쇄·디자인 제외, 다른 카테고리에서만 표시 */}
+          {!isPrintDesign && (
+            <PackagingFormFilter selectedForms={selectedForms} formUrls={formUrls} />
+          )}
 
           {/* 인증 필터 (Client Component) */}
           <CertFilterAccordion
@@ -487,7 +543,16 @@ export default async function CategoryPage({ params, searchParams }: Props) {
       <section className="max-w-7xl mx-auto px-5 sm:px-8 py-8">
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-2.5 flex-wrap">
-            {selectedMaterials.map((mat) => (
+            {isPrintDesign && selectedSubtype && (
+              <Link
+                href={buildFilterParams({ subtype: undefined })}
+                className="text-[11px] bg-[#EFF6FF] text-[#2563EB] font-medium px-2.5 py-1 rounded-full flex items-center gap-1 hover:bg-[#DBEAFE] transition-colors"
+              >
+                {PRINT_DESIGN_SUBTYPE_LABELS[selectedSubtype]}
+                <span className="text-[#2563EB]/60 text-[10px] leading-none">×</span>
+              </Link>
+            )}
+            {!isPrintDesign && selectedMaterials.map((mat) => (
               <Link
                 key={mat}
                 href={buildMaterialUrl(mat)}
@@ -497,7 +562,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
                 <span className="text-[#2563EB]/60 text-[10px] leading-none">×</span>
               </Link>
             ))}
-            {selectedForms.map((pf) => (
+            {!isPrintDesign && selectedForms.map((pf) => (
               <Link
                 key={pf}
                 href={buildFormUrl(pf)}
@@ -544,7 +609,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
                 <span className="text-teal-700/60 text-[10px] leading-none">×</span>
               </Link>
             )}
-            {(selectedMaterials.length > 0 || selectedForms.length > 0 || selectedCerts.length > 0 || selectedUseCase || sample === 'true') && (
+            {hasFilters && (
               <Link href={`/categories/${slug}`} className="text-xs text-gray-400 hover:text-gray-600">
                 초기화
               </Link>

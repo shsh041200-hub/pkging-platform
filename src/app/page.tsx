@@ -9,6 +9,8 @@ import {
   MATERIAL_TYPE_LABELS,
   PACKAGING_FORMS,
   PACKAGING_FORM_LABELS,
+  PRINT_DESIGN_SUBTYPES,
+  PRINT_DESIGN_SUBTYPE_LABELS,
   CERTIFICATION_TYPES,
   CERTIFICATION_CATEGORY_LABELS,
   MOQ_RANGES,
@@ -18,6 +20,7 @@ import {
   type IndustryCategory,
   type MaterialType,
   type PackagingForm,
+  type PrintDesignSubtype,
   type CertificationCategory,
   type PrintMethod,
 } from '@/types'
@@ -51,6 +54,7 @@ type SearchParams = Promise<{
   dryice?: string
   sample?: string
   page?: string
+  subtype?: string
 }>
 
 export async function generateMetadata({
@@ -108,17 +112,22 @@ export default async function HomePage({
 }: {
   searchParams: SearchParams
 }) {
-  const { q, industry, material, form, cert, sort, moq, leadtime, cold, print, coldretention, dryice, sample, page } = await searchParams
+  const { q, industry, material, form, cert, sort, moq, leadtime, cold, print, coldretention, dryice, sample, page, subtype } = await searchParams
   const currentPage = Math.max(1, parseInt(page ?? '1', 10))
   const supabase = await createClient()
 
+  const isPrintDesign = industry === 'print_design_services'
+
   const activeCerts = cert ? cert.split(',').filter(Boolean) : []
-  const selectedMaterials: MaterialType[] = material
+  const selectedMaterials: MaterialType[] = !isPrintDesign && material
     ? (material.split(',').filter((m): m is MaterialType => MATERIAL_TYPES.includes(m as MaterialType)))
     : []
-  const selectedForms: PackagingForm[] = form
+  const selectedForms: PackagingForm[] = !isPrintDesign && form
     ? (form.split(',').filter((f): f is PackagingForm => PACKAGING_FORMS.includes(f as PackagingForm)))
     : []
+  const selectedSubtype: PrintDesignSubtype | null = isPrintDesign && subtype
+    ? (PRINT_DESIGN_SUBTYPES.includes(subtype as PrintDesignSubtype) ? subtype as PrintDesignSubtype : null)
+    : null
 
   const COMPANY_SELECT = 'id, slug, name, description, category, industry_categories, material_type, packaging_form, tags, is_verified, cert_count, products, certifications, founded_year, website, icon_url, service_capabilities, target_industries, data_source, review_count, avg_rating, lead_time_standard_days, lead_time_express_days, moq_value, moq_unit, print_method, sample_available, cold_packaging_available, cold_retention_hours, dry_ice_available, reuse_model, spec_sheet_available, seasonal_packaging_available'
 
@@ -214,15 +223,19 @@ export default async function HomePage({
       .select(COMPANY_SELECT, { count: 'exact' })
 
     if (industry) dbQuery = dbQuery.contains('industry_categories', [industry])
-    if (selectedMaterials.length === 1) {
-      dbQuery = dbQuery.eq('material_type', selectedMaterials[0])
-    } else if (selectedMaterials.length > 1) {
-      dbQuery = dbQuery.in('material_type', selectedMaterials)
-    }
-    if (selectedForms.length === 1) {
-      dbQuery = dbQuery.eq('packaging_form', selectedForms[0])
-    } else if (selectedForms.length > 1) {
-      dbQuery = dbQuery.in('packaging_form', selectedForms)
+    if (isPrintDesign) {
+      if (selectedSubtype) dbQuery = dbQuery.eq('subcategory', selectedSubtype)
+    } else {
+      if (selectedMaterials.length === 1) {
+        dbQuery = dbQuery.eq('material_type', selectedMaterials[0])
+      } else if (selectedMaterials.length > 1) {
+        dbQuery = dbQuery.in('material_type', selectedMaterials)
+      }
+      if (selectedForms.length === 1) {
+        dbQuery = dbQuery.eq('packaging_form', selectedForms[0])
+      } else if (selectedForms.length > 1) {
+        dbQuery = dbQuery.in('packaging_form', selectedForms)
+      }
     }
     if (activeCerts.length > 0) {
       const expandedCerts = activeCerts.flatMap(id => {
@@ -292,16 +305,17 @@ export default async function HomePage({
     const params: Record<string, string> = {}
     if (q) params.q = q
     if (industry) params.industry = industry
-    if (material) params.material = material
-    if (form) params.form = form
+    if (!isPrintDesign && material) params.material = material
+    if (!isPrintDesign && form) params.form = form
+    if (isPrintDesign && selectedSubtype) params.subtype = selectedSubtype
     if (cert) params.cert = cert
     if (sort) params.sort = sort
-    if (moq) params.moq = moq
-    if (leadtime) params.leadtime = leadtime
-    if (cold) params.cold = cold
-    if (print) params.print = print
-    if (coldretention) params.coldretention = coldretention
-    if (dryice) params.dryice = dryice
+    if (!isPrintDesign && moq) params.moq = moq
+    if (!isPrintDesign && leadtime) params.leadtime = leadtime
+    if (!isPrintDesign && cold) params.cold = cold
+    if (!isPrintDesign && print) params.print = print
+    if (!isPrintDesign && coldretention) params.coldretention = coldretention
+    if (!isPrintDesign && dryice) params.dryice = dryice
     if (sample) params.sample = sample
     Object.assign(params, overrides)
     // always reset page when changing filters (except when page itself is the override)
@@ -315,16 +329,17 @@ export default async function HomePage({
     const params: Record<string, string | undefined> = {}
     if (q) params.q = q
     if (industry) params.industry = industry
-    if (material) params.material = material
-    if (form) params.form = form
+    if (!isPrintDesign && material) params.material = material
+    if (!isPrintDesign && form) params.form = form
+    if (isPrintDesign && selectedSubtype) params.subtype = selectedSubtype
     if (cert) params.cert = cert
     if (sort) params.sort = sort
-    if (moq) params.moq = moq
-    if (leadtime) params.leadtime = leadtime
-    if (cold) params.cold = cold
-    if (print) params.print = print
-    if (coldretention) params.coldretention = coldretention
-    if (dryice) params.dryice = dryice
+    if (!isPrintDesign && moq) params.moq = moq
+    if (!isPrintDesign && leadtime) params.leadtime = leadtime
+    if (!isPrintDesign && cold) params.cold = cold
+    if (!isPrintDesign && print) params.print = print
+    if (!isPrintDesign && coldretention) params.coldretention = coldretention
+    if (!isPrintDesign && dryice) params.dryice = dryice
     if (sample) params.sample = sample
     if (p > 1) params.page = String(p)
     Object.keys(params).forEach((k) => { if (params[k] === undefined) delete params[k] })
@@ -343,7 +358,7 @@ export default async function HomePage({
     return buildUrl({ cert: certStr || undefined })
   }
 
-  const showingCategory = !q && !industry && selectedMaterials.length === 0 && selectedForms.length === 0 && activeCerts.length === 0 && !moq && !leadtime && !cold && !print && !coldretention && !dryice && !sample
+  const showingCategory = !q && !industry && selectedMaterials.length === 0 && selectedForms.length === 0 && activeCerts.length === 0 && !moq && !leadtime && !cold && !print && !coldretention && !dryice && !sample && !selectedSubtype
 
   const buildMaterialUrl = (mat: MaterialType): string => {
     const current = new Set(selectedMaterials)
@@ -538,151 +553,186 @@ export default async function HomePage({
               ))}
             </div>
 
-            {/* Material chips */}
-            <div className="flex gap-1.5 py-2.5 overflow-x-auto scrollbar-none">
-              <span className="flex-shrink-0 text-[10px] font-semibold text-gray-300 uppercase tracking-widest self-center mr-1">소재</span>
-              {MATERIAL_TYPES.map((mat) => {
-                const isActive = selectedMaterials.includes(mat)
-                return (
-                  <Link
-                    key={mat}
-                    href={buildMaterialUrl(mat)}
-                    className={`flex-shrink-0 px-2.5 py-1.5 rounded text-[11px] font-medium transition-all border ${
-                      isActive
-                        ? 'bg-[#C2410C] text-white border-[#C2410C]'
-                        : 'text-gray-500 border-gray-200 hover:text-gray-700 hover:border-gray-300 bg-white'
-                    }`}
-                  >
-                    {MATERIAL_TYPE_LABELS[mat]}
-                  </Link>
-                )
-              })}
-            </div>
+            {/* Print/Design subtype filter — print_design_services 전용 */}
+            {isPrintDesign ? (
+              <div className="flex gap-1.5 py-2.5 overflow-x-auto scrollbar-none">
+                <span className="flex-shrink-0 text-[10px] font-semibold text-gray-300 uppercase tracking-widest self-center mr-1">유형</span>
+                <Link
+                  href={buildUrl({ subtype: undefined })}
+                  className={`flex-shrink-0 px-2.5 py-1.5 rounded text-[11px] font-medium transition-all border ${
+                    !selectedSubtype
+                      ? 'bg-gray-900 text-white border-gray-900'
+                      : 'text-gray-500 border-gray-200 hover:text-gray-700 hover:border-gray-300 bg-white'
+                  }`}
+                >
+                  전체
+                </Link>
+                {PRINT_DESIGN_SUBTYPES.map((sub) => {
+                  const isActive = selectedSubtype === sub
+                  return (
+                    <Link
+                      key={sub}
+                      href={buildUrl({ subtype: selectedSubtype === sub ? undefined : sub })}
+                      className={`flex-shrink-0 px-2.5 py-1.5 rounded text-[11px] font-medium transition-all border ${
+                        isActive
+                          ? 'bg-[#C2410C] text-white border-[#C2410C]'
+                          : 'text-gray-500 border-gray-200 hover:text-gray-700 hover:border-gray-300 bg-white'
+                      }`}
+                    >
+                      {PRINT_DESIGN_SUBTYPE_LABELS[sub]}
+                    </Link>
+                  )
+                })}
+              </div>
+            ) : (
+              <>
+                {/* Material chips */}
+                <div className="flex gap-1.5 py-2.5 overflow-x-auto scrollbar-none">
+                  <span className="flex-shrink-0 text-[10px] font-semibold text-gray-300 uppercase tracking-widest self-center mr-1">소재</span>
+                  {MATERIAL_TYPES.map((mat) => {
+                    const isActive = selectedMaterials.includes(mat)
+                    return (
+                      <Link
+                        key={mat}
+                        href={buildMaterialUrl(mat)}
+                        className={`flex-shrink-0 px-2.5 py-1.5 rounded text-[11px] font-medium transition-all border ${
+                          isActive
+                            ? 'bg-[#C2410C] text-white border-[#C2410C]'
+                            : 'text-gray-500 border-gray-200 hover:text-gray-700 hover:border-gray-300 bg-white'
+                        }`}
+                      >
+                        {MATERIAL_TYPE_LABELS[mat]}
+                      </Link>
+                    )
+                  })}
+                </div>
 
-            {/* Packaging form chips */}
-            <div className="flex gap-1.5 py-2.5 overflow-x-auto scrollbar-none">
-              <span className="flex-shrink-0 text-[10px] font-semibold text-gray-300 uppercase tracking-widest self-center mr-1">형태</span>
-              {PACKAGING_FORMS.map((pf) => {
-                const isActive = selectedForms.includes(pf)
-                return (
-                  <Link
-                    key={pf}
-                    href={buildFormUrl(pf)}
-                    className={`flex-shrink-0 px-2.5 py-1.5 rounded text-[11px] font-medium transition-all border ${
-                      isActive
-                        ? 'bg-[#7C3AED] text-white border-[#7C3AED]'
-                        : 'text-gray-500 border-gray-200 hover:text-gray-700 hover:border-gray-300 bg-white'
-                    }`}
-                  >
-                    {PACKAGING_FORM_LABELS[pf]}
-                  </Link>
-                )
-              })}
-            </div>
+                {/* Packaging form chips */}
+                <div className="flex gap-1.5 py-2.5 overflow-x-auto scrollbar-none">
+                  <span className="flex-shrink-0 text-[10px] font-semibold text-gray-300 uppercase tracking-widest self-center mr-1">형태</span>
+                  {PACKAGING_FORMS.map((pf) => {
+                    const isActive = selectedForms.includes(pf)
+                    return (
+                      <Link
+                        key={pf}
+                        href={buildFormUrl(pf)}
+                        className={`flex-shrink-0 px-2.5 py-1.5 rounded text-[11px] font-medium transition-all border ${
+                          isActive
+                            ? 'bg-[#7C3AED] text-white border-[#7C3AED]'
+                            : 'text-gray-500 border-gray-200 hover:text-gray-700 hover:border-gray-300 bg-white'
+                        }`}
+                      >
+                        {PACKAGING_FORM_LABELS[pf]}
+                      </Link>
+                    )
+                  })}
+                </div>
 
-            {/* Buyer criteria chips — MOQ / 납기 / 인쇄 / 보냉 */}
-            <div className="flex gap-1.5 py-2.5 overflow-x-auto scrollbar-none">
-              <span className="flex-shrink-0 text-[10px] font-semibold text-gray-300 uppercase tracking-widest self-center mr-1">조건</span>
-              {MOQ_RANGES.map((range) => {
-                const isActive = moq === range.id
-                return (
+                {/* Buyer criteria chips — MOQ / 납기 / 인쇄 / 보냉 */}
+                <div className="flex gap-1.5 py-2.5 overflow-x-auto scrollbar-none">
+                  <span className="flex-shrink-0 text-[10px] font-semibold text-gray-300 uppercase tracking-widest self-center mr-1">조건</span>
+                  {MOQ_RANGES.map((range) => {
+                    const isActive = moq === range.id
+                    return (
+                      <Link
+                        key={range.id}
+                        href={buildMoqUrl(range.id)}
+                        className={`flex-shrink-0 px-2.5 py-1.5 rounded text-[11px] font-medium transition-all border ${
+                          isActive
+                            ? 'bg-[#0D9488] text-white border-[#0D9488]'
+                            : 'text-gray-500 border-gray-200 hover:text-gray-700 hover:border-gray-300 bg-white'
+                        }`}
+                      >
+                        {range.label}
+                      </Link>
+                    )
+                  })}
+                  <span className="flex-shrink-0 w-px h-4 bg-gray-200 self-center mx-0.5" aria-hidden="true" />
+                  {LEAD_TIME_RANGES.map((range) => {
+                    const isActive = leadtime === range.id
+                    return (
+                      <Link
+                        key={range.id}
+                        href={buildLeadTimeUrl(range.id)}
+                        className={`flex-shrink-0 px-2.5 py-1.5 rounded text-[11px] font-medium transition-all border ${
+                          isActive
+                            ? 'bg-[#0D9488] text-white border-[#0D9488]'
+                            : 'text-gray-500 border-gray-200 hover:text-gray-700 hover:border-gray-300 bg-white'
+                        }`}
+                      >
+                        {range.label}
+                      </Link>
+                    )
+                  })}
+                  <span className="flex-shrink-0 w-px h-4 bg-gray-200 self-center mx-0.5" aria-hidden="true" />
+                  {(['digital', 'offset'] as PrintMethod[]).map((method) => {
+                    const isActive = print === method
+                    return (
+                      <Link
+                        key={method}
+                        href={buildPrintUrl(method)}
+                        className={`flex-shrink-0 px-2.5 py-1.5 rounded text-[11px] font-medium transition-all border ${
+                          isActive
+                            ? 'bg-[#0D9488] text-white border-[#0D9488]'
+                            : 'text-gray-500 border-gray-200 hover:text-gray-700 hover:border-gray-300 bg-white'
+                        }`}
+                      >
+                        {PRINT_METHOD_LABELS[method]}
+                      </Link>
+                    )
+                  })}
+                  <span className="flex-shrink-0 w-px h-4 bg-gray-200 self-center mx-0.5" aria-hidden="true" />
                   <Link
-                    key={range.id}
-                    href={buildMoqUrl(range.id)}
+                    href={buildColdUrl()}
                     className={`flex-shrink-0 px-2.5 py-1.5 rounded text-[11px] font-medium transition-all border ${
-                      isActive
+                      cold === 'true'
                         ? 'bg-[#0D9488] text-white border-[#0D9488]'
                         : 'text-gray-500 border-gray-200 hover:text-gray-700 hover:border-gray-300 bg-white'
                     }`}
                   >
-                    {range.label}
+                    보냉 포장
                   </Link>
-                )
-              })}
-              <span className="flex-shrink-0 w-px h-4 bg-gray-200 self-center mx-0.5" aria-hidden="true" />
-              {LEAD_TIME_RANGES.map((range) => {
-                const isActive = leadtime === range.id
-                return (
+                  <span className="flex-shrink-0 w-px h-4 bg-gray-200 self-center mx-0.5" aria-hidden="true" />
+                  {COLD_RETENTION_RANGES.map((range) => {
+                    const isActive = coldretention === range.id
+                    return (
+                      <Link
+                        key={range.id}
+                        href={buildColdRetentionUrl(range.id)}
+                        className={`flex-shrink-0 px-2.5 py-1.5 rounded text-[11px] font-medium transition-all border ${
+                          isActive
+                            ? 'bg-[#0D9488] text-white border-[#0D9488]'
+                            : 'text-gray-500 border-gray-200 hover:text-gray-700 hover:border-gray-300 bg-white'
+                        }`}
+                      >
+                        보냉 {range.label}
+                      </Link>
+                    )
+                  })}
                   <Link
-                    key={range.id}
-                    href={buildLeadTimeUrl(range.id)}
+                    href={buildDryIceUrl()}
                     className={`flex-shrink-0 px-2.5 py-1.5 rounded text-[11px] font-medium transition-all border ${
-                      isActive
+                      dryice === 'true'
                         ? 'bg-[#0D9488] text-white border-[#0D9488]'
                         : 'text-gray-500 border-gray-200 hover:text-gray-700 hover:border-gray-300 bg-white'
                     }`}
                   >
-                    {range.label}
+                    드라이아이스
                   </Link>
-                )
-              })}
-              <span className="flex-shrink-0 w-px h-4 bg-gray-200 self-center mx-0.5" aria-hidden="true" />
-              {(['digital', 'offset'] as PrintMethod[]).map((method) => {
-                const isActive = print === method
-                return (
+                  <span className="flex-shrink-0 w-px h-4 bg-gray-200 self-center mx-0.5" aria-hidden="true" />
                   <Link
-                    key={method}
-                    href={buildPrintUrl(method)}
+                    href={buildSampleUrl()}
                     className={`flex-shrink-0 px-2.5 py-1.5 rounded text-[11px] font-medium transition-all border ${
-                      isActive
+                      sample === 'true'
                         ? 'bg-[#0D9488] text-white border-[#0D9488]'
                         : 'text-gray-500 border-gray-200 hover:text-gray-700 hover:border-gray-300 bg-white'
                     }`}
                   >
-                    {PRINT_METHOD_LABELS[method]}
+                    샘플 제작
                   </Link>
-                )
-              })}
-              <span className="flex-shrink-0 w-px h-4 bg-gray-200 self-center mx-0.5" aria-hidden="true" />
-              <Link
-                href={buildColdUrl()}
-                className={`flex-shrink-0 px-2.5 py-1.5 rounded text-[11px] font-medium transition-all border ${
-                  cold === 'true'
-                    ? 'bg-[#0D9488] text-white border-[#0D9488]'
-                    : 'text-gray-500 border-gray-200 hover:text-gray-700 hover:border-gray-300 bg-white'
-                }`}
-              >
-                보냉 포장
-              </Link>
-              <span className="flex-shrink-0 w-px h-4 bg-gray-200 self-center mx-0.5" aria-hidden="true" />
-              {COLD_RETENTION_RANGES.map((range) => {
-                const isActive = coldretention === range.id
-                return (
-                  <Link
-                    key={range.id}
-                    href={buildColdRetentionUrl(range.id)}
-                    className={`flex-shrink-0 px-2.5 py-1.5 rounded text-[11px] font-medium transition-all border ${
-                      isActive
-                        ? 'bg-[#0D9488] text-white border-[#0D9488]'
-                        : 'text-gray-500 border-gray-200 hover:text-gray-700 hover:border-gray-300 bg-white'
-                    }`}
-                  >
-                    보냉 {range.label}
-                  </Link>
-                )
-              })}
-              <Link
-                href={buildDryIceUrl()}
-                className={`flex-shrink-0 px-2.5 py-1.5 rounded text-[11px] font-medium transition-all border ${
-                  dryice === 'true'
-                    ? 'bg-[#0D9488] text-white border-[#0D9488]'
-                    : 'text-gray-500 border-gray-200 hover:text-gray-700 hover:border-gray-300 bg-white'
-                }`}
-              >
-                드라이아이스
-              </Link>
-              <span className="flex-shrink-0 w-px h-4 bg-gray-200 self-center mx-0.5" aria-hidden="true" />
-              <Link
-                href={buildSampleUrl()}
-                className={`flex-shrink-0 px-2.5 py-1.5 rounded text-[11px] font-medium transition-all border ${
-                  sample === 'true'
-                    ? 'bg-[#0D9488] text-white border-[#0D9488]'
-                    : 'text-gray-500 border-gray-200 hover:text-gray-700 hover:border-gray-300 bg-white'
-                }`}
-              >
-                샘플 제작
-              </Link>
-            </div>
+                </div>
+              </>
+            )}
 
             {/* Certification accordion filter */}
             <CertFilterAccordion
@@ -726,6 +776,15 @@ export default async function HomePage({
               <span className="text-[11px] bg-[#EFF6FF] text-[#2563EB] font-medium px-2.5 py-1 rounded-full">
                 {INDUSTRY_CATEGORY_LABELS[industry as IndustryCategory]}
               </span>
+            )}
+            {isPrintDesign && selectedSubtype && (
+              <Link
+                href={buildUrl({ subtype: undefined })}
+                className="text-[11px] bg-[#EFF6FF] text-[#2563EB] font-medium px-2.5 py-1 rounded-full flex items-center gap-1 hover:bg-[#DBEAFE] transition-colors"
+              >
+                {PRINT_DESIGN_SUBTYPE_LABELS[selectedSubtype]}
+                <span className="text-[#2563EB]/60 text-[10px] leading-none">×</span>
+              </Link>
             )}
             {selectedMaterials.map((mat) => (
               <Link
@@ -823,7 +882,7 @@ export default async function HomePage({
                 &ldquo;{q}&rdquo;
               </span>
             )}
-            {(industry || selectedMaterials.length > 0 || selectedForms.length > 0 || q || activeCerts.length > 0 || moq || leadtime || cold || print || coldretention || dryice || sample) && (
+            {(industry || selectedMaterials.length > 0 || selectedForms.length > 0 || q || activeCerts.length > 0 || moq || leadtime || cold || print || coldretention || dryice || sample || selectedSubtype) && (
               <Link href="/" className="text-xs text-gray-400 hover:text-gray-600 ml-1">
                 초기화
               </Link>

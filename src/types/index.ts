@@ -54,6 +54,37 @@ export const INDUSTRY_CATEGORY_ICONS: Record<IndustryCategory, string> = {
   'print_design_services':   '🖨️',
 }
 
+// ── Print / Design service subtype filter (인쇄·디자인 세부 카테고리) ──
+
+export type PrintDesignSubtype =
+  | 'package-printing'
+  | 'label-sticker'
+  | 'brochure-catalog'
+  | 'business-stationery'
+  | 'signage-display'
+  | 'package-design'
+  | 'finishing-postpress'
+
+export const PRINT_DESIGN_SUBTYPES: PrintDesignSubtype[] = [
+  'package-printing',
+  'label-sticker',
+  'brochure-catalog',
+  'business-stationery',
+  'signage-display',
+  'package-design',
+  'finishing-postpress',
+]
+
+export const PRINT_DESIGN_SUBTYPE_LABELS: Record<PrintDesignSubtype, string> = {
+  'package-printing':    '패키지·박스 인쇄',
+  'label-sticker':       '라벨·스티커 인쇄',
+  'brochure-catalog':    '브로셔·카탈로그',
+  'business-stationery': '명함·사무 인쇄',
+  'signage-display':     '사인물·대형 출력',
+  'package-design':      '패키지 디자인',
+  'finishing-postpress': '후가공·특수 인쇄',
+}
+
 // ── Primary L2: Material filter (소재 필터) ──
 
 export type MaterialType =
