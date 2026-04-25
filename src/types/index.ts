@@ -421,6 +421,11 @@ export interface FaqItem {
   answer: string
 }
 
+export interface HowToStep {
+  name: string
+  text: string
+}
+
 export interface BlogPost {
   id: string
   slug: string
@@ -436,6 +441,7 @@ export interface BlogPost {
   meta_title: string | null
   meta_description: string | null
   faq_items: FaqItem[] | null
+  howto_steps: HowToStep[] | null
   target_audience: string[] | null
   published_at: string | null
   created_at: string
