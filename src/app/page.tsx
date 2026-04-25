@@ -136,9 +136,6 @@ export default async function HomePage({
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let companies: any[] = []
   let filteredCount: number | null = 0
-  let isRecommendation = false
-  let matchedKeyword = ''
-  let matchedIndustries: string[] = []
   const offset = (currentPage - 1) * PAGE_SIZE
 
   if (q) {
@@ -196,28 +193,6 @@ export default async function HomePage({
       filteredCount = count ?? 0
     }
 
-    // ── Pass 2: product→category recommendation (only when Pass 1 found nothing) ──
-    if (companies.length === 0 && (filteredCount ?? 0) === 0) {
-      const { data: recRows } = await supabase.rpc('recommend_companies_by_product', {
-        p_query: sanitized,
-        p_limit: PAGE_SIZE,
-        p_offset: offset,
-      })
-      if (recRows && recRows.length > 0) {
-        const recs = recRows as Array<{ id: string; matched_keyword: string; matched_industries: string[]; total_count: number }>
-        isRecommendation = true
-        matchedKeyword = recs[0].matched_keyword
-        matchedIndustries = recs[0].matched_industries ?? []
-        filteredCount = Number(recs[0].total_count)
-        const recIds = recs.map(r => r.id)
-        const { data: fullData } = await supabase
-          .from('companies')
-          .select(COMPANY_SELECT)
-          .in('id', recIds)
-        const byId = new Map((fullData ?? []).map(c => [c.id, c]))
-        companies = recIds.map(id => byId.get(id)).filter(Boolean)
-      }
-    }
   } else {
     // ── Filter-only path (no text query) ────────────────────────────────────
     let dbQuery = supabase
@@ -750,29 +725,10 @@ export default async function HomePage({
 
       {/* Results — only when search/filter active */}
       {!showingCategory && <section className="max-w-7xl mx-auto px-5 sm:px-8 py-8">
-        {isRecommendation && companies.length > 0 && (
-          <div className="mb-6 p-4 bg-[#FFF7ED] border border-[#C2410C]/10 rounded-xl">
-            <p className="text-[15px] font-semibold text-gray-900 mb-2">
-              &lsquo;{q}&rsquo; 포장에 적합한 업체를 추천합니다
-            </p>
-            <div className="flex flex-wrap gap-1.5">
-              {matchedIndustries.map((ind) => (
-                <Link
-                  key={ind}
-                  href={`/categories/${ind}`}
-                  className="text-[11px] font-medium bg-gray-100 text-gray-600 px-2.5 py-1 rounded-full hover:bg-gray-200 transition-colors"
-                >
-                  {INDUSTRY_CATEGORY_LABELS[ind as IndustryCategory] ?? ind}
-                </Link>
-              ))}
-            </div>
-          </div>
-        )}
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-2.5 flex-wrap">
             <p className="text-sm text-gray-500">
               <span className="font-semibold text-gray-900">{filteredCount ?? 0}</span>개 업체
-              {isRecommendation && <span className="text-gray-400 ml-1">(추천)</span>}
             </p>
             {industry && (
               <span className="text-[11px] bg-[#EFF6FF] text-[#2563EB] font-medium px-2.5 py-1 rounded-full">
