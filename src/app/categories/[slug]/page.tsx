@@ -122,7 +122,7 @@ export function generateStaticParams() {
 
 type Props = {
   params: Promise<{ slug: string }>
-  searchParams: Promise<{ material?: string; form?: string; cert?: string; 'use-case'?: string; sort?: string; page?: string }>
+  searchParams: Promise<{ material?: string; form?: string; cert?: string; 'use-case'?: string; sort?: string; sample?: string; page?: string }>
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -149,7 +149,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function CategoryPage({ params, searchParams }: Props) {
   const { slug } = await params
   const sp = await searchParams
-  const { material, form, cert, sort } = sp
+  const { material, form, cert, sort, sample } = sp
   const useCaseParam = sp['use-case']
   const currentPage = Math.max(1, parseInt(sp.page ?? '1', 10))
   const categoryKey = slugToCategory(slug)
@@ -180,6 +180,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
       cert,
       'use-case': useCaseParam,
       sort: sort || undefined,
+      sample: sample || undefined,
     }
     const merged = { ...base, ...overrides, page: undefined }
     const p = new URLSearchParams()
@@ -217,6 +218,10 @@ export default async function CategoryPage({ params, searchParams }: Props) {
     return buildFilterParams({ 'use-case': selectedUseCase !== tagSlug ? tagSlug : undefined })
   }
 
+  const buildSampleUrl = (): string => {
+    return buildFilterParams({ sample: sample === 'true' ? undefined : 'true' })
+  }
+
   const buildPageUrl = (page: number): string => {
     const p = new URLSearchParams()
     if (material) p.set('material', material)
@@ -224,6 +229,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
     if (cert) p.set('cert', cert)
     if (useCaseParam) p.set('use-case', useCaseParam)
     if (sort) p.set('sort', sort)
+    if (sample) p.set('sample', sample)
     if (page > 1) p.set('page', String(page))
     return `/categories/${slug}${p.toString() ? `?${p}` : ''}`
   }
@@ -251,7 +257,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
 
   let query = supabase
     .from('companies')
-    .select('id, slug, name, description, category, industry_categories, material_type, packaging_form, tags, is_verified, products, certifications, founded_year, website, icon_url, service_capabilities, target_industries', { count: 'exact' })
+    .select('id, slug, name, description, category, industry_categories, material_type, packaging_form, tags, is_verified, products, certifications, founded_year, website, icon_url, service_capabilities, target_industries, sample_available', { count: 'exact' })
     .contains('industry_categories', [categoryKey])
 
   if (selectedMaterials.length === 1) {
@@ -275,6 +281,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
   if (selectedUseCase) {
     query = query.contains('use_case_tags', [selectedUseCase])
   }
+  if (sample === 'true') query = query.eq('sample_available', true)
 
   if (sort === 'name_asc') {
     query = query.order('name', { ascending: true })
@@ -306,7 +313,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
     .order('published_at', { ascending: false })
     .limit(3)
 
-  const hasFilters = selectedMaterials.length > 0 || selectedForms.length > 0 || selectedCerts.length > 0 || !!selectedUseCase
+  const hasFilters = selectedMaterials.length > 0 || selectedForms.length > 0 || selectedCerts.length > 0 || !!selectedUseCase || sample === 'true'
   const heroCount = hasFilters ? filteredCount : totalInCategory
 
   const breadcrumbJsonLd = {
@@ -456,6 +463,23 @@ export default async function CategoryPage({ params, searchParams }: Props) {
             certCategoryLabels={CERTIFICATION_CATEGORY_LABELS}
             certUrls={certUrls}
           />
+
+          {/* 샘플 제작 가능 필터 */}
+          <div className="flex gap-1.5 py-2.5 items-center border-t border-gray-100">
+            <span className="flex-shrink-0 text-[10px] font-semibold text-gray-300 uppercase tracking-widest self-center mr-1">
+              서비스
+            </span>
+            <Link
+              href={buildSampleUrl()}
+              className={`flex-shrink-0 px-2.5 py-1.5 rounded text-[11px] font-medium transition-all border ${
+                sample === 'true'
+                  ? 'bg-[#0D9488] text-white border-[#0D9488]'
+                  : 'text-gray-500 border-gray-200 hover:text-gray-700 hover:border-gray-300 bg-white'
+              }`}
+            >
+              샘플 제작
+            </Link>
+          </div>
         </div>
       </div>
 
@@ -511,7 +535,16 @@ export default async function CategoryPage({ params, searchParams }: Props) {
                 </Link>
               )
             })()}
-            {(selectedMaterials.length > 0 || selectedForms.length > 0 || selectedCerts.length > 0 || selectedUseCase) && (
+            {sample === 'true' && (
+              <Link
+                href={buildSampleUrl()}
+                className="text-[11px] bg-teal-50 text-teal-700 font-medium px-2.5 py-1 rounded-full flex items-center gap-1 border border-teal-200 hover:bg-teal-100 transition-colors"
+              >
+                샘플 제작
+                <span className="text-teal-700/60 text-[10px] leading-none">×</span>
+              </Link>
+            )}
+            {(selectedMaterials.length > 0 || selectedForms.length > 0 || selectedCerts.length > 0 || selectedUseCase || sample === 'true') && (
               <Link href={`/categories/${slug}`} className="text-xs text-gray-400 hover:text-gray-600">
                 초기화
               </Link>
