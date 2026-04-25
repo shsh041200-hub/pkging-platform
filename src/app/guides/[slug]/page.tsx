@@ -54,11 +54,40 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 }
 
+function stripSeoMetaBlock(markdown: string): string {
+  const lines = markdown.split('\n')
+  const result: string[] = []
+  let inSeoBlock = false
+  let seoHeadingLevel = 0
+
+  for (const line of lines) {
+    const headingMatch = line.match(/^(#{1,6})\s+(.*)/)
+    if (headingMatch) {
+      const level = headingMatch[1].length
+      const text = headingMatch[2]
+      if (text.includes('SEO') && (text.includes('메타') || text.toLowerCase().includes('meta'))) {
+        inSeoBlock = true
+        seoHeadingLevel = level
+        continue
+      }
+      if (inSeoBlock && level <= seoHeadingLevel) {
+        inSeoBlock = false
+      }
+    }
+    if (!inSeoBlock) {
+      result.push(line)
+    }
+  }
+
+  return result.join('\n').trim()
+}
+
 async function markdownToHtml(markdown: string): Promise<string> {
+  const cleaned = stripSeoMetaBlock(markdown)
   const result = await remark()
     .use(remarkGfm, { singleTilde: false })
     .use(remarkHtml, { sanitize: false })
-    .process(markdown)
+    .process(cleaned)
   return result.toString()
 }
 
