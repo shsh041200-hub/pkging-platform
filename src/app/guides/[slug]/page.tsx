@@ -54,28 +54,59 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 }
 
+const HR_RE = /^(-{3,}|\*{3,}|_{3,})\s*$/
+
+function isSeoTrigger(text: string): boolean {
+  return /SEO/.test(text) && /(메타|meta)/i.test(text)
+}
+
+function removeTrailingHr(result: string[]): void {
+  for (let i = result.length - 1; i >= 0; i--) {
+    if (result[i].trim() === '') continue
+    if (HR_RE.test(result[i])) result.splice(i, 1)
+    break
+  }
+}
+
 function stripSeoMetaBlock(markdown: string): string {
   const lines = markdown.split('\n')
   const result: string[] = []
   let inSeoBlock = false
+  let boldMode = false
   let seoHeadingLevel = 0
 
   for (const line of lines) {
-    const headingMatch = line.match(/^(#{1,6})\s+(.*)/)
-    if (headingMatch) {
-      const level = headingMatch[1].length
-      const text = headingMatch[2]
-      if (text.includes('SEO') && (text.includes('메타') || text.toLowerCase().includes('meta'))) {
+    if (!inSeoBlock) {
+      // Heading form: ## SEO 메타 정보 ...
+      const headingMatch = line.match(/^(#{1,6})\s+(.*)/)
+      if (headingMatch && isSeoTrigger(headingMatch[2])) {
         inSeoBlock = true
-        seoHeadingLevel = level
+        boldMode = false
+        seoHeadingLevel = headingMatch[1].length
+        removeTrailingHr(result)
         continue
       }
-      if (inSeoBlock && level <= seoHeadingLevel) {
-        inSeoBlock = false
+      // Bold-paragraph form: **SEO 메타 정보 (발행 시 적용)**
+      if (/^\s*\*\*[^*]*SEO[^*]*(메타|meta)[^*]*\*\*\s*$/i.test(line)) {
+        inSeoBlock = true
+        boldMode = true
+        seoHeadingLevel = 0
+        removeTrailingHr(result)
+        continue
       }
-    }
-    if (!inSeoBlock) {
       result.push(line)
+    } else if (boldMode) {
+      // Bold mode: skip blank lines and list items; exit on any other content
+      if (line.trim() === '' || /^\s*[-*+]\s/.test(line)) continue
+      inSeoBlock = false
+      result.push(line)
+    } else {
+      // Heading mode: exit when reaching a heading at the same or higher level
+      const m = line.match(/^(#{1,6})\s/)
+      if (m && m[1].length <= seoHeadingLevel) {
+        inSeoBlock = false
+        result.push(line)
+      }
     }
   }
 
