@@ -1,13 +1,14 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import Image from 'next/image'
 import { notFound } from 'next/navigation'
 import { remark } from 'remark'
 import remarkGfm from 'remark-gfm'
 import remarkHtml from 'remark-html'
 import { PacklinxLogo } from '@/components/PacklinxLogo'
+import { GuideTocDesktop, GuideTocMobile, type TocItem } from '@/components/GuideToc'
 import {
   INDUSTRY_CATEGORY_LABELS,
+  GUIDE_CATEGORY_COLORS,
   type IndustryCategory,
   type BlogPost,
   type FaqItem,
@@ -55,9 +56,48 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 async function markdownToHtml(markdown: string): Promise<string> {
   const result = await remark()
     .use(remarkGfm)
-    .use(remarkHtml, { sanitize: true })
+    .use(remarkHtml, { sanitize: false })
     .process(markdown)
   return result.toString()
+}
+
+function slugifyHeading(text: string): string {
+  return text
+    .replace(/<[^>]+>/g, '')
+    .toLowerCase()
+    .replace(/[^가-힣a-z0-9\s]/g, '')
+    .trim()
+    .replace(/\s+/g, '-')
+    .slice(0, 60)
+}
+
+function injectHeadingIds(html: string): string {
+  const seen = new Map<string, number>()
+  return html.replace(/<h([23])([^>]*)>([\s\S]*?)<\/h[23]>/gi, (_, level, attrs, content) => {
+    const base = slugifyHeading(content)
+    const count = seen.get(base) ?? 0
+    seen.set(base, count + 1)
+    const id = count === 0 ? base : `${base}-${count}`
+    return `<h${level}${attrs} id="${id}">${content}</h${level}>`
+  })
+}
+
+function extractTocItems(html: string): TocItem[] {
+  const items: TocItem[] = []
+  const seen = new Map<string, number>()
+  const regex = /<h([23])[^>]*id="([^"]*)"[^>]*>([\s\S]*?)<\/h[23]>/gi
+  let match
+  while ((match = regex.exec(html)) !== null) {
+    const level = parseInt(match[1]) as 2 | 3
+    const id = match[2]
+    const text = match[3].replace(/<[^>]+>/g, '').trim()
+    if (id && text) {
+      const count = seen.get(id) ?? 0
+      seen.set(id, count + 1)
+      items.push({ id, text, level })
+    }
+  }
+  return items
 }
 
 function formatDate(dateStr: string): string {
@@ -66,6 +106,17 @@ function formatDate(dateStr: string): string {
     month: 'long',
     day: 'numeric',
   })
+}
+
+const CATEGORY_BADGE_STYLES: Record<IndustryCategory, { color: string; bg: string }> = {
+  'food-beverage':           { color: '#B45309', bg: '#FFFBEB' },
+  'ecommerce-shipping':      { color: '#C2410C', bg: '#FFF7ED' },
+  'cosmetics-beauty':        { color: '#BE185D', bg: '#FDF2F8' },
+  'pharma-health':           { color: '#047857', bg: '#ECFDF5' },
+  'electronics-industrial':  { color: '#334155', bg: '#F1F5F9' },
+  'eco-special':             { color: '#15803D', bg: '#F0FDF4' },
+  'fresh_produce_packaging': { color: '#3F6212', bg: '#F7FEE7' },
+  'print_design_services':   { color: '#5B21B6', bg: '#F5F3FF' },
 }
 
 export default async function GuidePostPage({ params }: Props) {
@@ -85,23 +136,30 @@ export default async function GuidePostPage({ params }: Props) {
 
   const typedPost = post as BlogPost
 
-  const contentHtml = typedPost.body ? await markdownToHtml(typedPost.body) : ''
+  const rawHtml = typedPost.body ? await markdownToHtml(typedPost.body) : ''
+  const contentHtml = injectHeadingIds(rawHtml)
+  const tocItems = extractTocItems(contentHtml)
 
   const { data: relatedGuides } = typedPost.category
     ? await supabase
         .from('blog_posts')
-        .select('id, slug, title, excerpt, cover_image_url, published_at')
+        .select('id, slug, title, excerpt, category, published_at')
         .eq('status', 'published')
         .eq('content_type', 'guide')
         .eq('category', typedPost.category)
         .neq('slug', slug)
         .order('published_at', { ascending: false })
-        .limit(3)
+        .limit(2)
     : { data: [] }
 
   const categoryLabel = typedPost.category
     ? INDUSTRY_CATEGORY_LABELS[typedPost.category as IndustryCategory]
     : null
+
+  const cat = typedPost.category as IndustryCategory | null
+  const barColor = cat ? GUIDE_CATEGORY_COLORS[cat] : '#E2E8F0'
+  const badgeStyle = cat ? CATEGORY_BADGE_STYLES[cat] : null
+  const targetAudience = typedPost.target_audience as string[] | null
 
   const articleJsonLd = {
     '@context': 'https://schema.org',
@@ -111,15 +169,8 @@ export default async function GuidePostPage({ params }: Props) {
     url: `${siteUrl}/guides/${slug}`,
     datePublished: typedPost.published_at ?? typedPost.created_at,
     dateModified: typedPost.updated_at,
-    author: {
-      '@type': 'Person',
-      name: typedPost.author,
-    },
-    publisher: {
-      '@type': 'Organization',
-      name: 'Packlinx',
-      url: siteUrl,
-    },
+    author: { '@type': 'Person', name: typedPost.author },
+    publisher: { '@type': 'Organization', name: 'Packlinx', url: siteUrl },
     ...(typedPost.og_image_url || typedPost.cover_image_url
       ? { image: typedPost.og_image_url ?? typedPost.cover_image_url }
       : {}),
@@ -143,233 +194,341 @@ export default async function GuidePostPage({ params }: Props) {
         mainEntity: faqItems.map((item) => ({
           '@type': 'Question',
           name: item.question,
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: item.answer,
-          },
+          acceptedAnswer: { '@type': 'Answer', text: item.answer },
         })),
       }
     : null
 
   return (
     <div className="min-h-screen bg-white">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
-      />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
       {faqJsonLd && (
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
-        />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
       )}
 
       {/* Header */}
-      <header className="bg-white sticky top-0 z-50 border-b border-gray-100">
-        <div className="max-w-7xl mx-auto px-5 sm:px-8 h-16 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-3">
-            <PacklinxLogo variant="light" />
-            <span className="hidden sm:inline text-gray-300 text-[11px] font-medium tracking-widest uppercase">전국 패키징 파트너, 한 번에</span>
+      <header className="bg-[#0F172A] sticky top-0 z-50" style={{ height: 56 }}>
+        <div className="max-w-[1120px] mx-auto px-6 h-full flex items-center justify-between">
+          <Link href="/" className="flex items-baseline gap-1">
+            <PacklinxLogo variant="dark" />
+            <span className="hidden sm:inline text-white/30 text-[10px] font-medium tracking-widest uppercase ml-2">
+              전국 패키징 파트너, 한 번에
+            </span>
           </Link>
-          <nav className="flex items-center gap-6">
-            <Link href="/guides" className="text-gray-900 text-[13px] font-semibold">
+          <nav>
+            <Link href="/guides" className="text-white/70 hover:text-white text-[14px] font-medium transition-colors">
               가이드
             </Link>
           </nav>
         </div>
       </header>
 
-      {/* Breadcrumb */}
-      <div className="bg-[#FFF8F3] border-b border-orange-100 px-5 py-3">
-        <div className="max-w-3xl mx-auto">
-          <nav className="text-sm text-gray-400">
-            <Link href="/" className="hover:text-gray-600 transition-colors">홈</Link>
-            <span className="mx-2">&rsaquo;</span>
-            <Link href="/guides" className="hover:text-gray-600 transition-colors">패키징 완전 가이드</Link>
-            <span className="mx-2">&rsaquo;</span>
-            <span className="text-gray-700 font-medium line-clamp-1">{typedPost.title}</span>
+      {/* Two-column layout */}
+      <div className="max-w-[1120px] mx-auto px-6 lg:grid lg:grid-cols-[1fr_240px] lg:gap-12">
+        {/* Main content */}
+        <main className="py-10 min-w-0 pb-16">
+
+          {/* Breadcrumb */}
+          <nav className="text-[13px] text-slate-500">
+            <Link href="/" className="hover:text-slate-700 transition-colors">홈</Link>
+            <span className="mx-1.5 text-slate-300">›</span>
+            <Link href="/guides" className="hover:text-slate-700 transition-colors">패키징 완전 가이드</Link>
+            <span className="mx-1.5 text-slate-300">›</span>
+            <span className="text-slate-700 line-clamp-1">{typedPost.title}</span>
           </nav>
-        </div>
+
+          {/* Article meta */}
+          <div className="flex flex-wrap items-center gap-2 mt-5">
+            {cat && badgeStyle && (
+              <span
+                className="text-[12px] font-medium px-2 py-1 rounded"
+                style={{ color: badgeStyle.color, background: badgeStyle.bg }}
+              >
+                {categoryLabel}
+              </span>
+            )}
+            <span className="text-[12px] font-medium px-2 py-1 rounded text-slate-500 bg-slate-100">
+              심층 가이드
+            </span>
+            {typedPost.published_at && (
+              <>
+                <span className="text-slate-300 text-[12px]">·</span>
+                <time className="text-[12px] text-slate-400" dateTime={typedPost.published_at}>
+                  {formatDate(typedPost.published_at)}
+                </time>
+              </>
+            )}
+            {typedPost.author && (
+              <>
+                <span className="text-slate-300 text-[12px]">·</span>
+                <span className="text-[12px] text-slate-400">by {typedPost.author}</span>
+              </>
+            )}
+          </div>
+
+          {/* Title */}
+          <h1 className="text-[28px] sm:text-[32px] font-extrabold text-[#0F172A] tracking-[-0.025em] leading-[1.25] mt-4">
+            {typedPost.title}
+          </h1>
+
+          {/* Lead / excerpt */}
+          {typedPost.excerpt && (
+            <p className="text-[16px] text-slate-500 leading-[1.7] mt-3 max-w-[640px]">
+              {typedPost.excerpt}
+            </p>
+          )}
+
+          {/* Target audience box */}
+          {targetAudience && targetAudience.length > 0 && (
+            <div className="mt-6 bg-slate-50 border border-slate-200 rounded-lg px-6 py-5">
+              <p className="text-[13px] font-semibold text-slate-700 mb-2">이런 분들께 추천합니다</p>
+              <ul className="space-y-1.5">
+                {targetAudience.map((item, i) => (
+                  <li key={i} className="flex items-start gap-2 text-[14px] text-slate-500 leading-relaxed">
+                    <span className="text-[#C2410C] font-semibold mt-px flex-shrink-0">✓</span>
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {/* Mobile TOC */}
+          <div className="lg:hidden">
+            <GuideTocMobile items={tocItems} />
+          </div>
+
+          {/* Key summary */}
+          {typedPost.excerpt && (
+            <div className="my-8 bg-[rgba(249,115,22,0.05)] border-l-[3px] border-[#F97316] rounded-r-lg px-6 py-5">
+              <p className="text-[13px] font-bold text-[#C2410C] tracking-wide mb-2">핵심 요약</p>
+              <p className="text-[14px] font-medium text-slate-700 leading-[1.7]">
+                {typedPost.excerpt}
+              </p>
+            </div>
+          )}
+
+          {/* Article body */}
+          {contentHtml ? (
+            <article
+              className="guide-body mt-2"
+              dangerouslySetInnerHTML={{ __html: contentHtml }}
+            />
+          ) : (
+            <p className="text-slate-400 text-center py-12">본문 콘텐츠가 없습니다.</p>
+          )}
+
+          {/* FAQ Section */}
+          {faqItems && faqItems.length > 0 && (
+            <section className="mt-12 border-t border-slate-100 pt-10">
+              <h2 className="text-[20px] font-extrabold text-[#0F172A] tracking-tight mb-6">
+                자주 묻는 질문
+              </h2>
+              <dl className="space-y-4">
+                {faqItems.map((item, index) => (
+                  <div key={index} className="border border-slate-200 rounded-xl p-5">
+                    <dt className="text-[15px] font-bold text-slate-900 mb-2">Q. {item.question}</dt>
+                    <dd className="text-[14px] text-slate-600 leading-relaxed">{item.answer}</dd>
+                  </div>
+                ))}
+              </dl>
+            </section>
+          )}
+
+          {/* Bottom CTA */}
+          {typedPost.category && (
+            <div className="mt-12 bg-slate-50 border border-slate-200 rounded-xl p-8">
+              <p className="text-[12px] font-medium text-slate-400 tracking-wide uppercase mb-2">
+                {categoryLabel} 업체 탐색
+              </p>
+              <h3 className="text-[20px] font-bold text-[#0F172A] mt-2">
+                관련 업체를 지금 바로 찾아보세요
+              </h3>
+              <p className="text-[14px] text-slate-500 mt-2">
+                Packlinx에서 검증된 {categoryLabel} 전문 업체를 한눈에 비교하세요.
+              </p>
+              <Link
+                href={`/categories/${typedPost.category}`}
+                className="inline-block mt-4 bg-[#C2410C] hover:bg-[#9A3412] text-white text-[14px] font-semibold px-5 py-2.5 rounded-lg transition-colors"
+              >
+                관련 업체 찾기 →
+              </Link>
+            </div>
+          )}
+
+          {/* Related Guides */}
+          {relatedGuides && relatedGuides.length > 0 && (
+            <section className="mt-12 pb-8">
+              <h3 className="text-[18px] font-bold text-[#0F172A] mb-4">관련 가이드</h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {(relatedGuides as Pick<BlogPost, 'id' | 'slug' | 'title' | 'excerpt' | 'category' | 'published_at'>[]).map((related) => {
+                  const relCat = related.category as IndustryCategory | null
+                  const relBarColor = relCat ? GUIDE_CATEGORY_COLORS[relCat] : '#E2E8F0'
+                  const relBadge = relCat ? CATEGORY_BADGE_STYLES[relCat] : null
+                  return (
+                    <Link
+                      key={related.id}
+                      href={`/guides/${related.slug}`}
+                      className="group block bg-white border border-slate-200 rounded-xl overflow-hidden hover:border-slate-300 hover:shadow-[0_4px_16px_rgba(0,0,0,0.08)] transition-all duration-200"
+                    >
+                      <div style={{ height: 3, background: relBarColor }} />
+                      <div className="p-4">
+                        <div className="flex items-center justify-between">
+                          {relCat && relBadge && (
+                            <span
+                              className="text-[11px] font-medium px-1.5 py-0.5 rounded"
+                              style={{ color: relBadge.color, background: relBadge.bg }}
+                            >
+                              {INDUSTRY_CATEGORY_LABELS[relCat]}
+                            </span>
+                          )}
+                          {related.published_at && (
+                            <span className="text-[11px] text-slate-400">{formatDate(related.published_at)}</span>
+                          )}
+                        </div>
+                        <h4 className="text-[14px] font-bold text-[#0F172A] leading-snug mt-2 line-clamp-2">
+                          {related.title}
+                        </h4>
+                        {related.excerpt && (
+                          <p className="text-[13px] text-slate-500 mt-1 line-clamp-2">{related.excerpt}</p>
+                        )}
+                      </div>
+                    </Link>
+                  )
+                })}
+              </div>
+            </section>
+          )}
+        </main>
+
+        {/* Desktop TOC sidebar */}
+        <aside className="hidden lg:block" style={{ paddingTop: 80 }}>
+          <GuideTocDesktop items={tocItems} />
+        </aside>
       </div>
 
-      {/* Article */}
-      <article className="max-w-3xl mx-auto px-5 sm:px-8 py-10">
-        {/* Meta */}
-        <div className="flex items-center gap-3 mb-4 flex-wrap">
-          {categoryLabel && (
-            <span className="text-[11px] font-semibold text-[#F97316] bg-[#FFF3E8] px-2.5 py-1 rounded-full">
-              {categoryLabel}
-            </span>
-          )}
-          <span className="text-[11px] font-semibold text-[#F97316] bg-[#FFF3E8] px-2.5 py-1 rounded-full">
-            심층 가이드
-          </span>
-          {typedPost.published_at && (
-            <time className="text-[12px] text-gray-400" dateTime={typedPost.published_at}>
-              {formatDate(typedPost.published_at)}
-            </time>
-          )}
-          {typedPost.author && (
-            <span className="text-[12px] text-gray-400">by {typedPost.author}</span>
-          )}
-        </div>
-
-        <h1 className="text-[28px] sm:text-[36px] font-extrabold text-gray-900 leading-[1.15] tracking-[-0.04em] mb-5">
-          {typedPost.title}
-        </h1>
-
-        {typedPost.excerpt && (
-          <p className="text-[17px] text-gray-500 leading-relaxed border-l-4 border-[#F97316] pl-4 mb-8 italic">
-            {typedPost.excerpt}
-          </p>
-        )}
-
-        {/* Cover Image */}
-        {typedPost.cover_image_url && (
-          <div className="relative w-full aspect-[16/9] rounded-xl overflow-hidden mb-8 bg-gray-100">
-            <Image
-              src={typedPost.cover_image_url}
-              alt={typedPost.title}
-              fill
-              className="object-cover"
-              sizes="(max-width: 768px) 100vw, 768px"
-              priority
-            />
-          </div>
-        )}
-
-        {/* Body */}
-        {contentHtml ? (
-          <div
-            className="prose prose-gray prose-lg max-w-none
-              prose-headings:font-extrabold prose-headings:tracking-tight
-              prose-h2:text-[22px] prose-h2:mt-10 prose-h2:mb-4
-              prose-h3:text-[18px] prose-h3:mt-8 prose-h3:mb-3
-              prose-p:text-[15px] prose-p:leading-[1.8] prose-p:text-gray-700
-              prose-a:text-[#F97316] prose-a:no-underline hover:prose-a:underline
-              prose-strong:text-gray-900
-              prose-li:text-[15px] prose-li:text-gray-700
-              prose-blockquote:border-l-4 prose-blockquote:border-[#F97316] prose-blockquote:bg-[#FFFAF5] prose-blockquote:py-1 prose-blockquote:rounded-r-lg"
-            dangerouslySetInnerHTML={{ __html: contentHtml }}
-          />
-        ) : (
-          <p className="text-gray-400 text-center py-12">본문 콘텐츠가 없습니다.</p>
-        )}
-
-        {/* FAQ Section */}
-        {faqItems && faqItems.length > 0 && (
-          <section className="mt-12 border-t border-gray-100 pt-10">
-            <h2 className="text-[20px] font-extrabold text-gray-900 tracking-tight mb-6">
-              자주 묻는 질문
-            </h2>
-            <dl className="space-y-5">
-              {faqItems.map((item, index) => (
-                <div key={index} className="border border-gray-200 rounded-xl p-5">
-                  <dt className="text-[15px] font-bold text-gray-900 mb-2">
-                    Q. {item.question}
-                  </dt>
-                  <dd className="text-[14px] text-gray-600 leading-relaxed">
-                    {item.answer}
-                  </dd>
-                </div>
-              ))}
-            </dl>
-          </section>
-        )}
-      </article>
-
-      {/* CTA — 관련 업체 찾기 */}
+      {/* Mid-page CTA (full-width, outside grid) */}
       {typedPost.category && (
-        <section className="bg-[#0F172A] py-12 px-5 mt-4">
-          <div className="max-w-3xl mx-auto text-center">
-            <p className="text-white/50 text-[12px] font-semibold uppercase tracking-widest mb-3">
-              {categoryLabel} 업체 탐색
-            </p>
-            <h2 className="text-[24px] sm:text-[30px] font-extrabold text-white tracking-tight mb-4">
-              관련 업체를 지금 바로 찾아보세요
-            </h2>
-            <p className="text-white/60 text-[14px] mb-7">
-              Packlinx에서 검증된 {categoryLabel} 전문 업체를 한눈에 비교하세요.
+        <div className="bg-[#0F172A] px-6 py-10 -mt-4">
+          <div className="max-w-[1120px] mx-auto">
+            <h3 className="text-[18px] font-bold text-white">
+              {categoryLabel} 공급업체, 한 번에 비교하세요
+            </h3>
+            <p className="text-[14px] text-slate-400 mt-2">
+              Packlinx에서 검증된 {categoryLabel} 전문 포장 업체를 한눈에 비교하세요.
             </p>
             <Link
               href={`/categories/${typedPost.category}`}
-              className="inline-flex items-center gap-2 bg-[#F97316] hover:bg-[#EA6B0A] text-white font-bold px-8 py-3.5 rounded-xl transition-colors text-[15px]"
+              className="inline-block mt-4 bg-[#C2410C] hover:bg-[#9A3412] text-white text-[14px] font-semibold px-6 py-2.5 rounded-lg transition-colors"
             >
-              관련 업체 찾기 &rarr;
+              업체 비교하기 →
             </Link>
           </div>
-        </section>
-      )}
-
-      {/* Related Guides */}
-      {relatedGuides && relatedGuides.length > 0 && (
-        <section className="max-w-7xl mx-auto px-5 sm:px-8 py-12">
-          <h2 className="text-[18px] font-extrabold text-gray-900 tracking-tight mb-6">
-            관련 가이드
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            {relatedGuides.map((related: Pick<BlogPost, 'id' | 'slug' | 'title' | 'excerpt' | 'cover_image_url' | 'published_at'>) => (
-              <article
-                key={related.id}
-                className="bg-white border border-gray-200 rounded-xl overflow-hidden hover:border-gray-300 hover:shadow-[0_4px_16px_rgba(0,0,0,0.06)] transition-all duration-200"
-              >
-                {related.cover_image_url ? (
-                  <div className="relative w-full aspect-[16/9] bg-gray-100">
-                    <Image
-                      src={related.cover_image_url}
-                      alt={related.title}
-                      fill
-                      className="object-cover"
-                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                    />
-                  </div>
-                ) : (
-                  <div className="w-full aspect-[16/9] bg-gradient-to-br from-[#FFF3E8] to-[#FFF8F3] flex items-center justify-center">
-                    <span className="text-3xl opacity-40">📚</span>
-                  </div>
-                )}
-                <div className="p-4">
-                  {related.published_at && (
-                    <p className="text-[11px] text-gray-400 mb-1.5">{formatDate(related.published_at)}</p>
-                  )}
-                  <h3 className="text-[14px] font-bold text-gray-900 leading-snug line-clamp-2 mb-1">
-                    <Link href={`/guides/${related.slug}`} className="hover:text-[#F97316] transition-colors">
-                      {related.title}
-                    </Link>
-                  </h3>
-                  {related.excerpt && (
-                    <p className="text-[12px] text-gray-500 line-clamp-2">{related.excerpt}</p>
-                  )}
-                </div>
-              </article>
-            ))}
-          </div>
-        </section>
+        </div>
       )}
 
       {/* Footer */}
-      <footer className="border-t border-gray-100 bg-white mt-auto py-8">
-        <div className="max-w-7xl mx-auto px-5 sm:px-8">
+      <footer className="border-t border-slate-100 bg-slate-50 py-8">
+        <div className="max-w-[1120px] mx-auto px-6">
           <div className="flex flex-wrap items-center justify-between gap-4">
-            <div className="flex flex-col gap-2">
-              <PacklinxLogo variant="light" layout="horizontal" />
-              <p className="text-[12px] text-gray-400 leading-relaxed">
-                &copy; 2026 PACKLINX. 본 서비스의 업체 정보는 공개된 출처에서 자동 수집되었습니다.<br className="hidden sm:inline" />
-                정보 오류·삭제 요청: privacy@pkging.kr
+            <div className="flex flex-col gap-1.5">
+              <PacklinxLogo variant="light" />
+              <p className="text-[12px] text-slate-400">
+                © 2026 PACKLINX. 본 서비스의 업체 정보는 공개된 출처에서 자동 수집되었습니다.
               </p>
             </div>
-            <div className="flex gap-5 text-[12px] text-gray-400">
-              <Link href="/guides" className="hover:text-gray-600 transition-colors">패키징 완전 가이드</Link>
-              <Link href="/privacy" className="hover:text-gray-600 transition-colors">개인정보처리방침</Link>
-              <Link href="/terms" className="hover:text-gray-600 transition-colors">이용약관</Link>
+            <div className="flex gap-4 text-[12px] text-slate-400">
+              <Link href="/guides" className="hover:text-slate-600 transition-colors">패키징 완전 가이드</Link>
+              <Link href="/privacy" className="hover:text-slate-600 transition-colors">개인정보처리방침</Link>
+              <Link href="/terms" className="hover:text-slate-600 transition-colors">이용약관</Link>
             </div>
           </div>
         </div>
       </footer>
+
+      {/* Guide body prose styles */}
+      <style>{`
+        .guide-body h2 {
+          font-size: 22px;
+          font-weight: 700;
+          color: #0F172A;
+          letter-spacing: -0.02em;
+          margin-top: 48px;
+          margin-bottom: 16px;
+          padding-bottom: 12px;
+          border-bottom: 1px solid #F1F5F9;
+        }
+        .guide-body h2:first-child { margin-top: 0; }
+        .guide-body h3 {
+          font-size: 17px;
+          font-weight: 600;
+          color: #1E293B;
+          margin-top: 32px;
+          margin-bottom: 12px;
+        }
+        .guide-body p {
+          font-size: 15px;
+          color: #334155;
+          line-height: 1.8;
+          margin-bottom: 16px;
+        }
+        .guide-body ul, .guide-body ol {
+          font-size: 15px;
+          color: #334155;
+          line-height: 1.8;
+          padding-left: 20px;
+          margin-bottom: 16px;
+        }
+        .guide-body li { margin-bottom: 6px; }
+        .guide-body li::marker { color: #94A3B8; }
+        .guide-body strong { color: #0F172A; font-weight: 600; }
+        .guide-body a { color: #C2410C; text-decoration: none; }
+        .guide-body a:hover { text-decoration: underline; }
+        .guide-body table {
+          width: 100%;
+          border-collapse: separate;
+          border-spacing: 0;
+          border: 1px solid #E2E8F0;
+          border-radius: 8px;
+          overflow: hidden;
+          margin: 24px 0;
+          font-size: 14px;
+        }
+        .guide-body th {
+          background: #F8FAFC;
+          font-size: 13px;
+          font-weight: 600;
+          color: #475569;
+          padding: 10px 16px;
+          text-align: left;
+          border-bottom: 1px solid #E2E8F0;
+        }
+        .guide-body td {
+          padding: 10px 16px;
+          color: #334155;
+          border-bottom: 1px solid #F1F5F9;
+        }
+        .guide-body tr:last-child td { border-bottom: none; }
+        .guide-body tr:nth-child(even) td { background: rgba(248,250,252,0.5); }
+        .guide-body blockquote {
+          margin: 24px 0;
+          background: #F8FAFC;
+          border-left: 3px solid #F97316;
+          border-radius: 0 8px 8px 0;
+          padding: 16px 20px;
+        }
+        .guide-body blockquote p {
+          font-size: 14px;
+          color: #334155;
+          line-height: 1.6;
+          margin: 0;
+        }
+        @media (max-width: 639px) {
+          .guide-body table { display: block; overflow-x: auto; }
+          .guide-body h2 { font-size: 20px; margin-top: 40px; }
+        }
+      `}</style>
     </div>
   )
 }

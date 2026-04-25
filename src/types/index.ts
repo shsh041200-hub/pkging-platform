@@ -436,9 +436,21 @@ export interface BlogPost {
   meta_title: string | null
   meta_description: string | null
   faq_items: FaqItem[] | null
+  target_audience: string[] | null
   published_at: string | null
   created_at: string
   updated_at: string
+}
+
+export const GUIDE_CATEGORY_COLORS: Record<IndustryCategory, string> = {
+  'food-beverage':           '#FBBF24',
+  'ecommerce-shipping':      '#F97316',
+  'cosmetics-beauty':        '#F472B6',
+  'pharma-health':           '#34D399',
+  'electronics-industrial':  '#94A3B8',
+  'eco-special':             '#22C55E',
+  'fresh_produce_packaging': '#A3E635',
+  'print_design_services':   '#A78BFA',
 }
 
 export interface Review {
