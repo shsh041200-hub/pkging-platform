@@ -78,7 +78,7 @@ export default function TermsPage() {
               요청할 수 있으며, 서비스는 요청 접수 후 10일 이내에 처리합니다.
             </p>
             <div className="bg-slate-100 rounded-lg p-3 text-sm">
-              <p>정보 수정·삭제 요청: privacy@pkging.kr</p>
+              <p>정보 수정·삭제 요청: rpdla041200@gmail.com</p>
             </div>
           </section>
 

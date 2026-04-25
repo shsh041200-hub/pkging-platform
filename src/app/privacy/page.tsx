@@ -136,7 +136,7 @@ export default function PrivacyPage() {
             <h2 className="text-base font-semibold text-slate-900 mb-3">제10조 (개인정보 보호책임자)</h2>
             <div className="bg-slate-100 rounded-lg p-4 text-sm">
               <p className="font-medium text-slate-800 mb-1">개인정보 보호책임자</p>
-              <p>이메일: privacy@pkging.kr</p>
+              <p>이메일: rpdla041200@gmail.com</p>
               <p className="text-xs text-slate-500 mt-1">
                 ※ 개인정보 관련 문의, 불만 처리, 피해 구제 등에 관한 사항은 위 연락처로 문의해 주시기 바랍니다.
               </p>

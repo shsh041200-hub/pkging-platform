@@ -712,7 +712,7 @@ export default async function CompanyPage({ params }: Props) {
           </p>
           <div className="mt-2">
             <a
-              href={`mailto:privacy@pkging.kr?subject=${encodeURIComponent('업체 정보 수정 요청: ' + company.name)}`}
+              href={`mailto:rpdla041200@gmail.com?subject=${encodeURIComponent('업체 정보 수정 요청: ' + company.name)}`}
               className="text-[12px] text-gray-400 hover:text-gray-600 underline underline-offset-2 transition-colors"
             >
               정보 수정 요청 →
@@ -729,7 +729,7 @@ export default async function CompanyPage({ params }: Props) {
               <PacklinxLogo variant="dark" layout="horizontal" />
               <p className="text-[12px] text-slate-400">
                 © 2026 PACKLINX. 업체 정보는 공개 출처에서 자동 수집되었습니다.
-                정보 오류·삭제 요청: privacy@pkging.kr
+                정보 오류·삭제 요청: rpdla041200@gmail.com
               </p>
             </div>
             <div className="flex gap-4 text-[12px] text-slate-400">

@@ -1038,7 +1038,7 @@ export default async function HomePage({
               <PacklinxLogo variant="dark" layout="horizontal" />
               <p className="text-[12px] text-slate-400 leading-relaxed">
                 © 2026 PACKLINX. 본 서비스의 업체 정보는 공개된 출처에서 자동 수집되었습니다.<br className="hidden sm:inline" />
-                정보 오류·삭제 요청: privacy@pkging.kr
+                정보 오류·삭제 요청: rpdla041200@gmail.com
               </p>
             </div>
             <div className="flex gap-5 text-[12px] text-slate-400">

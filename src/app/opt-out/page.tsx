@@ -34,8 +34,8 @@ export default function OptOutPage() {
         <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 mb-8 text-sm text-amber-800">
           <p className="font-medium mb-1">이메일로 직접 요청하실 수 있습니다</p>
           <p>
-            <a href="mailto:privacy@pkging.kr" className="underline font-medium">
-              privacy@pkging.kr
+            <a href="mailto:rpdla041200@gmail.com" className="underline font-medium">
+              rpdla041200@gmail.com
             </a>
             으로 업체명과 요청 내용을 보내주시면 동일하게 처리해 드립니다.
           </p>
