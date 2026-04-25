@@ -30,6 +30,7 @@ import { CompanyIcon } from '@/components/CompanyIcon'
 import { CertificationCTABanner } from '@/components/CertificationCTABanner'
 import { CertBadge } from '@/components/CertBadge'
 import { simplifyCompanyName } from '@/lib/simplify-company-name'
+import { SimilarOptoutToggle } from '@/components/SimilarOptoutToggle'
 
 type Props = {
   params: Promise<{ slug: string }>
@@ -627,21 +628,37 @@ export default async function CompanyPage({ params }: Props) {
         )}
 
         {/* Similar Companies — multi-signal similarity (KOR-530) */}
-        {similarCompanies.length > 0 && (
+        {/* Opted-out state: only the owner sees a re-enable prompt */}
+        {!!company.similar_optout_at && isOwner && (
+          <SimilarOptoutToggle
+            companyId={company.id}
+            initialOptedOut={true}
+          />
+        )}
+        {/* Normal section: hidden when opted out */}
+        {!company.similar_optout_at && similarCompanies.length > 0 && (
           <div className="bg-white border border-gray-200 rounded-xl p-5">
             <div className="mb-4">
               <div className="flex items-center justify-between">
                 <h2 className="text-[14px] font-semibold text-gray-800">
                   비슷한 업체
                 </h2>
-                {industryCats[0] && (
-                  <Link
-                    href={`/categories/${industryCats[0]}`}
-                    className="text-[12px] text-[#2563EB] hover:text-[#1D4ED8] font-medium transition-colors"
-                  >
-                    전체 보기 →
-                  </Link>
-                )}
+                <div className="flex items-center gap-3">
+                  {isOwner && (
+                    <SimilarOptoutToggle
+                      companyId={company.id}
+                      initialOptedOut={false}
+                    />
+                  )}
+                  {industryCats[0] && (
+                    <Link
+                      href={`/categories/${industryCats[0]}`}
+                      className="text-[12px] text-[#2563EB] hover:text-[#1D4ED8] font-medium transition-colors"
+                    >
+                      전체 보기 →
+                    </Link>
+                  )}
+                </div>
               </div>
               <p className="text-[11px] text-gray-400 mt-1">
                 ※ 같은 산업카테고리 기준 자동 노출이며, Packlinx의 추천·인증·보증을 의미하지 않습니다.
