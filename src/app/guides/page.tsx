@@ -298,6 +298,7 @@ export default async function GuidesListPage() {
               <Link href="/guides" className="hover:text-slate-200 transition-colors">패키징 완전 가이드</Link>
               <Link href="/privacy" className="hover:text-slate-200 transition-colors">개인정보처리방침</Link>
               <Link href="/terms" className="hover:text-slate-200 transition-colors">이용약관</Link>
+              <Link href="/opt-out?type=takedown" className="hover:text-slate-200 transition-colors">권리침해 신고</Link>
             </div>
           </div>
         </div>

@@ -72,9 +72,16 @@ export default function PrivacyPage() {
               수집된 사업자 정보는 서비스 제공 기간 동안 보유하며, 정보 주체가 삭제·정정을 요청하거나
               수집 목적이 달성된 경우 지체 없이 삭제합니다.
             </p>
-            <p>
+            <p className="mb-2">
               단, 관련 법령에 따라 일정 기간 보존이 필요한 경우 해당 기간 동안 보관합니다.
             </p>
+            <div className="bg-slate-100 rounded-lg p-3 text-sm">
+              <p className="font-medium text-slate-800 mb-1">권리침해 신고 처리 기록</p>
+              <p className="text-slate-600">
+                「정보통신망법」 제44조의2에 따른 권리침해 임시조치 신청 내용(신청인 정보, 신고 대상 URL,
+                처리 결과)은 <strong>3년간</strong> 보관 후 파기합니다. 이는 분쟁 해결 및 법령 의무 이행 목적입니다.
+              </p>
+            </div>
           </section>
 
           <section>
@@ -169,6 +176,7 @@ export default function PrivacyPage() {
           <Link href="/privacy" className="hover:text-slate-600 font-medium text-slate-600">개인정보처리방침</Link>
           <Link href="/terms" className="hover:text-slate-600">이용약관</Link>
           <Link href="/opt-out" className="hover:text-slate-600">정보 삭제·수정 요청</Link>
+          <Link href="/opt-out?type=takedown" className="hover:text-slate-600">권리침해 신고</Link>
         </div>
       </footer>
     </div>

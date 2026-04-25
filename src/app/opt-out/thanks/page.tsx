@@ -45,6 +45,7 @@ export default function OptOutThanksPage() {
           <Link href="/privacy" className="hover:text-slate-600">개인정보처리방침</Link>
           <Link href="/terms" className="hover:text-slate-600">이용약관</Link>
           <Link href="/opt-out" className="hover:text-slate-600">정보 삭제·수정 요청</Link>
+          <Link href="/opt-out?type=takedown" className="hover:text-slate-600">권리침해 신고</Link>
         </div>
       </footer>
     </div>

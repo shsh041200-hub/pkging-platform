@@ -139,7 +139,30 @@ export default function TermsPage() {
           </section>
 
           <section>
-            <h2 className="text-base font-semibold text-slate-900 mb-3">제10조 (분쟁 해결)</h2>
+            <h2 className="text-base font-semibold text-slate-900 mb-3">제10조 (권리침해 신고 및 임시조치)</h2>
+            <p className="mb-2">
+              ① 서비스에 게재된 정보로 인하여 권리가 침해된 자는 「정보통신망 이용촉진 및 정보보호
+              등에 관한 법률」 제44조의2에 따라 임시조치를 요청할 수 있습니다.
+            </p>
+            <p className="mb-2">
+              ② 임시조치 신청은 아래 방법으로 할 수 있습니다.
+            </p>
+            <div className="bg-slate-100 rounded-lg p-3 text-sm space-y-1 mb-2">
+              <p>• 온라인 신청: <a href="/opt-out?type=takedown" className="underline text-slate-700 hover:text-slate-900">packlinx.com/opt-out?type=takedown</a></p>
+              <p>• 이메일 신청: legal@pkging.kr (신고 대상 URL, 권리침해 사유, 권리 입증 자료 첨부)</p>
+            </div>
+            <p className="mb-2">
+              ③ 서비스는 신청 접수 후 10영업일 이내에 해당 정보의 임시조치(접근 차단) 여부를
+              결정하고 결과를 신청인에게 통지합니다.
+            </p>
+            <p>
+              ④ 임시조치된 정보는 30일간 접근이 제한되며, 그 기간 내에 당사자 간 합의 또는
+              법원의 결정이 없으면 서비스는 해당 정보를 복원할 수 있습니다.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="text-base font-semibold text-slate-900 mb-3">제11조 (분쟁 해결)</h2>
             <p>
               이 약관에 관한 분쟁은 대한민국 법을 적용하며, 분쟁이 발생한 경우 서비스 운영자의
               소재지를 관할하는 법원을 전속 관할 법원으로 합니다.
@@ -155,6 +178,7 @@ export default function TermsPage() {
           <Link href="/privacy" className="hover:text-slate-600">개인정보처리방침</Link>
           <Link href="/terms" className="hover:text-slate-600 font-medium text-slate-600">이용약관</Link>
           <Link href="/opt-out" className="hover:text-slate-600">정보 삭제·수정 요청</Link>
+          <Link href="/opt-out?type=takedown" className="hover:text-slate-600">권리침해 신고</Link>
         </div>
       </footer>
     </div>
