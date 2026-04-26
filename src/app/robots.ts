@@ -40,6 +40,10 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ['/'],
       },
       {
+        userAgent: 'GoogleOther',
+        disallow: ['/'],
+      },
+      {
         userAgent: '*',
         allow: '/',
         disallow: ['/api/', '/opt-out/'],

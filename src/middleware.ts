@@ -1,6 +1,6 @@
 import { type NextRequest, NextResponse } from 'next/server'
 
-const BLOCKED_BOT_RE = /facebookexternalhit|Facebot|Meta-ExternalAgent|Meta-ExternalFetcher|GPTBot|ChatGPT-User/i
+const BLOCKED_BOT_RE = /facebookexternalhit|Facebot|Meta-ExternalAgent|Meta-ExternalFetcher|GPTBot|ChatGPT-User|GoogleOther/i
 
 export async function middleware(request: NextRequest) {
   const ua = request.headers.get('user-agent') ?? ''
