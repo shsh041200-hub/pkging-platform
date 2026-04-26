@@ -16,6 +16,22 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ['/api/', '/opt-out/'],
       },
       {
+        userAgent: 'Meta-ExternalAgent',
+        disallow: ['/'],
+      },
+      {
+        userAgent: 'Meta-ExternalFetcher',
+        disallow: ['/'],
+      },
+      {
+        userAgent: 'facebookexternalhit',
+        disallow: ['/'],
+      },
+      {
+        userAgent: 'Facebot',
+        disallow: ['/'],
+      },
+      {
         userAgent: '*',
         allow: '/',
         disallow: ['/api/', '/opt-out/'],
