@@ -1,11 +1,14 @@
 import type { Metadata } from 'next'
 import localFont from 'next/font/local'
 import { Suspense } from 'react'
+import Script from 'next/script'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 import { AnalyticsProvider } from '@/components/AnalyticsProvider'
 import { PageViewTracker } from '@/components/PageViewTracker'
 import { TermsNoticeBanner } from '@/components/TermsNoticeBanner'
 import './globals.css'
+
+const GA_MEASUREMENT_ID = 'G-86MD7T3881'
 
 const pretendard = localFont({
   src: '../../public/fonts/PretendardVariable.woff2',
@@ -75,6 +78,19 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {children}
         <SpeedInsights />
         <AnalyticsProvider />
+        {/* Google Analytics 4 */}
+        <Script
+          src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
+          strategy="afterInteractive"
+        />
+        <Script id="ga4-init" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '${GA_MEASUREMENT_ID}');
+          `}
+        </Script>
       </body>
     </html>
   )
