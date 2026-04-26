@@ -32,6 +32,14 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ['/'],
       },
       {
+        userAgent: 'GPTBot',
+        disallow: ['/'],
+      },
+      {
+        userAgent: 'ChatGPT-User',
+        disallow: ['/'],
+      },
+      {
         userAgent: '*',
         allow: '/',
         disallow: ['/api/', '/opt-out/'],

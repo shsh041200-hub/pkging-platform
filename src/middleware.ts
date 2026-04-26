@@ -1,10 +1,10 @@
 import { type NextRequest, NextResponse } from 'next/server'
 
-const META_BOT_RE = /facebookexternalhit|Facebot|Meta-ExternalAgent|Meta-ExternalFetcher/i
+const BLOCKED_BOT_RE = /facebookexternalhit|Facebot|Meta-ExternalAgent|Meta-ExternalFetcher|GPTBot|ChatGPT-User/i
 
 export async function middleware(request: NextRequest) {
   const ua = request.headers.get('user-agent') ?? ''
-  if (META_BOT_RE.test(ua)) {
+  if (BLOCKED_BOT_RE.test(ua)) {
     return new NextResponse('Blocked', { status: 403 })
   }
 
