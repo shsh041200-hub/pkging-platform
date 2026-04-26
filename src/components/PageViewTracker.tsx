@@ -1,16 +1,21 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
+import { usePathname } from 'next/navigation'
 import { captureUTMFromURL } from '@/lib/utm'
 import { useTrackEvent } from '@/hooks/useTrackEvent'
 
 export function PageViewTracker() {
   const { track } = useTrackEvent()
+  const pathname = usePathname()
+  const lastTrackedPath = useRef<string | null>(null)
 
   useEffect(() => {
     captureUTMFromURL()
-    track('page_view', undefined, { path: window.location.pathname })
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+    if (pathname === lastTrackedPath.current) return
+    lastTrackedPath.current = pathname
+    track('page_view', undefined, { path: pathname })
+  }, [pathname]) // eslint-disable-line react-hooks/exhaustive-deps
 
   return null
 }
