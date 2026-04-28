@@ -208,19 +208,28 @@ export function CategoryFilterBar({
     [searchParams, pathname, router],
   )
 
-  const toggleSample = () => {
+  const currentEco = searchParams.get('eco') === 'true'
+  const currentFresh = searchParams.get('fresh') === 'true'
+
+  const toggleBoolean = (key: string, current: boolean) => {
     const params = new URLSearchParams(searchParams.toString())
     params.delete('page')
-    if (currentSample) params.delete('sample')
-    else params.set('sample', 'true')
+    if (current) params.delete(key)
+    else params.set(key, 'true')
     router.push(`${pathname}${params.toString() ? `?${params}` : ''}`)
   }
+
+  const toggleSample = () => toggleBoolean('sample', currentSample)
+  const toggleEco = () => toggleBoolean('eco', currentEco)
+  const toggleFresh = () => toggleBoolean('fresh', currentFresh)
 
   const totalActiveCount =
     (isPrintDesign ? currentSubtype.length : currentMaterials.length + currentForms.length) +
     currentCerts.length +
     currentUseCase.length +
-    (currentSample ? 1 : 0)
+    (currentSample ? 1 : 0) +
+    (currentEco ? 1 : 0) +
+    (currentFresh ? 1 : 0)
 
   const materialOptions: DropdownOption[] = MATERIAL_TYPES.map((m) => ({
     value: m,
@@ -321,6 +330,28 @@ export function CategoryFilterBar({
               }`}
             >
               샘플 가능
+            </button>
+
+            <button
+              onClick={toggleEco}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-sm font-medium transition-colors ${
+                currentEco
+                  ? 'border-green-700 text-green-700 bg-green-50'
+                  : 'border-slate-300 text-slate-700 bg-white hover:border-slate-400'
+              }`}
+            >
+              친환경
+            </button>
+
+            <button
+              onClick={toggleFresh}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-sm font-medium transition-colors ${
+                currentFresh
+                  ? 'border-sky-700 text-sky-700 bg-sky-50'
+                  : 'border-slate-300 text-slate-700 bg-white hover:border-slate-400'
+              }`}
+            >
+              신선·콜드체인
             </button>
 
             <div className="ml-auto flex items-center gap-3">

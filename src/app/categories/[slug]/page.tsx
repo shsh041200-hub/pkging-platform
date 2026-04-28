@@ -86,7 +86,7 @@ export function generateStaticParams() {
 
 type Props = {
   params: Promise<{ slug: string }>
-  searchParams: Promise<{ material?: string; form?: string; cert?: string; 'use-case'?: string; sort?: string; sample?: string; page?: string }>
+  searchParams: Promise<{ material?: string; form?: string; cert?: string; 'use-case'?: string; sort?: string; sample?: string; eco?: string; fresh?: string; page?: string }>
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -113,7 +113,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function CategoryPage({ params, searchParams }: Props) {
   const { slug } = await params
   const sp = await searchParams
-  const { material, form, cert, sort, sample } = sp
+  const { material, form, cert, sort, sample, eco, fresh } = sp
   const useCaseParam = sp['use-case']
   const currentPage = Math.max(1, parseInt(sp.page ?? '1', 10))
   const categoryKey = slugToCategory(slug)
@@ -145,6 +145,8 @@ export default async function CategoryPage({ params, searchParams }: Props) {
     if (useCaseParam) p.set('use-case', useCaseParam)
     if (sort) p.set('sort', sort)
     if (sample) p.set('sample', sample)
+    if (eco) p.set('eco', eco)
+    if (fresh) p.set('fresh', fresh)
     if (page > 1) p.set('page', String(page))
     return `/categories/${slug}${p.toString() ? `?${p}` : ''}`
   }
@@ -187,6 +189,8 @@ export default async function CategoryPage({ params, searchParams }: Props) {
     query = query.contains('use_case_tags', [selectedUseCase])
   }
   if (sample === 'true') query = query.eq('sample_available', true)
+  if (eco === 'true') query = query.eq('is_eco', true)
+  if (fresh === 'true') query = query.eq('is_cold_chain', true)
 
   if (sort === 'name_asc') {
     query = query.order('name', { ascending: true })
@@ -218,7 +222,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
     .order('published_at', { ascending: false })
     .limit(3)
 
-  const hasFilters = selectedMaterials.length > 0 || selectedForms.length > 0 || selectedCerts.length > 0 || !!selectedUseCase || sample === 'true'
+  const hasFilters = selectedMaterials.length > 0 || selectedForms.length > 0 || selectedCerts.length > 0 || !!selectedUseCase || sample === 'true' || eco === 'true' || fresh === 'true'
   const heroCount = hasFilters ? filteredCount : totalInCategory
 
   const breadcrumbJsonLd = {

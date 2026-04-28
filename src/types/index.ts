@@ -384,6 +384,9 @@ export interface Company {
   phone: string | null
   email: string | null
   use_case_tags?: string[]
+  is_eco: boolean
+  is_print_design_service: boolean
+  is_cold_chain: boolean
   created_at: string
   updated_at: string
 }

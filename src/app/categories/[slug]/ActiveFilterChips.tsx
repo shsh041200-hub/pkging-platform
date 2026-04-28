@@ -45,11 +45,13 @@ export function ActiveFilterChips({ isPrintDesign, useCaseTags }: ActiveFilterCh
   const certs = searchParams.get('cert')?.split(',').filter(Boolean) ?? []
   const useCase = searchParams.get('use-case')
   const sample = searchParams.get('sample') === 'true'
+  const eco = searchParams.get('eco') === 'true'
+  const fresh = searchParams.get('fresh') === 'true'
   const subtype = searchParams.get('subtype')
 
   const hasFilters = isPrintDesign
-    ? !!subtype || certs.length > 0 || !!useCase || sample
-    : materials.length > 0 || forms.length > 0 || certs.length > 0 || !!useCase || sample
+    ? !!subtype || certs.length > 0 || !!useCase || sample || eco || fresh
+    : materials.length > 0 || forms.length > 0 || certs.length > 0 || !!useCase || sample || eco || fresh
 
   if (!hasFilters) return null
 
@@ -137,6 +139,20 @@ export function ActiveFilterChips({ isPrintDesign, useCaseTags }: ActiveFilterCh
         {sample && (
           <button onClick={() => removeParam('sample')} className={chipClass}>
             샘플 가능
+            <CloseIcon />
+          </button>
+        )}
+
+        {eco && (
+          <button onClick={() => removeParam('eco')} className={chipClass}>
+            친환경
+            <CloseIcon />
+          </button>
+        )}
+
+        {fresh && (
+          <button onClick={() => removeParam('fresh')} className={chipClass}>
+            신선·콜드체인
             <CloseIcon />
           </button>
         )}

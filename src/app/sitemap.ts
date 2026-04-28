@@ -1,6 +1,8 @@
 import { MetadataRoute } from 'next'
 import { createClient } from '@/lib/supabase/server'
 import { INDUSTRY_CATEGORIES } from '@/types'
+import { PRODUCT_SLUGS } from '@/data/productGuide'
+import { SERVICE_SLUGS } from '@/data/serviceGuide'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://packlinx.com'
@@ -33,6 +35,20 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.8,
   }))
 
+  const productUrls: MetadataRoute.Sitemap = PRODUCT_SLUGS.map((slug) => ({
+    url: `${baseUrl}/products/${slug}`,
+    lastModified: new Date(),
+    changeFrequency: 'weekly' as const,
+    priority: 0.7,
+  }))
+
+  const serviceUrls: MetadataRoute.Sitemap = SERVICE_SLUGS.map((slug) => ({
+    url: `${baseUrl}/services/${slug}`,
+    lastModified: new Date(),
+    changeFrequency: 'weekly' as const,
+    priority: 0.7,
+  }))
+
   const guideUrls: MetadataRoute.Sitemap = (guidePosts ?? []).map((p) => ({
     url: `${baseUrl}/guides/${p.slug}`,
     lastModified: p.published_at,
@@ -44,6 +60,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: baseUrl, lastModified: new Date(), changeFrequency: 'daily', priority: 1 },
     { url: `${baseUrl}/guides`, lastModified: new Date(), changeFrequency: 'daily', priority: 0.7 },
     ...categoryUrls,
+    ...productUrls,
+    ...serviceUrls,
     ...companyUrls,
     ...guideUrls,
   ]
