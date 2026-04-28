@@ -12,12 +12,10 @@ import {
   MATERIAL_TYPES,
   MATERIAL_TYPE_LABELS,
   PACKAGING_FORMS,
-  PRINT_DESIGN_SUBTYPES,
   CERTIFICATION_TYPES,
   type IndustryCategory,
   type MaterialType,
   type PackagingForm,
-  type PrintDesignSubtype,
   type BlogPost,
   type UseCaseTag,
 } from '@/types'
@@ -42,9 +40,6 @@ const CATEGORY_SEO_TITLE: Record<IndustryCategory, string> = {
   'cosmetics-beauty':        '화장품 포장 업체 찾기 — 뷰티 브랜드 포장재 전문',
   'pharma-health':           '의약품·건강기능식품 포장 업체 — 전국 의약 포장재',
   'electronics-industrial':  '전자·산업용 포장 업체 — 보호 포장재 전문',
-  'eco-special':             '친환경 포장재 업체 찾기 — FSC·생분해 포장 전문',
-  'fresh_produce_packaging': '농산물·신선 포장 업체 찾기 — packlinx',
-  'print_design_services':   '인쇄·디자인 서비스 업체 찾기 — packlinx',
 }
 
 const CATEGORY_SEO_DESCRIPTION: Record<IndustryCategory, string> = {
@@ -58,12 +53,6 @@ const CATEGORY_SEO_DESCRIPTION: Record<IndustryCategory, string> = {
     '의약품, 건강기능식품 포장 업체를 비교하세요. GMP 인증 의약 포장재 전문 업체를 찾아보세요.',
   'electronics-industrial':
     '전자제품, 부품, 산업재 보호 포장 업체를 비교하세요. 완충·정전기방지 포장재 전문 업체를 Packlinx에서 찾아보세요.',
-  'eco-special':
-    'FSC·생분해 인증 친환경 포장재 업체 41개를 비교하세요. 재활용·OK Compost 인증 B2B 포장재 공급업체 Packlinx.',
-  'fresh_produce_packaging':
-    '신선식품·농산물 포장 전문 업체를 찾으시나요? 콜드체인, 냉장·냉동 포장재, CA/MAP 포장 업체를 packlinx.com에서 한 번에 비교하세요.',
-  'print_design_services':
-    '소량 주문 가능한 인쇄·패키지 디자인 업체를 찾으시나요? 박스 디자인, 라벨 인쇄, 맞춤 포장 전문 업체를 packlinx.com에서 바로 비교하세요.',
 }
 
 const CATEGORY_H1_OVERRIDE: Partial<Record<IndustryCategory, string>> = {
@@ -73,28 +62,18 @@ const CATEGORY_H1_OVERRIDE: Partial<Record<IndustryCategory, string>> = {
 const HIDE_ICON_CATEGORIES = new Set<IndustryCategory>([
   'ecommerce-shipping',
   'cosmetics-beauty',
-  'eco-special',
 ])
 
-const CATEGORY_OG_TITLE: Partial<Record<IndustryCategory, string>> = {
-  'fresh_produce_packaging': '농산물·신선 포장 전문 업체 — packlinx',
-  'print_design_services':   '인쇄·디자인 서비스 전문 업체 — packlinx',
-}
+const CATEGORY_OG_TITLE: Partial<Record<IndustryCategory, string>> = {}
 
-const CATEGORY_OG_DESCRIPTION: Partial<Record<IndustryCategory, string>> = {
-  'fresh_produce_packaging': '신선도 유지·콜드체인 포장재 공급업체를 빠르게 비교하세요. 국내 신선 포장 전문 업체 목록.',
-  'print_design_services':   '소량 맞춤 인쇄부터 패키지 디자인까지. 스타트업·소규모 발주에 특화된 인쇄·디자인 업체 목록.',
-}
+const CATEGORY_OG_DESCRIPTION: Partial<Record<IndustryCategory, string>> = {}
 
 const RELATED_CATEGORIES: Record<IndustryCategory, IndustryCategory[]> = {
-  'food-beverage':           ['fresh_produce_packaging', 'eco-special', 'pharma-health'],
-  'ecommerce-shipping':      ['eco-special', 'print_design_services', 'electronics-industrial'],
-  'cosmetics-beauty':        ['pharma-health', 'eco-special', 'print_design_services'],
-  'pharma-health':           ['cosmetics-beauty', 'food-beverage', 'eco-special'],
-  'electronics-industrial':  ['ecommerce-shipping', 'eco-special'],
-  'eco-special':             ['food-beverage', 'ecommerce-shipping', 'fresh_produce_packaging'],
-  'fresh_produce_packaging': ['food-beverage', 'eco-special', 'ecommerce-shipping'],
-  'print_design_services':   ['cosmetics-beauty', 'ecommerce-shipping', 'food-beverage'],
+  'food-beverage':           ['pharma-health', 'ecommerce-shipping', 'cosmetics-beauty'],
+  'ecommerce-shipping':      ['electronics-industrial', 'food-beverage', 'cosmetics-beauty'],
+  'cosmetics-beauty':        ['pharma-health', 'food-beverage', 'ecommerce-shipping'],
+  'pharma-health':           ['cosmetics-beauty', 'food-beverage', 'electronics-industrial'],
+  'electronics-industrial':  ['ecommerce-shipping', 'food-beverage', 'pharma-health'],
 }
 
 function slugToCategory(slug: string): IndustryCategory | undefined {
@@ -107,7 +86,7 @@ export function generateStaticParams() {
 
 type Props = {
   params: Promise<{ slug: string }>
-  searchParams: Promise<{ material?: string; form?: string; cert?: string; 'use-case'?: string; sort?: string; sample?: string; page?: string; subtype?: string }>
+  searchParams: Promise<{ material?: string; form?: string; cert?: string; 'use-case'?: string; sort?: string; sample?: string; page?: string }>
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -140,21 +119,15 @@ export default async function CategoryPage({ params, searchParams }: Props) {
   const categoryKey = slugToCategory(slug)
   if (!categoryKey) notFound()
 
-  const isPrintDesign = categoryKey === 'print_design_services'
-
   const label = INDUSTRY_CATEGORY_LABELS[categoryKey]
   const description = INDUSTRY_CATEGORY_DESCRIPTIONS[categoryKey]
   const icon = INDUSTRY_CATEGORY_ICONS[categoryKey]
 
-  const selectedSubtype: PrintDesignSubtype | null = isPrintDesign && sp.subtype
-    ? (PRINT_DESIGN_SUBTYPES.includes(sp.subtype as PrintDesignSubtype) ? sp.subtype as PrintDesignSubtype : null)
-    : null
-
-  const selectedMaterials: MaterialType[] = !isPrintDesign && material
+  const selectedMaterials: MaterialType[] = material
     ? (material.split(',').filter((m): m is MaterialType => MATERIAL_TYPES.includes(m as MaterialType)))
     : []
 
-  const selectedForms: PackagingForm[] = !isPrintDesign && form
+  const selectedForms: PackagingForm[] = form
     ? (form.split(',').filter((f): f is PackagingForm => PACKAGING_FORMS.includes(f as PackagingForm)))
     : []
 
@@ -166,9 +139,8 @@ export default async function CategoryPage({ params, searchParams }: Props) {
 
   const buildPageUrl = (page: number): string => {
     const p = new URLSearchParams()
-    if (!isPrintDesign && material) p.set('material', material)
-    if (!isPrintDesign && form) p.set('form', form)
-    if (isPrintDesign && selectedSubtype) p.set('subtype', selectedSubtype)
+    if (material) p.set('material', material)
+    if (form) p.set('form', form)
     if (cert) p.set('cert', cert)
     if (useCaseParam) p.set('use-case', useCaseParam)
     if (sort) p.set('sort', sort)
@@ -193,19 +165,15 @@ export default async function CategoryPage({ params, searchParams }: Props) {
     .select('id, slug, name, description, category, industry_categories, material_type, packaging_form, tags, is_verified, products, certifications, founded_year, website, icon_url, service_capabilities, target_industries, sample_available', { count: 'exact' })
     .contains('industry_categories', [categoryKey])
 
-  if (isPrintDesign) {
-    if (selectedSubtype) query = query.eq('subcategory', selectedSubtype)
-  } else {
-    if (selectedMaterials.length === 1) {
-      query = query.eq('material_type', selectedMaterials[0])
-    } else if (selectedMaterials.length > 1) {
-      query = query.in('material_type', selectedMaterials)
-    }
-    if (selectedForms.length === 1) {
-      query = query.eq('packaging_form', selectedForms[0])
-    } else if (selectedForms.length > 1) {
-      query = query.in('packaging_form', selectedForms)
-    }
+  if (selectedMaterials.length === 1) {
+    query = query.eq('material_type', selectedMaterials[0])
+  } else if (selectedMaterials.length > 1) {
+    query = query.in('material_type', selectedMaterials)
+  }
+  if (selectedForms.length === 1) {
+    query = query.eq('packaging_form', selectedForms[0])
+  } else if (selectedForms.length > 1) {
+    query = query.in('packaging_form', selectedForms)
   }
   if (selectedCerts.length > 0) {
     // Expand canonical IDs to all known aliases so stored values like 'HACCP 인증' match 'haccp'
@@ -250,9 +218,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
     .order('published_at', { ascending: false })
     .limit(3)
 
-  const hasFilters = isPrintDesign
-    ? (!!selectedSubtype || selectedCerts.length > 0 || !!selectedUseCase || sample === 'true')
-    : (selectedMaterials.length > 0 || selectedForms.length > 0 || selectedCerts.length > 0 || !!selectedUseCase || sample === 'true')
+  const hasFilters = selectedMaterials.length > 0 || selectedForms.length > 0 || selectedCerts.length > 0 || !!selectedUseCase || sample === 'true'
   const heroCount = hasFilters ? filteredCount : totalInCategory
 
   const breadcrumbJsonLd = {
@@ -324,14 +290,14 @@ export default async function CategoryPage({ params, searchParams }: Props) {
       {/* Dropdown filter bar (desktop) + mobile filter button */}
       <CategoryFilterBar
         categorySlug={slug}
-        isPrintDesign={isPrintDesign}
+        isPrintDesign={false}
         resultCount={filteredCount ?? 0}
         useCaseTags={useCaseTagList}
       />
 
       {/* Active filter chips row */}
       <ActiveFilterChips
-        isPrintDesign={isPrintDesign}
+        isPrintDesign={false}
         useCaseTags={useCaseTagList}
       />
 

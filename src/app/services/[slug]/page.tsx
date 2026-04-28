@@ -97,7 +97,7 @@ export default async function ServicePage({ params, searchParams }: Props) {
   let query = supabase
     .from('companies')
     .select('id, slug, name, description, category, industry_categories, material_type, packaging_form, tags, is_verified, products, certifications, founded_year, website, icon_url, service_capabilities, target_industries, sample_available, subcategory', { count: 'exact' })
-    .contains('industry_categories', ['print_design_services'])
+    .eq('is_print_design_service', true)
 
   if (selectedSubtype) query = query.eq('subcategory', selectedSubtype)
   if (selectedCerts.length > 0) {
@@ -128,7 +128,7 @@ export default async function ServicePage({ params, searchParams }: Props) {
   const { count: totalInService } = await supabase
     .from('companies')
     .select('*', { count: 'exact', head: true })
-    .contains('industry_categories', ['print_design_services'])
+    .eq('is_print_design_service', true)
 
   const hasFilters = !!selectedSubtype || selectedCerts.length > 0 || sample === 'true'
   const heroCount = hasFilters ? filteredCount : totalInService

@@ -21,6 +21,25 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  async redirects() {
+    return [
+      {
+        source: '/categories/eco-special',
+        destination: '/categories?eco=true',
+        permanent: true,
+      },
+      {
+        source: '/categories/fresh_produce_packaging',
+        destination: '/categories/food-beverage?fresh=true',
+        permanent: true,
+      },
+      {
+        source: '/categories/print_design_services',
+        destination: '/services/printing-design',
+        permanent: true,
+      },
+    ];
+  },
   async headers() {
     return [
       {

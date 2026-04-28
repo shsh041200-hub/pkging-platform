@@ -50,9 +50,6 @@ const CATEGORY_BADGE_STYLES: Record<IndustryCategory, { color: string; bg: strin
   'cosmetics-beauty':        { color: '#BE185D', bg: '#FDF2F8' },
   'pharma-health':           { color: '#047857', bg: '#ECFDF5' },
   'electronics-industrial':  { color: '#334155', bg: '#F1F5F9' },
-  'eco-special':             { color: '#15803D', bg: '#F0FDF4' },
-  'fresh_produce_packaging': { color: '#3F6212', bg: '#F7FEE7' },
-  'print_design_services':   { color: '#5B21B6', bg: '#F5F3FF' },
 }
 
 function formatDate(dateStr: string): string {

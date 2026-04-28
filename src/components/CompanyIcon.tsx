@@ -20,7 +20,6 @@ const CATEGORY_COLORS: Record<string, FallbackStyle> = {
   'cosmetics-beauty':       { bg: 'bg-rose-50',    text: 'text-rose-600' },
   'pharma-health':          { bg: 'bg-purple-50',  text: 'text-purple-600' },
   'electronics-industrial': { bg: 'bg-blue-50',    text: 'text-blue-600' },
-  'eco-special':            { bg: 'bg-green-50',   text: 'text-green-600' },
 }
 
 const DEFAULT_STYLE: FallbackStyle = { bg: 'bg-gray-100', text: 'text-gray-500' }

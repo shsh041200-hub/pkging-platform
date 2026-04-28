@@ -6,9 +6,6 @@ export type IndustryCategory =
   | 'cosmetics-beauty'
   | 'pharma-health'
   | 'electronics-industrial'
-  | 'eco-special'
-  | 'fresh_produce_packaging'
-  | 'print_design_services'
 
 export const INDUSTRY_CATEGORIES: IndustryCategory[] = [
   'food-beverage',
@@ -16,9 +13,6 @@ export const INDUSTRY_CATEGORIES: IndustryCategory[] = [
   'cosmetics-beauty',
   'pharma-health',
   'electronics-industrial',
-  'eco-special',
-  'fresh_produce_packaging',
-  'print_design_services',
 ]
 
 export const INDUSTRY_CATEGORY_LABELS: Record<IndustryCategory, string> = {
@@ -27,9 +21,6 @@ export const INDUSTRY_CATEGORY_LABELS: Record<IndustryCategory, string> = {
   'cosmetics-beauty':        '화장품·뷰티 포장',
   'pharma-health':           '의약·건강 포장',
   'electronics-industrial':  '전자·산업 포장',
-  'eco-special':             '친환경·특수 포장',
-  'fresh_produce_packaging': '농산물·신선 포장',
-  'print_design_services':   '인쇄·디자인 서비스',
 }
 
 export const INDUSTRY_CATEGORY_DESCRIPTIONS: Record<IndustryCategory, string> = {
@@ -38,9 +29,6 @@ export const INDUSTRY_CATEGORY_DESCRIPTIONS: Record<IndustryCategory, string> = 
   'cosmetics-beauty':        '스킨케어, 메이크업, 헤어케어 포장',
   'pharma-health':           '의약품, 건강기능식품, 의료기기 포장',
   'electronics-industrial':  '전자제품, 부품, 산업재 보호 포장',
-  'eco-special':             '친환경, 생분해, 특수 공정 포장',
-  'fresh_produce_packaging': '콜드체인·신선식품 전용 포장재 전문 공급사를 연결합니다',
-  'print_design_services':   '소량 맞춤 인쇄부터 패키지 디자인까지 — 스타트업·소규모 발주 특화',
 }
 
 export const INDUSTRY_CATEGORY_ICONS: Record<IndustryCategory, string> = {
@@ -49,9 +37,6 @@ export const INDUSTRY_CATEGORY_ICONS: Record<IndustryCategory, string> = {
   'cosmetics-beauty':        '💄',
   'pharma-health':           '💊',
   'electronics-industrial':  '⚙️',
-  'eco-special':             '🌿',
-  'fresh_produce_packaging': '🥬',
-  'print_design_services':   '🖨️',
 }
 
 // ── Print / Design service subtype filter (인쇄·디자인 세부 카테고리) ──
@@ -485,9 +470,6 @@ export const GUIDE_CATEGORY_COLORS: Record<IndustryCategory, string> = {
   'cosmetics-beauty':        '#F472B6',
   'pharma-health':           '#34D399',
   'electronics-industrial':  '#94A3B8',
-  'eco-special':             '#22C55E',
-  'fresh_produce_packaging': '#A3E635',
-  'print_design_services':   '#A78BFA',
 }
 
 export interface Review {

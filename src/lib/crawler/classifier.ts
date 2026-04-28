@@ -143,32 +143,6 @@ const WEIGHTED_INDUSTRY_RULES: WeightedIndustryRule[] = [
     ],
     weight: 2,
   },
-  {
-    industry: 'eco-special',
-    keywords: [
-      '친환경', '생분해', 'FSC', 'fsc', 'PLA', '업사이클', '재활용', 'GRS',
-      '바이오', '천연소재', '생분해성', '친환경포장',
-    ],
-    weight: 3,
-  },
-  {
-    industry: 'fresh_produce_packaging',
-    keywords: [
-      '신선', '신선식품', '콜드체인', '농산물', '청과', '산지', '보냉',
-      'CA포장', 'MAP포장', '저온유통', '신선도유지', '에어캡포장',
-      '스티로폼박스', '신선 포장',
-    ],
-    weight: 3,
-  },
-  {
-    industry: 'print_design_services',
-    keywords: [
-      '그래픽디자인', '패키지디자인', '인쇄소', '소량인쇄',
-      '라벨인쇄', '스티커인쇄', '박스디자인', '포장디자인', '오프셋인쇄',
-      '디지털인쇄', '포장인쇄',
-    ],
-    weight: 2,
-  },
 ]
 
 // ── Print/Design subtype detection ──────────────────────────────────────────
@@ -366,8 +340,7 @@ export function classifyCompany(text: string): ClassificationResult {
 
   const tags = detectTags(text)
   const industryClassification = detectIndustryCategories(text)
-  const isPrintDesign = industryClassification.categories.includes('print_design_services')
-  const printDesignSubtype = isPrintDesign ? detectPrintDesignSubtype(text) : null
+  const printDesignSubtype = detectPrintDesignSubtype(text)
 
   if (best.score === 0) {
     return {
