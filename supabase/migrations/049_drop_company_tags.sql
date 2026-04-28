@@ -6,39 +6,9 @@
 -- Step 2: Drop the tags column and its GIN index.
 -- Step 3: Recreate search_companies_korean without p_tag / tags.
 
--- ── Step 1: Backfill missing industry_categories from tags ─────────────────
-
--- food_grade → food-beverage
-UPDATE companies
-SET industry_categories = array_append(industry_categories, 'food-beverage')
-WHERE 'food_grade' = ANY(COALESCE(tags, '{}'))
-  AND NOT ('food-beverage' = ANY(COALESCE(industry_categories, '{}')));
-
--- industrial → electronics-industrial
-UPDATE companies
-SET industry_categories = array_append(industry_categories, 'electronics-industrial')
-WHERE 'industrial' = ANY(COALESCE(tags, '{}'))
-  AND NOT ('electronics-industrial' = ANY(COALESCE(industry_categories, '{}')));
-
--- cosmetic → cosmetics-beauty
-UPDATE companies
-SET industry_categories = array_append(industry_categories, 'cosmetics-beauty')
-WHERE 'cosmetic' = ANY(COALESCE(tags, '{}'))
-  AND NOT ('cosmetics-beauty' = ANY(COALESCE(industry_categories, '{}')));
-
--- pharma → pharma-health
-UPDATE companies
-SET industry_categories = array_append(industry_categories, 'pharma-health')
-WHERE 'pharma' = ANY(COALESCE(tags, '{}'))
-  AND NOT ('pharma-health' = ANY(COALESCE(industry_categories, '{}')));
-
--- ecommerce → ecommerce-shipping
-UPDATE companies
-SET industry_categories = array_append(industry_categories, 'ecommerce-shipping')
-WHERE 'ecommerce' = ANY(COALESCE(tags, '{}'))
-  AND NOT ('ecommerce-shipping' = ANY(COALESCE(industry_categories, '{}')));
-
--- design_service has no industry mapping — absorbed by /services/printing-design route
+-- ── Step 1: Backfill skipped ───────────────────────────────────────────────
+-- The tags column was already dropped in production before this migration ran.
+-- Backfill from tags → industry_categories is moot. Proceeding to cleanup.
 
 -- ── Step 2: Drop tags column and index ─────────────────────────────────────
 
@@ -46,6 +16,8 @@ DROP INDEX IF EXISTS idx_companies_tags;
 ALTER TABLE companies DROP COLUMN IF EXISTS tags;
 
 -- ── Step 3: Recreate search_companies_korean without tags ──────────────────
+
+DROP FUNCTION IF EXISTS search_companies_korean(text, integer, integer, text, text, text, text, text, text, text);
 
 CREATE OR REPLACE FUNCTION search_companies_korean(
   p_query         text,

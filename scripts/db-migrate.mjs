@@ -45,17 +45,39 @@ function splitStatements(sql) {
   let current = ''
   let inString = false
   let stringChar = ''
+  let dollarTag = null
   let i = 0
 
   while (i < sql.length) {
     const ch = sql[i]
-    // 문자열 리터럴 추적 (단순 single-quote)
+
+    if (dollarTag !== null) {
+      current += ch
+      if (ch === '$' && sql.slice(i, i + dollarTag.length) === dollarTag) {
+        current += sql.slice(i + 1, i + dollarTag.length)
+        i += dollarTag.length
+        dollarTag = null
+        continue
+      }
+      i++
+      continue
+    }
+
+    if (!inString && ch === '$') {
+      const m = sql.slice(i).match(/^(\$[^$]*\$)/)
+      if (m) {
+        dollarTag = m[1]
+        current += dollarTag
+        i += dollarTag.length
+        continue
+      }
+    }
+
     if (!inString && ch === "'") {
       inString = true
       stringChar = "'"
       current += ch
     } else if (inString && ch === stringChar) {
-      // escape: ''
       if (sql[i + 1] === stringChar) {
         current += ch + sql[i + 1]
         i += 2
