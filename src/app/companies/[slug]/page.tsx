@@ -10,7 +10,6 @@ import { TermsNoticeFooterLine } from '@/components/TermsNoticeFooterLine'
 import { BusinessRegistrationInfo } from '@/components/BusinessRegistrationInfo'
 import {
   CATEGORY_LABELS,
-  TAG_LABELS,
   INDUSTRY_CATEGORY_LABELS,
   INDUSTRY_CATEGORY_ICONS,
   CERTIFICATION_TYPES,
@@ -19,7 +18,6 @@ import {
   PRICE_TIER_LABELS,
   REUSE_MODEL_LABELS,
   type Category,
-  type CompanyTag,
   type IndustryCategory,
   type CertificationCategory,
   type Portfolio,
@@ -202,7 +200,6 @@ export default async function CompanyPage({ params }: Props) {
   const hasServiceCapabilities = company.service_capabilities && company.service_capabilities.length > 0
   const hasKeyClients = company.key_clients && company.key_clients.length > 0
   const hasTargetIndustries = company.target_industries && company.target_industries.length > 0
-  const hasTags = company.tags && company.tags.length > 0
   const hasCertifications = company.certifications && company.certifications.length > 0
   const hasPortfolios = portfolios && portfolios.length > 0
 
@@ -309,21 +306,6 @@ export default async function CompanyPage({ params }: Props) {
               )}
             </div>
           </div>
-
-          {/* Tags */}
-          {hasTags && (
-            <div className="flex flex-wrap gap-1.5 mb-6">
-              {(company.tags as string[]).map((t: string) => (
-                <Link
-                  key={t}
-                  href={`/?tag=${t}`}
-                  className="text-[12px] bg-gray-100 text-gray-600 px-2.5 py-1 rounded hover:bg-gray-200 transition-colors"
-                >
-                  {TAG_LABELS[t as CompanyTag] ?? t}
-                </Link>
-              ))}
-            </div>
-          )}
 
           {/* 1단: 핵심 거래 정보 — MOQ, 납기, 샘플 */}
           {hasCoreCommerce && (

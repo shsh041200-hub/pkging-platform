@@ -220,23 +220,6 @@ export const CATEGORY_LABELS: Record<Category, string> = {
   glass:    '유리',
 }
 
-export type CompanyTag =
-  | 'food_grade'
-  | 'industrial'
-  | 'cosmetic'
-  | 'pharma'
-  | 'design_service'
-  | 'ecommerce'
-
-export const TAG_LABELS: Record<CompanyTag, string> = {
-  food_grade:     '식품등급',
-  industrial:     '산업용',
-  cosmetic:       '화장품',
-  pharma:         '제약',
-  design_service: '디자인',
-  ecommerce:      '이커머스',
-}
-
 export const CATEGORY_TO_MATERIAL: Record<Category, MaterialType> = {
   paper:    'paper-corrugated',
   plastic:  'plastic-container',
@@ -361,7 +344,6 @@ export interface Company {
   description: string | null
   category: Category
   subcategory: string | null
-  tags: string[]
   industry_categories: IndustryCategory[]
   material_type: MaterialType | null
   buyer_category: string | null

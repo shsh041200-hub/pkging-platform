@@ -1,6 +1,5 @@
 import {
   type Category,
-  type CompanyTag,
   type IndustryCategory,
   type MaterialType,
   type PrintDesignSubtype,
@@ -12,11 +11,6 @@ interface CategoryRule {
   category: Category
   keywords: string[]
   subcategoryMap: Record<string, string[]>
-}
-
-interface TagRule {
-  tag: CompanyTag
-  keywords: string[]
 }
 
 interface WeightedIndustryRule {
@@ -88,15 +82,6 @@ const CATEGORY_RULES: CategoryRule[] = [
       '유리용기': ['유리용기', '유리컵'],
     },
   },
-]
-
-const TAG_RULES: TagRule[] = [
-  { tag: 'food_grade', keywords: ['식품', 'HACCP', 'haccp', '식품등급', '냉동', '냉장', '진공포장', '신선', '농산물', '수산물', '식품용', '식품포장'] },
-  { tag: 'industrial', keywords: ['산업용', '공업용', '방청', 'ESD', '팔레트', '물류', '크레이트', '완충재', '산업포장', '중공업', '정밀부품'] },
-  { tag: 'cosmetic', keywords: ['화장품', '코스메틱', '뷰티', '스킨케어', '메이크업', '향수', '화장품용기'] },
-  { tag: 'pharma', keywords: ['제약', '의약품', '의료', '약품', '블리스터', 'pharma', 'GMP'] },
-  { tag: 'design_service', keywords: ['패키지 디자인', '패키징 디자인', '디자인 서비스', '브랜딩', '디자인 에이전시', '디자인 스튜디오', '라벨 디자인'] },
-  { tag: 'ecommerce', keywords: ['이커머스', '온라인 쇼핑', '언박싱', 'D2C', '배송박스', '쿠팡', '스마트스토어'] },
 ]
 
 const WEIGHTED_INDUSTRY_RULES: WeightedIndustryRule[] = [
@@ -208,12 +193,6 @@ function detectSubcategory(text: string, rule: CategoryRule): string | null {
   return null
 }
 
-function detectTags(text: string): CompanyTag[] {
-  return TAG_RULES
-    .filter((rule) => rule.keywords.some((kw) => text.includes(kw)))
-    .map((rule) => rule.tag)
-}
-
 function matchesKeyword(text: string, kw: string): boolean {
   if (ABBREV_RE.test(kw)) {
     return new RegExp('(?<![A-Za-z])' + kw + '(?![A-Za-z])', 'i').test(text)
@@ -252,7 +231,6 @@ export interface ClassificationResult {
   category: Category
   subcategory: string | null
   confidence: number
-  tags: CompanyTag[]
   industryClassification: IndustryClassificationResult
   materialType: MaterialType
   printDesignSubtype: PrintDesignSubtype | null
@@ -338,7 +316,6 @@ export function classifyCompany(text: string): ClassificationResult {
   scores.sort((a, b) => b.score - a.score)
   const best = scores[0]
 
-  const tags = detectTags(text)
   const industryClassification = detectIndustryCategories(text)
   const printDesignSubtype = detectPrintDesignSubtype(text)
 
@@ -347,7 +324,6 @@ export function classifyCompany(text: string): ClassificationResult {
       category: 'plastic',
       subcategory: printDesignSubtype,
       confidence: 0,
-      tags,
       industryClassification,
       materialType: 'plastic-container',
       printDesignSubtype,
@@ -362,7 +338,6 @@ export function classifyCompany(text: string): ClassificationResult {
     category: best.rule.category,
     subcategory: printDesignSubtype ?? legacySubcategory,
     confidence,
-    tags,
     industryClassification,
     materialType: CATEGORY_TO_MATERIAL[best.rule.category],
     printDesignSubtype,

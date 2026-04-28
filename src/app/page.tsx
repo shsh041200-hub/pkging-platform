@@ -123,7 +123,7 @@ export default async function HomePage({
     ? (form.split(',').filter((f): f is PackagingForm => PACKAGING_FORMS.includes(f as PackagingForm)))
     : []
 
-  const COMPANY_SELECT = 'id, slug, name, description, category, industry_categories, material_type, packaging_form, tags, is_verified, cert_count, products, certifications, founded_year, website, icon_url, service_capabilities, target_industries, data_source, review_count, avg_rating, lead_time_standard_days, lead_time_express_days, moq_value, moq_unit, print_method, sample_available, cold_packaging_available, cold_retention_hours, dry_ice_available, reuse_model, spec_sheet_available, seasonal_packaging_available'
+  const COMPANY_SELECT = 'id, slug, name, description, category, industry_categories, material_type, packaging_form, is_verified, cert_count, products, certifications, founded_year, website, icon_url, service_capabilities, target_industries, data_source, review_count, avg_rating, lead_time_standard_days, lead_time_express_days, moq_value, moq_unit, print_method, sample_available, cold_packaging_available, cold_retention_hours, dry_ice_available, reuse_model, spec_sheet_available, seasonal_packaging_available'
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let companies: any[] = []
@@ -151,7 +151,6 @@ export default async function HomePage({
       p_material_type:  selectedMaterials.length === 1 ? selectedMaterials[0] : null,
       p_packaging_form: selectedForms.length === 1 ? selectedForms[0] : null,
       p_category:       null,
-      p_tag:            null,
       p_use_case:       null,
       p_certification:  rpcCertAlias,
     })

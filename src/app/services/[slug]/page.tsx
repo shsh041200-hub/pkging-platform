@@ -96,7 +96,7 @@ export default async function ServicePage({ params, searchParams }: Props) {
 
   let query = supabase
     .from('companies')
-    .select('id, slug, name, description, category, industry_categories, material_type, packaging_form, tags, is_verified, products, certifications, founded_year, website, icon_url, service_capabilities, target_industries, sample_available, subcategory', { count: 'exact' })
+    .select('id, slug, name, description, category, industry_categories, material_type, packaging_form, is_verified, products, certifications, founded_year, website, icon_url, service_capabilities, target_industries, sample_available, subcategory', { count: 'exact' })
     .eq('is_print_design_service', true)
 
   if (selectedSubtype) query = query.eq('subcategory', selectedSubtype)
