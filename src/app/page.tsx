@@ -378,7 +378,16 @@ export default async function HomePage({
             <PacklinxLogo variant="dark" />
             <span className="hidden sm:inline text-slate-400 text-[11px] font-medium tracking-widest uppercase">패키징 업체 검색 플랫폼</span>
           </Link>
-          <nav className="flex items-center gap-6">
+          <nav className="flex items-center gap-3">
+            <Link
+              href="/services/printing-design"
+              className="flex items-center gap-1.5 text-slate-200 hover:text-white text-sm font-medium px-3.5 py-2 border border-white/[0.15] hover:border-white/[0.30] hover:bg-white/[0.06] rounded-full transition-colors focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:ring-white/40 focus-visible:ring-offset-[#0F172A]"
+            >
+              <svg className="w-4 h-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0110.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0l.229 2.523a1.125 1.125 0 01-1.12 1.227H7.231c-.662 0-1.18-.568-1.12-1.227L6.34 18m11.318 0h1.091A2.25 2.25 0 0021 15.75V9.456c0-1.081-.768-2.015-1.837-2.175a48.055 48.055 0 00-1.913-.247M6.34 18H5.25A2.25 2.25 0 013 15.75V9.456c0-1.081.768-2.015 1.837-2.175a48.041 48.041 0 011.913-.247m10.5 0a48.536 48.536 0 00-10.5 0m10.5 0V3.375c0-.621-.504-1.125-1.125-1.125h-8.25c-.621 0-1.125.504-1.125 1.125v3.659M18.25 7.034l-.057-.022M6.75 7.034c-.018-.007-.036-.014-.057-.022" />
+              </svg>
+              인쇄·디자인
+            </Link>
             <Link
               href="/guides"
               className="flex items-center gap-1.5 text-slate-200 hover:text-white text-sm font-medium px-3.5 py-2 border border-white/[0.15] hover:border-white/[0.30] hover:bg-white/[0.06] rounded-full transition-colors focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:ring-white/40 focus-visible:ring-offset-[#0F172A]"
@@ -474,6 +483,30 @@ export default async function HomePage({
                     </button>
                   </form>
                 ))}
+              </div>
+
+              {/* Services section */}
+              <div className="mt-8">
+                <div className="flex items-center justify-center mb-4">
+                  <span className="text-[11px] font-semibold text-gray-400 uppercase tracking-widest">서비스</span>
+                </div>
+                <Link
+                  href="/services/printing-design"
+                  className="group flex items-center gap-4 bg-white border border-gray-200 rounded-xl px-5 py-4 hover:border-[#C2410C]/30 hover:bg-[#FFF7ED] transition-all duration-150"
+                >
+                  <span className="text-2xl flex-shrink-0">🖨️</span>
+                  <div className="min-w-0 flex-1">
+                    <span className="text-[14px] font-semibold text-gray-900 group-hover:text-[#C2410C] transition-colors block">
+                      인쇄·디자인 서비스
+                    </span>
+                    <span className="text-[12px] text-gray-500 leading-relaxed block mt-0.5">
+                      패키지 인쇄·디자인이 필요하신가요? 소량 맞춤 인쇄부터 브랜드 패키징까지
+                    </span>
+                  </div>
+                  <svg className="w-5 h-5 text-gray-300 group-hover:text-[#C2410C] flex-shrink-0 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                  </svg>
+                </Link>
               </div>
             </div>
           )}

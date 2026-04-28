@@ -176,7 +176,10 @@ export default async function ProductPage({ params, searchParams }: Props) {
             <PacklinxLogo variant="dark" />
             <span className="hidden sm:inline text-slate-400 text-[11px] font-medium tracking-widest uppercase">전국 패키징 파트너, 한 번에</span>
           </Link>
-          <nav className="flex items-center gap-6">
+          <nav className="flex items-center gap-4">
+            <Link href="/services/printing-design" className="text-slate-300 hover:text-white text-[13px] font-medium transition-colors">
+              인쇄·디자인
+            </Link>
             <Link href="/guides" className="text-slate-300 hover:text-white text-[13px] font-medium transition-colors">
               가이드
             </Link>
@@ -369,6 +372,27 @@ export default async function ProductPage({ params, searchParams }: Props) {
             </Link>
           ))}
         </div>
+      </section>
+
+      {/* Cross-link: printing-design service */}
+      <section className="max-w-7xl mx-auto px-5 sm:px-8 pb-12">
+        <Link
+          href="/services/printing-design"
+          className="group flex items-center gap-4 bg-gradient-to-r from-[#FFF7ED] to-white border border-orange-100 rounded-xl px-6 py-5 hover:border-[#C2410C]/30 hover:shadow-sm transition-all duration-150"
+        >
+          <span className="text-2xl flex-shrink-0">🖨️</span>
+          <div className="min-w-0 flex-1">
+            <span className="text-[14px] font-semibold text-gray-900 group-hover:text-[#C2410C] transition-colors block">
+              인쇄·디자인 서비스가 필요하신가요?
+            </span>
+            <span className="text-[12px] text-gray-500 leading-relaxed block mt-0.5">
+              패키징 발주 후 인쇄·디자인은 별도 작업 흐름입니다. 소량 맞춤 인쇄부터 패키지 브랜딩까지 전문 업체를 찾아보세요.
+            </span>
+          </div>
+          <svg className="w-5 h-5 text-gray-300 group-hover:text-[#C2410C] flex-shrink-0 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+          </svg>
+        </Link>
       </section>
 
       {/* Footer */}

@@ -172,7 +172,10 @@ export default async function ServicePage({ params, searchParams }: Props) {
             <PacklinxLogo variant="dark" />
             <span className="hidden sm:inline text-slate-400 text-[11px] font-medium tracking-widest uppercase">전국 패키징 파트너, 한 번에</span>
           </Link>
-          <nav className="flex items-center gap-6">
+          <nav className="flex items-center gap-4">
+            <Link href="/services/printing-design" className="text-white text-[13px] font-medium transition-colors">
+              인쇄·디자인
+            </Link>
             <Link href="/guides" className="text-slate-300 hover:text-white text-[13px] font-medium transition-colors">
               가이드
             </Link>
