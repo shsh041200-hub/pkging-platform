@@ -96,7 +96,7 @@ export default async function ServicePage({ params, searchParams }: Props) {
 
   let query = supabase
     .from('companies')
-    .select('id, slug, name, description, category, industry_categories, material_type, packaging_form, tags, is_verified, products, certifications, founded_year, website, icon_url, service_capabilities, target_industries, sample_available, subcategory', { count: 'exact' })
+    .select('id, slug, name, description, category, industry_categories, material_type, packaging_form, is_verified, products, certifications, founded_year, website, icon_url, service_capabilities, target_industries, sample_available, subcategory', { count: 'exact' })
     .eq('is_print_design_service', true)
 
   if (selectedSubtype) query = query.eq('subcategory', selectedSubtype)
@@ -172,7 +172,10 @@ export default async function ServicePage({ params, searchParams }: Props) {
             <PacklinxLogo variant="dark" />
             <span className="hidden sm:inline text-slate-400 text-[11px] font-medium tracking-widest uppercase">전국 패키징 파트너, 한 번에</span>
           </Link>
-          <nav className="flex items-center gap-6">
+          <nav className="flex items-center gap-4">
+            <Link href="/services/printing-design" className="text-white text-[13px] font-medium transition-colors">
+              인쇄·디자인
+            </Link>
             <Link href="/guides" className="text-slate-300 hover:text-white text-[13px] font-medium transition-colors">
               가이드
             </Link>

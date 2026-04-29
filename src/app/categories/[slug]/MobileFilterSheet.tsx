@@ -78,6 +78,8 @@ export function MobileFilterSheet({
   const [pendingCerts, setPendingCerts] = useState<Set<string>>(new Set())
   const [pendingUseCase, setPendingUseCase] = useState<string | null>(null)
   const [pendingSample, setPendingSample] = useState(false)
+  const [pendingEco, setPendingEco] = useState(false)
+  const [pendingFresh, setPendingFresh] = useState(false)
   const [pendingSubtype, setPendingSubtype] = useState<PrintDesignSubtype | null>(null)
 
   const firstSection = isPrintDesign ? 'subtype' : 'material'
@@ -99,6 +101,8 @@ export function MobileFilterSheet({
     setPendingCerts(new Set(searchParams.get('cert')?.split(',').filter(Boolean) ?? []))
     setPendingUseCase(searchParams.get('use-case') ?? null)
     setPendingSample(searchParams.get('sample') === 'true')
+    setPendingEco(searchParams.get('eco') === 'true')
+    setPendingFresh(searchParams.get('fresh') === 'true')
     setPendingSubtype((searchParams.get('subtype') as PrintDesignSubtype | null) ?? null)
     setOpenSection(firstSection)
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -130,6 +134,8 @@ export function MobileFilterSheet({
     if (pendingCerts.size > 0) params.set('cert', Array.from(pendingCerts).join(','))
     if (pendingUseCase) params.set('use-case', pendingUseCase)
     if (pendingSample) params.set('sample', 'true')
+    if (pendingEco) params.set('eco', 'true')
+    if (pendingFresh) params.set('fresh', 'true')
     if (currentSort) params.set('sort', currentSort)
 
     router.push(`${pathname}${params.toString() ? `?${params}` : ''}`)
@@ -142,6 +148,8 @@ export function MobileFilterSheet({
     setPendingCerts(new Set())
     setPendingUseCase(null)
     setPendingSample(false)
+    setPendingEco(false)
+    setPendingFresh(false)
     setPendingSubtype(null)
   }
 
@@ -151,7 +159,9 @@ export function MobileFilterSheet({
       : pendingMaterials.size + pendingForms.size) +
     pendingCerts.size +
     (pendingUseCase ? 1 : 0) +
-    (pendingSample ? 1 : 0)
+    (pendingSample ? 1 : 0) +
+    (pendingEco ? 1 : 0) +
+    (pendingFresh ? 1 : 0)
 
   const toggleSection = (key: string) => {
     setOpenSection((prev) => (prev === key ? '' : key))
@@ -341,6 +351,44 @@ export function MobileFilterSheet({
               <span
                 className={`absolute top-0.5 h-5 w-5 rounded-full bg-white shadow transition-transform ${
                   pendingSample ? 'translate-x-[22px]' : 'translate-x-0.5'
+                }`}
+              />
+            </button>
+          </div>
+
+          {/* Eco toggle */}
+          <div className="flex items-center justify-between border-b border-slate-100 px-4 py-3">
+            <span className="text-sm font-medium text-slate-900">친환경</span>
+            <button
+              onClick={() => setPendingEco(!pendingEco)}
+              role="switch"
+              aria-checked={pendingEco}
+              className={`relative h-6 w-11 rounded-full transition-colors ${
+                pendingEco ? 'bg-green-700' : 'bg-slate-300'
+              }`}
+            >
+              <span
+                className={`absolute top-0.5 h-5 w-5 rounded-full bg-white shadow transition-transform ${
+                  pendingEco ? 'translate-x-[22px]' : 'translate-x-0.5'
+                }`}
+              />
+            </button>
+          </div>
+
+          {/* Fresh / cold-chain toggle */}
+          <div className="flex items-center justify-between border-b border-slate-100 px-4 py-3">
+            <span className="text-sm font-medium text-slate-900">신선·콜드체인</span>
+            <button
+              onClick={() => setPendingFresh(!pendingFresh)}
+              role="switch"
+              aria-checked={pendingFresh}
+              className={`relative h-6 w-11 rounded-full transition-colors ${
+                pendingFresh ? 'bg-sky-700' : 'bg-slate-300'
+              }`}
+            >
+              <span
+                className={`absolute top-0.5 h-5 w-5 rounded-full bg-white shadow transition-transform ${
+                  pendingFresh ? 'translate-x-[22px]' : 'translate-x-0.5'
                 }`}
               />
             </button>

@@ -5,6 +5,7 @@ import Script from 'next/script'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 import { AnalyticsProvider } from '@/components/AnalyticsProvider'
 import { PageViewTracker } from '@/components/PageViewTracker'
+import { PlausibleProvider } from '@/components/PlausibleProvider'
 import { TermsNoticeBanner } from '@/components/TermsNoticeBanner'
 import './globals.css'
 
@@ -78,6 +79,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {children}
         <SpeedInsights />
         <AnalyticsProvider />
+        <PlausibleProvider />
         {/* Google Analytics 4 */}
         <Script
           src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
