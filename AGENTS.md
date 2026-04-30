@@ -8,17 +8,18 @@ This version has breaking changes — APIs, conventions, and file structure may 
 
 **[`DESIGN.md`](./DESIGN.md)는 packlinx.com의 공식 디자인 시스템이다.** 모든 프론트엔드 작업 전에 반드시 읽어야 한다.
 
-핵심 규칙 요약 (전체 규칙은 반드시 DESIGN.md 참조):
+Stripe-inspired 디자인 시스템 핵심 규칙 요약 (전체 규칙은 반드시 DESIGN.md 참조):
 
-- **CTA 버튼**: `#C2410C` (brand-700) 배경 + 흰색 텍스트. 호버 시 `#9A3412`
-- **아이콘/장식**: `#F97316` (brand-500) — 텍스트에는 사용 금지
-- **라이트 배경 텍스트**: brand-700 이상만 허용 (brand-500은 AA 실패)
-- **본문 텍스트**: `#0F172A` (neutral-900)
-- **보조 텍스트**: `#64748B` (neutral-500) 이상
-- **링크**: `#2563EB` (info-600) — 브랜드 오렌지 아님
-- **Tailwind 사용 시**: `orange-*` / `slate-*` 클래스를 위 토큰에 매핑
-- **본문에 오렌지 금지**: 오렌지는 CTA, 아이콘, 강조 전용
-- **유채색은 오렌지 단 하나**: 파란색 accent 금지 (레거시 `#005EFF` 사용 금지)
+- **Primary CTA 버튼**: `#533afd` (Stripe Purple) 배경 + 흰색 텍스트. 호버 시 `#4434d4`
+- **헤딩 텍스트**: `#061b31` (Deep Navy) — 순수 블랙 금지
+- **본문 텍스트**: `#64748d` (Slate)
+- **링크/인터랙티브**: `#533afd` (Stripe Purple) — 오렌지 accent 금지
+- **폰트**: `sohne-var` + OpenType `"ss01"` 필수. 헤딩 weight 300
+- **그림자**: `rgba(50,50,93,0.25)` 블루틴트 멀티레이어 — 회색 그림자 금지
+- **Border radius**: 4px–8px — pill shape / 12px+ 금지
+- **다크 섹션**: `#1c1e54` (Brand Dark) — 검정 또는 회색 금지
+- **장식 accent**: Ruby(`#ea2261`), Magenta(`#f96bee`) — 버튼/링크에는 사용 금지
+- **코드**: `SourceCodePro` 12px weight 500, line-height 2.00
 
 이 규칙을 위반하는 UI 코드는 리뷰 통과 불가.
 
