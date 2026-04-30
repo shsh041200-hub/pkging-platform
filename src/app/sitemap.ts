@@ -1,8 +1,18 @@
 import { MetadataRoute } from 'next'
-import { createClient } from '@/lib/supabase/server'
+import { createClient as createSupabaseClient } from '@supabase/supabase-js'
 import { INDUSTRY_CATEGORIES } from '@/types'
 import { PRODUCT_SLUGS } from '@/data/productGuide'
 import { SERVICE_SLUGS } from '@/data/serviceGuide'
+
+// Build-time / static-generation context — cannot use the cookie-based
+// SSR client. Use a plain anon client; sitemap reads only public rows.
+function createClient() {
+  return createSupabaseClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    { auth: { persistSession: false } },
+  )
+}
 
 // Google sitemap limits: 50,000 URLs and 50 MB per file. Index 0 holds
 // static + categories + products + services + guides; index >=1 holds
@@ -14,7 +24,7 @@ const baseUrl = () =>
   process.env.NEXT_PUBLIC_SITE_URL ?? 'https://packlinx.com'
 
 async function getCompanyCount(): Promise<number> {
-  const supabase = await createClient()
+  const supabase = createClient()
   const { count, error } = await supabase
     .from('companies')
     .select('id', { count: 'exact', head: true })
@@ -29,7 +39,7 @@ async function fetchCompanySlice(
   offset: number,
   limit: number,
 ): Promise<Array<{ slug: string; updated_at: string | null }>> {
-  const supabase = await createClient()
+  const supabase = createClient()
   const out: Array<{ slug: string; updated_at: string | null }> = []
   let cursor = offset
   const end = offset + limit
@@ -61,7 +71,7 @@ export async function generateSitemaps() {
 
 async function staticSitemap(): Promise<MetadataRoute.Sitemap> {
   const root = baseUrl()
-  const supabase = await createClient()
+  const supabase = createClient()
   const { data: guidePosts } = await supabase
     .from('blog_posts')
     .select('slug, published_at')
