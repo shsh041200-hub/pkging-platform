@@ -60,9 +60,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title,
     description,
-    alternates: {
-      canonical: `/companies/${slug}`,
-    },
     openGraph: {
       title: company.name,
       description,
@@ -229,8 +226,12 @@ export default async function CompanyPage({ params }: Props) {
     return rawUrl
   }
 
+  const rawCanonical = `${siteUrl}/companies/${slug}`
+
   return (
     <div className="min-h-screen bg-[#F9FAFB]">
+      {/* raw UTF-8 canonical — Next metadata API re-encodes Korean; JSX href passes through verbatim */}
+      <link rel="canonical" href={rawCanonical} />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(companyJsonLd) }}

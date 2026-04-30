@@ -64,7 +64,7 @@ export async function generateMetadata({
   const { q, industry, material, form, cert } = await searchParams
   if (q) return { robots: { index: false, follow: true } }
   if (industry || material || form || cert) return { alternates: { canonical: siteUrl } }
-  return {}
+  return { alternates: { canonical: siteUrl } }
 }
 
 const jsonLd = {

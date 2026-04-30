@@ -13,6 +13,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     .from('companies')
     .select('slug, updated_at')
     .order('updated_at', { ascending: false })
+    .range(0, 49999)
 
   const { data: guidePosts } = await supabase
     .from('blog_posts')
