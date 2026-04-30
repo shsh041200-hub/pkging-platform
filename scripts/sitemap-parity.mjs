@@ -14,10 +14,15 @@ import { createClient } from '@supabase/supabase-js'
 
 const SITE = (process.env.SITE_URL ?? 'https://packlinx.com').replace(/\/$/, '')
 const SUPABASE_URL = process.env.SUPABASE_URL ?? process.env.NEXT_PUBLIC_SUPABASE_URL
-const SUPABASE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY
+// Use anon key by default — matches the RLS-filtered view the sitemap route sees.
+// Pass SUPABASE_SERVICE_ROLE_KEY only if you intentionally want the total (RLS-bypassed) count.
+const SUPABASE_KEY =
+  process.env.SUPABASE_ANON_KEY ??
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ??
+  process.env.SUPABASE_SERVICE_ROLE_KEY
 
 if (!SUPABASE_URL || !SUPABASE_KEY) {
-  console.error('SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY required')
+  console.error('SUPABASE_URL and SUPABASE_ANON_KEY (or SERVICE_ROLE_KEY) required')
   process.exit(2)
 }
 
@@ -54,7 +59,8 @@ async function sitemapCompanyUrls() {
     const xml = await fetchText(child)
     const locs = extractAll(xml, 'loc')
     for (const loc of locs) {
-      if (loc.includes(`${SITE}/companies/`)) {
+      // Match /companies/ path regardless of www vs non-www host variant.
+      if (/\/companies\//.test(loc)) {
         seen.add(loc)
       }
     }
