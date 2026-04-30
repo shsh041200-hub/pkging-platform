@@ -38,9 +38,10 @@ export async function middleware(request: NextRequest) {
           const rows = (await res.json()) as Array<{ to_slug: string; status_code: number }>
           if (rows.length > 0) {
             const { to_slug, status_code } = rows[0]
-            // Set Location header directly to preserve Korean characters unencoded.
+            // Percent-encode each path segment so Vercel/CDN edge doesn't strip the Location header.
+            const encodedSlug = to_slug.split('/').map(encodeURIComponent).join('/')
             const response = new NextResponse(null, { status: status_code })
-            response.headers.set('Location', `${origin}/companies/${to_slug}`)
+            response.headers.set('Location', `${origin}/companies/${encodedSlug}`)
             return response
           }
         }
