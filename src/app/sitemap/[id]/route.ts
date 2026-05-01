@@ -9,6 +9,7 @@ const STATIC_GUIDE_SLUGS = [
   'label-printing-guide',
   'flexible-packaging-guide',
   'plastic-container-guide',
+  'packaging-printing-guide',
 ]
 
 // PACAA-116 sitemap shard.
