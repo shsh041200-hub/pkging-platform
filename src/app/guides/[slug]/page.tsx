@@ -41,10 +41,18 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const description = post.meta_description ?? post.excerpt ?? ''
   const ogImage = post.og_image_url ?? post.cover_image_url
 
+  const pageUrl = `${siteUrl}/guides/${slug}`
+
   return {
     title,
     description,
-    alternates: { canonical: `/guides/${slug}` },
+    alternates: {
+      canonical: `/guides/${slug}`,
+      languages: {
+        'ko-KR': pageUrl,
+        'x-default': pageUrl,
+      },
+    },
     openGraph: {
       title: `${title} | Packlinx`,
       description,
