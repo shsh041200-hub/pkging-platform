@@ -282,8 +282,11 @@ export default async function GuidePostPage({ params }: Props) {
 
   return (
     <>
-      <link rel="alternate" hrefLang="ko-KR" href={pageUrl} />
-      <link rel="alternate" hrefLang="x-default" href={pageUrl} />
+      {/* React 19 passes unknown/lowercase attrs as-is; hreflang must be lowercase for SEO */}
+      {/* @ts-ignore */}
+      <link rel="alternate" hreflang="ko-KR" href={pageUrl} />
+      {/* @ts-ignore */}
+      <link rel="alternate" hreflang="x-default" href={pageUrl} />
     <div className="min-h-screen bg-white">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
