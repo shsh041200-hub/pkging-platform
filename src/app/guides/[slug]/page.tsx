@@ -48,10 +48,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     description,
     alternates: {
       canonical: `/guides/${slug}`,
-      languages: {
-        'ko-KR': pageUrl,
-        'x-default': pageUrl,
-      },
     },
     openGraph: {
       title: `${title} | Packlinx`,
@@ -282,7 +278,12 @@ export default async function GuidePostPage({ params }: Props) {
       }
     : null
 
+  const pageUrl = `${siteUrl}/guides/${slug}`
+
   return (
+    <>
+      <link rel="alternate" hrefLang="ko-KR" href={pageUrl} />
+      <link rel="alternate" hrefLang="x-default" href={pageUrl} />
     <div className="min-h-screen bg-white">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
@@ -618,5 +619,6 @@ export default async function GuidePostPage({ params }: Props) {
         }
       `}</style>
     </div>
+    </>
   )
 }
