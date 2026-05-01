@@ -3,6 +3,14 @@ import { INDUSTRY_CATEGORIES } from '@/types'
 import { PRODUCT_SLUGS } from '@/data/productGuide'
 import { SERVICE_SLUGS } from '@/data/serviceGuide'
 
+// Static guide pages with dedicated app/guides/<slug>/page.tsx routes.
+// These are not in blog_posts and must be listed explicitly.
+const STATIC_GUIDE_SLUGS = [
+  'label-printing-guide',
+  'flexible-packaging-guide',
+  'plastic-container-guide',
+]
+
 // PACAA-116 sitemap shard.
 // Emits raw UTF-8 URLs (no percent-encoding) per the canonical ADR. Only
 // XML-special characters (& < > " ') are escaped. Korean characters in path
@@ -78,7 +86,12 @@ async function staticEntries(): Promise<Entry[]> {
   for (const slug of SERVICE_SLUGS) {
     out.push({ url: `${root}/services/${slug}`, lastmod: now, changefreq: 'weekly', priority: 0.7 })
   }
+  for (const slug of STATIC_GUIDE_SLUGS) {
+    out.push({ url: `${root}/guides/${slug}`, lastmod: now, changefreq: 'monthly', priority: 0.7 })
+  }
+  const dbGuideSlugs = new Set(STATIC_GUIDE_SLUGS)
   for (const p of guidePosts ?? []) {
+    if (dbGuideSlugs.has(p.slug)) continue
     out.push({
       url: `${root}/guides/${p.slug}`,
       lastmod: p.published_at ?? now,

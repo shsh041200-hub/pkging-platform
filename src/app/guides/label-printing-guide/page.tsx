@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   description,
   alternates: {
     canonical: canonicalUrl,
-    languages: { "ko-KR": canonicalUrl },
+    languages: { "ko-KR": canonicalUrl, "x-default": canonicalUrl },
   },
   openGraph: {
     title,
