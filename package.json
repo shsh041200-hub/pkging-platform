@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "deploy": "node -e \"console.error('\\n[BLOCKED] PACAA-234: Direct CLI deploys overwrite git-source production deploys (e.g. f42ca8e Disk IO fix). Production deploys MUST go through: git push origin main (Vercel auto-deploy fires).\\n\\nIf this is a real emergency with explicit CEO approval, use: PACKLINX_EMERGENCY_DEPLOY=1 npm run deploy:emergency\\n'); process.exit(1)\"",
+    "deploy:emergency": "node -e \"if(process.env.PACKLINX_EMERGENCY_DEPLOY!=='1'){console.error('[BLOCKED] Set PACKLINX_EMERGENCY_DEPLOY=1 and obtain explicit CEO approval first. See AGENTS.md (배포 절대 금지 section).');process.exit(1)}else{console.error('[EMERGENCY DEPLOY] Proceeding. Confirm CEO approval is logged in the issue trail.')}\" && vercel --prod"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.91.0",
