@@ -18,8 +18,14 @@ const STATIC_GUIDE_SLUGS = [
 // XML-special characters (& < > " ') are escaped. Korean characters in path
 // segments are passed through as raw UTF-8 bytes.
 
-export const dynamic = 'force-dynamic'
 export const revalidate = 3600
+export const dynamicParams = true
+
+// PACAA-228: declare empty static params so Next.js classifies unknown shard
+// IDs as ISR-on-demand rather than fully-dynamic on every request.
+export async function generateStaticParams() {
+  return []
+}
 
 const COMPANIES_PER_SITEMAP = 50_000
 const SUPABASE_PAGE_SIZE = 1_000

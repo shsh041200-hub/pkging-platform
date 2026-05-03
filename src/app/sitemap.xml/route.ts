@@ -10,7 +10,6 @@ import { createClient as createSupabaseClient } from '@supabase/supabase-js'
 // holds up to COMPANIES_PER_SITEMAP company URLs (well below the Google 50k
 // per-sitemap limit) plus index 0 for static URLs.
 
-export const dynamic = 'force-dynamic'
 export const revalidate = 3600
 
 const COMPANIES_PER_SITEMAP = 50_000

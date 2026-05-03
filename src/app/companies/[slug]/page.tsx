@@ -3,7 +3,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { Suspense } from 'react'
 import type { Metadata } from 'next'
-import { createClient } from '@/lib/supabase/server'
+import { createClient as createSupabaseClient } from '@supabase/supabase-js'
 import { PacklinxLogo } from '@/components/PacklinxLogo'
 import { CompanyDetailCTA } from '@/components/CompanyDetailCTA'
 import { TermsNoticeFooterLine } from '@/components/TermsNoticeFooterLine'
@@ -26,11 +26,10 @@ import {
   type ReuseModel,
 } from '@/types'
 import { CompanyViewTracker } from './CompanyViewTracker'
+import { OwnerControls } from './OwnerControls'
 import { CompanyIcon } from '@/components/CompanyIcon'
-import { CertificationCTABanner } from '@/components/CertificationCTABanner'
 import { CertBadge } from '@/components/CertBadge'
 import { simplifyCompanyName } from '@/lib/simplify-company-name'
-import { SimilarOptoutToggle } from '@/components/SimilarOptoutToggle'
 
 type Props = {
   params: Promise<{ slug: string }>
@@ -38,14 +37,31 @@ type Props = {
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://packlinx.com'
 
-// Auth cookie access makes this page inherently dynamic; ISR requires separating auth into a
-// client-side fetch. Declare intent explicitly rather than relying on implicit opt-out.
-export const dynamic = 'force-dynamic'
+// PACAA-228: ISR cache to reduce Supabase Disk IO. Owner-only UI is fetched client-side via
+// <OwnerControls> against /api/companies/[slug]/is-owner so this page itself stays cacheable.
+// We use a cookieless anon client here — invoking cookies() (via the SSR helper) would force
+// fully-dynamic rendering and defeat ISR.
+export const revalidate = 3600
+
+function supabaseAnon() {
+  return createSupabaseClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    { auth: { persistSession: false } },
+  )
+}
+
+// PACAA-228: declare empty static params with dynamicParams=true so Next.js
+// treats unknown slugs as ISR-on-demand rather than fully dynamic.
+export const dynamicParams = true
+export async function generateStaticParams() {
+  return []
+}
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug: rawSlug } = await params
   const slug = decodeURIComponent(rawSlug)
-  const supabase = await createClient()
+  const supabase = supabaseAnon()
   const { data: company } = await supabase
     .from('companies')
     .select('name, description, category')
@@ -90,7 +106,7 @@ function resolveCertification(raw: string) {
 export default async function CompanyPage({ params }: Props) {
   const { slug: rawSlug } = await params
   const slug = decodeURIComponent(rawSlug)
-  const supabase = await createClient()
+  const supabase = supabaseAnon()
 
   const { data: company } = await supabase
     .from('companies')
@@ -100,17 +116,7 @@ export default async function CompanyPage({ params }: Props) {
 
   if (!company) notFound()
 
-  const [isOwner, portfoliosResult, similarCompaniesResult] = await Promise.all([
-    (async (): Promise<boolean> => {
-      const { data: { user } } = await supabase.auth.getUser()
-      if (!user) return false
-      const { data: profile } = await supabase
-        .from('user_profiles')
-        .select('company_id')
-        .eq('id', user.id)
-        .single()
-      return profile?.company_id === company.id
-    })(),
+  const [portfoliosResult, similarCompaniesResult] = await Promise.all([
     supabase
       .from('company_portfolios')
       .select('id, title, description, image_url, display_order, category_tag')
@@ -466,7 +472,7 @@ export default async function CompanyPage({ params }: Props) {
         )}
 
         {/* 취급 제품 + 보유 인증 — 하나의 카드로 통합 */}
-        {(company.products && (company.products as string[]).length > 0) || hasCertifications || isOwner ? (
+        {(company.products && (company.products as string[]).length > 0) || hasCertifications ? (
           <div className="bg-white border border-gray-200 rounded-xl p-5">
             {/* 취급 제품 */}
             {company.products && (company.products as string[]).length > 0 && (
@@ -505,13 +511,25 @@ export default async function CompanyPage({ params }: Props) {
                   )
                 })}
               </div>
-            ) : isOwner ? (
-              <div className={company.products && (company.products as string[]).length > 0 ? 'border-t border-gray-100 pt-5' : ''}>
-                <CertificationCTABanner companyId={company.id} />
-              </div>
-            ) : null}
+            ) : (
+              <OwnerControls
+                companyId={company.id}
+                slug={slug}
+                variant={{
+                  kind: 'cert-cta',
+                  withTopBorder: !!(company.products && (company.products as string[]).length > 0),
+                }}
+              />
+            )}
           </div>
-        ) : null}
+        ) : (
+          // Owner-only CertCTA card when there are no products and no certs.
+          <OwnerControls
+            companyId={company.id}
+            slug={slug}
+            variant={{ kind: 'cert-cta', withTopBorder: false, standaloneCard: true }}
+          />
+        )}
 
         {/* Portfolio Gallery */}
         {hasPortfolios && (
@@ -614,10 +632,11 @@ export default async function CompanyPage({ params }: Props) {
 
         {/* Similar Companies — multi-signal similarity (KOR-530) */}
         {/* Opted-out state: only the owner sees a re-enable prompt */}
-        {!!company.similar_optout_at && isOwner && (
-          <SimilarOptoutToggle
+        {!!company.similar_optout_at && (
+          <OwnerControls
             companyId={company.id}
-            initialOptedOut={true}
+            slug={slug}
+            variant={{ kind: 'similar-optout-on' }}
           />
         )}
         {/* Normal section: hidden when opted out */}
@@ -629,12 +648,11 @@ export default async function CompanyPage({ params }: Props) {
                   비슷한 업체
                 </h2>
                 <div className="flex items-center gap-3">
-                  {isOwner && (
-                    <SimilarOptoutToggle
-                      companyId={company.id}
-                      initialOptedOut={false}
-                    />
-                  )}
+                  <OwnerControls
+                    companyId={company.id}
+                    slug={slug}
+                    variant={{ kind: 'similar-optout-off' }}
+                  />
                   {industryCats[0] && (
                     <Link
                       href={`/categories/${industryCats[0]}`}
