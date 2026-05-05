@@ -13,9 +13,9 @@
 | Site | `packlinx.com` |
 | Tracker live since | 2026-04-29 (PACAA-34 merge `cdc0ebb7`) |
 | Baseline ISO week | **2026-W18** (2026-04-27 Mon → 2026-05-03 Sun, Asia/Seoul) |
-| Baseline WUV | _pending — read from dashboard at week close (2026-05-04 Mon)_ |
+| Baseline WUV | **8** (captured 2026-05-05, Plausible Last 7 days 2026-04-27→05-03) |
 | Baseline source filter | none — total WUV across all traffic sources |
-| Baseline organic-Korean WUV | _pending — Plausible Sources filter (Google + Naver + Daum)_ |
+| Baseline organic-Korean WUV | **4** (Google 2 + Naver 2 + Daum 0) |
 
 The first full ISO week with a complete `Mon..Sun` Plausible signal is **W18 (2026-04-27 → 2026-05-03)**. The tracker went live mid-week, so the partial 2026-W17 reading is not used as a baseline.
 
@@ -38,7 +38,7 @@ The first full ISO week with a complete `Mon..Sun` Plausible signal is **W18 (20
 | ISO week | Date range (KST) | WUV (total) | Organic KR WUV | SG-2 share | Notes |
 |----------|------------------|-------------|----------------|------------|-------|
 | 2026-W17 | 04-20 → 04-26 | n/a — tracker not live full week | — | — | Plausible installed mid-week |
-| 2026-W18 | 04-27 → 05-03 | _pending_ | _pending_ | _pending_ | **Baseline** |
+| 2026-W18 | 04-27 → 05-03 | **8** | **4** | 1.00 (anchor) | **Baseline** — captured 2026-05-05 |
 | 2026-W19 | 05-04 → 05-10 | | | | |
 | 2026-W20 | 05-11 → 05-17 | | | | |
 
