@@ -24,6 +24,12 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       {
+        source: '/:path*',
+        has: [{ type: 'host', value: 'packlinx.com' }],
+        destination: 'https://www.packlinx.com/:path*',
+        permanent: true,
+      },
+      {
         source: '/categories/eco-special',
         destination: '/categories?eco=true',
         permanent: true,

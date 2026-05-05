@@ -32,7 +32,7 @@ const PAGE_SIZE = 30
 
 export const revalidate = 300
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://packlinx.com'
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://www.packlinx.com'
 
 const CATEGORY_SEO_TITLE: Record<IndustryCategory, string> = {
   'food-beverage':           '식품 포장업체 찾기 — 전국 식품·음료 포장재 업체',

@@ -15,7 +15,7 @@ export const revalidate = 3600
 const COMPANIES_PER_SITEMAP = 50_000
 
 function siteUrl() {
-  return (process.env.NEXT_PUBLIC_SITE_URL ?? 'https://packlinx.com').replace(/\/$/, '')
+  return (process.env.NEXT_PUBLIC_SITE_URL ?? 'https://www.packlinx.com').replace(/\/$/, '')
 }
 
 function supabase() {

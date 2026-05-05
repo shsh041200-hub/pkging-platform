@@ -14,10 +14,10 @@ import {
 import { createClient } from '@/lib/supabase/server'
 import { getActiveGuideCategories } from '@/lib/guides'
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://packlinx.com'
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://www.packlinx.com'
 
 export const metadata: Metadata = {
-  title: '패키징 완전 가이드 — 소재별·용도별 심층 가이드 | Packlinx',
+  title: '패키징 완전 가이드 — 소재별·용도별 심층 가이드',
   description: '종이, 플라스틱, 친환경 포장재까지 — 소재별·용도별로 깊이 있는 패키징 가이드를 제공합니다.',
   alternates: { canonical: '/guides' },
   openGraph: {

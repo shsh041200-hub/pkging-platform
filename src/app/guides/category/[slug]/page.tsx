@@ -14,7 +14,7 @@ import {
 import { createClient } from '@/lib/supabase/server'
 import { getActiveGuideCategories } from '@/lib/guides'
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://packlinx.com'
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://www.packlinx.com'
 
 type Props = {
   params: Promise<{ slug: string }>

@@ -3,7 +3,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { Suspense } from 'react'
 import type { Metadata } from 'next'
-import { createClient as createSupabaseClient } from '@supabase/supabase-js'
+import { createClient } from '@/lib/supabase/server'
 import { PacklinxLogo } from '@/components/PacklinxLogo'
 import { CompanyDetailCTA } from '@/components/CompanyDetailCTA'
 import { TermsNoticeFooterLine } from '@/components/TermsNoticeFooterLine'
@@ -35,43 +35,34 @@ type Props = {
   params: Promise<{ slug: string }>
 }
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://packlinx.com'
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://www.packlinx.com'
 
-// PACAA-228: ISR cache to reduce Supabase Disk IO. Owner-only UI is fetched client-side via
-// <OwnerControls> against /api/companies/[slug]/is-owner so this page itself stays cacheable.
-// We use a cookieless anon client here — invoking cookies() (via the SSR helper) would force
-// fully-dynamic rendering and defeat ISR.
-export const revalidate = 3600
-
-function supabaseAnon() {
-  return createSupabaseClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    { auth: { persistSession: false } },
-  )
-}
-
-// PACAA-228: declare empty static params with dynamicParams=true so Next.js
-// treats unknown slugs as ISR-on-demand rather than fully dynamic.
-export const dynamicParams = true
-export async function generateStaticParams() {
-  return []
-}
+// PACAA-248: Reverted PACAA-228 ISR to fix Korean-slug 500 errors.
+// ISR + non-ASCII path segments causes Next.js cache-key collisions → 500.
+// Page is now fully dynamic; OwnerControls client-side fetch pattern retained.
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug: rawSlug } = await params
   const slug = decodeURIComponent(rawSlug)
-  const supabase = supabaseAnon()
+  const supabase = await createClient()
   const { data: company } = await supabase
     .from('companies')
-    .select('name, description, category')
+    .select('name, description, category, phone, products, founded_year')
     .eq('slug', slug)
     .single()
 
   if (!company) return { title: '업체를 찾을 수 없습니다' }
 
-  const title = `${company.name} — Packlinx`
-  const description = company.description ?? `${company.name} 패키징 업체 상세 정보`
+  const title = company.name
+  const categoryLabel = CATEGORY_LABELS[company.category as Category] ?? company.category
+  const productList = Array.isArray(company.products) && (company.products as string[]).length > 0
+    ? (company.products as string[]).slice(0, 3).join(', ')
+    : null
+  const descParts: string[] = [`${categoryLabel} 패키징 전문`]
+  if (productList) descParts.push(`취급: ${productList}`)
+  if (company.founded_year) descParts.push(`설립 ${company.founded_year as number}년`)
+  if (company.phone) descParts.push(company.phone as string)
+  const description = `${company.name} — ${descParts.join(' · ')}`
 
   return {
     title,
@@ -106,7 +97,7 @@ function resolveCertification(raw: string) {
 export default async function CompanyPage({ params }: Props) {
   const { slug: rawSlug } = await params
   const slug = decodeURIComponent(rawSlug)
-  const supabase = supabaseAnon()
+  const supabase = await createClient()
 
   const { data: company } = await supabase
     .from('companies')

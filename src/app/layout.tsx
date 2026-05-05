@@ -25,7 +25,7 @@ const pretendard = localFont({
   ],
 })
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://packlinx.com'
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://www.packlinx.com'
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),

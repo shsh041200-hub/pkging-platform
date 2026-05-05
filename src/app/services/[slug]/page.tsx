@@ -29,7 +29,7 @@ const PAGE_SIZE = 30
 
 export const revalidate = 300
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://packlinx.com'
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://www.packlinx.com'
 
 function slugToService(slug: string): ServiceSlug | undefined {
   return SERVICE_SLUGS.find((k) => k === slug)

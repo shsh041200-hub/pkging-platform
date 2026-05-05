@@ -17,7 +17,7 @@ import {
 } from '@/types'
 import { createClient } from '@/lib/supabase/server'
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://packlinx.com'
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://www.packlinx.com'
 
 type Props = {
   params: Promise<{ slug: string }>
@@ -37,7 +37,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   if (!post) return { title: '가이드를 찾을 수 없습니다' }
 
-  const title = post.meta_title ?? post.title
+  const title = (post.meta_title ?? post.title).replace(/ \| Packlinx\s*$/, '')
   const description = post.meta_description ?? post.excerpt ?? ''
   const ogImage = post.og_image_url ?? post.cover_image_url
 
