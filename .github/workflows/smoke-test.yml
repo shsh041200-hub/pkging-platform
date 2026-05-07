@@ -1,0 +1,64 @@
+# PACAA-303 — Post-deploy smoke test
+# Triggers when Vercel creates a successful GitHub Deployment (Production only).
+# Fails the check if any URL returns non-200, surfacing regressions before
+# CMO heartbeats catch them (~30-60 min latency avoided).
+name: smoke-test
+
+on:
+  deployment_status: {}
+
+jobs:
+  smoke:
+    name: Smoke test (production)
+    if: |
+      github.event.deployment_status.state == 'success' &&
+      github.event.deployment.environment == 'Production'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Resolve production URL
+        id: url
+        run: |
+          # Prefer packlinx.com; fall back to deployment URL from the event.
+          BASE="${{ github.event.deployment_status.target_url }}"
+          # Strip trailing slash
+          BASE="${BASE%/}"
+          echo "base=$BASE" >> "$GITHUB_OUTPUT"
+          echo "Testing against: $BASE"
+
+      - name: Check critical pages
+        env:
+          BASE: ${{ steps.url.outputs.base }}
+        run: |
+          URLS=(
+            "/"
+            "/categories/flexible-packaging"
+            "/guides/flexible-packaging-guide"
+            "/guides/packaging-accessories-guide"
+            "/guides/packaging-machinery-guide"
+            "/guides/plastic-containers-guide"
+            "/keywords/%ED%8F%AC%EC%9E%A5%EC%9E%AC"
+            "/sitemap.xml"
+          )
+
+          FAIL=0
+          for PATH in "${URLS[@]}"; do
+            URL="${BASE}${PATH}"
+            STATUS=$(curl -s -o /dev/null -w "%{http_code}" --max-time 15 "$URL")
+            if [ "$STATUS" -eq 200 ]; then
+              echo "✅ $STATUS  $URL"
+            else
+              echo "❌ $STATUS  $URL"
+              FAIL=1
+            fi
+          done
+
+          if [ "$FAIL" -eq 1 ]; then
+            echo ""
+            echo "One or more URLs returned non-200."
+            echo "→ Manual action: Vercel dashboard → Deployments → roll back to previous."
+            exit 1
+          fi
+          echo ""
+          echo "All checks passed."
