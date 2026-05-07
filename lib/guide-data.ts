@@ -13,7 +13,6 @@ export const STATIC_GUIDE_SLUGS = [
   "label-printing-guide",
   "flexible-packaging-guide",
   "plastic-container-guide",
-  "plastic-containers-guide",
   "packaging-printing-guide",
   "glass-metal-container-guide",
   "packaging-accessories-guide",
@@ -76,12 +75,6 @@ export const GUIDE_META: GuideMeta[] = [
     title: "플라스틱 용기·병 종류 완전 가이드 — PET·PP·HDPE 소재 선택 + 식약처 기준",
     description:
       "PET·PP·HDPE·PS·PC 소재 비교, 식품용 식약처 이행성 시험 기준, 사출·블로우·진공 성형 공법 차이, 금형비·MOQ·친환경 rPET 비용을 정리합니다.",
-  },
-  {
-    slug: "plastic-containers-guide",
-    title: "플라스틱 용기·병 완전 가이드 — 종류·소재·업체 선택 기준 (2026년)",
-    description:
-      "플라스틱 용기·병 종류·소재·식품 안전 기준·업체 선택 체크리스트를 한 곳에 정리했습니다. PET 병, PE·PP·HDPE 용기 비교와 Packlinx 플라스틱 용기 업체 디렉토리.",
   },
   {
     slug: "packaging-printing-guide",
