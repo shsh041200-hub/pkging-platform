@@ -114,6 +114,13 @@ export default function PackagingPrintingGuidePage() {
           정리합니다.
         </p>
 
+        <p>
+          업체를 바로 찾으신다면{" "}
+          <Link href="/products/printing">
+            <strong>Packlinx 포장 인쇄 업체 목록 →</strong>
+          </Link>
+        </p>
+
         <section>
           <h2>1. 포장 인쇄 방식 종류 — 옵셋·플렉소·그라비어·디지털 비교</h2>
           <p>
@@ -482,6 +489,24 @@ export default function PackagingPrintingGuidePage() {
             <Link href="/products/printing">인쇄·후가공 업체 목록</Link>에서 조건에 맞는 업체를
             찾아보세요.
           </p>
+        </section>
+
+        <section>
+          <h2>관련 가이드</h2>
+          <ul>
+            <li>
+              <Link href="/guides/label-printing-guide">라벨 인쇄 업체 선정 가이드</Link> — 라벨·스티커 전문 인쇄 발주 시 참고
+            </li>
+            <li>
+              <Link href="/guides/flexible-packaging-guide">연포장재 완전 가이드</Link> — 파우치·롤 필름 그라비어 인쇄 연계 발주 시 참고
+            </li>
+            <li>
+              <Link href="/guides/packaging-accessories-guide">포장 부자재 완전 가이드</Link> — 인쇄 후 테이프·완충재 등 부자재 발주 시 참고
+            </li>
+            <li>
+              <Link href="/guides/glass-metal-container-guide">유리·금속 용기 선택 가이드</Link> — 용기 인쇄 및 라벨 부착 시 참고
+            </li>
+          </ul>
         </section>
 
         <section>
