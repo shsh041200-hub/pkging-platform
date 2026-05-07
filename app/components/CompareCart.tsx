@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { getCartItems, removeFromCart, type CompareCartItem } from '@/lib/compare-data'
+import { getCartItems, removeFromCart, type CompareCartItem } from '@/lib/compare-cart'
 
 export default function CompareCart() {
   const [items, setItems] = useState<CompareCartItem[]>([])

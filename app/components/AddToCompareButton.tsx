@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { addToCart, removeFromCart, isInCart, getCartItems, COMPARE_MAX } from '@/lib/compare-data'
+import { addToCart, removeFromCart, getCartItems, COMPARE_MAX } from '@/lib/compare-cart'
 
 type Props = { slug: string; name: string }
 
