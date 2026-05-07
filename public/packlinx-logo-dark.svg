@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 260" width="400" height="260">
+  <rect width="400" height="260" fill="#0F172A" rx="12"/>
+  <text x="50" y="120" font-family="'Trebuchet MS', 'Avenir', 'Segoe UI', sans-serif" font-size="80" font-weight="900" fill="#F8FAFC" letter-spacing="10">PACK</text>
+  <text x="50" y="190" font-family="'Trebuchet MS', 'Avenir', 'Segoe UI', sans-serif" font-size="80" font-weight="200" fill="#F97316" letter-spacing="10">LINX</text>
+  <rect x="50" y="204" width="300" height="2" rx="1" fill="#F97316" opacity="0.3"/>
+  <text x="52" y="232" font-family="'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif" font-size="12" font-weight="400" fill="#475569" letter-spacing="6">B2B 패키징 허브</text>
+</svg>

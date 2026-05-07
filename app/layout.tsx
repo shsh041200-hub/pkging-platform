@@ -1,37 +1,96 @@
-import type { Metadata } from "next";
-import Script from "next/script";
-import "./globals.css";
-import PlausibleAnalytics from "./components/PlausibleAnalytics";
+import type { Metadata } from 'next'
+import localFont from 'next/font/local'
+import { Suspense } from 'react'
+import Script from 'next/script'
+import { SpeedInsights } from '@vercel/speed-insights/next'
+import { AnalyticsProvider } from '@/components/AnalyticsProvider'
+import { PageViewTracker } from '@/components/PageViewTracker'
+import { PlausibleProvider } from '@/components/PlausibleProvider'
+import { TermsNoticeBanner } from '@/components/TermsNoticeBanner'
+import './globals.css'
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://packlinx.vercel.app";
+const GA_MEASUREMENT_ID = 'G-86MD7T3881'
+
+const pretendard = localFont({
+  src: '../public/fonts/PretendardVariable.woff2',
+  display: 'swap',
+  weight: '100 900',
+  variable: '--font-pretendard',
+  fallback: [
+    '-apple-system',
+    'BlinkMacSystemFont',
+    'Apple SD Gothic Neo',
+    'Malgun Gothic',
+    'sans-serif',
+  ],
+})
+
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://www.packlinx.com'
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "Packlinx — 한국 포장재 B2B 디렉토리",
-    template: "%s | Packlinx",
+    default: '전국 패키징 업체 찾기 — B2B 포장재 플랫폼 | Packlinx',
+    template: '%s | Packlinx',
   },
-  description: "국내 포장재 공급업체를 한눈에 비교하세요.",
-  robots: { index: true, follow: true },
-};
+  description: '국내 1,396개 패키징 업체를 무료로 검색·비교하세요. 식품·화장품·이커머스·친환경 포장재 B2B 플랫폼 Packlinx.',
+  keywords: '패키징, 포장재, 박스, 식품포장, 친환경포장, 산업용포장, Packlinx, packlinx',
+  icons: {
+    icon: [
+      { url: '/favicon.ico', sizes: 'any' },
+      { url: '/favicon.svg', type: 'image/svg+xml' },
+    ],
+    shortcut: '/favicon.svg',
+  },
+  openGraph: {
+    title: '전국 패키징 업체 찾기 — B2B 포장재 플랫폼 | Packlinx',
+    description: '국내 1,396개 패키징 업체를 무료로 검색·비교하세요. 식품·화장품·이커머스·친환경 포장재 B2B 플랫폼 Packlinx.',
+    url: siteUrl,
+    siteName: 'Packlinx',
+    locale: 'ko_KR',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: '전국 패키징 업체 찾기 — B2B 포장재 플랫폼 | Packlinx',
+    description: '국내 1,396개 패키징 업체를 무료로 검색·비교하세요. 식품·화장품·이커머스·친환경 포장재 B2B 플랫폼 Packlinx.',
+  },
+  verification: {
+    google: '_GGnVSZzAe6F2EM9dnt4z7PIMimex08aUukQZzAxN7c',
+    other: {
+      'naver-site-verification': '61dbcdceef233109c8f6544378cd3884448d161e',
+    },
+  },
+}
 
-export default function RootLayout({
-  children,
-}: Readonly<{ children: React.ReactNode }>) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="ko">
-      <head>
+    <html lang="ko" className={`h-full ${pretendard.variable}`}>
+      <body className="min-h-full flex flex-col antialiased">
+        <Suspense fallback={null}>
+          <PageViewTracker />
+        </Suspense>
+        <Suspense fallback={null}>
+          <TermsNoticeBanner />
+        </Suspense>
+        {children}
+        <SpeedInsights />
+        <AnalyticsProvider />
+        <PlausibleProvider />
+        {/* Google Analytics 4 */}
         <Script
-          defer
-          data-domain="packlinx.com"
-          src="https://plausible.io/js/script.js"
+          src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
           strategy="afterInteractive"
         />
-      </head>
-      <body>
-        {children}
-        <PlausibleAnalytics />
+        <Script id="ga4-init" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '${GA_MEASUREMENT_ID}');
+          `}
+        </Script>
       </body>
     </html>
-  );
+  )
 }

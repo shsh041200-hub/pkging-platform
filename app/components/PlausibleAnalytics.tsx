@@ -3,12 +3,6 @@
 import { usePathname } from 'next/navigation'
 import { useEffect, useRef } from 'react'
 
-declare global {
-  interface Window {
-    plausible?: (event: string, options?: Record<string, unknown>) => void
-  }
-}
-
 // Fires a manual pageview on every SPA navigation.
 // Skips the initial render because the Plausible script already
 // auto-fires a pageview when the page first loads.

@@ -1,0 +1,9 @@
+<svg viewBox="0 0 280 80" width="280" height="80" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Packlinx v03">
+  <!-- v03: Box Outline — simple package box icon, red accent -->
+  <rect x="4" y="16" width="50" height="46" rx="4" stroke="#DC2626" stroke-width="3"/>
+  <line x1="4" y1="32" x2="54" y2="32" stroke="#DC2626" stroke-width="2"/>
+  <line x1="29" y1="32" x2="29" y2="62" stroke="#DC2626" stroke-width="2"/>
+  <rect x="18" y="16" width="22" height="16" rx="2" fill="#FEE2E2"/>
+  <text x="70" y="51" font-family="'Helvetica Neue',Arial,sans-serif" font-weight="700" font-size="26" fill="#1A1A1A">packlinx</text>
+  <line x1="70" y1="58" x2="210" y2="58" stroke="#DC2626" stroke-width="2"/>
+</svg>
