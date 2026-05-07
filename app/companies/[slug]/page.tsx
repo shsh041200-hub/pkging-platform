@@ -30,6 +30,8 @@ import { OwnerControls } from './OwnerControls'
 import { CompanyIcon } from '@/components/CompanyIcon'
 import { CertBadge } from '@/components/CertBadge'
 import { simplifyCompanyName } from '@/lib/simplify-company-name'
+import AddToCompareButton from '@/app/components/AddToCompareButton'
+import CompareCart from '@/app/components/CompareCart'
 
 type Props = {
   params: Promise<{ slug: string }>
@@ -226,6 +228,7 @@ export default async function CompanyPage({ params }: Props) {
   const rawCanonical = `${siteUrl}/companies/${slug}`
 
   return (
+    <>
     <div className="min-h-screen bg-[#F9FAFB]">
       {/* raw UTF-8 canonical — Next metadata API re-encodes Korean; JSX href passes through verbatim */}
       <link rel="canonical" href={rawCanonical} />
@@ -280,6 +283,7 @@ export default async function CompanyPage({ params }: Props) {
             <div className="flex-1 min-w-0">
               <div className="flex flex-wrap items-center gap-2 mb-2">
                 <h1 className="text-[28px] font-bold text-gray-900 tracking-[-0.025em] leading-tight">{company.name}</h1>
+                <AddToCompareButton slug={slug} name={company.name} />
               </div>
               <div className="flex flex-wrap items-center gap-2">
                 <span className="bg-gray-100 text-gray-600 text-[11px] font-medium px-2.5 py-1 rounded">
@@ -754,5 +758,7 @@ export default async function CompanyPage({ params }: Props) {
         </div>
       </footer>
     </div>
+    <CompareCart />
+    </>
   )
 }

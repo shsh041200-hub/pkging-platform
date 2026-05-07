@@ -26,6 +26,8 @@ import { createClient } from '@/lib/supabase/server'
 import { simplifyCompanyName } from '@/lib/simplify-company-name'
 import { WebsiteFavicon } from '@/components/WebsiteFavicon'
 import { Pagination } from '@/components/Pagination'
+import AddToCompareButton from '@/app/components/AddToCompareButton'
+import CompareCart from '@/app/components/CompareCart'
 
 const PAGE_SIZE = 30
 
@@ -247,6 +249,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
   }
 
   return (
+    <>
     <div className="min-h-screen bg-[#F9FAFB]">
       <script
         type="application/ld+json"
@@ -372,6 +375,9 @@ export default async function CategoryPage({ params, searchParams }: Props) {
                     <span className="text-[11px] text-gray-400 flex-shrink-0">
                       {company.founded_year ? `est. ${company.founded_year}` : ''}
                     </span>
+                  </div>
+                  <div className="mt-2.5 flex justify-end">
+                    <AddToCompareButton slug={company.slug} name={company.name} />
                   </div>
                 </div>
               </article>
@@ -504,5 +510,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
         </div>
       </footer>
     </div>
+    <CompareCart />
+    </>
   )
 }
