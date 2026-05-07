@@ -134,6 +134,13 @@ export default function FlexiblePackagingGuidePage() {
           추천하거나 순위를 매기지 않으며, 모든 수치는 시장 일반 범위를 기준으로 합니다.
         </p>
 
+        <p>
+          업체를 바로 찾으신다면{" "}
+          <Link href="/keywords/비닐-포장지-제작">
+            <strong>Packlinx 연포장재 업체 목록 →</strong>
+          </Link>
+        </p>
+
         <section>
           <h2>1. 연포장재란 무엇인가 — 경포장재와의 차이, 언제 선택해야 하나</h2>
           <p>
@@ -549,6 +556,24 @@ export default function FlexiblePackagingGuidePage() {
             <Link href="/guides/food-packaging-materials">식품 포장재 소재 가이드</Link>,{" "}
             <Link href="/guides/label-printing-guide">라벨 인쇄 업체 선정 가이드</Link>
           </p>
+        </section>
+
+        <section>
+          <h2>관련 가이드</h2>
+          <ul>
+            <li>
+              <Link href="/guides/label-printing-guide">라벨 인쇄 업체 선정 가이드</Link> — 연포장재 인쇄와 함께 라벨·스티커 발주 시 참고
+            </li>
+            <li>
+              <Link href="/guides/packaging-printing-guide">포장 인쇄 종류·후가공 완전 가이드</Link> — 옵셋·플렉소·그라비어·디지털 인쇄 방식 비교
+            </li>
+            <li>
+              <Link href="/guides/plastic-container-guide">플라스틱 용기·병 선택 가이드</Link> — 경포장재로 전환할 때 소재·규격 비교
+            </li>
+            <li>
+              <Link href="/guides/packaging-accessories-guide">포장 부자재 완전 가이드</Link> — 테이프·완충재·실링재 함께 발주 시 참고
+            </li>
+          </ul>
         </section>
 
         <section>
