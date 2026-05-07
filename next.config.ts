@@ -1,28 +1,11 @@
 import type { NextConfig } from "next";
 
-const securityHeaders = [
-  { key: "X-Content-Type-Options", value: "nosniff" },
-  { key: "X-Frame-Options", value: "SAMEORIGIN" },
-  { key: "X-XSS-Protection", value: "1; mode=block" },
-  { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
-  { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=()" },
-];
-
 const nextConfig: NextConfig = {
-  poweredByHeader: false,
-  compress: true,
-  images: {
-    formats: ["image/avif", "image/webp"],
-    remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "*.supabase.co",
-        pathname: "/storage/v1/object/public/company-icons/**",
-      },
-    ],
-  },
+  // Enforce ISR revalidation interval (seconds). Backend can lower via on-demand revalidation.
+  // This is a page-level default; individual pages may override.
   async redirects() {
     return [
+      // PACAA-201: brief spec used plural slug; actual published route is singular
       {
         source: '/:path*',
         has: [{ type: 'host', value: 'packlinx.com' }],
@@ -35,30 +18,9 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
       {
-        source: '/categories/fresh_produce_packaging',
-        destination: '/categories/food-beverage?fresh=true',
+        source: "/guides/plastic-containers-guide",
+        destination: "/guides/plastic-container-guide",
         permanent: true,
-      },
-      {
-        source: '/categories/print_design_services',
-        destination: '/services/printing-design',
-        permanent: true,
-      },
-    ];
-  },
-  async headers() {
-    return [
-      {
-        source: "/(.*)",
-        headers: securityHeaders,
-      },
-      {
-        source: "/favicon.ico",
-        headers: [{ key: "Cache-Control", value: "public, max-age=604800" }],
-      },
-      {
-        source: "/(.*)\\.svg",
-        headers: [{ key: "Cache-Control", value: "public, max-age=604800" }],
       },
     ];
   },

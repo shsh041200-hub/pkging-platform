@@ -1,38 +1,27 @@
 {
-  "name": "pkging-platform",
+  "name": "packlinx-web",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "next build && node scripts/fix-hreflang.mjs",
     "start": "next start",
     "lint": "eslint",
     "deploy": "node -e \"console.error('\\n[BLOCKED] PACAA-234: Direct CLI deploys overwrite git-source production deploys (e.g. f42ca8e Disk IO fix). Production deploys MUST go through: git push origin main (Vercel auto-deploy fires).\\n\\nIf this is a real emergency with explicit CEO approval, use: PACKLINX_EMERGENCY_DEPLOY=1 npm run deploy:emergency\\n'); process.exit(1)\"",
     "deploy:emergency": "node -e \"if(process.env.PACKLINX_EMERGENCY_DEPLOY!=='1'){console.error('[BLOCKED] Set PACKLINX_EMERGENCY_DEPLOY=1 and obtain explicit CEO approval first. See AGENTS.md (배포 절대 금지 section).');process.exit(1)}else{console.error('[EMERGENCY DEPLOY] Proceeding. Confirm CEO approval is logged in the issue trail.')}\" && vercel --prod"
   },
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.91.0",
-    "@supabase/ssr": "^0.10.2",
-    "@supabase/supabase-js": "^2.103.3",
-    "@tanstack/react-query": "^5.99.1",
-    "@vercel/analytics": "^2.0.1",
-    "@vercel/speed-insights": "^2.0.0",
-    "next": "16.2.4",
-    "react": "19.2.4",
-    "react-dom": "19.2.4",
-    "recharts": "^3.8.1",
-    "remark": "^15.0.1",
-    "remark-gfm": "^4.0.1",
-    "remark-html": "^16.0.1"
+    "next": "^15.3.1",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "@supabase/supabase-js": "^2.49.4"
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "^4",
-    "@types/node": "^20",
+    "@types/node": "^22",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "typescript": "^5",
     "eslint": "^9",
-    "eslint-config-next": "16.2.4",
-    "tailwindcss": "^4",
-    "typescript": "^5"
+    "eslint-config-next": "^15.3.1"
   }
 }
