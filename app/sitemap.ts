@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { listKeywordSlugs } from "@/lib/keyword-data";
 import { listGuideSlugs } from "@/lib/guide-data";
+import { INDUSTRY_CATEGORIES } from "@/types";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://packlinx.vercel.app";
 
@@ -19,6 +20,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   return [
     { url: siteUrl, lastModified: new Date(), changeFrequency: "weekly", priority: 1 },
+    {
+      url: `${siteUrl}/categories`,
+      lastModified: new Date(),
+      changeFrequency: "weekly" as const,
+      priority: 0.9,
+    },
+    ...INDUSTRY_CATEGORIES.map((cat) => ({
+      url: `${siteUrl}/categories/${cat}`,
+      lastModified: new Date(),
+      changeFrequency: "weekly" as const,
+      priority: 0.85,
+    })),
     {
       url: `${siteUrl}/guides`,
       lastModified: new Date(),
