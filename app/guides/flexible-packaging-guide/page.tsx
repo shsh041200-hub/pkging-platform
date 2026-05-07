@@ -1,0 +1,624 @@
+import React from "react";
+import type { Metadata } from "next";
+import Link from "next/link";
+
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://packlinx.com";
+const canonicalUrl = `${siteUrl}/guides/flexible-packaging-guide`;
+
+const title = "연포장재 완전 가이드 — 종류·소재·선택 기준 | Packlinx";
+const description =
+  "연포장재 종류·소재·식품 안전 기준·업체 선택 체크리스트를 한 곳에 정리했습니다. 파우치, 롤 필름, 합지 소재 비교와 Packlinx 연포장재 업체 디렉토리.";
+
+// generateMetadata (function form) matches the dynamic-route pattern that reliably
+// serialises alternates.languages in Next.js 15 + React 19.  The static
+// `export const metadata` form has a known serialisation gap on Vercel SSG.
+export function generateMetadata(): Metadata {
+  return {
+    title,
+    description,
+    alternates: {
+      canonical: canonicalUrl,
+      // languages intentionally omitted here — injected via JSX below so we
+      // get lowercase hreflang= regardless of the postbuild patch running.
+    },
+    openGraph: {
+      title,
+      description,
+      url: canonicalUrl,
+      siteName: "Packlinx",
+      locale: "ko_KR",
+      type: "website",
+    },
+  };
+}
+
+const articleJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  headline: "연포장재 완전 가이드 — 종류·소재·식품별 선택 기준 (2026년)",
+  description,
+  url: canonicalUrl,
+  inLanguage: "ko-KR",
+  datePublished: "2026-05-01",
+  dateModified: "2026-05-01",
+  author: {
+    "@type": "Organization",
+    name: "Packlinx",
+    url: siteUrl,
+  },
+  image: `${canonicalUrl}/opengraph-image`,
+  publisher: {
+    "@type": "Organization",
+    name: "Packlinx",
+    url: siteUrl,
+  },
+  about: {
+    "@type": "Thing",
+    name: "연포장재",
+  },
+};
+
+const faqJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: [
+    {
+      "@type": "Question",
+      name: "연포장재와 경포장재의 차이는 무엇인가요?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "연포장재(flexible packaging)는 외력에 의해 형태가 변하는 포장재로, 파우치·롤 필름·합지 필름 등이 해당됩니다. 경포장재(rigid packaging)는 유리병·금속 캔·경질 플라스틱 용기처럼 형태가 고정된 포장재입니다. 연포장재는 경포장재 대비 물류 부피와 중량이 적고, 소재 유연성 덕분에 다양한 봉합 방식과 인쇄 옵션을 적용할 수 있습니다.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "식품 포장에 사용할 수 있는 연포장재 소재는 무엇인가요?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "국내 식품위생법 기준을 충족하는 연포장재 소재로는 PE(폴리에틸렌), PP(폴리프로필렌), PET(폴리에스터), 나일론(PA), 알루미늄 라미네이트 필름 등이 있습니다. 소재별로 산소 차단성(OTR)과 수분 차단성(WVTR) 수치가 다르므로, 제품의 유통 기한과 보관 조건에 따라 소재를 선택해야 합니다. 식품 접촉면에 사용되는 소재는 식품의약품안전처 고시(기구·용기·포장의 기준 및 규격)에 따라 안전성이 확인된 소재여야 합니다.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "연포장재 소량 주문 MOQ는 어느 정도인가요?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "디지털 인쇄 방식을 활용하는 소량 특화 업체의 경우 300~500매부터 주문이 가능합니다. 그라비아 인쇄 방식을 사용하는 일반 연포장재 업체는 3,000~10,000매를 기준 MOQ로 설정하는 경우가 많습니다. 소량 발주가 필요하다면 초도 셋업 비용(판 제작비) 없이 디지털 인쇄로 생산하는 업체를 우선 검토하시기 바랍니다.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "친환경 연포장재는 일반 포장재와 어떻게 다른가요?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "친환경 연포장재는 크게 세 가지 방향으로 나뉩니다. 첫째, 생분해 필름(PLA, PBAT 등)은 퇴비화 조건에서 분해됩니다. 둘째, 재활용 가능 단일 소재 파우치(모노 PE, 모노 PP)는 다층 복합 소재를 사용하지 않아 재활용률이 높습니다. 셋째, 재생 원료(r-PET, r-PE)를 일부 함유한 소재입니다. 단가는 일반 소재 대비 20~50% 추가되는 경우가 많으며, 국내 생분해 인증 기준(환경부 고시)과 해외 수출 시 요구되는 인증이 다를 수 있으므로 확인이 필요합니다.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "연포장재 업체 선정 시 가장 중요한 기준은 무엇인가요?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "식품 포장재 발주의 경우 HACCP 인증 또는 ISO 22000 인증 여부가 가장 중요한 검증 항목입니다. 그 외에 ①식품 접촉 소재 적합성 확인서 발급 가능 여부, ②샘플 제작 후 실물 확인 프로세스, ③납기 준수율 및 재발주 시 판 비용 재청구 여부, ④불량 처리 정책(재생산 또는 환불 기준)을 사전에 서면으로 확인하는 것을 권장합니다. Packlinx에 등록된 연포장재 업체는 기본 업체 정보를 통해 전문 분야와 인증 현황을 확인할 수 있습니다.",
+      },
+    },
+  ],
+};
+
+export default function FlexiblePackagingGuidePage() {
+  // Spread lowercase `hreflang` prop to bypass React 19 camelCase hoisting serialiser.
+  // React 19 outputs hrefLang= (camelCase) for metadata alternates; direct JSX spread
+  // with a plain-object key produces the lowercase hreflang= attribute crawlers expect.
+  const hreflangKo = { rel: "alternate", hreflang: "ko-KR", href: canonicalUrl } as React.LinkHTMLAttributes<HTMLLinkElement>;
+  const hreflangDefault = { rel: "alternate", hreflang: "x-default", href: canonicalUrl } as React.LinkHTMLAttributes<HTMLLinkElement>;
+  return (
+    <>
+      <link {...hreflangKo} />
+      <link {...hreflangDefault} />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
+      <main>
+        <h1>연포장재 완전 가이드 — 종류·소재·식품별 선택 기준 (2026년)</h1>
+        <p>
+          식품·화장품·커피·밀키트 구매 담당자가 연포장재를 처음 발주하거나 기존 소재를 교체할 때
+          가장 먼저 마주치는 질문은 같습니다. &ldquo;어떤 소재와 구조를 선택해야 할까?&rdquo;
+          연포장재는 파우치 종류만 해도 스탠드업·삼면봉합·사면봉합으로 나뉘고, 소재는 PE·PP·PET·
+          나일론·알루미늄 라미네이트 등 다양합니다. 이 가이드는 구매 담당자가 소재와 구조를 스스로
+          비교 판단하고 적합한 업체를 선정할 수 있도록, 핵심 기준을 항목별로 정리합니다. 특정 업체를
+          추천하거나 순위를 매기지 않으며, 모든 수치는 시장 일반 범위를 기준으로 합니다.
+        </p>
+
+        <section>
+          <h2>1. 연포장재란 무엇인가 — 경포장재와의 차이, 언제 선택해야 하나</h2>
+          <p>
+            <strong>연포장재(flexible packaging)</strong>는 외력에 의해 형태가 변하는 포장재를
+            통칭합니다. 파우치, 롤 필름, 합지 필름, 수축 필름이 대표적입니다.
+            <strong>경포장재(rigid packaging)</strong>인 유리병, 금속 캔, 경질 플라스틱 용기와
+            달리 형태가 고정되지 않아 물류 부피와 중량이 적고, 다양한 봉합 방식과 인쇄 옵션을 적용할
+            수 있습니다.
+          </p>
+          <p>다음 조건 중 하나 이상에 해당한다면 연포장재가 유리합니다.</p>
+          <ul>
+            <li>물류 비용 절감이 우선인 경우 (동일 부피 대비 포장재 중량이 낮음)</li>
+            <li>내용물 형태가 불규칙하거나 소분 포장이 필요한 경우</li>
+            <li>인쇄 면적이 넓고 고품질 그라비아 인쇄가 필요한 경우</li>
+            <li>진공 포장·질소 충전·지퍼 재봉합 등 기능성이 요구되는 경우</li>
+            <li>식품·건강기능식품의 장기 보관을 위해 산소·수분 차단이 필요한 경우</li>
+          </ul>
+          <blockquote>
+            <p>
+              연포장재 업체를 비교하려면{" "}
+              <Link href="/keywords/비닐-포장지-제작">Packlinx 연포장재 업체 디렉토리</Link>에서
+              소재·인증 기준으로 필터링해보세요.
+            </p>
+          </blockquote>
+        </section>
+
+        <section>
+          <h2>2. 연포장재 종류 비교 — 파우치 3종, 롤 필름, 합지 필름</h2>
+          <p>
+            연포장재는 봉합 방식과 구조에 따라 크게 파우치(스탠드업·삼면봉합·사면봉합), 롤 필름,
+            합지 필름으로 구분됩니다. 내용물의 특성, MOQ, 납기, 인쇄 적합성을 기준으로 비교하면
+            다음과 같습니다.
+          </p>
+          <table>
+            <thead>
+              <tr>
+                <th>종류</th>
+                <th>용도</th>
+                <th>MOQ 범위</th>
+                <th>납기(표준)</th>
+                <th>그라비아 인쇄 적합성</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>스탠드업 파우치</td>
+                <td>커피·견과류·밀키트·반찬</td>
+                <td>3,000~5,000매</td>
+                <td>3~4주</td>
+                <td>우수 (전면 인쇄 가능)</td>
+              </tr>
+              <tr>
+                <td>삼면봉합(3-side seal) 파우치</td>
+                <td>스낵·분말·건조식품·의약품</td>
+                <td>3,000~5,000매</td>
+                <td>2~3주</td>
+                <td>우수</td>
+              </tr>
+              <tr>
+                <td>사면봉합(4-side seal) 파우치</td>
+                <td>소량 분말·소스·소분 포장</td>
+                <td>5,000~10,000매</td>
+                <td>3~4주</td>
+                <td>우수</td>
+              </tr>
+              <tr>
+                <td>롤 필름</td>
+                <td>자동 포장기 연동·대량 식품 포장</td>
+                <td>100kg 이상(롤 단위)</td>
+                <td>2~3주</td>
+                <td>우수 (연속 인쇄)</td>
+              </tr>
+              <tr>
+                <td>합지 필름</td>
+                <td>레토르트·고온 살균 식품</td>
+                <td>3,000~5,000매</td>
+                <td>3~5주</td>
+                <td>우수 (다층 구조 필요)</td>
+              </tr>
+            </tbody>
+          </table>
+          <p>
+            <strong>스탠드업 파우치</strong>는 진열 편의성이 높아 소매 유통에 적합합니다. 지퍼(재봉합
+            가능), 노즐(액체 편의 개구), 투명 창 등 다양한 옵션을 추가할 수 있어 커피·건강기능식품·
+            밀키트에 많이 사용됩니다.
+          </p>
+          <p>
+            <strong>삼면봉합 파우치</strong>는 구조가 단순해 MOQ와 단가가 스탠드업보다 낮은 편입니다.
+            스낵·분말·건조 식품처럼 자립이 필요 없는 내용물에 적합합니다.
+          </p>
+          <p>
+            <strong>롤 필름</strong>은 자동 포장기(VFFS·HFFS)와 연동해 대량 연속 포장이 가능합니다.
+            자동 포장기 규격(필름 폭, 권취 방향)이 업체 공급 사양과 맞아야 하므로 발주 전 장비 규격
+            공유가 필수입니다.
+          </p>
+          <p>
+            <strong>합지 필름(레토르트 파우치)</strong>은 120℃ 이상 고온 살균 공정을 견디는 다층
+            구조 필름입니다. 알루미늄 라미네이트 층이 포함된 경우 투명도가 없으며, 투명 레토르트를
+            원한다면 투명 배리어 필름(나일론/PET 적층)을 별도로 검토해야 합니다.
+          </p>
+          <blockquote>
+            <p>
+              파우치 포장재 전문 업체를 찾으려면{" "}
+              <Link href="/keywords/지퍼백-제작">Packlinx 지퍼백·파우치 업체 목록</Link>에서
+              확인하세요.
+            </p>
+          </blockquote>
+        </section>
+
+        <section>
+          <h2>3. 소재별 특성과 적합 용도 — PE · PP · PET · 나일론 · 알루미늄 라미네이트</h2>
+          <p>
+            연포장재 소재 선택의 핵심 지표는 <strong>산소 차단성(OTR: Oxygen Transmission Rate)</strong>과{" "}
+            <strong>수분 차단성(WVTR: Water Vapor Transmission Rate)</strong>입니다. 수치가 낮을수록
+            차단성이 높습니다. 단일 소재만으로 모든 특성을 충족하기 어려워 대부분의 식품 연포장재는
+            두 가지 이상의 소재를 라미네이트(합지)한 다층 구조로 제작됩니다.
+          </p>
+          <table>
+            <thead>
+              <tr>
+                <th>소재</th>
+                <th>산소 차단성</th>
+                <th>수분 차단성</th>
+                <th>내열성</th>
+                <th>친환경성</th>
+                <th>단가 범위</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>PE(폴리에틸렌)</td>
+                <td>낮음</td>
+                <td>높음</td>
+                <td>낮음(60~80℃)</td>
+                <td>모노 PE 재활용 가능</td>
+                <td>낮음</td>
+              </tr>
+              <tr>
+                <td>PP(폴리프로필렌)</td>
+                <td>낮음</td>
+                <td>높음</td>
+                <td>중간(120℃ 일부 가능)</td>
+                <td>모노 PP 재활용 가능</td>
+                <td>낮음~중간</td>
+              </tr>
+              <tr>
+                <td>PET(폴리에스터)</td>
+                <td>중간</td>
+                <td>중간</td>
+                <td>높음(150℃ 이상)</td>
+                <td>r-PET 재생 원료 사용 가능</td>
+                <td>중간</td>
+              </tr>
+              <tr>
+                <td>나일론(PA)</td>
+                <td>높음</td>
+                <td>중간</td>
+                <td>높음(레토르트 가능)</td>
+                <td>낮음</td>
+                <td>중간~높음</td>
+              </tr>
+              <tr>
+                <td>알루미늄 라미네이트</td>
+                <td>매우 높음</td>
+                <td>매우 높음</td>
+                <td>높음(레토르트 가능)</td>
+                <td>낮음(복합 소재, 재활용 어려움)</td>
+                <td>높음</td>
+              </tr>
+              <tr>
+                <td>바이오/생분해 필름(PLA 등)</td>
+                <td>낮음~중간</td>
+                <td>낮음~중간</td>
+                <td>낮음</td>
+                <td>높음(퇴비화 조건에서 분해)</td>
+                <td>높음</td>
+              </tr>
+            </tbody>
+          </table>
+          <p>
+            <strong>PE·PP 단일 소재 파우치</strong>는 재활용이 가능한 모노 소재(mono-material)로
+            제작할 수 있어 친환경 규제 대응에 유리합니다. 다만 차단성이 낮아 산화·습기에 민감한
+            제품에는 적합하지 않습니다.
+          </p>
+          <p>
+            <strong>PET/PE 합지(2층 구조)</strong>는 가장 범용적인 식품 연포장재 소재 조합입니다.
+            외층 PET가 인쇄와 내열을 담당하고, 내층 PE가 실링(열접착)과 수분 차단을 담당합니다.
+          </p>
+          <p>
+            <strong>나일론/PE 또는 PET/나일론/PE 다층 구조</strong>는 산소 차단성이 높아야 하는
+            육류·수산물·델리 제품에 적합합니다. 나일론 층이 핀홀(pinholes) 발생을 억제해 파손
+            저항성도 높습니다.
+          </p>
+          <p>
+            <strong>알루미늄 라미네이트(레토르트 파우치)</strong>는 산소·수분·광선 차단성이 가장
+            높아 상온 장기 보관 식품(카레·즉석밥·참치)에 사용됩니다. 복합 소재 특성상 재활용이
+            어려우며, 마이크로웨이브 사용이 불가합니다.
+          </p>
+        </section>
+
+        <section>
+          <h2>4. 식품 안전 기준 — 식품위생법·KS규격·OTR·WVTR 읽는 법</h2>
+          <p>
+            식품 접촉 연포장재는 <strong>식품위생법 제9조</strong> 및{" "}
+            <strong>식품의약품안전처 고시 「기구·용기·포장의 기준 및 규격」</strong>을 준수해야
+            합니다. 업체에 발주 시 아래 서류를 요청하십시오.
+          </p>
+          <ul>
+            <li>
+              <strong>식품 접촉 소재 적합성 확인서(또는 성적서)</strong> — 식품용 기구·용기·포장
+              기준에 적합함을 확인하는 서류
+            </li>
+            <li>
+              <strong>KS T ISO 표준 성적서</strong> — 산소 투과율(OTR), 수분 투과율(WVTR) 측정값
+              포함
+            </li>
+            <li>
+              <strong>HACCP 인증서 또는 ISO 22000 인증서</strong> — 식품 포장 생산 위생 관리 체계
+              확인
+            </li>
+          </ul>
+          <p>
+            <strong>OTR(산소 투과율)</strong>은 단위 면적당 하루 동안 투과되는 산소량
+            [cc/m²·day·atm]으로 표시됩니다. 수치가 낮을수록 산소 차단성이 높습니다. 커피·견과류·
+            건강기능식품의 경우 OTR 10 이하를 권장합니다.
+          </p>
+          <p>
+            <strong>WVTR(수분 투과율)</strong>은 [g/m²·day] 단위로 표시됩니다. 수분에 민감한
+            건조 식품(분말·동결건조 등)은 WVTR 1 이하의 소재를 선택하는 것이 일반적입니다. 알루미늄
+            라미네이트 소재는 OTR·WVTR 모두 0에 가까운 수치를 달성합니다.
+          </p>
+          <p>
+            상세 규격은 식품의약품안전처 식품안전나라(
+            <a
+              href="https://www.foodsafetykorea.go.kr"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              foodsafetykorea.go.kr
+            </a>
+            ) 및 국가법령정보센터 식품위생법 원문에서 확인하시기 바랍니다.
+          </p>
+          <blockquote>
+            <p>
+              식품 포장재 소재 선택에 대한 추가 정보는{" "}
+              <Link href="/guides/food-packaging-materials">식품 포장재 소재 가이드</Link>에서
+              확인하세요.
+            </p>
+          </blockquote>
+        </section>
+
+        <section>
+          <h2>5. 인쇄 방식과 MOQ — 그라비아 인쇄 vs 디지털 인쇄</h2>
+          <p>
+            연포장재 인쇄는 그라비아(gravure) 인쇄가 주력이지만, 소량 발주를 위한 디지털 인쇄
+            방식도 보급되고 있습니다.
+          </p>
+          <table>
+            <thead>
+              <tr>
+                <th>구분</th>
+                <th>그라비아 인쇄</th>
+                <th>디지털 인쇄</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>적합 MOQ</td>
+                <td>3,000~10,000매 이상</td>
+                <td>300~1,000매</td>
+              </tr>
+              <tr>
+                <td>판 제작비(초도)</td>
+                <td>색상당 10~30만 원 (4색 기준 40~120만 원)</td>
+                <td>없음 또는 소액 셋업비</td>
+              </tr>
+              <tr>
+                <td>납기</td>
+                <td>3~5주 (판 제작 포함)</td>
+                <td>1~2주</td>
+              </tr>
+              <tr>
+                <td>컬러 재현도</td>
+                <td>매우 우수 (별색·금·은 가능)</td>
+                <td>우수 (CMYK 기준)</td>
+              </tr>
+              <tr>
+                <td>대량 단가</td>
+                <td>유리</td>
+                <td>불리</td>
+              </tr>
+            </tbody>
+          </table>
+          <p>
+            <strong>그라비아 인쇄</strong>는 필름에 잉크를 직접 전사하는 방식으로, 발색이 뛰어나고
+            대량 생산에서 단가가 낮습니다. 신규 디자인마다 동판(인쇄판)을 제작해야 하므로 초도
+            셋업 비용이 발생합니다. 색상 수가 많을수록 판 제작 비용이 증가하므로, 디자인을
+            결정한 뒤 발주하는 것이 비용 효율적입니다.
+          </p>
+          <p>
+            <strong>디지털 인쇄</strong>는 판 제작 없이 디지털 파일을 직접 출력해 소량 발주와 빠른
+            납기가 강점입니다. 테스트 마케팅, 시즌 한정 에디션, 시제품 제작에 적합합니다. 다만
+            대량 생산 시 단가 경쟁력이 그라비아보다 낮으며, 일부 특수 잉크(금속성 효과 등)
+            구현에 제약이 있을 수 있습니다.
+          </p>
+          <p>
+            재발주 시 동일 판을 보관하는 업체는 판 제작비를 재청구하지 않습니다. 정기 발주
+            제품이라면 첫 거래 시 판 보관 정책을 확인하십시오.
+          </p>
+        </section>
+
+        <section>
+          <h2>6. 친환경 연포장재 옵션 — 생분해 필름·재활용 단일 소재·재생 원료</h2>
+          <p>
+            ESG 경영과 포장재 재활용 의무화(자원재활용법 개정)에 따라 친환경 연포장재 수요가
+            증가하고 있습니다. 현재 국내에서 적용 가능한 옵션은 크게 세 가지입니다.
+          </p>
+          <ol>
+            <li>
+              <strong>생분해 필름 (PLA, PBAT 계열)</strong> — 산업용 퇴비화 조건(50~60℃,
+              고습도)에서 분해됩니다. 일반 매립·소각 환경에서는 기존 플라스틱과 분해 속도 차이가
+              크지 않을 수 있습니다. 환경부 친환경마크(EL724) 인증 여부를 확인하십시오.
+              단가는 일반 PE 대비 40~80% 높습니다.
+            </li>
+            <li>
+              <strong>재활용 가능 단일 소재 파우치 (모노 PE·모노 PP)</strong> — 다층 복합 소재를
+              사용하지 않아 재활용률이 높습니다. 분리수거 후 필름류로 배출 시 재활용 가능성이
+              있습니다. 다만 단일 소재 특성상 차단성이 다층 구조보다 낮아 내용물에 따라
+              적합성을 확인해야 합니다.
+            </li>
+            <li>
+              <strong>재생 원료 함유 소재 (r-PET·r-PE)</strong> — 재생 PET나 재생 PE를 일정 비율
+              함유한 소재입니다. EU 포장재 규정(PPWR) 대응이 필요한 수출 제품에 적합합니다.
+              재생 원료 함량 비율과 인증서(GRS, ISO 14044 LCA 등)를 업체에 요청하십시오.
+            </li>
+          </ol>
+          <p>
+            해외 수출 제품의 경우 EU의 포장재·포장폐기물 규정(Packaging and Packaging Waste
+            Regulation)이나 미국 각 주의 Extended Producer Responsibility(EPR) 법안 요건이
+            국내 기준과 다를 수 있습니다. 수출 대상국의 최신 규제를 별도로 확인하시기 바랍니다.
+          </p>
+        </section>
+
+        <section>
+          <h2>7. 업체 선택 체크리스트 — 식품 안전 인증·샘플·견적 비교</h2>
+          <p>
+            연포장재 업체를 최종 선정하기 전, 아래 5가지 항목을 반드시 확인하십시오.
+          </p>
+          <ul>
+            <li>
+              <strong>식품 안전 인증 확인 (HACCP·ISO 22000)</strong> — 식품 포장재를 생산하는
+              업체라면 HACCP 인증 또는 ISO 22000(식품 안전 경영 시스템) 인증 여부를 확인하십시오.
+              인증이 없더라도 식품용 소재 적합성 확인서와 자체 위생 관리 절차를 서면으로 요청할
+              수 있습니다.
+            </li>
+            <li>
+              <strong>실물 샘플 수령 후 발주</strong> — 그라비아 인쇄의 경우 교정쇄(press proof)
+              단계에서 인쇄 색상을 실물로 확인하는 절차가 있습니다. 교정쇄 없이 본 발주를 진행하면
+              색상 차이나 소재 불량을 사전에 검토할 기회가 없습니다. 디지털 인쇄의 경우에도
+              소량 샘플 발주 후 품질을 확인한 뒤 본 발주를 권장합니다.
+            </li>
+            <li>
+              <strong>판 보관 정책과 재발주 조건</strong> — 동판 보관 기간(통상 2~3년)과 재발주 시
+              판 비용 재청구 여부를 서면으로 확인하십시오. 정기 발주 제품은 판 보관료를 포함한
+              연간 비용을 업체와 사전에 합의하는 것이 유리합니다.
+            </li>
+            <li>
+              <strong>불량 처리 정책 서면 확인</strong> — 인쇄 불량(색상 오차·실링 불량·핀홀),
+              소재 불량, 납기 지연 발생 시 재생산 또는 환불 기준을 사전에 계약서에 명기하십시오.
+              구두 합의만으로는 분쟁 발생 시 보호받기 어렵습니다.
+            </li>
+            <li>
+              <strong>자동 포장기 호환성 확인 (롤 필름 발주 시)</strong> — 롤 필름을 자동 포장기와
+              연동해 사용할 계획이라면, 필름 폭·두께·권취 방향·열접착 온도 범위를 포장기 제조사
+              사양과 맞추어 업체에 사전 공유하십시오. 호환성 불일치는 가장 흔한 롤 필름 발주
+              실패 원인입니다.
+            </li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>8. Packlinx에서 연포장재 공급업체 견적 비교하기</h2>
+          <p>
+            Packlinx는 국내 연포장재 제조사와 구매 담당자를 연결하는 B2B 패키징 디렉토리입니다.
+            파우치 종류·소재·식품 안전 인증·지역 조건으로 업체를 필터링하고, 동일 사양으로 여러
+            업체에 견적을 요청해 비교하는 과정을 단축할 수 있습니다.
+          </p>
+          <p>
+            <strong>견적 비교 권장 절차:</strong>
+          </p>
+          <ol>
+            <li>
+              <Link href="/keywords/비닐-포장지-제작">연포장재 업체 디렉토리</Link>에서
+              소재·인증(HACCP/ISO 22000)·파우치 종류로 필터링
+            </li>
+            <li>
+              관심 업체 2~3곳의 프로필에서 생산 가능 소재, MOQ, 납기 이력 확인
+            </li>
+            <li>
+              동일 사양(파우치 종류·소재 구조·인쇄 색상 수·MOQ·납기 조건)으로 견적 요청
+            </li>
+            <li>
+              판 제작비 포함 총 발주 비용과 샘플 정책을 포함해 비교
+            </li>
+          </ol>
+          <p>
+            업체 목록은{" "}
+            <Link href="/keywords/비닐-포장지-제작">Packlinx 연포장재 업체 목록</Link>에서 확인하시기
+            바랍니다.
+          </p>
+          <p>
+            관련 포장재 가이드:{" "}
+            <Link href="/guides/food-packaging-materials">식품 포장재 소재 가이드</Link>,{" "}
+            <Link href="/guides/label-printing-guide">라벨 인쇄 업체 선정 가이드</Link>
+          </p>
+        </section>
+
+        <section>
+          <h2>자주 묻는 질문 (FAQ)</h2>
+
+          <div>
+            <h3>연포장재와 경포장재의 차이는 무엇인가요?</h3>
+            <p>
+              연포장재(flexible packaging)는 외력에 의해 형태가 변하는 포장재로, 파우치·롤 필름·합지
+              필름 등이 해당됩니다. 경포장재(rigid packaging)는 유리병·금속 캔·경질 플라스틱 용기처럼
+              형태가 고정된 포장재입니다. 연포장재는 경포장재 대비 물류 부피와 중량이 적고, 소재
+              유연성 덕분에 다양한 봉합 방식과 인쇄 옵션을 적용할 수 있습니다.
+            </p>
+          </div>
+
+          <div>
+            <h3>식품 포장에 사용할 수 있는 연포장재 소재는 무엇인가요?</h3>
+            <p>
+              국내 식품위생법 기준을 충족하는 연포장재 소재로는 PE(폴리에틸렌), PP(폴리프로필렌),
+              PET(폴리에스터), 나일론(PA), 알루미늄 라미네이트 필름 등이 있습니다. 소재별로 산소
+              차단성(OTR)과 수분 차단성(WVTR) 수치가 다르므로, 제품의 유통 기한과 보관 조건에 따라
+              소재를 선택해야 합니다. 식품 접촉면에 사용되는 소재는 식품의약품안전처 고시(기구·용기·
+              포장의 기준 및 규격)에 따라 안전성이 확인된 소재여야 합니다.
+            </p>
+          </div>
+
+          <div>
+            <h3>연포장재 소량 주문 MOQ는 어느 정도인가요?</h3>
+            <p>
+              디지털 인쇄 방식을 활용하는 소량 특화 업체의 경우 300~500매부터 주문이 가능합니다.
+              그라비아 인쇄 방식을 사용하는 일반 연포장재 업체는 3,000~10,000매를 기준 MOQ로
+              설정하는 경우가 많습니다. 소량 발주가 필요하다면 초도 셋업 비용(판 제작비) 없이
+              디지털 인쇄로 생산하는 업체를 우선 검토하시기 바랍니다.
+            </p>
+          </div>
+
+          <div>
+            <h3>친환경 연포장재는 일반 포장재와 어떻게 다른가요?</h3>
+            <p>
+              친환경 연포장재는 크게 세 가지 방향으로 나뉩니다. 첫째, 생분해 필름(PLA, PBAT 등)은
+              퇴비화 조건에서 분해됩니다. 둘째, 재활용 가능 단일 소재 파우치(모노 PE, 모노 PP)는
+              다층 복합 소재를 사용하지 않아 재활용률이 높습니다. 셋째, 재생 원료(r-PET, r-PE)를
+              일부 함유한 소재입니다. 단가는 일반 소재 대비 20~50% 추가되는 경우가 많으며, 국내
+              생분해 인증 기준(환경부 고시)과 해외 수출 시 요구되는 인증이 다를 수 있으므로
+              확인이 필요합니다.
+            </p>
+          </div>
+
+          <div>
+            <h3>연포장재 업체 선정 시 가장 중요한 기준은 무엇인가요?</h3>
+            <p>
+              식품 포장재 발주의 경우 HACCP 인증 또는 ISO 22000 인증 여부가 가장 중요한 검증
+              항목입니다. 그 외에 ①식품 접촉 소재 적합성 확인서 발급 가능 여부, ②샘플 제작 후
+              실물 확인 프로세스, ③납기 준수율 및 재발주 시 판 비용 재청구 여부, ④불량 처리 정책
+              (재생산 또는 환불 기준)을 사전에 서면으로 확인하는 것을 권장합니다.
+            </p>
+          </div>
+        </section>
+
+        <footer>
+          <p>
+            <em>
+              이 가이드는 Packlinx 콘텐츠팀이 작성하였습니다. 수록된 MOQ·단가·납기 수치는 시장
+              일반 범위를 기준으로 하며, 업체·소재별로 상이할 수 있습니다. 식품 안전 관련 수치는
+              식품위생법 및 식품의약품안전처 고시를 참고하였으며, 최신 규정은 공식 원문에서 확인하시기
+              바랍니다.
+            </em>
+          </p>
+        </footer>
+      </main>
+    </>
+  );
+}
