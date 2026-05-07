@@ -319,6 +319,12 @@ export async function listKeywordSlugs(): Promise<string[]> {
   return Object.keys(KEYWORD_REGISTRY);
 }
 
+export function listKeywordIndex(): Array<{ slug: string; titleKo: string }> {
+  return Object.entries(KEYWORD_REGISTRY)
+    .filter(([slug]) => slug !== 'test-keyword')
+    .map(([slug, meta]) => ({ slug, titleKo: meta.titleKo }));
+}
+
 export async function getKeywordPage(
   slug: string
 ): Promise<KeywordPageData | null> {

@@ -747,7 +747,8 @@ export default async function CompanyPage({ params }: Props) {
               </p>
               <BusinessRegistrationInfo theme="dark" />
             </div>
-            <div className="flex gap-4 text-[12px] text-slate-400">
+            <div className="flex flex-wrap gap-4 text-[12px] text-slate-400">
+              <a href="https://keywords.packlinx.com/keywords" className="hover:text-slate-200 transition-colors">키워드 디렉터리</a>
               <Link href="/privacy" className="hover:text-slate-200 transition-colors">개인정보처리방침</Link>
               <Link href="/terms" className="hover:text-slate-200 transition-colors">이용약관</Link>
               <Link href="/opt-out?type=takedown" className="hover:text-slate-200 transition-colors">권리침해 신고</Link>

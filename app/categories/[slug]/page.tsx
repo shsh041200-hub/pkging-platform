@@ -77,6 +77,39 @@ const RELATED_CATEGORIES: Record<IndustryCategory, IndustryCategory[]> = {
   'electronics-industrial':  ['ecommerce-shipping', 'food-beverage', 'pharma-health'],
 }
 
+const CATEGORY_KEYWORDS: Record<IndustryCategory, Array<{ slug: string; label: string }>> = {
+  'food-beverage': [
+    { slug: '지퍼백-제작', label: '지퍼백 제작' },
+    { slug: '비닐봉투-제작', label: '비닐봉투 제작' },
+    { slug: '진공포장기-가격', label: '진공포장기 가격' },
+    { slug: '유리병-제작', label: '유리병 제작' },
+  ],
+  'ecommerce-shipping': [
+    { slug: '택배박스-제작', label: '택배박스 제작' },
+    { slug: '골판지박스-제작', label: '골판지박스 제작' },
+    { slug: '소량-박스-제작', label: '소량 박스 제작' },
+    { slug: '박스-견적', label: '박스 견적' },
+  ],
+  'cosmetics-beauty': [
+    { slug: '화장품-용기-제작', label: '화장품 용기 제작' },
+    { slug: '화장품-펌프-용기', label: '화장품 펌프 용기' },
+    { slug: '공병-가격', label: '공병 가격' },
+    { slug: '라벨-스티커-제작', label: '라벨 스티커 제작' },
+  ],
+  'pharma-health': [
+    { slug: '플라스틱-용기-제작', label: '플라스틱 용기 제작' },
+    { slug: '유리병-제작', label: '유리병 제작' },
+    { slug: '라벨-스티커-제작', label: '라벨 스티커 제작' },
+    { slug: '스티커-인쇄-업체', label: '스티커 인쇄 업체' },
+  ],
+  'electronics-industrial': [
+    { slug: '박스-테이프-제작', label: '박스 테이프 제작' },
+    { slug: '택배박스-제작', label: '택배박스 제작' },
+    { slug: '테이프-제작', label: '테이프 제작' },
+    { slug: '골판지박스-제작', label: '골판지박스 제작' },
+  ],
+}
+
 function slugToCategory(slug: string): IndustryCategory | undefined {
   return INDUSTRY_CATEGORIES.find((k) => k === slug)
 }
@@ -486,7 +519,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
       </section>
 
       {/* Other Categories */}
-      <section className="max-w-7xl mx-auto px-5 sm:px-8 pb-12">
+      <section className="max-w-7xl mx-auto px-5 sm:px-8 pb-8">
         <h2 className="text-[13px] font-semibold text-gray-400 uppercase tracking-wider mb-4">다른 카테고리</h2>
         <div className="flex flex-wrap gap-2">
           {INDUSTRY_CATEGORIES.filter((k) => k !== categoryKey && !RELATED_CATEGORIES[categoryKey].includes(k)).map((key) => (
@@ -498,6 +531,28 @@ export default async function CategoryPage({ params, searchParams }: Props) {
               {INDUSTRY_CATEGORY_LABELS[key]}
             </Link>
           ))}
+        </div>
+      </section>
+
+      {/* Related Keywords */}
+      <section className="max-w-7xl mx-auto px-5 sm:px-8 pb-12">
+        <h2 className="text-[13px] font-semibold text-gray-400 uppercase tracking-wider mb-4">관련 검색 키워드</h2>
+        <div className="flex flex-wrap gap-2">
+          {(CATEGORY_KEYWORDS[categoryKey] ?? []).map(({ slug, label }) => (
+            <a
+              key={slug}
+              href={`https://keywords.packlinx.com/keywords/${slug}`}
+              className="text-[13px] text-[#533afd] bg-[#533afd]/[0.06] hover:bg-[#533afd]/[0.12] border border-[#533afd]/[0.15] hover:border-[#533afd]/[0.30] px-3 py-1.5 rounded-lg transition-colors"
+            >
+              {label}
+            </a>
+          ))}
+          <a
+            href="https://keywords.packlinx.com/keywords"
+            className="text-[13px] text-gray-500 bg-gray-100 hover:bg-gray-200 px-3 py-1.5 rounded-lg transition-colors"
+          >
+            키워드 전체 보기 →
+          </a>
         </div>
       </section>
 
@@ -513,7 +568,8 @@ export default async function CategoryPage({ params, searchParams }: Props) {
               </p>
               <BusinessRegistrationInfo theme="dark" />
             </div>
-            <div className="flex gap-5 text-[12px] text-slate-400">
+            <div className="flex flex-wrap gap-5 text-[12px] text-slate-400">
+              <a href="https://keywords.packlinx.com/keywords" className="hover:text-slate-200 transition-colors">키워드 디렉터리</a>
               <Link href="/guides" className="hover:text-slate-200 transition-colors">패키징 가이드</Link>
               <Link href="/privacy" className="hover:text-slate-200 transition-colors">개인정보처리방침</Link>
               <Link href="/terms" className="hover:text-slate-200 transition-colors">이용약관</Link>
