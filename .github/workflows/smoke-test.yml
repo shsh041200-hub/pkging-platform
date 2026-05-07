@@ -34,7 +34,7 @@ jobs:
           # Korean slugs are percent-encoded so curl does not need locale flags.
           PATHS=(
             "/"
-            "/categories/film-pouch"
+            "/categories/food-beverage"
             "/guides/flexible-packaging-guide"
             "/guides/packaging-accessories-guide"
             "/guides/packaging-machinery-guide"
