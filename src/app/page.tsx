@@ -468,20 +468,19 @@ export default async function HomePage({
               </div>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                 {INDUSTRY_CATEGORIES.filter((cat) => categoryCounts[cat] > 0).map((cat) => (
-                  <form key={cat} action={`/categories/${categoryToSlug(cat)}`} className="contents">
-                    <button
-                      type="submit"
-                      className="group flex items-center gap-2.5 bg-white border border-gray-200 rounded-lg px-3 py-2.5 hover:border-[#C2410C]/30 hover:bg-[#FFF7ED] transition-all duration-150"
-                    >
-                      <span className="text-base flex-shrink-0">{INDUSTRY_CATEGORY_ICONS[cat]}</span>
-                      <div className="min-w-0 text-left">
-                        <span className="text-[13px] font-semibold text-gray-900 group-hover:text-[#C2410C] transition-colors block truncate">
-                          {INDUSTRY_CATEGORY_LABELS[cat]}
-                        </span>
-                        <span className="text-[11px] text-gray-400">{categoryCounts[cat]}개</span>
-                      </div>
-                    </button>
-                  </form>
+                  <Link
+                    key={cat}
+                    href={`/categories/${categoryToSlug(cat)}`}
+                    className="group flex items-center gap-2.5 bg-white border border-gray-200 rounded-lg px-3 py-2.5 hover:border-[#C2410C]/30 hover:bg-[#FFF7ED] transition-all duration-150"
+                  >
+                    <span className="text-base flex-shrink-0">{INDUSTRY_CATEGORY_ICONS[cat]}</span>
+                    <div className="min-w-0 text-left">
+                      <span className="text-[13px] font-semibold text-gray-900 group-hover:text-[#C2410C] transition-colors block leading-tight">
+                        {INDUSTRY_CATEGORY_LABELS[cat]}
+                      </span>
+                      <span className="text-[11px] text-gray-400">{categoryCounts[cat]}개</span>
+                    </div>
+                  </Link>
                 ))}
               </div>
 
