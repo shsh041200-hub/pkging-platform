@@ -29,7 +29,6 @@ import { WebsiteFavicon } from '@/components/WebsiteFavicon'
 import { CertBadge } from '@/components/CertBadge'
 import { SortDropdown } from '@/components/SortDropdown'
 import { Pagination } from '@/components/Pagination'
-import { TermsNoticeFooterLine } from '@/components/TermsNoticeFooterLine'
 import { BusinessRegistrationInfo } from '@/components/BusinessRegistrationInfo'
 
 const PAGE_SIZE = 30
@@ -435,7 +434,7 @@ export default async function HomePage({
           </div>
 
           {/* Search bar */}
-          <div className="max-w-[560px] w-full mx-auto mt-8">
+          <div className="max-w-[560px] lg:max-w-[720px] w-full mx-auto mt-8">
             <form method="GET" className="flex rounded-xl overflow-hidden border border-gray-200 shadow-[0_2px_8px_rgba(0,0,0,0.06)] focus-within:border-[#C2410C] focus-within:shadow-[0_2px_8px_rgba(0,0,0,0.06),0_0_0_3px_rgba(194,65,12,0.12)] transition-shadow">
               <input
                 name="q"
@@ -462,7 +461,7 @@ export default async function HomePage({
 
           {/* Category grid */}
           {showingCategory && (
-            <div className="max-w-[560px] mx-auto w-full mt-8">
+            <div className="max-w-[560px] lg:max-w-[720px] mx-auto w-full mt-8">
               <div className="flex items-center justify-center mb-4">
                 <span className="text-[11px] font-semibold text-gray-400 uppercase tracking-widest">카테고리 탐색</span>
               </div>
@@ -493,7 +492,11 @@ export default async function HomePage({
                   href="/services/printing-design"
                   className="group flex items-center gap-4 bg-white border border-gray-200 rounded-xl px-5 py-4 hover:border-[#C2410C]/30 hover:bg-[#FFF7ED] transition-all duration-150"
                 >
-                  <span className="text-2xl flex-shrink-0">🖨️</span>
+                  <span className="flex-shrink-0 w-8 h-8 flex items-center justify-center">
+                    <svg className="w-6 h-6 text-gray-500 group-hover:text-[#C2410C] transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.6}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0110.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0l.229 2.523a1.125 1.125 0 01-1.12 1.227H7.231c-.662 0-1.18-.568-1.12-1.227L6.34 18m11.318 0h1.091A2.25 2.25 0 0021 15.75V9.456c0-1.081-.768-2.015-1.837-2.175a48.055 48.055 0 00-1.913-.247M6.34 18H5.25A2.25 2.25 0 013 15.75V9.456c0-1.081.768-2.015 1.837-2.175a48.041 48.041 0 011.913-.247m10.5 0a48.536 48.536 0 00-10.5 0m10.5 0V3.375c0-.621-.504-1.125-1.125-1.125h-8.25c-.621 0-1.125.504-1.125 1.125v3.659M18.25 7.034l-.057-.022M6.75 7.034c-.018-.007-.036-.014-.057-.022" />
+                    </svg>
+                  </span>
                   <div className="min-w-0 flex-1">
                     <span className="text-[14px] font-semibold text-gray-900 group-hover:text-[#C2410C] transition-colors block">
                       인쇄·디자인 서비스
@@ -934,7 +937,7 @@ export default async function HomePage({
             <p className="text-gray-600 font-semibold mb-1.5 text-[15px]">검색 결과가 없습니다</p>
             <p className="text-gray-400 text-sm mb-8">검색어나 카테고리를 변경해보세요</p>
 
-            <div className="max-w-[560px] mx-auto">
+            <div className="max-w-[560px] lg:max-w-[720px] mx-auto">
               <div className="flex items-center justify-center mb-4">
                 <span className="text-[11px] font-semibold text-gray-400 uppercase tracking-widest">카테고리별로 업체를 둘러보세요</span>
               </div>
@@ -962,7 +965,6 @@ export default async function HomePage({
 
       {/* Footer */}
       <footer className="border-t border-white/[0.06] bg-[#0F172A] mt-auto">
-        <TermsNoticeFooterLine theme="dark" />
         <div className="max-w-7xl mx-auto px-5 sm:px-8 py-8">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div className="flex flex-col gap-2">
