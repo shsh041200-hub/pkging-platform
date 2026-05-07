@@ -136,7 +136,7 @@ export default function FlexiblePackagingGuidePage() {
 
         <p>
           업체를 바로 찾으신다면{" "}
-          <Link href="/keywords/비닐-포장지-제작">
+          <Link href="/products/film">
             <strong>Packlinx 연포장재 업체 목록 →</strong>
           </Link>
         </p>
@@ -161,7 +161,7 @@ export default function FlexiblePackagingGuidePage() {
           <blockquote>
             <p>
               연포장재 업체를 비교하려면{" "}
-              <Link href="/keywords/비닐-포장지-제작">Packlinx 연포장재 업체 디렉토리</Link>에서
+              <Link href="/products/film">Packlinx 연포장재 업체 디렉토리</Link>에서
               소재·인증 기준으로 필터링해보세요.
             </p>
           </blockquote>
@@ -533,7 +533,7 @@ export default function FlexiblePackagingGuidePage() {
           </p>
           <ol>
             <li>
-              <Link href="/keywords/비닐-포장지-제작">연포장재 업체 디렉토리</Link>에서
+              <Link href="/products/film">연포장재 업체 디렉토리</Link>에서
               소재·인증(HACCP/ISO 22000)·파우치 종류로 필터링
             </li>
             <li>
@@ -548,7 +548,7 @@ export default function FlexiblePackagingGuidePage() {
           </ol>
           <p>
             업체 목록은{" "}
-            <Link href="/keywords/비닐-포장지-제작">Packlinx 연포장재 업체 목록</Link>에서 확인하시기
+            <Link href="/products/film">Packlinx 연포장재 업체 목록</Link>에서 확인하시기
             바랍니다.
           </p>
           <p>

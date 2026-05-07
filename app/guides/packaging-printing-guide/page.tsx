@@ -116,7 +116,7 @@ export default function PackagingPrintingGuidePage() {
 
         <p>
           업체를 바로 찾으신다면{" "}
-          <Link href="/products/printing">
+          <Link href="/products/label">
             <strong>Packlinx 포장 인쇄 업체 목록 →</strong>
           </Link>
         </p>
@@ -209,7 +209,7 @@ export default function PackagingPrintingGuidePage() {
           <blockquote>
             <p>
               인쇄 방식별 업체를 비교하려면{" "}
-              <Link href="/products/printing">Packlinx 인쇄 업체 디렉토리</Link>를 확인하세요.
+              <Link href="/products/label">Packlinx 인쇄 업체 디렉토리</Link>를 확인하세요.
             </p>
           </blockquote>
         </section>
@@ -476,7 +476,7 @@ export default function PackagingPrintingGuidePage() {
           </p>
           <ol>
             <li>
-              <Link href="/products/printing">인쇄 업체 카테고리 페이지</Link>에서 인쇄 방식·후가공·지역으로
+              <Link href="/products/label">인쇄 업체 카테고리 페이지</Link>에서 인쇄 방식·후가공·지역으로
               필터링
             </li>
             <li>관심 업체 2~3곳의 프로필 페이지에서 보유 설비, 후가공 범위, MOQ 확인</li>
@@ -486,7 +486,7 @@ export default function PackagingPrintingGuidePage() {
           </ol>
           <p>
             업체 목록을 확인하려면{" "}
-            <Link href="/products/printing">인쇄·후가공 업체 목록</Link>에서 조건에 맞는 업체를
+            <Link href="/products/label">인쇄·후가공 업체 목록</Link>에서 조건에 맞는 업체를
             찾아보세요.
           </p>
         </section>

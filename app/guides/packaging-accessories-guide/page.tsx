@@ -125,6 +125,13 @@ export default function PackagingAccessoriesGuidePage() {
           수치는 시장 일반 범위를 기준으로 합니다.
         </p>
 
+        <p>
+          업체를 바로 찾으신다면{" "}
+          <Link href="/products/cushioning">
+            <strong>Packlinx 포장 부자재 업체 목록 →</strong>
+          </Link>
+        </p>
+
         <section>
           <h2>1. 포장 부자재 분류 — 완충재·봉함재·충전재·운반보조재·표기재 비교</h2>
           <p>
@@ -263,7 +270,7 @@ export default function PackagingAccessoriesGuidePage() {
           <blockquote>
             <p>
               완충재 공급업체를 비교하려면{" "}
-              <Link href="/keywords/완충재">
+              <Link href="/products/cushioning">
                 Packlinx 완충재 업체 디렉토리
               </Link>
               에서 소재·MOQ 조건으로 필터링하세요.
@@ -350,7 +357,7 @@ export default function PackagingAccessoriesGuidePage() {
           <blockquote>
             <p>
               포장용 테이프 업체를 비교하려면{" "}
-              <Link href="/keywords/포장-테이프">
+              <Link href="/products/tape">
                 Packlinx 포장 테이프 업체 디렉토리
               </Link>
               에서 조건별로 검색하세요.
@@ -637,7 +644,7 @@ export default function PackagingAccessoriesGuidePage() {
           </p>
           <blockquote>
             <p>
-              <Link href="/keywords/포장-부자재">
+              <Link href="/products/cushioning">
                 Packlinx 포장 부자재 업체 디렉토리에서 지금 바로 검색하기
               </Link>
             </p>
@@ -648,16 +655,42 @@ export default function PackagingAccessoriesGuidePage() {
           </p>
           <ul>
             <li>
-              <Link href="/keywords/완충재">완충재 업체 (에어캡·EPE·에어 쿠션)</Link>
+              <Link href="/products/cushioning">완충재 업체 (에어캡·EPE·에어 쿠션)</Link>
             </li>
             <li>
-              <Link href="/keywords/포장-테이프">포장 테이프 업체 (OPP·천·보안 테이프)</Link>
+              <Link href="/products/tape">포장 테이프 업체 (OPP·천·보안 테이프)</Link>
             </li>
             <li>
-              <Link href="/keywords/충전재">충전재 업체 (허니컴·우드울·크래프트지)</Link>
+              <Link href="/products/cushioning">충전재 업체 (허니컴·우드울·크래프트지)</Link>
             </li>
             <li>
-              <Link href="/keywords/포장-부자재">전체 포장 부자재 업체 검색</Link>
+              <Link href="/products/cushioning">전체 포장 부자재 업체 검색</Link>
+            </li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>관련 가이드</h2>
+          <ul>
+            <li>
+              <Link href="/guides/flexible-packaging-guide">
+                연포장재 완전 가이드 — 종류·소재·선택 기준
+              </Link>
+            </li>
+            <li>
+              <Link href="/guides/plastic-container-guide">
+                플라스틱 용기·병 종류 완전 가이드 — PET·PP·HDPE 소재 선택 + 식약처 기준
+              </Link>
+            </li>
+            <li>
+              <Link href="/guides/glass-metal-container-guide">
+                유리·금속 용기 완전 가이드 — 종류·소재·MOQ·인쇄 옵션 비교
+              </Link>
+            </li>
+            <li>
+              <Link href="/guides/packaging-machinery-guide">
+                포장기계·자동화 완전 가이드 — 종류·ROI·도입 체크리스트
+              </Link>
             </li>
           </ul>
         </section>

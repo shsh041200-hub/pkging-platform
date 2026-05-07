@@ -124,6 +124,17 @@ export default function GlassMetalContainerGuidePage() {
           않으며, 수치는 시장 일반 범위를 기준으로 합니다.
         </p>
 
+        <p>
+          업체를 바로 찾으신다면{" "}
+          <Link href="/products/container">
+            <strong>Packlinx 유리 용기 업체 목록 →</strong>
+          </Link>{" "}
+          또는{" "}
+          <Link href="/products/can">
+            <strong>Packlinx 금속 캔 업체 목록 →</strong>
+          </Link>
+        </p>
+
         <section>
           <h2>1. 유리 용기 종류 — 색상·형태별 비교</h2>
           <p>
@@ -192,7 +203,7 @@ export default function GlassMetalContainerGuidePage() {
           <blockquote>
             <p>
               유리 용기 공급업체를 비교하려면{" "}
-              <Link href="/keywords/유리-용기">
+              <Link href="/products/container">
                 Packlinx 유리 용기 업체 디렉토리
               </Link>
               에서 용량·색상·형태 조건으로 필터링하세요.
@@ -578,11 +589,11 @@ export default function GlassMetalContainerGuidePage() {
           </p>
           <ol>
             <li>
-              <Link href="/keywords/유리-용기">
+              <Link href="/products/container">
                 Packlinx 유리 용기 업체 디렉토리
               </Link>
               또는{" "}
-              <Link href="/keywords/금속-캔">
+              <Link href="/products/can">
                 Packlinx 금속 캔 업체 디렉토리
               </Link>
               에서 소재·용량·인증 조건으로 필터링
@@ -599,15 +610,38 @@ export default function GlassMetalContainerGuidePage() {
             </li>
           </ol>
           <p>
-            관련 포장재 가이드:{" "}
-            <Link href="/guides/plastic-container-guide">
-              플라스틱 용기·병 완전 가이드
-            </Link>
-            ,{" "}
-            <Link href="/guides/flexible-packaging-guide">
-              연포장재 완전 가이드
-            </Link>
+            업체 목록은{" "}
+            <Link href="/products/container">Packlinx 유리 용기 업체 목록</Link>
+            {" "}또는{" "}
+            <Link href="/products/can">Packlinx 금속 캔 업체 목록</Link>에서
+            확인하시기 바랍니다.
           </p>
+        </section>
+
+        <section>
+          <h2>관련 가이드</h2>
+          <ul>
+            <li>
+              <Link href="/guides/plastic-container-guide">
+                플라스틱 용기·병 종류 완전 가이드 — PET·PP·HDPE 소재 선택 + 식약처 기준
+              </Link>
+            </li>
+            <li>
+              <Link href="/guides/flexible-packaging-guide">
+                연포장재 완전 가이드 — 종류·소재·선택 기준
+              </Link>
+            </li>
+            <li>
+              <Link href="/guides/label-printing-guide">
+                라벨 인쇄 업체 선정 가이드 — 인쇄 방식·소재·MOQ·납기 비교
+              </Link>
+            </li>
+            <li>
+              <Link href="/guides/packaging-accessories-guide">
+                포장 부자재 종류 완전 가이드 — 완충재·테이프·충전재 비교
+              </Link>
+            </li>
+          </ul>
         </section>
 
         <section>
