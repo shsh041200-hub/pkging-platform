@@ -950,7 +950,7 @@ export default async function HomePage({
                   >
                     <span className="text-base flex-shrink-0">{INDUSTRY_CATEGORY_ICONS[cat]}</span>
                     <div className="min-w-0 text-left">
-                      <span className="text-[13px] font-semibold text-gray-900 group-hover:text-[#C2410C] transition-colors block truncate">
+                      <span className="text-[13px] font-semibold text-gray-900 group-hover:text-[#C2410C] transition-colors block leading-tight">
                         {INDUSTRY_CATEGORY_LABELS[cat]}
                       </span>
                       <span className="text-[11px] text-gray-400">{categoryCounts[cat]}개</span>
