@@ -5,7 +5,7 @@ import Link from "next/link";
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://packlinx.com";
 const canonicalUrl = `${siteUrl}/guides/flexible-packaging-guide`;
 
-const title = "연포장재 완전 가이드 — 종류·소재·선택 기준 | Packlinx";
+const title = "연포장재 완전 가이드 — 종류·소재·선택 기준";
 const description =
   "연포장재 종류·소재·식품 안전 기준·업체 선택 체크리스트를 한 곳에 정리했습니다. 파우치, 롤 필름, 합지 소재 비교와 Packlinx 연포장재 업체 디렉토리.";
 

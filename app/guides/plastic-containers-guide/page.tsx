@@ -5,7 +5,7 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://packlinx.com";
 const canonicalUrl = `${siteUrl}/guides/plastic-containers-guide`;
 
 const title =
-  "플라스틱 용기·병 완전 가이드 — 종류·소재·선택 기준 | Packlinx";
+  "플라스틱 용기·병 완전 가이드 — 종류·소재·선택 기준";
 const description =
   "플라스틱 용기·병 종류·소재·식품 안전 기준·업체 선택 체크리스트를 한 곳에 정리했습니다. PET 병, PE·PP·HDPE 용기 비교와 Packlinx 플라스틱 용기 업체 디렉토리.";
 

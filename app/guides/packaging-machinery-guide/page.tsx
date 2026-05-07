@@ -5,7 +5,7 @@ import Link from "next/link";
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://packlinx.com";
 const canonicalUrl = `${siteUrl}/guides/packaging-machinery-guide`;
 
-const title = "포장기계·자동화 완전 가이드 — 종류·ROI·도입 체크리스트 | Packlinx";
+const title = "포장기계·자동화 완전 가이드 — 종류·ROI·도입 체크리스트";
 const description =
   "충전기·밀봉기·라벨러·박스포장기·팔레타이저 종류 비교, 자동화 ROI 계산식, 국내 주요 제조사 비교, 식약처·KC 인증 요건, 발주 전 체크리스트를 한 곳에 정리했습니다.";
 

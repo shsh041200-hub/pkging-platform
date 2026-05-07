@@ -5,7 +5,7 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://packlinx.com";
 const canonicalUrl = `${siteUrl}/guides/plastic-container-guide`;
 
 const title =
-  "플라스틱 용기·병 종류 완전 가이드 — PET·PP·HDPE 소재 선택 + 식약처 기준 (2026) | Packlinx";
+  "플라스틱 용기·병 종류 완전 가이드 — PET·PP·HDPE 소재 선택 + 식약처 기준 (2026)";
 const description =
   "PET·PP·HDPE·PS·PC 소재 비교, 식품용 플라스틱 용기 식약처 기준, 사출·블로우·진공 성형 공법 차이, 금형비·MOQ·친환경 rPET 비용을 한곳에 정리했습니다.";
 
