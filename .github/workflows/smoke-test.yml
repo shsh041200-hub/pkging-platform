@@ -1,7 +1,7 @@
 # PACAA-303 — Post-deploy smoke test
-# Triggers when Vercel creates a successful GitHub Deployment (Production only).
-# Fails the check if any URL returns non-200, surfacing regressions before
-# CMO heartbeats catch them (~30-60 min latency avoided).
+# Fires on every GitHub Deployment status update from Vercel; skips unless
+# the environment is "Production" and the state is "success".
+# Fails the CI check if any critical URL returns non-200.
 name: smoke-test
 
 on:
@@ -17,48 +17,49 @@ jobs:
     timeout-minutes: 5
 
     steps:
-      - name: Resolve production URL
+      - name: Resolve base URL
         id: url
         run: |
-          # Prefer packlinx.com; fall back to deployment URL from the event.
-          BASE="${{ github.event.deployment_status.target_url }}"
-          # Strip trailing slash
-          BASE="${BASE%/}"
-          echo "base=$BASE" >> "$GITHUB_OUTPUT"
-          echo "Testing against: $BASE"
+          # Prefer explicit production domain; fall back to Vercel deployment URL.
+          TARGET="${{ github.event.deployment_status.target_url }}"
+          TARGET="${TARGET%/}"
+          echo "base=${TARGET}" >> "$GITHUB_OUTPUT"
+          echo "Smoke-testing: ${TARGET}"
 
       - name: Check critical pages
         env:
           BASE: ${{ steps.url.outputs.base }}
         run: |
-          URLS=(
+          # Paths verified against app/ route tree as of PACAA-303.
+          # Korean slugs are percent-encoded so curl does not need locale flags.
+          PATHS=(
             "/"
-            "/categories/flexible-packaging"
+            "/categories/film-pouch"
             "/guides/flexible-packaging-guide"
             "/guides/packaging-accessories-guide"
             "/guides/packaging-machinery-guide"
-            "/guides/plastic-containers-guide"
-            "/keywords/%ED%8F%AC%EC%9E%A5%EC%9E%AC"
+            "/guides/plastic-container-guide"
+            "/keywords/%EA%B3%A8%ED%8C%90%EC%A7%80%EB%B0%95%EC%8A%A4-%EC%A0%9C%EC%9E%91"
             "/sitemap.xml"
           )
 
           FAIL=0
-          for PATH in "${URLS[@]}"; do
+          for PATH in "${PATHS[@]}"; do
             URL="${BASE}${PATH}"
-            STATUS=$(curl -s -o /dev/null -w "%{http_code}" --max-time 15 "$URL")
-            if [ "$STATUS" -eq 200 ]; then
-              echo "✅ $STATUS  $URL"
+            HTTP=$(curl -s -o /dev/null -w "%{http_code}" --max-time 15 --location "$URL")
+            if [ "$HTTP" -eq 200 ]; then
+              echo "✅ $HTTP  $PATH"
             else
-              echo "❌ $STATUS  $URL"
+              echo "❌ $HTTP  $PATH"
               FAIL=1
             fi
           done
 
           if [ "$FAIL" -eq 1 ]; then
             echo ""
-            echo "One or more URLs returned non-200."
-            echo "→ Manual action: Vercel dashboard → Deployments → roll back to previous."
+            echo "One or more URLs returned non-200. Manual action required:"
+            echo "  Vercel dashboard → Deployments → Instant Rollback to previous."
             exit 1
           fi
           echo ""
-          echo "All checks passed."
+          echo "All ${#PATHS[@]} checks passed."
