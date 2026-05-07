@@ -55,3 +55,28 @@ export async function getCompaniesBySlugs(slugs: string[]): Promise<CompanyFull[
   const bySlug = Object.fromEntries((data ?? []).map((c: CompanyFull) => [c.slug, c]))
   return slugs.map((s) => bySlug[s]).filter(Boolean) as CompanyFull[]
 }
+
+/** Returns 0–100 representing how many of the 18 compare fields are filled. */
+export function computeCompleteness(c: CompanyFull): number {
+  const filled = [
+    !!(c.city || c.province),
+    c.founded_year != null,
+    true, // is_verified: non-nullable boolean — always data-present
+    (c.industry_categories?.length ?? 0) > 0,
+    c.material_type != null,
+    c.packaging_form != null,
+    (c.certifications?.length ?? 0) > 0,
+    (c.service_capabilities?.length ?? 0) > 0,
+    c.print_method != null,
+    c.moq_value != null,
+    c.lead_time_standard_days != null,
+    c.lead_time_express_days != null,
+    c.price_tier != null,
+    c.sample_available != null,
+    true, // cold_packaging_available: non-nullable boolean
+    true, // greenwashing_verified: non-nullable boolean
+    c.reuse_model != null,
+    c.avg_rating != null,
+  ].filter(Boolean).length
+  return Math.round((filled / 18) * 100)
+}
