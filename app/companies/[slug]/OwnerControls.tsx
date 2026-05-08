@@ -58,9 +58,9 @@ export function OwnerControls({ companyId, slug, variant }: Props) {
   }
 
   if (variant.kind === 'similar-optout-on') {
-    return <SimilarOptoutToggle companyId={companyId} initialOptedOut={true} />
+    return <SimilarOptoutToggle slug={slug} initialOptedOut={true} />
   }
 
   // similar-optout-off
-  return <SimilarOptoutToggle companyId={companyId} initialOptedOut={false} />
+  return <SimilarOptoutToggle slug={slug} initialOptedOut={false} />
 }

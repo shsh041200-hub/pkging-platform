@@ -3,6 +3,17 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   // Enforce ISR revalidation interval (seconds). Backend can lower via on-demand revalidation.
   // This is a page-level default; individual pages may override.
+  async rewrites() {
+    return [
+      // PACAA-360: sitemap shard handler lives at /sitemaps/[id] to avoid
+      // Next.js internal metadata routing conflict at app/sitemap/. Public
+      // URL /sitemap/:id is preserved via this rewrite.
+      {
+        source: '/sitemap/:id',
+        destination: '/sitemaps/:id',
+      },
+    ]
+  },
   async redirects() {
     return [
       // PACAA-201: brief spec used plural slug; actual published route is singular
