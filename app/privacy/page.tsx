@@ -6,7 +6,7 @@ import { BusinessRegistrationInfo } from '@/components/BusinessRegistrationInfo'
 
 export const metadata: Metadata = {
   title: '개인정보처리방침 — Packlinx',
-  description: 'Packlinx 개인정보처리방침 — 최종 개정일 2026년 5월 2일',
+  description: 'Packlinx 개인정보처리방침 — 최종 개정일 2026년 5월 8일',
 }
 
 export default function PrivacyPage() {
@@ -28,10 +28,10 @@ export default function PrivacyPage() {
       <main className="max-w-3xl mx-auto px-4 sm:px-6 py-10 pb-16">
         <h1 className="text-2xl font-bold text-neutral-900 mb-2">개인정보처리방침</h1>
         <p className="text-sm text-neutral-500 mb-1">최초 시행일: 2026년 4월 19일</p>
-        <p className="text-sm text-neutral-500 mb-6">시행일: 2026년 5월 2일 (개정 2회)</p>
+        <p className="text-sm text-neutral-500 mb-6">시행일: 2026년 5월 8일 (개정 3회)</p>
 
         <div className="bg-brand-50 border-l-4 border-brand-700 px-4 py-3 mb-8 rounded-r">
-          <p className="text-sm text-neutral-900">본 문서는 2026-05-02 부터 시행됩니다.</p>
+          <p className="text-sm text-neutral-900">본 문서는 2026-05-08 부터 시행됩니다.</p>
         </div>
 
         <div className="space-y-8 text-sm text-neutral-700 leading-relaxed">
@@ -52,8 +52,9 @@ export default function PrivacyPage() {
             <h3 className="font-medium text-neutral-800 mb-2">① 공개 출처로부터의 자동 수집 (사업자 정보)</h3>
             <ul className="list-disc list-inside space-y-1 mb-1 ml-2">
               <li><strong>수집 항목</strong>: 업체명, 웹사이트 URL, 카테고리, 공개된 사업 설명·취급 제품·인증 정보</li>
-              <li><strong>수집 방법</strong>: 인터넷에 공개된 사업자 정보를 자동화된 도구로 수집</li>
+              <li><strong>수집 방법</strong>: 공공데이터 포털, 업체 공개 웹사이트, 네이버 지역 검색 등 인터넷에 공개된 사업자 정보를 자동화된 도구로 수집</li>
               <li><strong>수집 대상</strong>: 사업자(법인 또는 개인사업자)에 관한 공개 사업 정보에 한정</li>
+              <li><strong>법적 근거</strong>: 「개인정보 보호법」 제15조 제1항 제6호 (정보주체의 정당한 이익을 위하여 명백히 필요한 경우로서 정보주체의 이익을 부당하게 침해하지 않는 범위에서 처리하는 경우) — 공개된 사업자 정보를 B2B 디렉토리 서비스 제공 목적으로 수집·이용</li>
             </ul>
             <p className="mb-1 ml-2"><strong>명시적 비수집 항목</strong>: 회사 정책에 따라 다음 항목은 <strong>수집·저장·노출하지 않습니다</strong></p>
             <ul className="list-disc list-inside space-y-1 mb-3 ml-6">
@@ -353,6 +354,11 @@ export default function PrivacyPage() {
                 2026년 5월 2일: &quot;비슷한 업체&quot; 자동 노출 관련 조항 신설·보완
                 <br />
                 <span className="ml-4 text-neutral-500">(이용약관 제4조·제12조, 개인정보처리방침 제3조·제7조)</span>
+              </li>
+              <li>
+                2026년 5월 8일: 공개 출처 수집의 법적 근거(「개인정보 보호법」 §15 ①⑥) 명시, 수집 경로 구체화(공공데이터 포털·네이버 지역 검색·업체 웹사이트)
+                <br />
+                <span className="ml-4 text-neutral-500">(PACAA-371 Surface 2 시정 — 공시정보 enrichment PIPA §15 근거 정비)</span>
               </li>
             </ul>
           </section>
