@@ -56,6 +56,25 @@ export async function getCompaniesBySlugs(slugs: string[]): Promise<CompanyFull[
   return slugs.map((s) => bySlug[s]).filter(Boolean) as CompanyFull[]
 }
 
+/**
+ * Returns all (slug, name) pairs for verified companies, used in sitemap generation.
+ * Capped at 100 to keep pair combinations manageable (≤ 4950 pairs max).
+ */
+export async function listVerifiedCompanyStubs(): Promise<{ slug: string; name: string }[]> {
+  const supabase = await createClient()
+  const { data, error } = await supabase
+    .from('companies')
+    .select('slug, name')
+    .eq('is_verified', true)
+    .eq('is_hidden', false)
+    .limit(100)
+  if (error) {
+    console.error('[compare-data] listVerifiedCompanyStubs error:', error)
+    return []
+  }
+  return (data ?? []) as { slug: string; name: string }[]
+}
+
 /** Returns 0–100 representing how many of the 18 compare fields are filled. */
 export function computeCompleteness(c: CompanyFull): number {
   const filled = [

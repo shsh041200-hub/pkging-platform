@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import { redirect } from 'next/navigation'
 import { getCompaniesBySlugs, computeCompleteness } from '@/lib/compare-data'
 import CompareCart from '@/app/components/CompareCart'
 import CompareTable from './CompareTable'
@@ -18,6 +19,12 @@ export default async function ComparePage({ searchParams }: Props) {
   const slugs = ids
     ? ids.split(',').map((s) => decodeURIComponent(s.trim())).filter(Boolean).slice(0, 3)
     : []
+
+  // 2-way comparison: redirect to canonical SEO URL (/compare/a-vs-b)
+  if (slugs.length === 2) {
+    const [a, b] = slugs.sort()
+    redirect(`/compare/${a}-vs-${b}`)
+  }
 
   const companies = await getCompaniesBySlugs(slugs)
 
