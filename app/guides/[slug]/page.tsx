@@ -50,9 +50,9 @@ const GUIDES: Record<DynamicGuideSlug, GuideContent> = {
     body: <CorrugatedBoxSupplierSelectionContent />,
   },
   "shipping-box-pricing": {
-    title: "배송 박스 가격 완전 가이드 — 사이즈별·수량별 단가 비교",
+    title: "택배 박스 가격표 (2026) — 사이즈별 단가·수량 할인·업체 비교",
     description:
-      "택배 박스 사이즈별·수량별 단가, 가격 결정 요인, 업체 비교 기준을 정리합니다.",
+      "택배 박스 1호 130~180원, 2호 160~220원 (1,000개 기준). 수량 5,000개↑ 시 30~40% 할인. Packlinx에서 무료 견적 비교.",
     datePublished: "2026-05-01",
     body: <ShippingBoxPricingContent />,
   },
