@@ -1,7 +1,8 @@
 'use client'
 
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect, useCallback } from 'react'
 import type { CompanyFull } from '@/lib/compare-data'
+import { trackPlausibleEvent } from '@/lib/plausible'
 
 type Props = {
   companies: CompanyFull[]
@@ -20,6 +21,35 @@ export default function QuoteRequestForm({ companies }: Props) {
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState(false)
   const honeyRef = useRef<HTMLInputElement>(null)
+  const sectionRef = useRef<HTMLElement>(null)
+  const hasStartedRef = useRef(false)
+
+  const vendorCount = companies.length
+
+  // quote-form-view: fire once when form enters viewport
+  useEffect(() => {
+    const el = sectionRef.current
+    if (!el) return
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          trackPlausibleEvent('quote-form-view', { vendor_count: vendorCount })
+          observer.disconnect()
+        }
+      },
+      { threshold: 0.25 }
+    )
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [vendorCount])
+
+  // quote-form-start: fire once on first input focus
+  const handleFormStart = useCallback(() => {
+    if (!hasStartedRef.current) {
+      hasStartedRef.current = true
+      trackPlausibleEvent('quote-form-start')
+    }
+  }, [])
 
   if (companies.length === 0) return null
 
@@ -62,11 +92,15 @@ export default function QuoteRequestForm({ companies }: Props) {
       })
       if (!res.ok) {
         const data = await res.json().catch(() => ({}))
+        const errorType = res.status === 429 ? '429' : res.status === 400 ? '400' : '500'
+        trackPlausibleEvent('quote-form-error', { error_type: errorType })
         setError((data as { error?: string }).error ?? '요청 중 오류가 발생했습니다. 다시 시도해 주세요.')
         return
       }
+      trackPlausibleEvent('quote-form-submit', { vendor_count: vendorCount })
       setSuccess(true)
     } catch {
+      trackPlausibleEvent('quote-form-error', { error_type: 'network' })
       setError('네트워크 오류가 발생했습니다. 다시 시도해 주세요.')
     } finally {
       setSubmitting(false)
@@ -105,6 +139,7 @@ export default function QuoteRequestForm({ companies }: Props) {
 
   return (
     <section
+      ref={sectionRef}
       aria-label="견적 요청 폼"
       className="mt-8 mb-4 overflow-hidden rounded-lg border border-[#e5edf5] bg-white"
       style={{ boxShadow: 'rgba(50,50,93,0.15) 0px 8px 24px -8px' }}
@@ -118,7 +153,7 @@ export default function QuoteRequestForm({ companies }: Props) {
         </h2>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-5 p-6" noValidate>
+      <form onSubmit={handleSubmit} onFocus={handleFormStart} className="space-y-5 p-6" noValidate>
         {/* Honeypot — bots fill this; real users never see it */}
         <input
           ref={honeyRef}
