@@ -1,4 +1,4 @@
-import { notFound, redirect } from 'next/navigation'
+import { notFound, permanentRedirect } from 'next/navigation'
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import { getCompaniesBySlugs, computeCompleteness } from '@/lib/compare-data'
@@ -79,9 +79,9 @@ export default async function CompareSlugPage({ params }: Props) {
   const [slugA, slugB] = parsed
   const [canonA, canonB] = [slugA, slugB].sort()
 
-  // Redirect non-canonical order (e.g. /compare/b-vs-a → /compare/a-vs-b)
+  // Permanent redirect: enforce alphabetical slug order for canonical URL
   if (slugA !== canonA || slugB !== canonB) {
-    redirect(`/compare/${canonA}-vs-${canonB}`)
+    permanentRedirect(`/compare/${canonA}-vs-${canonB}`)
   }
 
   const companies = await getCompaniesBySlugs([canonA, canonB])
