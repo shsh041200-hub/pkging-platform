@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { BANNER_DISMISS_KEY, isBannerWindowActive } from '@/lib/terms-notice-window'
 
 const COPY = {
-  text: '[안내] 2026년 5월 2일부터 이용약관과 개인정보처리방침이 개정됩니다. 주요 변경: "비슷한 업체" 자동 노출 기능 관련 조항 신설.',
+  text: '[안내] 개인정보처리방침이 2026년 5월 8일(개정 4회) 변경되었습니다. 주요 변경: 견적 의뢰 기능 도입에 따른 수집 항목 및 제3자 제공(공급업체) 항목 추가.',
   linkLabel: '자세히 보기 →',
   closeLabel: '닫기',
 } as const
@@ -36,7 +36,7 @@ export function TermsNoticeBanner() {
         <p className="text-[13px] leading-snug text-slate-200">
           {COPY.text}{' '}
           <Link
-            href="/terms#변경이력"
+            href="/privacy#변경이력"
             className="text-white font-semibold underline underline-offset-2 hover:text-slate-300 transition-colors whitespace-nowrap"
           >
             {COPY.linkLabel}
