@@ -218,8 +218,8 @@ async function compareEntries(): Promise<Entry[]> {
   return out
 }
 
-export async function GET(_req: Request, ctx: { params: Promise<{ id: string }> }) {
-  const { id: idStr } = await ctx.params
+export async function GET(_req: Request, ctx: { params: Promise<{ __metadata_id__: string }> }) {
+  const { __metadata_id__: idStr } = await ctx.params
   const id = Number.parseInt(idStr, 10)
   if (!Number.isInteger(id) || id < 0) {
     return new Response('not found', { status: 404 })
