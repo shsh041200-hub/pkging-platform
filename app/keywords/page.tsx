@@ -22,8 +22,8 @@ export const metadata: Metadata = {
   },
 }
 
-export default function KeywordsIndexPage() {
-  const keywords = listKeywordIndex()
+export default async function KeywordsIndexPage() {
+  const keywords = await listKeywordIndex()
 
   return (
     <div className="min-h-screen bg-[#F9FAFB] flex flex-col">

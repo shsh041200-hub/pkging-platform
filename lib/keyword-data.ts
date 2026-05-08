@@ -45,10 +45,23 @@ export async function listKeywordSlugs(): Promise<string[]> {
   return (data ?? []).map((row: { slug: string }) => row.slug);
 }
 
-export function listKeywordIndex(): Array<{ slug: string; titleKo: string }> {
-  return Object.entries(KEYWORD_REGISTRY)
-    .filter(([slug]) => slug !== 'test-keyword')
-    .map(([slug, meta]) => ({ slug, titleKo: meta.titleKo }));
+export async function listKeywordIndex(): Promise<Array<{ slug: string; titleKo: string }>> {
+  const supabase = getClient();
+  const { data, error } = await supabase
+    .from("keyword_pages")
+    .select("slug, title_ko")
+    .eq("is_active", true)
+    .neq("slug", "test-keyword")
+    .order("slug");
+
+  if (error) {
+    console.error("[keyword-data] Failed to list keyword index:", error);
+    return [];
+  }
+  return (data ?? []).map((row: { slug: string; title_ko: string }) => ({
+    slug: row.slug,
+    titleKo: row.title_ko,
+  }));
 }
 
 export async function getKeywordPage(
