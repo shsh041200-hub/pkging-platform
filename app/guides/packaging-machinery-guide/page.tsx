@@ -626,6 +626,12 @@ export default function PackagingMachineryGuidePage() {
             <Link href="/guides/flexible-packaging-guide">연포장재 완전 가이드</Link>,{" "}
             <Link href="/guides/packaging-accessories-guide">포장 부자재 종류 가이드</Link>
           </p>
+          <p>
+            관련 업체 찾기:{" "}
+            <a href="https://keywords.packlinx.com/keywords/진공포장기-가격">진공포장기 가격 비교 →</a>
+            {" "}·{" "}
+            <a href="https://keywords.packlinx.com/keywords/실링기">실링기 업체 →</a>
+          </p>
         </section>
 
         <section>

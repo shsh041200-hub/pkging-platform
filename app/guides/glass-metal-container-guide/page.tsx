@@ -616,6 +616,12 @@ export default function GlassMetalContainerGuidePage() {
             <Link href="/products/can">Packlinx 금속 캔 업체 목록</Link>에서
             확인하시기 바랍니다.
           </p>
+          <p>
+            관련 업체 찾기:{" "}
+            <a href="https://keywords.packlinx.com/keywords/유리병-제작">유리병 제작 업체 →</a>
+            {" "}·{" "}
+            <a href="https://keywords.packlinx.com/keywords/캔음료-제작">캔음료 제작 업체 →</a>
+          </p>
         </section>
 
         <section>

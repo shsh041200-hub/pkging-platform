@@ -489,6 +489,12 @@ export default function PackagingPrintingGuidePage() {
             <Link href="/products/label">인쇄·후가공 업체 목록</Link>에서 조건에 맞는 업체를
             찾아보세요.
           </p>
+          <p>
+            관련 업체 찾기:{" "}
+            <a href="https://keywords.packlinx.com/keywords/UV-인쇄">UV 인쇄 업체 →</a>
+            {" "}·{" "}
+            <a href="https://keywords.packlinx.com/keywords/박스-인쇄">박스 인쇄 업체 →</a>
+          </p>
         </section>
 
         <section>

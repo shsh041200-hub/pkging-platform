@@ -590,6 +590,12 @@ export default function LabelPrintingGuidePage() {
             <Link href="/products/label">라벨 업체 목록</Link>에서 인쇄 방식·소재·지역 조건으로
             필터링하시기 바랍니다.
           </p>
+          <p>
+            관련 업체 찾기:{" "}
+            <a href="https://keywords.packlinx.com/keywords/라벨-스티커-제작">라벨·스티커 제작 업체 →</a>
+            {" "}·{" "}
+            <a href="https://keywords.packlinx.com/keywords/스티커-인쇄-업체">스티커 인쇄 업체 →</a>
+          </p>
         </section>
 
         <section>

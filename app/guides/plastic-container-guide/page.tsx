@@ -544,6 +544,12 @@ export default function PlasticContainerGuidePage() {
               식품 포장재 소재 가이드
             </Link>
           </p>
+          <p>
+            관련 업체 찾기:{" "}
+            <a href="https://keywords.packlinx.com/keywords/플라스틱-용기-제작">플라스틱 용기 제작 업체 →</a>
+            {" "}·{" "}
+            <a href="https://keywords.packlinx.com/keywords/화장품-용기-제작">화장품 용기 제작 업체 →</a>
+          </p>
         </section>
 
         <section>

@@ -667,6 +667,12 @@ export default function PackagingAccessoriesGuidePage() {
               <Link href="/products/cushioning">전체 포장 부자재 업체 검색</Link>
             </li>
           </ul>
+          <p>
+            관련 업체 찾기:{" "}
+            <a href="https://keywords.packlinx.com/keywords/박스-테이프-제작">박스 테이프 제작 업체 →</a>
+            {" "}·{" "}
+            <a href="https://keywords.packlinx.com/keywords/종이-쇼핑백-제작">종이 쇼핑백 제작 업체 →</a>
+          </p>
         </section>
 
         <section>

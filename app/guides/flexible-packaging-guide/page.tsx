@@ -556,6 +556,12 @@ export default function FlexiblePackagingGuidePage() {
             <Link href="/guides/food-packaging-materials">식품 포장재 소재 가이드</Link>,{" "}
             <Link href="/guides/label-printing-guide">라벨 인쇄 업체 선정 가이드</Link>
           </p>
+          <p>
+            관련 업체 찾기:{" "}
+            <a href="https://keywords.packlinx.com/keywords/비닐-포장지-제작">비닐 포장지 제작 업체 →</a>
+            {" "}·{" "}
+            <a href="https://keywords.packlinx.com/keywords/비닐봉투-제작">비닐봉투 제작 업체 →</a>
+          </p>
         </section>
 
         <section>
