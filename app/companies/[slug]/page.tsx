@@ -742,8 +742,17 @@ export default async function CompanyPage({ params }: Props) {
             <div className="flex flex-col gap-2">
               <PacklinxLogo variant="dark" layout="horizontal" />
               <p className="text-[12px] text-slate-400">
-                © 2026 PACKLINX. 업체 정보는 공개 출처에서 자동 수집되었습니다.
-                정보 오류·삭제 요청: rpdla041200@gmail.com
+                © 2026 PACKLINX. 업체 정보는 공개 출처(공공데이터 포털, 업체 웹사이트 등)에서 자동 수집되었습니다.
+              </p>
+              <p className="text-[12px] text-slate-400">
+                정보 정정·삭제·처리정지 요청 (「개인정보 보호법」 §39-3):&nbsp;
+                <a href="/opt-out" className="underline hover:text-slate-200 transition-colors">
+                  packlinx.com/opt-out
+                </a>
+                &nbsp;또는&nbsp;
+                <a href="mailto:rpdla041200@gmail.com" className="underline hover:text-slate-200 transition-colors">
+                  rpdla041200@gmail.com
+                </a>
               </p>
               <BusinessRegistrationInfo theme="dark" />
             </div>
