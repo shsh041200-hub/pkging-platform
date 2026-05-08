@@ -22,7 +22,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const slugs = await listKeywordSlugs();
   const guideSlugs = listGuideSlugs();
 
-  // Compare pairs are now handled in sitemap/[id]/route.ts shard 0 (PACAA-348).
+  // Compare pairs are handled in sitemaps/[id]/route.ts shard 0 (PACAA-348).
+  // Public URL /sitemap/0 → next.config.js rewrite → /sitemaps/0 (PACAA-360).
   return [
     { url: siteUrl, lastModified: new Date(), changeFrequency: "weekly", priority: 1 },
     {
