@@ -5,7 +5,7 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://packlinx.com";
 const canonicalUrl = `${siteUrl}/guides/packaging-accessories-guide`;
 
 const title =
-  "포장 부자재 종류 완전 가이드 — 완충재·테이프·충전재 비교 + 환경 규제 (2026) | Packlinx";
+  "포장 부자재 종류 완전 가이드 — 완충재·테이프·충전재 비교 + 환경 규제 (2026)";
 const description =
   "에어캡(뽁뽁이)·EPE 폼·종이 완충재 등 완충재 종류, OPP·천·보안 테이프 선택 기준, 허니컴·우드울 충전재, 과대포장 환경 규제 대응, B2B 대량구매 단가 기준을 한곳에 정리했습니다.";
 
@@ -667,6 +667,12 @@ export default function PackagingAccessoriesGuidePage() {
               <Link href="/products/cushioning">전체 포장 부자재 업체 검색</Link>
             </li>
           </ul>
+          <p>
+            관련 업체 찾기:{" "}
+            <a href="https://keywords.packlinx.com/keywords/박스-테이프-제작">박스 테이프 제작 업체 →</a>
+            {" "}·{" "}
+            <a href="https://keywords.packlinx.com/keywords/종이-쇼핑백-제작">종이 쇼핑백 제작 업체 →</a>
+          </p>
         </section>
 
         <section>

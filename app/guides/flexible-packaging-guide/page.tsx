@@ -5,7 +5,7 @@ import Link from "next/link";
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://packlinx.com";
 const canonicalUrl = `${siteUrl}/guides/flexible-packaging-guide`;
 
-const title = "연포장재 완전 가이드 — 종류·소재·선택 기준 | Packlinx";
+const title = "연포장재 완전 가이드 — 종류·소재·선택 기준";
 const description =
   "연포장재 종류·소재·식품 안전 기준·업체 선택 체크리스트를 한 곳에 정리했습니다. 파우치, 롤 필름, 합지 소재 비교와 Packlinx 연포장재 업체 디렉토리.";
 
@@ -555,6 +555,12 @@ export default function FlexiblePackagingGuidePage() {
             관련 포장재 가이드:{" "}
             <Link href="/guides/food-packaging-materials">식품 포장재 소재 가이드</Link>,{" "}
             <Link href="/guides/label-printing-guide">라벨 인쇄 업체 선정 가이드</Link>
+          </p>
+          <p>
+            관련 업체 찾기:{" "}
+            <a href="https://keywords.packlinx.com/keywords/비닐-포장지-제작">비닐 포장지 제작 업체 →</a>
+            {" "}·{" "}
+            <a href="https://keywords.packlinx.com/keywords/비닐봉투-제작">비닐봉투 제작 업체 →</a>
           </p>
         </section>
 

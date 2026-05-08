@@ -5,7 +5,7 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://packlinx.com";
 const canonicalUrl = `${siteUrl}/guides/glass-metal-container-guide`;
 
 const title =
-  "유리·금속 용기 완전 가이드 — 종류·소재·MOQ·인쇄 옵션 비교 (2026) | Packlinx";
+  "유리·금속 용기 완전 가이드 — 종류·소재·MOQ·인쇄 옵션 비교 (2026)";
 const description =
   "유리 용기(갈색·투명·청색, 병·단지·바이알)와 금속 캔(알루미늄·TFS·양철) 종류 비교, 식품·화장품·의약품별 선택 기준, B2B 구매 결정 비교표, MOQ·커스텀 성형 비용, 슈링크 라벨·직접 인쇄 옵션을 한곳에 정리했습니다.";
 
@@ -615,6 +615,12 @@ export default function GlassMetalContainerGuidePage() {
             {" "}또는{" "}
             <Link href="/products/can">Packlinx 금속 캔 업체 목록</Link>에서
             확인하시기 바랍니다.
+          </p>
+          <p>
+            관련 업체 찾기:{" "}
+            <a href="https://keywords.packlinx.com/keywords/유리병-제작">유리병 제작 업체 →</a>
+            {" "}·{" "}
+            <a href="https://keywords.packlinx.com/keywords/캔음료-제작">캔음료 제작 업체 →</a>
           </p>
         </section>
 

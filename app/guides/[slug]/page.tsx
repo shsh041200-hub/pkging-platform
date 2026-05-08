@@ -50,9 +50,9 @@ const GUIDES: Record<DynamicGuideSlug, GuideContent> = {
     body: <CorrugatedBoxSupplierSelectionContent />,
   },
   "shipping-box-pricing": {
-    title: "배송 박스 가격 완전 가이드 — 사이즈별·수량별 단가 비교",
+    title: "택배 박스 가격표 (2026) — 사이즈별 단가·수량 할인·업체 비교",
     description:
-      "택배 박스 사이즈별·수량별 단가, 가격 결정 요인, 업체 비교 기준을 정리합니다.",
+      "택배 박스 1호 130~180원, 2호 160~220원 (1,000개 기준). 수량 5,000개↑ 시 30~40% 할인. Packlinx에서 무료 견적 비교.",
     datePublished: "2026-05-01",
     body: <ShippingBoxPricingContent />,
   },
@@ -742,6 +742,12 @@ function CorrugatedBoxSupplierSelectionContent() {
           MOQ·지역·인증 조건으로 맞는 업체를 빠르게 찾아보세요.{" "}
           <a href="/products/box">골판지 박스 업체 목록 보기</a>
         </p>
+        <p>
+          관련 업체 찾기:{" "}
+          <a href="https://keywords.packlinx.com/keywords/골판지박스-제작">골판지박스 제작 업체 →</a>
+          {" "}·{" "}
+          <a href="https://keywords.packlinx.com/keywords/택배박스-제작">택배박스 제작 업체 →</a>
+        </p>
       </section>
 
       <footer>
@@ -1235,6 +1241,12 @@ function ShippingBoxPricingContent() {
         <p>
           <a href="/products/box">Packlinx 골판지 박스 업체 디렉토리</a>에서
           사이즈·수량·지역으로 필터링하여 견적을 비교하세요.
+        </p>
+        <p>
+          관련 업체 찾기:{" "}
+          <a href="https://keywords.packlinx.com/keywords/박스-견적">박스 견적 업체 →</a>
+          {" "}·{" "}
+          <a href="https://keywords.packlinx.com/keywords/우체국택배박스-가격">우체국택배박스 가격 비교 →</a>
         </p>
       </section>
 
