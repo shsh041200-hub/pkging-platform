@@ -12,6 +12,10 @@ const BLOG_POSTS = [
     slug: "2026-korea-packaging-trends",
     lastModified: new Date("2026-05-07"),
   },
+  {
+    slug: "packaging-rfq-guide",
+    lastModified: new Date("2026-05-08"),
+  },
 ];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {

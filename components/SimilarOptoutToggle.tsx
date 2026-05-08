@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 
 interface SimilarOptoutToggleProps {
-  companyId: string
+  slug: string
   initialOptedOut: boolean
 }
 
@@ -18,7 +18,7 @@ const TEXTS = {
   errorMsg: '요청 중 오류가 발생했습니다. 다시 시도해 주세요.',
 } as const
 
-export function SimilarOptoutToggle({ companyId, initialOptedOut }: SimilarOptoutToggleProps) {
+export function SimilarOptoutToggle({ slug, initialOptedOut }: SimilarOptoutToggleProps) {
   const router = useRouter()
   const [optedOut, setOptedOut] = useState(initialOptedOut)
   const [loading, setLoading] = useState(false)
@@ -31,7 +31,7 @@ export function SimilarOptoutToggle({ companyId, initialOptedOut }: SimilarOptou
     const prev = optedOut
     setOptedOut(enable)
     try {
-      const res = await fetch(`/api/companies/${companyId}/similar-optout`, {
+      const res = await fetch(`/api/companies/${encodeURIComponent(slug)}/similar-optout`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ enabled: enable }),

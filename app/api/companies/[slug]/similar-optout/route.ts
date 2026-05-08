@@ -4,9 +4,9 @@ import { createServiceClient } from '@/lib/supabase/service'
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ slug: string }> }
 ) {
-  const { id: companyId } = await params
+  const { slug } = await params
 
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
@@ -23,7 +23,22 @@ export async function PATCH(
     .eq('id', user.id)
     .single()
 
-  if (!profile || profile.company_id !== companyId) {
+  const serviceClient = createServiceClient()
+
+  const { data: company, error: companyErr } = await serviceClient
+    .from('companies')
+    .select('id')
+    .eq('slug', slug)
+    .single()
+
+  if (companyErr || !company) {
+    return NextResponse.json(
+      { error: { code: 'NOT_FOUND', message: '업체를 찾을 수 없습니다.' } },
+      { status: 404 }
+    )
+  }
+
+  if (!profile || profile.company_id !== company.id) {
     return NextResponse.json(
       { error: { code: 'FORBIDDEN', message: '본인 업체만 설정할 수 있습니다.' } },
       { status: 403 }
@@ -49,25 +64,10 @@ export async function PATCH(
     )
   }
 
-  const serviceClient = createServiceClient()
-
-  const { data: company, error: companyErr } = await serviceClient
-    .from('companies')
-    .select('id')
-    .eq('id', companyId)
-    .single()
-
-  if (companyErr || !company) {
-    return NextResponse.json(
-      { error: { code: 'NOT_FOUND', message: '업체를 찾을 수 없습니다.' } },
-      { status: 404 }
-    )
-  }
-
   const { data: updated, error: updateErr } = await serviceClient
     .from('companies')
     .update({ similar_optout_at: enabled ? new Date().toISOString() : null })
-    .eq('id', companyId)
+    .eq('id', company.id)
     .select('similar_optout_at')
     .single()
 

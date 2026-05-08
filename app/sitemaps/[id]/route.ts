@@ -19,6 +19,11 @@ const STATIC_GUIDE_SLUGS = [
 // Emits raw UTF-8 URLs (no percent-encoding) per the canonical ADR. Only
 // XML-special characters (& < > " ') are escaped. Korean characters in path
 // segments are passed through as raw UTF-8 bytes.
+//
+// Moved from app/sitemap/[id]/ to app/sitemaps/[id]/ to avoid Next.js
+// internal metadata routing conflict with app/sitemap.ts (PACAA-360).
+// A rewrite in next.config.js maps /sitemap/:id → /sitemaps/:id so the
+// public URL /sitemap/0, /sitemap/1 etc. remains unchanged.
 
 export const revalidate = 3600
 export const dynamicParams = true
