@@ -50,16 +50,20 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     companies.find((c) => c.slug === canonB)!,
   ]
 
-  const title = `${compA.name} vs ${compB.name} — 패키징 업체 비교 | Packlinx`
+  // Use absolute title to bypass root layout's "%s | Packlinx" template — the
+  // page-level title already ends with "| Packlinx" and the template would
+  // double the brand suffix.
+  const titleAbsolute = `${compA.name} vs ${compB.name} — 패키징 업체 비교 | Packlinx`
+  const ogTitle = titleAbsolute
   const description = `${compA.name}과 ${compB.name}를 한눈에 비교하세요. 최소주문수량, 납기, 인증, 가격 등 18가지 항목을 비교해 최적의 포장 업체를 선택하세요.`
   const canonicalUrl = `${siteUrl}/compare/${canonA}-vs-${canonB}`
 
   return {
-    title,
+    title: { absolute: titleAbsolute },
     description,
     robots: { index: true, follow: true },
     openGraph: {
-      title,
+      title: ogTitle,
       description,
       url: canonicalUrl,
       type: 'website',
