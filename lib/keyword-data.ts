@@ -27,7 +27,14 @@ function getClient() {
   if (!url || !key) {
     throw new Error("NEXT_PUBLIC_SUPABASE_URL or NEXT_PUBLIC_SUPABASE_ANON_KEY is not set");
   }
-  return createClient(url, key);
+  // cache: 'no-store' bypasses Next.js data cache so ISR pages always get
+  // fresh Supabase data instead of a stale cached response from a prior build.
+  return createClient(url, key, {
+    global: {
+      fetch: (input, init) =>
+        fetch(input as RequestInfo, { ...(init as RequestInit), cache: "no-store" }),
+    },
+  });
 }
 
 export async function listKeywordSlugs(): Promise<string[]> {
@@ -76,7 +83,10 @@ export async function getKeywordPage(
     .eq("is_active", true)
     .single();
 
-  if (metaError || !meta) return null;
+  if (metaError || !meta) {
+    if (metaError) console.error("[keyword-data] keyword_pages query error:", metaError);
+    return null;
+  }
 
   const { data: companies, error: vendorError } = await supabase
     .from("companies")
