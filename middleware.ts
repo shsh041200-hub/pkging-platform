@@ -60,6 +60,26 @@ export async function middleware(request: NextRequest) {
     }
   }
 
+  // /compare?ids=A,B (2-way only) → 301 → /compare/A-vs-B (alphabetical canonical)
+  // 3-way stays on /compare?ids=... to preserve existing behaviour until CTO decides on 3-way slug shape.
+  if (pathname === '/compare') {
+    const idsParam = request.nextUrl.searchParams.get('ids')
+    if (idsParam) {
+      const ids = idsParam
+        .split(',')
+        .map((s) => decodeURIComponent(s.trim()))
+        .filter(Boolean)
+      if (ids.length === 2) {
+        const [a, b] = ids.slice().sort()
+        const encodedA = a.split('/').map(encodeURIComponent).join('/')
+        const encodedB = b.split('/').map(encodeURIComponent).join('/')
+        const response = new NextResponse(null, { status: 301 })
+        response.headers.set('Location', `${origin}/compare/${encodedA}-vs-${encodedB}`)
+        return response
+      }
+    }
+  }
+
   return NextResponse.next()
 }
 

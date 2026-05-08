@@ -150,13 +150,94 @@ async function companyEntries(shardIndex: number): Promise<Entry[]> {
   return out
 }
 
+// PACAA-348: compare pair sitemap entries.
+// Cap policy (CEO-approved 2026-05-08):
+//   - Per category: top-5 by avg_rating DESC → 5×5 = 25 pairs (≤125 total for 5 categories).
+//   - If a category has ≤5 verified vendors, list ALL pairs (no cap).
+//   - Pairs are deduplicated across categories (slug-pair key, alphabetically sorted).
+//   - Trigger: when total compare URLs reach 500+, open a new PACAA issue to upgrade
+//     cap to top-10×10 and consider a separate compare shard.
+const COMPARE_TOP_N = 5
+
+async function compareEntries(): Promise<Entry[]> {
+  const root = siteUrl()
+  const { data, error } = await supabase()
+    .from('companies')
+    .select('slug, industry_categories, avg_rating')
+    .eq('is_verified', true)
+    .eq('is_hidden', false)
+    .not('industry_categories', 'is', null)
+
+  if (error || !data) {
+    console.error('[sitemap-shard] compareEntries failed', error)
+    return []
+  }
+
+  // Group all verified vendors by category
+  const byCategory = new Map<string, { slug: string; avg_rating: number | null }[]>()
+  for (const cat of INDUSTRY_CATEGORIES) {
+    byCategory.set(cat, [])
+  }
+  for (const company of data) {
+    const cats = (company.industry_categories ?? []) as string[]
+    for (const cat of cats) {
+      const arr = byCategory.get(cat)
+      if (arr) arr.push({ slug: company.slug, avg_rating: company.avg_rating ?? null })
+    }
+  }
+
+  const seen = new Set<string>()
+  const out: Entry[] = []
+  const now = new Date().toISOString()
+
+  for (const vendors of byCategory.values()) {
+    // If >5 vendors in category, take top-N by avg_rating DESC (nulls last)
+    const topVendors =
+      vendors.length > COMPARE_TOP_N
+        ? [...vendors]
+            .sort((a, b) => {
+              if (a.avg_rating == null && b.avg_rating == null) return 0
+              if (a.avg_rating == null) return 1
+              if (b.avg_rating == null) return -1
+              return b.avg_rating - a.avg_rating
+            })
+            .slice(0, COMPARE_TOP_N)
+        : vendors
+
+    for (let i = 0; i < topVendors.length; i++) {
+      for (let j = i + 1; j < topVendors.length; j++) {
+        const [a, b] = [topVendors[i].slug, topVendors[j].slug].sort()
+        const key = `${a}|${b}`
+        if (seen.has(key)) continue
+        seen.add(key)
+        out.push({
+          url: `${root}/compare/${a}-vs-${b}`,
+          lastmod: now,
+          changefreq: 'weekly',
+          priority: 0.7,
+        })
+      }
+    }
+  }
+
+  return out
+}
+
 export async function GET(_req: Request, ctx: { params: Promise<{ id: string }> }) {
   const { id: idStr } = await ctx.params
   const id = Number.parseInt(idStr, 10)
   if (!Number.isInteger(id) || id < 0) {
     return new Response('not found', { status: 404 })
   }
-  const entries = id === 0 ? await staticEntries() : await companyEntries(id - 1)
+
+  let entries: Entry[]
+  if (id === 0) {
+    const [staticE, compareE] = await Promise.all([staticEntries(), compareEntries()])
+    entries = [...staticE, ...compareE]
+  } else {
+    entries = await companyEntries(id - 1)
+  }
+
   return new Response(renderUrlset(entries), {
     headers: {
       'Content-Type': 'application/xml; charset=utf-8',
