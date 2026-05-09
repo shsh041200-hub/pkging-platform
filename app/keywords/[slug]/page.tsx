@@ -66,7 +66,8 @@ async function fetchKeywordPage(slug: string): Promise<KeywordPageData | null> {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { slug } = await params;
+  const { slug: rawSlug } = await params;
+  const slug = decodeURIComponent(rawSlug);
   const data = await fetchKeywordPage(slug);
 
   if (!data) return { title: "페이지 없음" };
@@ -88,7 +89,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function KeywordPage({ params }: Props) {
-  const { slug } = await params;
+  const { slug: rawSlug } = await params;
+  const slug = decodeURIComponent(rawSlug);
   const data = await fetchKeywordPage(slug);
 
   if (!data) notFound();

@@ -20,9 +20,9 @@ jobs:
       - name: Resolve base URL
         id: url
         run: |
-          # Prefer explicit production domain; fall back to Vercel deployment URL.
-          TARGET="${{ github.event.deployment_status.target_url }}"
-          TARGET="${TARGET%/}"
+          # Always test the canonical production domain.
+          # Vercel deployment URLs require auth and return 401 — cannot be used.
+          TARGET="https://www.packlinx.com"
           echo "base=${TARGET}" >> "$GITHUB_OUTPUT"
           echo "Smoke-testing: ${TARGET}"
 
