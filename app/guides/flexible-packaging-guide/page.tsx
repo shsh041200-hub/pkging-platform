@@ -1,6 +1,7 @@
 import React from "react";
 import type { Metadata } from "next";
 import Link from "next/link";
+import { GuidePageShell } from "@/components/guide/GuidePageShell";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://packlinx.com";
 const canonicalUrl = `${siteUrl}/guides/flexible-packaging-guide`;
@@ -112,7 +113,7 @@ export default function FlexiblePackagingGuidePage() {
   const hreflangKo = { rel: "alternate", hreflang: "ko-KR", href: canonicalUrl } as React.LinkHTMLAttributes<HTMLLinkElement>;
   const hreflangDefault = { rel: "alternate", hreflang: "x-default", href: canonicalUrl } as React.LinkHTMLAttributes<HTMLLinkElement>;
   return (
-    <>
+    <GuidePageShell>
       <link {...hreflangKo} />
       <link {...hreflangDefault} />
       <script
@@ -650,6 +651,6 @@ export default function FlexiblePackagingGuidePage() {
           </p>
         </footer>
       </main>
-    </>
+    </GuidePageShell>
   );
 }

@@ -67,6 +67,12 @@ export type GuideMeta = {
   title: string;
   description: string;
   category: GuideCategory;
+  /** 1 = v1 redesign template; absence = legacy prose template */
+  redesignVersion?: 1;
+  /** Short reading-time label shown on index cards, e.g. "6분" */
+  readTime?: string;
+  /** Emoji icon for index card display */
+  icon?: string;
 };
 
 /** Display metadata for the /guides index page. Order matches ALL_GUIDE_SLUGS. */
@@ -107,8 +113,11 @@ export const GUIDE_META: GuideMeta[] = [
     title: "골판지 플루트 유형 가이드",
     description: "A·B·C·E·F 플루트별 특성과 박스 설계 시 적합한 용도를 안내합니다." },
   { slug: "corrugated-box-supplier-selection", category: "box",
-    title: "골판지 박스 업체 선정 가이드",
-    description: "MOQ·납기·인쇄 방식·인증 기준으로 골판지 박스 업체를 비교 선정하는 방법을 정리합니다." },
+    title: "골판지 박스 업체 선정 가이드 — MOQ·납기·인쇄·인증 비교",
+    description: "골판지 박스 업체 선정 시 MOQ, 납기, 인쇄 방식, 물류 접근성, 인증 기준을 항목별로 비교합니다.",
+    redesignVersion: 1,
+    readTime: "6분",
+    icon: "📦" },
   { slug: "shipping-box-pricing", category: "box",
     title: "택배 박스 가격표 (2026) — 사이즈별 단가·수량 할인·업체 비교",
     description: "택배 박스 1호 130~180원, 2호 160~220원 (1,000개 기준). 수량 5,000개↑ 시 30~40% 할인. Packlinx에서 무료 견적 비교." },
