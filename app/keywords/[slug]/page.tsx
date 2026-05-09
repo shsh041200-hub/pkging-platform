@@ -1,19 +1,16 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { getKeywordPage, listKeywordSlugs } from "@/lib/keyword-data";
+import { getKeywordPage } from "@/lib/keyword-data";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://packlinx.vercel.app";
 
-// ISR: revalidate every 6 hours. Backend can trigger on-demand revalidation via
-// the Next.js revalidatePath API after Supabase writes.
-export const revalidate = 21600;
+// force-dynamic: render fresh on every request.
+// ISR (revalidate=21600) caused build-time null caches → stale 404 for 6 hours.
+// API route uses the same getKeywordPage() and works correctly at runtime;
+// matching that behavior here fixes the 404s without changing any data logic.
+export const dynamic = "force-dynamic";
 
 type Props = { params: Promise<{ slug: string }> };
-
-export async function generateStaticParams() {
-  const slugs = await listKeywordSlugs();
-  return slugs.map((slug) => ({ slug }));
-}
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
