@@ -1,0 +1,344 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>패키징 가이드 — Packlinx (목업 v1)</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
+<style>
+  :root{
+    --bg:#fafbfc; --surface:#ffffff; --line:#e5e7eb; --line-strong:#d1d5db;
+    --ink:#0b1220; --ink-2:#374151; --ink-3:#6b7280;
+    --brand:#0a3d62; --brand-2:#1e6fb8; --accent:#10b981; --accent-soft:#ecfdf5;
+    --shadow:0 1px 2px rgba(15,23,42,.04), 0 8px 24px rgba(15,23,42,.06);
+    --r:14px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--bg);color:var(--ink);font-family:Pretendard,system-ui,-apple-system,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased}
+  a{color:inherit;text-decoration:none}
+  .container{max-width:1180px;margin:0 auto;padding:0 24px}
+
+  /* nav */
+  .nav{position:sticky;top:0;background:rgba(255,255,255,.92);backdrop-filter:saturate(140%) blur(8px);border-bottom:1px solid var(--line);z-index:20}
+  .nav-inner{display:flex;align-items:center;gap:28px;height:64px}
+  .logo{font-weight:800;letter-spacing:-.02em;font-size:18px;color:var(--brand)}
+  .nav a.item{color:var(--ink-2);font-weight:500;font-size:15px}
+  .nav a.item:hover{color:var(--ink)}
+  .nav-search{margin-left:auto;display:flex;align-items:center;gap:8px;background:#f1f3f5;border:1px solid var(--line);border-radius:10px;padding:8px 12px;width:280px}
+  .nav-search input{border:0;background:transparent;outline:0;width:100%;font-family:inherit;font-size:14px;color:var(--ink)}
+
+  /* hero */
+  .hero{padding:64px 0 36px;background:linear-gradient(180deg,#f3f7fb 0%,var(--bg) 100%);border-bottom:1px solid var(--line)}
+  .crumb{font-size:13px;color:var(--ink-3);margin-bottom:14px}
+  .crumb b{color:var(--ink-2);font-weight:500}
+  .hero h1{font-size:44px;line-height:1.18;letter-spacing:-.025em;margin:0 0 12px;font-weight:800}
+  .hero p.lead{font-size:18px;line-height:1.6;color:var(--ink-2);max-width:720px;margin:0 0 24px}
+  .hero-meta{display:flex;flex-wrap:wrap;gap:10px;margin-top:8px}
+  .pill{display:inline-flex;align-items:center;gap:6px;background:#fff;border:1px solid var(--line);border-radius:999px;padding:8px 14px;font-size:13px;color:var(--ink-2);font-weight:500}
+  .pill .dot{width:6px;height:6px;border-radius:50%;background:var(--accent)}
+
+  /* search bar */
+  .search{margin:28px 0 0;background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);padding:16px;display:flex;gap:10px;align-items:center}
+  .search input{flex:1;border:0;outline:0;font:inherit;font-size:16px;padding:8px 10px;background:transparent}
+  .search button{background:var(--brand);color:#fff;border:0;border-radius:10px;padding:12px 18px;font-weight:600;font-size:14px;cursor:pointer}
+  .chips{margin-top:12px;display:flex;flex-wrap:wrap;gap:8px}
+  .chip{font-size:13px;padding:6px 12px;border-radius:999px;background:#eef2f6;color:var(--ink-2);cursor:pointer;border:1px solid transparent}
+  .chip:hover{background:#e2e8f0}
+  .chip.on{background:var(--brand);color:#fff;border-color:var(--brand)}
+
+  /* category tabs */
+  .cat-tabs{display:flex;flex-wrap:wrap;gap:8px;margin:48px 0 24px;border-bottom:1px solid var(--line);padding-bottom:0}
+  .cat-tabs .tab{padding:14px 18px;font-weight:600;color:var(--ink-3);border-bottom:2px solid transparent;cursor:pointer;font-size:14px}
+  .cat-tabs .tab.on{color:var(--brand);border-color:var(--brand)}
+  .cat-tabs .tab .count{margin-left:6px;color:var(--ink-3);font-weight:500;font-size:12px}
+
+  /* featured */
+  .featured{display:grid;grid-template-columns:2fr 1fr 1fr;gap:18px;margin:0 0 40px}
+  @media (max-width:900px){.featured{grid-template-columns:1fr}}
+  .feat-card{position:relative;border-radius:18px;background:#fff;border:1px solid var(--line);overflow:hidden;display:flex;flex-direction:column;box-shadow:var(--shadow);transition:transform .15s ease, box-shadow .15s ease}
+  .feat-card:hover{transform:translateY(-2px);box-shadow:0 1px 2px rgba(15,23,42,.04), 0 16px 36px rgba(15,23,42,.08)}
+  .feat-card.lg{grid-row:span 2}
+  .feat-thumb{aspect-ratio:16/9;background:linear-gradient(135deg,#0a3d62 0%,#1e6fb8 100%);position:relative;overflow:hidden}
+  .feat-thumb.alt{background:linear-gradient(135deg,#0f766e 0%,#10b981 100%)}
+  .feat-thumb.alt2{background:linear-gradient(135deg,#7c2d12 0%,#ea580c 100%)}
+  .feat-thumb .badge{position:absolute;top:14px;left:14px;background:rgba(255,255,255,.92);color:var(--ink);font-size:12px;font-weight:600;padding:5px 10px;border-radius:999px}
+  .feat-thumb .deco{position:absolute;right:-30px;bottom:-30px;width:220px;height:220px;border-radius:50%;background:rgba(255,255,255,.08)}
+  .feat-body{padding:20px 22px 22px;flex:1;display:flex;flex-direction:column}
+  .feat-body .tag{font-size:12px;color:var(--brand-2);font-weight:600;margin-bottom:8px;letter-spacing:.02em}
+  .feat-body h3{margin:0 0 8px;font-size:20px;line-height:1.35;letter-spacing:-.015em}
+  .feat-body.lg h3{font-size:26px}
+  .feat-body p{margin:0;color:var(--ink-3);font-size:14px;line-height:1.6}
+  .feat-meta{margin-top:14px;display:flex;gap:14px;font-size:12px;color:var(--ink-3)}
+  .feat-meta span{display:inline-flex;align-items:center;gap:5px}
+
+  /* category section */
+  .cat-section{margin:56px 0}
+  .cat-head{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:18px;gap:18px}
+  .cat-head h2{font-size:26px;letter-spacing:-.02em;margin:0 0 4px;font-weight:800}
+  .cat-head .sub{color:var(--ink-3);font-size:14px}
+  .cat-head a.more{color:var(--brand-2);font-size:14px;font-weight:600;white-space:nowrap}
+
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  @media (max-width:900px){.grid{grid-template-columns:1fr}}
+  .card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:22px;display:flex;flex-direction:column;gap:10px;transition:.15s ease;min-height:180px}
+  .card:hover{border-color:var(--brand-2);transform:translateY(-1px);box-shadow:var(--shadow)}
+  .card .ico{width:36px;height:36px;border-radius:10px;display:grid;place-items:center;background:#eef4fb;color:var(--brand);font-weight:700;font-size:14px}
+  .card h4{margin:4px 0 0;font-size:17px;line-height:1.4;letter-spacing:-.01em}
+  .card p{margin:0;color:var(--ink-3);font-size:13.5px;line-height:1.55}
+  .card .row{margin-top:auto;display:flex;align-items:center;justify-content:space-between;font-size:12px;color:var(--ink-3)}
+  .card .row .read{color:var(--brand-2);font-weight:600}
+
+  /* CTA strip */
+  .cta{margin:64px 0 80px;background:linear-gradient(135deg,#0b1220 0%,#0a3d62 100%);color:#fff;border-radius:20px;padding:40px;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap}
+  .cta h3{margin:0 0 6px;font-size:24px;letter-spacing:-.015em}
+  .cta p{margin:0;color:rgba(255,255,255,.78);font-size:15px}
+  .cta .btn{background:#fff;color:var(--brand);font-weight:700;padding:14px 22px;border-radius:12px;font-size:15px}
+
+  footer{border-top:1px solid var(--line);padding:30px 0;color:var(--ink-3);font-size:13px}
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="container nav-inner">
+    <a class="logo" href="/">Packlinx</a>
+    <a class="item" href="/categories">카테고리</a>
+    <a class="item" href="/services/printing-design">인쇄·디자인</a>
+    <a class="item" href="/guides" style="color:var(--ink);font-weight:600">가이드</a>
+    <div class="nav-search">
+      <span aria-hidden>🔍</span>
+      <input placeholder="업체·소재·가이드 검색" />
+    </div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="container">
+    <div class="crumb"><a href="/">홈</a> · <b>가이드</b></div>
+    <h1>발주 전에 꼭 확인하는<br/>패키징 실무 가이드</h1>
+    <p class="lead">소재 선택부터 MOQ·납기·인증까지. 1,380개 업체 데이터를 기반으로 만든 현장형 가이드 — 추측 대신 비교, 검색 대신 결정.</p>
+    <div class="hero-meta">
+      <span class="pill"><span class="dot"></span>주간 업데이트</span>
+      <span class="pill">📚 21개 가이드</span>
+      <span class="pill">🏭 1,380개 업체 데이터 기반</span>
+    </div>
+
+    <div class="search">
+      <span aria-hidden style="color:var(--ink-3);font-size:18px">🔎</span>
+      <input placeholder="예: MOQ 500개 골판지 박스, 친환경 인증 소재…" />
+      <button>가이드 찾기</button>
+    </div>
+    <div class="chips">
+      <span class="chip on">전체</span>
+      <span class="chip">처음 발주</span>
+      <span class="chip">MOQ 비교</span>
+      <span class="chip">친환경·ESG</span>
+      <span class="chip">인쇄 품질</span>
+      <span class="chip">2026 트렌드</span>
+      <span class="chip">이사·물류</span>
+    </div>
+  </div>
+</section>
+
+<main class="container">
+
+  <div class="cat-tabs" role="tablist">
+    <span class="tab on">전체 <span class="count">21</span></span>
+    <span class="tab">박스·골판지 <span class="count">6</span></span>
+    <span class="tab">소재 <span class="count">7</span></span>
+    <span class="tab">산업별 <span class="count">4</span></span>
+    <span class="tab">공정·인쇄 <span class="count">2</span></span>
+    <span class="tab">트렌드 <span class="count">1</span></span>
+    <span class="tab">이사·물류 <span class="count">1</span></span>
+  </div>
+
+  <!-- featured -->
+  <div class="featured">
+    <a class="feat-card lg" href="/guides/2026-korea-packaging-trends">
+      <div class="feat-thumb">
+        <div class="deco"></div>
+        <span class="badge">📈 이번 주 추천</span>
+      </div>
+      <div class="feat-body lg">
+        <div class="tag">트렌드 리포트</div>
+        <h3>2026 한국 패키징 트렌드 5가지 — 규제·소재·공급망 일괄 정리</h3>
+        <p>2026년부터 적용되는 일회용 규제, EPR 강화, 친환경 인증 의무화까지. 결정자가 바로 행동할 수 있는 체크리스트와 산업별 영향도를 한 페이지에 정리.</p>
+        <div class="feat-meta"><span>⏱ 8분 읽기</span><span>📅 업데이트 2026-04</span><span>👁 2.1k 조회</span></div>
+      </div>
+    </a>
+
+    <a class="feat-card" href="/guides/corrugated-box-supplier-selection">
+      <div class="feat-thumb alt">
+        <div class="deco"></div>
+        <span class="badge">⭐ 가장 많이 본</span>
+      </div>
+      <div class="feat-body">
+        <div class="tag">박스·골판지</div>
+        <h3>골판지 박스 업체 선정 가이드</h3>
+        <div class="feat-meta"><span>⏱ 6분</span><span>비교표 포함</span></div>
+      </div>
+    </a>
+
+    <a class="feat-card" href="/guides/eco-friendly-packaging">
+      <div class="feat-thumb alt2">
+        <div class="deco"></div>
+        <span class="badge">🌱 ESG</span>
+      </div>
+      <div class="feat-body">
+        <div class="tag">소재</div>
+        <h3>친환경 패키징 도입 — 인증·비용·로드맵</h3>
+        <div class="feat-meta"><span>⏱ 7분</span><span>FAQ 포함</span></div>
+      </div>
+    </a>
+  </div>
+
+  <!-- category sections -->
+  <section class="cat-section">
+    <div class="cat-head">
+      <div>
+        <h2>박스·골판지</h2>
+        <div class="sub">발주 단가·MOQ·골 종류까지 — 박스 결정에 필요한 모든 것</div>
+      </div>
+      <a class="more" href="#">전체 보기 →</a>
+    </div>
+    <div class="grid">
+      <a class="card" href="/guides/corrugated-box-supplier-selection">
+        <div class="ico">📦</div>
+        <h4>골판지 박스 업체 선정 — MOQ·납기·인쇄·인증 비교</h4>
+        <p>업체 유형별 MOQ·단가·납기 비교표와 샘플 검수 체크리스트.</p>
+        <div class="row"><span>⏱ 6분</span><span class="read">읽기 →</span></div>
+      </a>
+      <a class="card" href="/guides/corrugated-flute-types">
+        <div class="ico">🟫</div>
+        <h4>골판지 골 종류 (A·B·E·F골) 선택 가이드</h4>
+        <p>제품 무게·완충성·인쇄 기준으로 고르는 골 선택 매트릭스.</p>
+        <div class="row"><span>⏱ 4분</span><span class="read">읽기 →</span></div>
+      </a>
+      <a class="card" href="/guides/shipping-box-pricing">
+        <div class="ico">💰</div>
+        <h4>택배 박스 단가 — 수량·사이즈별 가격대</h4>
+        <p>실측 견적 기반 가격 레인지와 절감 포인트 5가지.</p>
+        <div class="row"><span>⏱ 5분</span><span class="read">읽기 →</span></div>
+      </a>
+      <a class="card" href="/guides/small-quantity-custom-box">
+        <div class="ico">📐</div>
+        <h4>소량 맞춤 박스 — 100~500매 발주 옵션</h4>
+        <p>디지털 인쇄 vs 실크·옵셋 비교, 견적 받는 법.</p>
+        <div class="row"><span>⏱ 4분</span><span class="read">읽기 →</span></div>
+      </a>
+      <a class="card" href="/guides/이사박스-사이즈-규격">
+        <div class="ico">📏</div>
+        <h4>이사박스 사이즈·규격 표</h4>
+        <p>1호~5호 표준 규격과 실제 적재 효율.</p>
+        <div class="row"><span>⏱ 3분</span><span class="read">읽기 →</span></div>
+      </a>
+      <a class="card" href="/guides/이사박스-대량구매-가이드">
+        <div class="ico">🚚</div>
+        <h4>이사박스 대량 구매 가이드</h4>
+        <p>이사·물류 업체 단체 발주 시 단가 산정 방식.</p>
+        <div class="row"><span>⏱ 4분</span><span class="read">읽기 →</span></div>
+      </a>
+    </div>
+  </section>
+
+  <section class="cat-section">
+    <div class="cat-head">
+      <div>
+        <h2>소재</h2>
+        <div class="sub">필름·라벨·플라스틱·유리·금속·친환경 — 소재별 결정 기준</div>
+      </div>
+      <a class="more" href="#">전체 보기 →</a>
+    </div>
+    <div class="grid">
+      <a class="card" href="/guides/packaging-material-complete-guide">
+        <div class="ico">🧱</div>
+        <h4>패키징 소재 종합 가이드</h4>
+        <p>종이·플라스틱·금속·유리 6대 소재의 강·약점 한눈에.</p>
+        <div class="row"><span>⏱ 9분</span><span class="read">읽기 →</span></div>
+      </a>
+      <a class="card" href="/guides/eco-friendly-packaging">
+        <div class="ico">🌱</div>
+        <h4>친환경 패키징 — 인증·비용·로드맵</h4>
+        <p>FSC·GRS·생분해 인증 비교와 단계적 도입 전략.</p>
+        <div class="row"><span>⏱ 7분</span><span class="read">읽기 →</span></div>
+      </a>
+      <a class="card" href="/guides/flexible-packaging-guide">
+        <div class="ico">🎀</div>
+        <h4>연포장 (파우치·필름) 가이드</h4>
+        <p>식품·화장품·생활용품 파우치 소재 비교.</p>
+        <div class="row"><span>⏱ 6분</span><span class="read">읽기 →</span></div>
+      </a>
+      <a class="card" href="/guides/label-printing-guide">
+        <div class="ico">🏷️</div>
+        <h4>라벨 인쇄 가이드</h4>
+        <p>소재·접착제·인쇄 방식별 단가와 적합 용도.</p>
+        <div class="row"><span>⏱ 5분</span><span class="read">읽기 →</span></div>
+      </a>
+      <a class="card" href="/guides/plastic-container-guide">
+        <div class="ico">🧴</div>
+        <h4>플라스틱 용기 가이드</h4>
+        <p>PP·PET·HDPE 차이와 식품 적합성 기준.</p>
+        <div class="row"><span>⏱ 5분</span><span class="read">읽기 →</span></div>
+      </a>
+      <a class="card" href="/guides/glass-metal-container-guide">
+        <div class="ico">🍾</div>
+        <h4>유리·금속 용기 가이드</h4>
+        <p>주류·화장품·고급 식품 용기 선택 기준.</p>
+        <div class="row"><span>⏱ 6분</span><span class="read">읽기 →</span></div>
+      </a>
+    </div>
+  </section>
+
+  <section class="cat-section">
+    <div class="cat-head">
+      <div>
+        <h2>산업별</h2>
+        <div class="sub">화장품·전자·식품 등 — 업종 표준에 맞는 패키징 결정</div>
+      </div>
+      <a class="more" href="#">전체 보기 →</a>
+    </div>
+    <div class="grid">
+      <a class="card" href="/guides/cosmetic-packaging-box">
+        <div class="ico">💄</div>
+        <h4>화장품 패키징 박스</h4>
+        <p>브랜드 톤과 단가 모두 잡는 박스 사양 가이드.</p>
+        <div class="row"><span>⏱ 5분</span><span class="read">읽기 →</span></div>
+      </a>
+      <a class="card" href="/guides/electronics-packaging-design">
+        <div class="ico">🔌</div>
+        <h4>전자제품 패키징 디자인</h4>
+        <p>완충·정전기·국제 운송 표준 충족 설계.</p>
+        <div class="row"><span>⏱ 6분</span><span class="read">읽기 →</span></div>
+      </a>
+      <a class="card" href="/guides/food-packaging-materials">
+        <div class="ico">🍱</div>
+        <h4>식품 패키징 소재</h4>
+        <p>식약처 기준·온도·차단성 요구사항.</p>
+        <div class="row"><span>⏱ 6분</span><span class="read">읽기 →</span></div>
+      </a>
+      <a class="card" href="/guides/packaging-accessories-guide">
+        <div class="ico">🎁</div>
+        <h4>포장 부자재 가이드</h4>
+        <p>완충재·테이프·라벨 등 부자재 선택.</p>
+        <div class="row"><span>⏱ 4분</span><span class="read">읽기 →</span></div>
+      </a>
+    </div>
+  </section>
+
+  <div class="cta">
+    <div>
+      <h3>가이드만 읽고 끝나면 의미 없잖아요.</h3>
+      <p>1,380개 등록 업체에서 조건에 맞는 곳 바로 비교하세요.</p>
+    </div>
+    <a class="btn" href="/categories">업체 찾기 →</a>
+  </div>
+
+</main>
+
+<footer>
+  <div class="container">© Packlinx · 가이드 · 카테고리 · 개인정보 · 약관</div>
+</footer>
+
+</body>
+</html>
