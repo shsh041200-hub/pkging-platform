@@ -17,6 +17,20 @@ jobs:
         with:
           version: latest
 
+      - name: Check for duplicate migration version prefixes
+        run: |
+          all_versions=$(ls supabase/migrations/*.sql 2>/dev/null \
+            | xargs -I{} basename {} \
+            | grep -oE '^[0-9]+' \
+            | sort)
+          dupes=$(echo "$all_versions" | uniq -d)
+          if [ -n "$dupes" ]; then
+            echo "ERROR: Duplicate migration version prefix(es) detected: $dupes"
+            echo "Use a full 14-digit timestamp (YYYYMMDDHHmmSS) to make each version unique."
+            exit 1
+          fi
+          echo "OK: no duplicate version prefixes"
+
       - name: Link Supabase project
         run: supabase link --project-ref ${{ secrets.SUPABASE_PROJECT_REF }}
         env:
