@@ -103,6 +103,24 @@
   --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.03);
   --shadow-card-hover: 0 8px 24px rgba(0, 0, 0, 0.10), 0 2px 4px rgba(0, 0, 0, 0.04);
   --shadow-elevated: 0 16px 48px rgba(0, 0, 0, 0.12);
+
+  /* Guide v2 design tokens (navy/blue palette — guide detail/index pages) */
+  --g-bg: #fafbfc;
+  --g-ink: #0b1220;
+  --g-ink-2: #374151;
+  --g-ink-3: #6b7280;
+  --g-ink-4: #9ca3af;
+  --g-brand: #0a3d62;
+  --g-brand-2: #1e6fb8;
+  --g-brand-soft: #eff6ff;
+  --g-accent: #10b981;
+  --g-accent-soft: #ecfdf5;
+  --g-warn: #f59e0b;
+  --g-warn-soft: #fffbeb;
+  --g-danger: #ef4444;
+  --g-danger-soft: #fef2f2;
+  --g-line: #e5e7eb;
+  --g-shadow: 0 1px 2px rgba(15,23,42,.04), 0 8px 24px rgba(15,23,42,.06);
 }
 
 @layer base {

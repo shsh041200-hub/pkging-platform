@@ -1,6 +1,15 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { DYNAMIC_GUIDE_SLUGS, type DynamicGuideSlug } from "@/lib/guide-data";
+import { GuidePageShell } from "@/components/guide/GuidePageShell";
+import { GuideHero } from "@/components/guide/GuideHero";
+import { GuideToc, type GuideTocItem } from "@/components/guide/GuideToc";
+import { GuideCallout } from "@/components/guide/GuideCallout";
+import { GuideCompareTable } from "@/components/guide/GuideCompareTable";
+import { GuideChecklist } from "@/components/guide/GuideChecklist";
+import { GuideFaq } from "@/components/guide/GuideFaq";
+import { GuideSidebar } from "@/components/guide/GuideSidebar";
+import { GuideEndCta } from "@/components/guide/GuideEndCta";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://packlinx.com";
 
@@ -8,6 +17,8 @@ type GuideContent = {
   title: string;
   description: string;
   datePublished: string;
+  /** 1 = v1 redesign template */
+  redesignVersion?: 1;
   body: React.ReactNode;
 };
 
@@ -47,6 +58,7 @@ const GUIDES: Record<DynamicGuideSlug, GuideContent> = {
     description:
       "골판지 박스 업체 선정 시 MOQ, 납기, 인쇄 방식, 물류 접근성, 인증 기준을 항목별로 비교합니다. Packlinx에서 검증된 골판지 박스 업체를 빠르게 찾아보세요.",
     datePublished: "2026-05-01",
+    redesignVersion: 1,
     body: <CorrugatedBoxSupplierSelectionContent />,
   },
   "shipping-box-pricing": {
@@ -144,11 +156,394 @@ export default async function GuidePage({ params }: Props) {
   const { slug } = await params;
   if (!isDynamicGuideSlug(slug)) notFound();
   const guide = GUIDES[slug];
+
+  if (guide.redesignVersion === 1) {
+    return <GuideV1Page slug={slug} guide={guide} />;
+  }
+
   return (
-    <main>
-      <h1>{guide.title}</h1>
-      {guide.body}
-    </main>
+    <GuidePageShell>
+      <main>
+        <h1>{guide.title}</h1>
+        {guide.body}
+      </main>
+    </GuidePageShell>
+  );
+}
+
+// ─── v1 redesign template ────────────────────────────────────────────────────
+
+const CORRUGATED_TOC_ITEMS: GuideTocItem[] = [
+  { id: "s1", label: "1. 업체 유형 4가지" },
+  { id: "s2", label: "2. MOQ·단가·납기 비교표" },
+  { id: "s3", label: "3. 견적 전 5가지 체크" },
+  { id: "s4", label: "4. 샘플 검수 체크리스트" },
+  { id: "s5", label: "5. 자주 묻는 질문" },
+];
+
+function GuideV1Page({
+  slug,
+  guide,
+}: {
+  slug: string;
+  guide: GuideContent;
+}) {
+  // Route to per-slug content; Phase 2 will batch the remaining guides
+  if (slug === "corrugated-box-supplier-selection") {
+    return <CorrugatedBoxGuideV1 guide={guide} />;
+  }
+  // Fallback to prose template for any other redesign-flagged guide
+  return (
+    <GuidePageShell>
+      <main>
+        <h1>{guide.title}</h1>
+        {guide.body}
+      </main>
+    </GuidePageShell>
+  );
+}
+
+function CorrugatedBoxGuideV1({ guide }: { guide: GuideContent }) {
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: [
+      {
+        "@type": "Question",
+        name: "해외(중국·동남아) 업체와 국내 업체 단가 차이는?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "평균적으로 국내 대비 30~45% 저렴하지만, 운송·통관·MOQ(보통 5,000매 이상)·리드타임(30~45일)을 합산하면 월 50,000매 이상 안정적 발주가 가능한 경우에만 유리합니다.",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "샘플은 무료인가요?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "기성 박스 샘플은 대부분 무료(택배비만 부담)이며, 인쇄·후가공 포함 커스텀 샘플은 1~5만원 또는 양산 시 차감 조건이 일반적입니다.",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "발주 후 디자인 수정이 가능한 시점은?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "제판 제작 전까지만 무료 수정. 제판 이후 수정 시 100,000~300,000원의 재제판 비용이 발생합니다.",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "친환경 인증 (FSC) 박스는 단가가 얼마나 더 비싼가요?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "동일 사양 대비 8~15% 추가.",
+        },
+      },
+    ],
+  };
+
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
+      {/* Hero — full-width breakout from the layout's overflow-x-clip wrapper */}
+      <div className="-mx-5 sm:-mx-8 -mt-10 sm:-mt-14">
+        <GuideHero
+          tag="박스·골판지 · 업체 선정"
+          title="골판지 박스 업체, 어떻게 골라야 후회 안 할까?"
+          subtitle="MOQ·납기·인쇄·인증을 동일 기준으로 비교하는 4단계 체크리스트"
+          dateLabel="2026-04 업데이트"
+          readTime="6분 읽기"
+          views="4,128 조회"
+          category="박스·골판지"
+          categoryHref="/guides"
+          tldr={[
+            {
+              bold: "업체 유형 4가지",
+              text: "— 직판 제조, 도매 유통, 인쇄 특화, 종합 패키징. 각각 MOQ·단가·납기 구조가 다름.",
+            },
+            {
+              bold: "견적 받기 전 체크",
+              text: "— 골 종류, 인쇄 사양, 후가공, 납기, 샘플 수령 가능 여부 5가지를 확정해야 정확한 비교가 가능.",
+            },
+            {
+              bold: "샘플 검수 5항목",
+              text: "— 압축강도·인쇄 정합·접착·치수·발주 식별 — 이 5가지만 통과하면 양산 리스크 80% 차단.",
+            },
+          ]}
+        />
+
+        {/* 3-col layout */}
+        <div
+          className="max-w-[1180px] mx-auto px-6"
+          style={{
+            display: "grid",
+            gridTemplateColumns: "240px 1fr 280px",
+            gap: "48px",
+            padding: "40px 24px 80px",
+          }}
+        >
+          {/* TOC */}
+          <GuideToc items={CORRUGATED_TOC_ITEMS} />
+
+          {/* Article */}
+          <article
+            style={{
+              fontSize: "17px",
+              lineHeight: "1.78",
+              color: "var(--g-ink-2)",
+              maxWidth: "760px",
+            }}
+          >
+            <h2
+              id="s1"
+              className="text-[26px] leading-[1.3] tracking-[-0.015em] mt-12 mb-[14px] text-[var(--g-ink)] font-extrabold scroll-mt-28"
+            >
+              <span
+                aria-hidden
+                className="inline-grid place-items-center w-[30px] h-[30px] rounded-lg bg-[var(--g-brand)] text-white text-sm mr-[10px] align-middle"
+              >
+                1
+              </span>
+              업체 유형 4가지 — 무엇이 다른가
+            </h2>
+            <p>
+              같은 &ldquo;골판지 박스&rdquo;라도 어디서 발주하느냐에 따라 단가는{" "}
+              <strong className="text-[var(--g-ink)]">최대 2배 이상</strong> 차이가 납니다.
+              첫 단계는 우리 회사가 어떤 유형의 업체에 발주해야 적합한지 파악하는 것입니다.
+            </p>
+
+            <GuideCallout variant="info" title="핵심 원칙">
+              <p>
+                월 발주량 5,000매 이하라면 도매 유통, 5,000~30,000매는 인쇄 특화, 30,000매
+                이상은 직판 제조가 보통 가장 유리합니다. 단, 인쇄 컬러 수가 4도 이상이면
+                발주량과 무관하게 인쇄 특화 업체를 권장합니다.
+              </p>
+            </GuideCallout>
+
+            <h2
+              id="s2"
+              className="text-[26px] leading-[1.3] tracking-[-0.015em] mt-12 mb-[14px] text-[var(--g-ink)] font-extrabold scroll-mt-28"
+            >
+              <span
+                aria-hidden
+                className="inline-grid place-items-center w-[30px] h-[30px] rounded-lg bg-[var(--g-brand)] text-white text-sm mr-[10px] align-middle"
+              >
+                2
+              </span>
+              MOQ·단가·납기 한눈에 비교
+            </h2>
+            <p>
+              아래 표는 2026년 1분기 등록 업체 평균치 기준입니다. 단가는
+              200×150×100mm·BC골·1도 인쇄 기준으로 환산했습니다.
+            </p>
+
+            <GuideCompareTable
+              columns={[
+                { key: "type", label: "업체 유형" },
+                { key: "moq", label: "MOQ" },
+                { key: "price", label: "단가 (매)" },
+                { key: "leadtime", label: "납기" },
+                { key: "print", label: "인쇄 역량" },
+                { key: "scale", label: "적합 발주 규모" },
+              ]}
+              rows={[
+                {
+                  type: "<strong>직판 제조</strong>",
+                  moq: { text: "3,000매~", pill: "warn" },
+                  price: "₩280~420",
+                  leadtime: "10~14일",
+                  print: "1~2도",
+                  scale: "월 30,000매 이상",
+                },
+                {
+                  type: "<strong>도매 유통</strong>",
+                  moq: { text: "100매~", pill: "good" },
+                  price: "₩520~780",
+                  leadtime: "2~5일",
+                  print: "무지·기성",
+                  scale: "월 5,000매 이하",
+                },
+                {
+                  type: "<strong>인쇄 특화</strong>",
+                  moq: { text: "500매~", pill: "default" },
+                  price: "₩460~650",
+                  leadtime: "7~10일",
+                  print: "4~8도·후가공",
+                  scale: "브랜드 박스·중간 발주",
+                },
+                {
+                  type: "<strong>종합 패키징</strong>",
+                  moq: { text: "1,000매~", pill: "warn" },
+                  price: "₩430~590",
+                  leadtime: "5~10일",
+                  print: "2~4도",
+                  scale: "다품종 동시 발주",
+                },
+              ]}
+            />
+
+            <GuideCallout variant="warn" title="흔한 실수">
+              <p>
+                &ldquo;단가만 보고 직판 제조에 의뢰&rdquo; — MOQ 미달이면 견적이 도매 수준으로
+                올라가거나 거절당합니다. 발주 전 MOQ를 먼저 확인하세요.
+              </p>
+            </GuideCallout>
+
+            <h2
+              id="s3"
+              className="text-[26px] leading-[1.3] tracking-[-0.015em] mt-12 mb-[14px] text-[var(--g-ink)] font-extrabold scroll-mt-28"
+            >
+              <span
+                aria-hidden
+                className="inline-grid place-items-center w-[30px] h-[30px] rounded-lg bg-[var(--g-brand)] text-white text-sm mr-[10px] align-middle"
+              >
+                3
+              </span>
+              견적 받기 전 5가지를 확정하세요
+            </h2>
+            <p>
+              업체 5곳에 같은 사양으로 견적을 받아야 비교가 됩니다. 다음 5가지가 빠지면 받은
+              견적은 의미가 없습니다.
+            </p>
+
+            <GuideChecklist
+              title="견적 요청 전 확정 항목"
+              items={[
+                "<strong>외경 치수</strong> — 너비×길이×높이 (mm). 내경 기준이면 별도 명시",
+                "<strong>골 종류</strong> — A·B·E·F골 또는 BC·EB 합지",
+                "<strong>인쇄 사양</strong> — 도수, Pantone 컬러 코드, 인쇄 면적 비율",
+                "<strong>후가공</strong> — 코팅, 박, 형압, 창 (불필요시 &ldquo;없음&rdquo; 명시)",
+                "<strong>납기·납품 방법</strong> — 희망 납기일, 분납 여부, 직배송/택배",
+              ]}
+            />
+
+            <h2
+              id="s4"
+              className="text-[26px] leading-[1.3] tracking-[-0.015em] mt-12 mb-[14px] text-[var(--g-ink)] font-extrabold scroll-mt-28"
+            >
+              <span
+                aria-hidden
+                className="inline-grid place-items-center w-[30px] h-[30px] rounded-lg bg-[var(--g-brand)] text-white text-sm mr-[10px] align-middle"
+              >
+                4
+              </span>
+              샘플 검수 — 5가지만 보면 됩니다
+            </h2>
+            <p>
+              샘플은 <strong className="text-[var(--g-ink)]">최소 3매 이상</strong> 받아 다음
+              5가지 항목을 평가하세요. 한 가지라도 통과하지 못하면 양산 후 더 큰 비용이
+              발생합니다.
+            </p>
+
+            <h3 className="text-[19px] mt-[30px] mb-[10px] text-[var(--g-ink)] font-bold tracking-[-0.01em]">
+              ① 압축강도 (Compression Strength)
+            </h3>
+            <p>
+              적재 시 무너지지 않는지 확인. 책상 모서리에 박스 모서리를 맞대고 체중을 실어
+              눌러도 함몰되지 않아야 합니다.
+            </p>
+
+            <h3 className="text-[19px] mt-[30px] mb-[10px] text-[var(--g-ink)] font-bold tracking-[-0.01em]">
+              ② 인쇄 정합·색상
+            </h3>
+            <p>Pantone 색상 일치, 도판 어긋남(misregister) 없음, 인쇄면 긁힘 없음.</p>
+
+            <h3 className="text-[19px] mt-[30px] mb-[10px] text-[var(--g-ink)] font-bold tracking-[-0.01em]">
+              ③ 접착·접합
+            </h3>
+            <p>
+              이음새 부위를 손으로 꺾어 5회 반복. 접착이 떨어지면 양산 시 운송 중 파손률
+              급증.
+            </p>
+
+            <h3 className="text-[19px] mt-[30px] mb-[10px] text-[var(--g-ink)] font-bold tracking-[-0.01em]">
+              ④ 치수 정밀도
+            </h3>
+            <p>
+              ±2mm 이내. 자동 포장 라인을 쓴다면 ±1mm 이내 요구 가능.
+            </p>
+
+            <h3 className="text-[19px] mt-[30px] mb-[10px] text-[var(--g-ink)] font-bold tracking-[-0.01em]">
+              ⑤ 발주 식별 정보
+            </h3>
+            <p>
+              박스 내부 또는 측면에 발주 코드·생산일자가 인쇄/스탬핑 되어 있어야 추후 클레임
+              시 추적이 가능.
+            </p>
+
+            <GuideCallout variant="tip" title="Pro tip">
+              <p>
+                샘플 평가표를 PDF로 저장해 모든 업체에 동일 기준으로 적용하세요. 주관 평가가
+                아닌 객관 데이터가 협상력을 만듭니다.
+              </p>
+            </GuideCallout>
+
+            <h2
+              id="s5"
+              className="text-[26px] leading-[1.3] tracking-[-0.015em] mt-12 mb-[14px] text-[var(--g-ink)] font-extrabold scroll-mt-28"
+            >
+              <span
+                aria-hidden
+                className="inline-grid place-items-center w-[30px] h-[30px] rounded-lg bg-[var(--g-brand)] text-white text-sm mr-[10px] align-middle"
+              >
+                5
+              </span>
+              자주 묻는 질문
+            </h2>
+
+            <GuideFaq
+              items={[
+                {
+                  question: "해외(중국·동남아) 업체와 국내 업체 단가 차이는?",
+                  answer:
+                    "평균적으로 국내 대비 30~45% 저렴하지만, 운송·통관·MOQ(보통 5,000매 이상)·리드타임(30~45일)을 합산하면 월 50,000매 이상 안정적 발주가 가능한 경우에만 유리합니다. 시즌성 발주는 권장하지 않습니다.",
+                },
+                {
+                  question: "샘플은 무료인가요? 비용이 든다면 얼마인가요?",
+                  answer:
+                    "기성 박스 샘플은 대부분 무료(택배비만 부담)이며, 인쇄·후가공 포함 커스텀 샘플은 1~5만원 또는 양산 시 차감 조건이 일반적입니다.",
+                },
+                {
+                  question: "발주 후 디자인 수정이 가능한 시점은?",
+                  answer:
+                    "제판(인쇄용 동판) 제작 전까지만 무료 수정. 제판 이후 수정 시 ₩100,000~₩300,000의 재제판 비용이 발생합니다.",
+                },
+                {
+                  question: "친환경 인증 (FSC) 박스는 단가가 얼마나 더 비싼가요?",
+                  answer:
+                    '동일 사양 대비 8~15% 추가. 자세한 비교는 <a href="/guides/eco-friendly-packaging">친환경 패키징 가이드</a>를 참고하세요.',
+                },
+              ]}
+            />
+
+            <GuideEndCta
+              headline="이 가이드대로 견적 받을 업체 찾으세요"
+              subtext="골판지 박스 등록 업체 320곳 — MOQ·납기 필터로 즉시 비교"
+              buttonLabel="업체 비교하기 →"
+              href="/products/box"
+            />
+          </article>
+
+          {/* Sidebar */}
+          <GuideSidebar
+            ctaHeadline="MOQ 500개부터 가능한 업체"
+            ctaSubtext="등록된 320개 골판지 박스 업체 중 조건에 맞는 곳만 추려 비교하세요."
+            ctaButtonLabel="업체 찾기 →"
+            ctaHref="/products/box"
+            relatedGuides={[
+              { href: "/guides/corrugated-flute-types", title: "골판지 골 종류 (A·B·E·F골) 선택", readTime: "4분" },
+              { href: "/guides/shipping-box-pricing", title: "택배 박스 단가 — 수량·사이즈별", readTime: "5분" },
+              { href: "/guides/small-quantity-custom-box", title: "소량 맞춤 박스 — 100~500매 발주", readTime: "4분" },
+              { href: "/guides/eco-friendly-packaging", title: "친환경 패키징 — 인증·비용·로드맵", readTime: "7분" },
+            ]}
+          />
+        </div>
+      </div>
+    </>
   );
 }
 

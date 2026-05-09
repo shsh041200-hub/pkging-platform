@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { GuidePageShell } from "@/components/guide/GuidePageShell";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://packlinx.com";
 const canonicalUrl = `${siteUrl}/guides/packaging-accessories-guide`;
@@ -102,7 +103,7 @@ const faqJsonLd = {
 
 export default function PackagingAccessoriesGuidePage() {
   return (
-    <>
+    <GuidePageShell>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
@@ -701,6 +702,6 @@ export default function PackagingAccessoriesGuidePage() {
           </ul>
         </section>
       </main>
-    </>
+    </GuidePageShell>
   );
 }
