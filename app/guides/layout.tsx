@@ -35,7 +35,7 @@ export default function GuidesLayout({ children }: { children: React.ReactNode }
         </div>
       </header>
 
-      <div className="flex-1 w-full">
+      <div className="flex-1 w-full overflow-x-clip">
         <div className="prose-guide max-w-3xl mx-auto w-full px-5 sm:px-8 py-10 sm:py-14">
           <nav aria-label="breadcrumb" className="mb-6 text-sm text-gray-500 [&_a]:!text-gray-500 [&_a]:!no-underline hover:[&_a]:!text-[#C2410C]">
             <Link href="/">홈</Link>
