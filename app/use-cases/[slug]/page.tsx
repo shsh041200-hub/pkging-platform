@@ -169,7 +169,7 @@ export default async function UseCaseLandingPage({ params }: Props) {
             </p>
           )}
           {companies != null && (
-            <p className="text-[13px] text-brand-700 font-semibold mt-3">
+            <p className="text-[13px] text-stripe-purple font-semibold mt-3">
               {companies.length.toLocaleString()}개 업체
             </p>
           )}
@@ -274,7 +274,7 @@ export default async function UseCaseLandingPage({ params }: Props) {
           </div>
           <Link
             href={categoryPath}
-            className="flex-shrink-0 px-5 py-2.5 bg-brand-700 text-white text-[13px] font-semibold rounded-lg hover:bg-brand-800 transition-colors"
+            className="flex-shrink-0 px-5 py-2.5 bg-stripe-purple text-white text-[13px] font-semibold rounded-lg hover:bg-stripe-purple-hover transition-colors"
           >
             전체 {categoryLabel} 업체 보기 →
           </Link>
