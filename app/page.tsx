@@ -30,6 +30,7 @@ import { CertBadge } from '@/components/CertBadge'
 import { SortDropdown } from '@/components/SortDropdown'
 import { Pagination } from '@/components/Pagination'
 import { BusinessRegistrationInfo } from '@/components/BusinessRegistrationInfo'
+import { HomeHero } from './HomeHero'
 
 const PAGE_SIZE = 30
 
@@ -60,9 +61,8 @@ export async function generateMetadata({
 }: {
   searchParams: SearchParams
 }): Promise<Metadata> {
-  const { q, industry, material, form, cert } = await searchParams
+  const { q } = await searchParams
   if (q) return { robots: { index: false, follow: true } }
-  if (industry || material || form || cert) return { alternates: { canonical: siteUrl } }
   return { alternates: { canonical: siteUrl } }
 }
 
@@ -110,7 +110,7 @@ export default async function HomePage({
 }: {
   searchParams: SearchParams
 }) {
-  const { q, industry, material, form, cert, sort, moq, leadtime, cold, print, coldretention, dryice, sample, page, subtype } = await searchParams
+  const { q, industry, material, form, cert, sort, moq, leadtime, cold, print, coldretention, dryice, sample, page } = await searchParams
   const currentPage = Math.max(1, parseInt(page ?? '1', 10))
   const supabase = await createClient()
 
@@ -131,11 +131,6 @@ export default async function HomePage({
 
   if (q) {
     // ── Korean full-text search path ──────────────────────────────────────────
-    // Delegates to search_companies_korean RPC (migration 037) which:
-    //   1. Expands synonyms via korean_search_synonyms
-    //   2. Searches using weighted tsvector (name A > products/subcategory B > description D)
-    //   3. Includes ilike fallback for compound Korean words not split by spaces
-    //   4. Ranks results by relevance, verified status, and cert count
     const sanitized = q.replace(/[,().]/g, '')
     const rpcCertAlias = activeCerts.flatMap(id => {
       const ct = CERTIFICATION_TYPES.find(c => c.id === id)
@@ -160,21 +155,19 @@ export default async function HomePage({
       filteredCount = ranked.length > 0 ? Number(ranked[0].total_count) : 0
 
       if (rankedIds.length > 0) {
-        // Fetch full display fields for the ranked IDs (RPC only returns core columns)
         const { data: fullData } = await supabase
           .from('companies')
           .select(COMPANY_SELECT)
           .in('id', rankedIds)
         const byId = new Map((fullData ?? []).map(c => [c.id, c]))
-        // Preserve RPC-determined rank order
         companies = rankedIds.map(id => byId.get(id)).filter(Boolean)
       }
     } else {
-      // RPC unavailable (migration not applied locally) — fallback to ilike
+      const sanitizedQ = sanitized
       const { data, count } = await supabase
         .from('companies')
         .select(COMPANY_SELECT, { count: 'exact' })
-        .or(`name.ilike.%${sanitized}%,description.ilike.%${sanitized}%`)
+        .or(`name.ilike.%${sanitizedQ}%,description.ilike.%${sanitizedQ}%`)
         .order('is_verified', { ascending: false })
         .order('cert_count', { ascending: false })
         .order('name')
@@ -350,183 +343,144 @@ export default async function HomePage({
   const buildDryIceUrl = (): string => buildUrl({ dryice: dryice === 'true' ? undefined : 'true' })
   const buildSampleUrl = (): string => buildUrl({ sample: sample === 'true' ? undefined : 'true' })
 
-  // Group cert types by category for filter UI
   const certsByCategory = CERTIFICATION_TYPES.reduce<Record<CertificationCategory, typeof CERTIFICATION_TYPES>>((acc, ct) => {
     if (!acc[ct.category]) acc[ct.category] = []
     acc[ct.category].push(ct)
     return acc
   }, {} as Record<CertificationCategory, typeof CERTIFICATION_TYPES>)
 
-  // Pre-compute cert toggle URLs — serializable map avoids passing functions to Client Components
   const certUrls: Record<string, string> = {}
   for (const ct of CERTIFICATION_TYPES) {
     certUrls[ct.id] = buildCertUrl(ct.id)
   }
 
   return (
-    <div className="min-h-screen bg-[#F9FAFB]">
+    <div className="min-h-screen bg-neutral-50">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      {/* Header */}
-      <header className="bg-[#0F172A] sticky top-0 z-50 border-b border-white/[0.06]">
-        <div className="max-w-7xl mx-auto px-5 sm:px-8 h-16 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-3">
-            <PacklinxLogo variant="dark" />
-            <span className="hidden sm:inline text-slate-400 text-[11px] font-medium tracking-widest uppercase">패키징 업체 검색 플랫폼</span>
+      {/* Header — V05 white style */}
+      <header className="bg-white sticky top-0 z-50 border-b border-border-v04">
+        <div className="max-w-6xl mx-auto px-5 h-14 flex items-center justify-between">
+          <Link href="/" className="flex items-center">
+            <PacklinxLogo variant="light" />
           </Link>
-          <nav className="flex items-center gap-3">
-            <Link
-              href="/categories"
-              className="flex items-center gap-1.5 text-slate-200 hover:text-white text-sm font-medium px-3.5 py-2 border border-white/[0.15] hover:border-white/[0.30] hover:bg-white/[0.06] rounded-full transition-colors focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:ring-white/40 focus-visible:ring-offset-[#0F172A]"
-            >
-              <svg className="w-4 h-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z" />
-              </svg>
+          <nav className="flex items-center gap-4 text-sm text-neutral-500">
+            <Link href="/" className="hover:text-heading-deep-navy transition-colors">
+              전체 업체 보기
+            </Link>
+            <Link href="/categories" className="hover:text-heading-deep-navy transition-colors">
               카테고리
             </Link>
-            <Link
-              href="/services/printing-design"
-              className="flex items-center gap-1.5 text-slate-200 hover:text-white text-sm font-medium px-3.5 py-2 border border-white/[0.15] hover:border-white/[0.30] hover:bg-white/[0.06] rounded-full transition-colors focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:ring-white/40 focus-visible:ring-offset-[#0F172A]"
-            >
-              <svg className="w-4 h-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0110.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0l.229 2.523a1.125 1.125 0 01-1.12 1.227H7.231c-.662 0-1.18-.568-1.12-1.227L6.34 18m11.318 0h1.091A2.25 2.25 0 0021 15.75V9.456c0-1.081-.768-2.015-1.837-2.175a48.055 48.055 0 00-1.913-.247M6.34 18H5.25A2.25 2.25 0 013 15.75V9.456c0-1.081.768-2.015 1.837-2.175a48.041 48.041 0 011.913-.247m10.5 0a48.536 48.536 0 00-10.5 0m10.5 0V3.375c0-.621-.504-1.125-1.125-1.125h-8.25c-.621 0-1.125.504-1.125 1.125v3.659M18.25 7.034l-.057-.022M6.75 7.034c-.018-.007-.036-.014-.057-.022" />
-              </svg>
-              인쇄·디자인
-            </Link>
-            <Link
-              href="/guides"
-              className="flex items-center gap-1.5 text-slate-200 hover:text-white text-sm font-medium px-3.5 py-2 border border-white/[0.15] hover:border-white/[0.30] hover:bg-white/[0.06] rounded-full transition-colors focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:ring-white/40 focus-visible:ring-offset-[#0F172A]"
-            >
-              <svg className="w-4 h-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
-              </svg>
+            <Link href="/guides" className="hover:text-heading-deep-navy transition-colors">
               가이드
             </Link>
           </nav>
         </div>
       </header>
 
-      {/* Hero — Variation B: center-aligned */}
-      <section className="relative bg-[#F9FAFB] border-b border-gray-100 overflow-hidden">
-        {/* Radial glow — top-left */}
-        <div
-          className="absolute -top-[20%] -left-[20%] w-[80%] h-[120%] max-md:w-[80%] max-md:h-[80%] max-md:-top-[10%] max-md:-left-[20%] pointer-events-none z-0"
-          style={{
-            background: 'radial-gradient(ellipse at center, var(--glow-primary) 0%, var(--glow-primary-mid) 40%, transparent 70%)'
-          }}
-        />
-        {/* Radial glow — bottom-right */}
-        <div
-          className="absolute -bottom-[30%] -right-[10%] w-[60%] h-[100%] max-md:w-[70%] max-md:h-[60%] max-md:-bottom-[10%] max-md:-right-[15%] pointer-events-none z-0"
-          style={{
-            background: 'radial-gradient(ellipse at center, var(--glow-secondary) 0%, transparent 60%)'
-          }}
-        />
+      {/* Hero — V05 situation selection (landing state) */}
+      {showingCategory && (
+        <HomeHero totalCount={totalCount} />
+      )}
 
-        <div className="relative z-10 flex flex-col items-center text-center px-6 sm:px-8 py-16 lg:py-24">
-          {/* Text content */}
-          <div className="max-w-3xl mx-auto w-full">
-            <div className="inline-block text-[11px] font-semibold tracking-widest uppercase text-stripe-purple bg-stripe-purple/8 border border-stripe-purple/15 px-3 py-1.5 rounded-full mb-5">
-              패키징 파트너 검색의 시작점
-            </div>
-            <h1 className="text-[32px] sm:text-[40px] lg:text-[48px] font-light text-heading-deep-navy leading-[1.15] tracking-[-0.96px] mb-4">
-              패키징에 필요한 모든 업체,<br />여기서 한 번에 찾으세요
-            </h1>
-            <p className="text-[15px] sm:text-[16px] text-[#64748B] leading-relaxed max-w-[520px] mx-auto">
-              박스 제작부터 인쇄·디자인, 친환경 소재까지 —<br className="hidden sm:inline" />
-              전국 1,300+ 패키징 업체를 카테고리별로 비교하고<br className="hidden sm:inline" />
-              내 제품에 딱 맞는 파트너를 찾으세요.
-            </p>
-          </div>
-
-          {/* Search bar */}
-          <div className="max-w-[560px] lg:max-w-[720px] w-full mx-auto mt-8">
-            <form method="GET" className="flex rounded-xl overflow-hidden border border-gray-200 shadow-[0_2px_8px_rgba(0,0,0,0.06)] focus-within:border-stripe-purple focus-within:shadow-[0_2px_8px_rgba(0,0,0,0.06),0_0_0_3px_var(--color-stripe-purple-ring)] transition-shadow">
-              <input
-                name="q"
-                defaultValue={q}
-                placeholder="업체명, 제품, 인증으로 검색..."
-                className="flex-1 px-5 py-3.5 text-[15px] text-gray-900 bg-white placeholder:text-gray-400 focus:outline-none"
-              />
-              <button
-                type="submit"
-                className="bg-stripe-purple hover:bg-stripe-purple-hover text-white font-semibold px-6 py-3 transition-colors text-sm flex-shrink-0 m-1.5 rounded-lg"
+      {/* Category browse — landing state only */}
+      {showingCategory && (
+        <section className="max-w-6xl mx-auto px-5 py-16">
+          <h2 className="text-xl font-light text-heading-deep-navy tracking-[-0.02em] mb-8">
+            카테고리별 업체 둘러보기
+            <Link href="/categories" className="ml-4 text-[13px] text-stripe-purple font-normal">
+              전체 보기 →
+            </Link>
+          </h2>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            {INDUSTRY_CATEGORIES.filter((cat) => categoryCounts[cat] > 0).map((cat) => (
+              <Link
+                key={cat}
+                href={`/categories/${categoryToSlug(cat)}`}
+                className="group border border-border-v04 rounded-lg p-4 bg-white hover:border-stripe-purple/30 hover:shadow-[rgba(83,58,253,0.06)_0px_4px_12px] transition-all text-center"
               >
-                검색
-              </button>
-            </form>
-
-            {totalCount != null && (
-              <div className="flex items-center justify-center gap-3 mt-3 text-[12px] text-gray-400 font-medium text-center">
-                <span>{totalCount.toLocaleString()}개 업체 등록됨</span>
-                <span className="text-gray-200">·</span>
-                <span>무료 이용</span>
-              </div>
-            )}
+                <div className="w-10 h-10 rounded-lg bg-stripe-purple/6 mx-auto mb-3 flex items-center justify-center group-hover:bg-stripe-purple/10 transition-colors">
+                  <span className="text-lg">{INDUSTRY_CATEGORY_ICONS[cat]}</span>
+                </div>
+                <p className="text-[13px] font-semibold text-heading-deep-navy group-hover:text-stripe-purple transition-colors">
+                  {INDUSTRY_CATEGORY_LABELS[cat]}
+                </p>
+                <p className="text-[11px] text-neutral-500 mt-0.5">{categoryCounts[cat]}개</p>
+              </Link>
+            ))}
           </div>
 
-          {/* Category grid */}
-          {showingCategory && (
-            <div className="max-w-[560px] lg:max-w-[720px] mx-auto w-full mt-8">
-              <div className="flex items-center justify-center mb-4">
-                <span className="text-[11px] font-semibold text-gray-400 uppercase tracking-widest">카테고리 탐색</span>
+          {/* Printing & Design service card */}
+          <div className="mt-6">
+            <Link
+              href="/services/printing-design"
+              className="group flex items-center gap-4 bg-white border border-border-v04 rounded-xl px-5 py-4 hover:border-stripe-purple/30 hover:bg-stripe-purple/4 transition-all duration-150"
+            >
+              <span className="flex-shrink-0 w-8 h-8 flex items-center justify-center">
+                <svg className="w-6 h-6 text-gray-500 group-hover:text-stripe-purple transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.6}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0110.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0l.229 2.523a1.125 1.125 0 01-1.12 1.227H7.231c-.662 0-1.18-.568-1.12-1.227L6.34 18m11.318 0h1.091A2.25 2.25 0 0021 15.75V9.456c0-1.081-.768-2.015-1.837-2.175a48.055 48.055 0 00-1.913-.247M6.34 18H5.25A2.25 2.25 0 013 15.75V9.456c0-1.081.768-2.015 1.837-2.175a48.041 48.041 0 011.913-.247m10.5 0a48.536 48.536 0 00-10.5 0m10.5 0V3.375c0-.621-.504-1.125-1.125-1.125h-8.25c-.621 0-1.125.504-1.125 1.125v3.659M18.25 7.034l-.057-.022M6.75 7.034c-.018-.007-.036-.014-.057-.022" />
+                </svg>
+              </span>
+              <div className="min-w-0 flex-1">
+                <span className="text-[14px] font-semibold text-heading-deep-navy group-hover:text-stripe-purple transition-colors block">
+                  인쇄·디자인 서비스
+                </span>
+                <span className="text-[12px] text-neutral-500 leading-relaxed block mt-0.5">
+                  패키지 인쇄·디자인이 필요하신가요? 소량 맞춤 인쇄부터 브랜드 패키징까지
+                </span>
               </div>
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-                {INDUSTRY_CATEGORIES.filter((cat) => categoryCounts[cat] > 0).map((cat) => (
-                  <Link
-                    key={cat}
-                    href={`/categories/${categoryToSlug(cat)}`}
-                    className="group flex items-center gap-2.5 bg-white border border-border-v04 rounded-lg px-3 py-2.5 hover:border-stripe-purple/30 hover:bg-stripe-purple/4 transition-all duration-150"
-                  >
-                    <span className="text-base flex-shrink-0">{INDUSTRY_CATEGORY_ICONS[cat]}</span>
-                    <div className="min-w-0 text-left">
-                      <span className="text-[13px] font-semibold text-gray-900 group-hover:text-stripe-purple transition-colors block leading-tight">
-                        {INDUSTRY_CATEGORY_LABELS[cat]}
-                      </span>
-                      <span className="text-[11px] text-gray-400">{categoryCounts[cat]}개</span>
-                    </div>
-                  </Link>
-                ))}
-              </div>
+              <svg className="w-5 h-5 text-gray-300 group-hover:text-stripe-purple flex-shrink-0 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+              </svg>
+            </Link>
+          </div>
+        </section>
+      )}
 
-              {/* Services section */}
-              <div className="mt-8">
-                <div className="flex items-center justify-center mb-4">
-                  <span className="text-[11px] font-semibold text-gray-400 uppercase tracking-widest">서비스</span>
-                </div>
-                <Link
-                  href="/services/printing-design"
-                  className="group flex items-center gap-4 bg-white border border-border-v04 rounded-xl px-5 py-4 hover:border-stripe-purple/30 hover:bg-stripe-purple/4 transition-all duration-150"
-                >
-                  <span className="flex-shrink-0 w-8 h-8 flex items-center justify-center">
-                    <svg className="w-6 h-6 text-gray-500 group-hover:text-stripe-purple transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.6}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0110.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0l.229 2.523a1.125 1.125 0 01-1.12 1.227H7.231c-.662 0-1.18-.568-1.12-1.227L6.34 18m11.318 0h1.091A2.25 2.25 0 0021 15.75V9.456c0-1.081-.768-2.015-1.837-2.175a48.055 48.055 0 00-1.913-.247M6.34 18H5.25A2.25 2.25 0 013 15.75V9.456c0-1.081.768-2.015 1.837-2.175a48.041 48.041 0 011.913-.247m10.5 0a48.536 48.536 0 00-10.5 0m10.5 0V3.375c0-.621-.504-1.125-1.125-1.125h-8.25c-.621 0-1.125.504-1.125 1.125v3.659M18.25 7.034l-.057-.022M6.75 7.034c-.018-.007-.036-.014-.057-.022" />
-                    </svg>
-                  </span>
-                  <div className="min-w-0 flex-1">
-                    <span className="text-[14px] font-semibold text-gray-900 group-hover:text-stripe-purple transition-colors block">
-                      인쇄·디자인 서비스
-                    </span>
-                    <span className="text-[12px] text-gray-500 leading-relaxed block mt-0.5">
-                      패키지 인쇄·디자인이 필요하신가요? 소량 맞춤 인쇄부터 브랜드 패키징까지
-                    </span>
-                  </div>
-                  <svg className="w-5 h-5 text-gray-300 group-hover:text-stripe-purple flex-shrink-0 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-                  </svg>
-                </Link>
-              </div>
+      {/* Guides section — landing state only */}
+      {showingCategory && (
+        <section className="border-t border-border-v04 bg-neutral-50">
+          <div className="max-w-6xl mx-auto px-5 py-16">
+            <h2 className="text-xl font-light text-heading-deep-navy tracking-[-0.02em] mb-8">
+              포장재 가이드
+              <Link href="/guides" className="ml-4 text-[13px] text-stripe-purple font-normal">
+                전체 보기 →
+              </Link>
+            </h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <Link
+                href="/guides/box-vendor-selection"
+                className="group border border-border-v04 rounded-lg p-5 bg-white hover:border-stripe-purple/20 transition-colors"
+              >
+                <span className="text-[11px] font-medium text-stripe-purple bg-stripe-purple/6 px-2.5 py-1 rounded mb-3 inline-block">
+                  골판지·종이
+                </span>
+                <h3 className="text-[14px] font-medium text-heading-deep-navy leading-snug group-hover:text-stripe-purple transition-colors">
+                  박스 포장 업체 선정 기준 5가지
+                </h3>
+              </Link>
+              <Link
+                href="/guides/eco-packaging-checklist"
+                className="group border border-border-v04 rounded-lg p-5 bg-white hover:border-stripe-purple/20 transition-colors"
+              >
+                <span className="text-[11px] font-medium text-stripe-purple bg-stripe-purple/6 px-2.5 py-1 rounded mb-3 inline-block">
+                  친환경
+                </span>
+                <h3 className="text-[14px] font-medium text-heading-deep-navy leading-snug group-hover:text-stripe-purple transition-colors">
+                  친환경 포장재 전환 시 체크리스트
+                </h3>
+              </Link>
             </div>
-          )}
-        </div>
-      </section>
+          </div>
+        </section>
+      )}
 
       {/* Filter Bar — only when search/filter active */}
       {!showingCategory && (
-        <div className="bg-white border-b border-gray-100 sticky top-16 z-40">
+        <div className="bg-white border-b border-gray-100 sticky top-14 z-40">
           <div className="max-w-7xl mx-auto px-5 sm:px-8">
             {/* Industry tabs */}
             <div className="flex gap-0.5 pt-2 overflow-x-auto scrollbar-none">
@@ -558,151 +512,151 @@ export default async function HomePage({
               ))}
             </div>
 
-                {/* Material chips */}
-                <div className="flex gap-1.5 py-2.5 overflow-x-auto scrollbar-none">
-                  <span className="flex-shrink-0 text-[10px] font-semibold text-gray-300 uppercase tracking-widest self-center mr-1">소재</span>
-                  {MATERIAL_TYPES.map((mat) => {
-                    const isActive = selectedMaterials.includes(mat)
-                    return (
-                      <Link
-                        key={mat}
-                        href={buildMaterialUrl(mat)}
-                        className={`flex-shrink-0 px-2.5 py-1.5 rounded text-[11px] font-medium transition-all border ${
-                          isActive
-                            ? 'bg-stripe-purple text-white border-stripe-purple'
-                            : 'text-gray-500 border-gray-200 hover:text-gray-700 hover:border-gray-300 bg-white'
-                        }`}
-                      >
-                        {MATERIAL_TYPE_LABELS[mat]}
-                      </Link>
-                    )
-                  })}
-                </div>
+            {/* Material chips */}
+            <div className="flex gap-1.5 py-2.5 overflow-x-auto scrollbar-none">
+              <span className="flex-shrink-0 text-[10px] font-semibold text-gray-300 uppercase tracking-widest self-center mr-1">소재</span>
+              {MATERIAL_TYPES.map((mat) => {
+                const isActive = selectedMaterials.includes(mat)
+                return (
+                  <Link
+                    key={mat}
+                    href={buildMaterialUrl(mat)}
+                    className={`flex-shrink-0 px-2.5 py-1.5 rounded text-[11px] font-medium transition-all border ${
+                      isActive
+                        ? 'bg-stripe-purple text-white border-stripe-purple'
+                        : 'text-gray-500 border-gray-200 hover:text-gray-700 hover:border-gray-300 bg-white'
+                    }`}
+                  >
+                    {MATERIAL_TYPE_LABELS[mat]}
+                  </Link>
+                )
+              })}
+            </div>
 
-                {/* Packaging form chips */}
-                <div className="flex gap-1.5 py-2.5 overflow-x-auto scrollbar-none">
-                  <span className="flex-shrink-0 text-[10px] font-semibold text-gray-300 uppercase tracking-widest self-center mr-1">형태</span>
-                  {PACKAGING_FORMS.map((pf) => {
-                    const isActive = selectedForms.includes(pf)
-                    return (
-                      <Link
-                        key={pf}
-                        href={buildFormUrl(pf)}
-                        className={`flex-shrink-0 px-2.5 py-1.5 rounded text-[11px] font-medium transition-all border ${
-                          isActive
-                            ? 'bg-stripe-purple text-white border-stripe-purple'
-                            : 'text-gray-500 border-gray-200 hover:text-gray-700 hover:border-gray-300 bg-white'
-                        }`}
-                      >
-                        {PACKAGING_FORM_LABELS[pf]}
-                      </Link>
-                    )
-                  })}
-                </div>
+            {/* Packaging form chips */}
+            <div className="flex gap-1.5 py-2.5 overflow-x-auto scrollbar-none">
+              <span className="flex-shrink-0 text-[10px] font-semibold text-gray-300 uppercase tracking-widest self-center mr-1">형태</span>
+              {PACKAGING_FORMS.map((pf) => {
+                const isActive = selectedForms.includes(pf)
+                return (
+                  <Link
+                    key={pf}
+                    href={buildFormUrl(pf)}
+                    className={`flex-shrink-0 px-2.5 py-1.5 rounded text-[11px] font-medium transition-all border ${
+                      isActive
+                        ? 'bg-stripe-purple text-white border-stripe-purple'
+                        : 'text-gray-500 border-gray-200 hover:text-gray-700 hover:border-gray-300 bg-white'
+                    }`}
+                  >
+                    {PACKAGING_FORM_LABELS[pf]}
+                  </Link>
+                )
+              })}
+            </div>
 
-                {/* Buyer criteria chips — MOQ / 납기 / 인쇄 / 보냉 */}
-                <div className="flex gap-1.5 py-2.5 overflow-x-auto scrollbar-none">
-                  <span className="flex-shrink-0 text-[10px] font-semibold text-gray-300 uppercase tracking-widest self-center mr-1">조건</span>
-                  {MOQ_RANGES.map((range) => {
-                    const isActive = moq === range.id
-                    return (
-                      <Link
-                        key={range.id}
-                        href={buildMoqUrl(range.id)}
-                        className={`flex-shrink-0 px-2.5 py-1.5 rounded text-[11px] font-medium transition-all border ${
-                          isActive
-                            ? 'bg-[#0D9488] text-white border-[#0D9488]'
-                            : 'text-gray-500 border-gray-200 hover:text-gray-700 hover:border-gray-300 bg-white'
-                        }`}
-                      >
-                        {range.label}
-                      </Link>
-                    )
-                  })}
-                  <span className="flex-shrink-0 w-px h-4 bg-gray-200 self-center mx-0.5" aria-hidden="true" />
-                  {LEAD_TIME_RANGES.map((range) => {
-                    const isActive = leadtime === range.id
-                    return (
-                      <Link
-                        key={range.id}
-                        href={buildLeadTimeUrl(range.id)}
-                        className={`flex-shrink-0 px-2.5 py-1.5 rounded text-[11px] font-medium transition-all border ${
-                          isActive
-                            ? 'bg-[#0D9488] text-white border-[#0D9488]'
-                            : 'text-gray-500 border-gray-200 hover:text-gray-700 hover:border-gray-300 bg-white'
-                        }`}
-                      >
-                        {range.label}
-                      </Link>
-                    )
-                  })}
-                  <span className="flex-shrink-0 w-px h-4 bg-gray-200 self-center mx-0.5" aria-hidden="true" />
-                  {(['digital', 'offset'] as PrintMethod[]).map((method) => {
-                    const isActive = print === method
-                    return (
-                      <Link
-                        key={method}
-                        href={buildPrintUrl(method)}
-                        className={`flex-shrink-0 px-2.5 py-1.5 rounded text-[11px] font-medium transition-all border ${
-                          isActive
-                            ? 'bg-[#0D9488] text-white border-[#0D9488]'
-                            : 'text-gray-500 border-gray-200 hover:text-gray-700 hover:border-gray-300 bg-white'
-                        }`}
-                      >
-                        {PRINT_METHOD_LABELS[method]}
-                      </Link>
-                    )
-                  })}
-                  <span className="flex-shrink-0 w-px h-4 bg-gray-200 self-center mx-0.5" aria-hidden="true" />
+            {/* Buyer criteria chips — MOQ / 납기 / 인쇄 / 보냉 */}
+            <div className="flex gap-1.5 py-2.5 overflow-x-auto scrollbar-none">
+              <span className="flex-shrink-0 text-[10px] font-semibold text-gray-300 uppercase tracking-widest self-center mr-1">조건</span>
+              {MOQ_RANGES.map((range) => {
+                const isActive = moq === range.id
+                return (
                   <Link
-                    href={buildColdUrl()}
+                    key={range.id}
+                    href={buildMoqUrl(range.id)}
                     className={`flex-shrink-0 px-2.5 py-1.5 rounded text-[11px] font-medium transition-all border ${
-                      cold === 'true'
-                        ? 'bg-[#0D9488] text-white border-[#0D9488]'
+                      isActive
+                        ? 'bg-teal-600 text-white border-teal-600'
                         : 'text-gray-500 border-gray-200 hover:text-gray-700 hover:border-gray-300 bg-white'
                     }`}
                   >
-                    보냉 포장
+                    {range.label}
                   </Link>
-                  <span className="flex-shrink-0 w-px h-4 bg-gray-200 self-center mx-0.5" aria-hidden="true" />
-                  {COLD_RETENTION_RANGES.map((range) => {
-                    const isActive = coldretention === range.id
-                    return (
-                      <Link
-                        key={range.id}
-                        href={buildColdRetentionUrl(range.id)}
-                        className={`flex-shrink-0 px-2.5 py-1.5 rounded text-[11px] font-medium transition-all border ${
-                          isActive
-                            ? 'bg-[#0D9488] text-white border-[#0D9488]'
-                            : 'text-gray-500 border-gray-200 hover:text-gray-700 hover:border-gray-300 bg-white'
-                        }`}
-                      >
-                        보냉 {range.label}
-                      </Link>
-                    )
-                  })}
+                )
+              })}
+              <span className="flex-shrink-0 w-px h-4 bg-gray-200 self-center mx-0.5" aria-hidden="true" />
+              {LEAD_TIME_RANGES.map((range) => {
+                const isActive = leadtime === range.id
+                return (
                   <Link
-                    href={buildDryIceUrl()}
+                    key={range.id}
+                    href={buildLeadTimeUrl(range.id)}
                     className={`flex-shrink-0 px-2.5 py-1.5 rounded text-[11px] font-medium transition-all border ${
-                      dryice === 'true'
-                        ? 'bg-[#0D9488] text-white border-[#0D9488]'
+                      isActive
+                        ? 'bg-teal-600 text-white border-teal-600'
                         : 'text-gray-500 border-gray-200 hover:text-gray-700 hover:border-gray-300 bg-white'
                     }`}
                   >
-                    드라이아이스
+                    {range.label}
                   </Link>
-                  <span className="flex-shrink-0 w-px h-4 bg-gray-200 self-center mx-0.5" aria-hidden="true" />
+                )
+              })}
+              <span className="flex-shrink-0 w-px h-4 bg-gray-200 self-center mx-0.5" aria-hidden="true" />
+              {(['digital', 'offset'] as PrintMethod[]).map((method) => {
+                const isActive = print === method
+                return (
                   <Link
-                    href={buildSampleUrl()}
+                    key={method}
+                    href={buildPrintUrl(method)}
                     className={`flex-shrink-0 px-2.5 py-1.5 rounded text-[11px] font-medium transition-all border ${
-                      sample === 'true'
-                        ? 'bg-[#0D9488] text-white border-[#0D9488]'
+                      isActive
+                        ? 'bg-teal-600 text-white border-teal-600'
                         : 'text-gray-500 border-gray-200 hover:text-gray-700 hover:border-gray-300 bg-white'
                     }`}
                   >
-                    샘플 제작
+                    {PRINT_METHOD_LABELS[method]}
                   </Link>
-                </div>
+                )
+              })}
+              <span className="flex-shrink-0 w-px h-4 bg-gray-200 self-center mx-0.5" aria-hidden="true" />
+              <Link
+                href={buildColdUrl()}
+                className={`flex-shrink-0 px-2.5 py-1.5 rounded text-[11px] font-medium transition-all border ${
+                  cold === 'true'
+                    ? 'bg-teal-600 text-white border-teal-600'
+                    : 'text-gray-500 border-gray-200 hover:text-gray-700 hover:border-gray-300 bg-white'
+                }`}
+              >
+                보냉 포장
+              </Link>
+              <span className="flex-shrink-0 w-px h-4 bg-gray-200 self-center mx-0.5" aria-hidden="true" />
+              {COLD_RETENTION_RANGES.map((range) => {
+                const isActive = coldretention === range.id
+                return (
+                  <Link
+                    key={range.id}
+                    href={buildColdRetentionUrl(range.id)}
+                    className={`flex-shrink-0 px-2.5 py-1.5 rounded text-[11px] font-medium transition-all border ${
+                      isActive
+                        ? 'bg-teal-600 text-white border-teal-600'
+                        : 'text-gray-500 border-gray-200 hover:text-gray-700 hover:border-gray-300 bg-white'
+                    }`}
+                  >
+                    보냉 {range.label}
+                  </Link>
+                )
+              })}
+              <Link
+                href={buildDryIceUrl()}
+                className={`flex-shrink-0 px-2.5 py-1.5 rounded text-[11px] font-medium transition-all border ${
+                  dryice === 'true'
+                    ? 'bg-teal-600 text-white border-teal-600'
+                    : 'text-gray-500 border-gray-200 hover:text-gray-700 hover:border-gray-300 bg-white'
+                }`}
+              >
+                드라이아이스
+              </Link>
+              <span className="flex-shrink-0 w-px h-4 bg-gray-200 self-center mx-0.5" aria-hidden="true" />
+              <Link
+                href={buildSampleUrl()}
+                className={`flex-shrink-0 px-2.5 py-1.5 rounded text-[11px] font-medium transition-all border ${
+                  sample === 'true'
+                    ? 'bg-teal-600 text-white border-teal-600'
+                    : 'text-gray-500 border-gray-200 hover:text-gray-700 hover:border-gray-300 bg-white'
+                }`}
+              >
+                샘플 제작
+              </Link>
+            </div>
 
             {/* Certification accordion filter */}
             <CertFilterAccordion
@@ -742,10 +696,10 @@ export default async function HomePage({
               <Link
                 key={pf}
                 href={buildFormUrl(pf)}
-                className="text-[11px] bg-[#F3E8FF] text-[#7C3AED] font-medium px-2.5 py-1 rounded-full flex items-center gap-1 hover:bg-[#EDE9FE] transition-colors"
+                className="text-[11px] bg-purple-100 text-purple-700 font-medium px-2.5 py-1 rounded-full flex items-center gap-1 hover:bg-violet-100 transition-colors"
               >
                 {PACKAGING_FORM_LABELS[pf]}
-                <span className="text-[#7C3AED]/60 text-[10px] leading-none">×</span>
+                <span className="text-purple-700/60 text-[10px] leading-none">×</span>
               </Link>
             ))}
             {activeCerts.map((certId) => {
@@ -851,7 +805,6 @@ export default async function HomePage({
                         </span>
                       ))}
                     </div>
-                    {/* Rating badge */}
                     {company.avg_rating != null && company.review_count > 0 && (
                       <div className="flex items-center gap-1 flex-shrink-0">
                         <svg className="w-3 h-3 text-amber-400" fill="currentColor" viewBox="0 0 20 20">
@@ -973,7 +926,7 @@ export default async function HomePage({
       </section>}
 
       {/* Footer */}
-      <footer className="border-t border-white/[0.06] bg-[#0F172A] mt-auto">
+      <footer className="border-t border-white/[0.06] bg-slate-900 mt-auto">
         <div className="max-w-7xl mx-auto px-5 sm:px-8 py-8">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div className="flex flex-col gap-2">
