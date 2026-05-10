@@ -26,7 +26,7 @@ export default async function OptOutPage({ searchParams }: Props) {
 
   return (
     <div className="min-h-screen bg-slate-50">
-      <header className="bg-[#0F172A] sticky top-0 z-50">
+      <header className="bg-neutral-900 sticky top-0 z-50">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2.5">
             <PacklinxLogo variant="dark" />

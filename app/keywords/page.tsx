@@ -26,9 +26,9 @@ export default async function KeywordsIndexPage() {
   const keywords = await listKeywordIndex()
 
   return (
-    <div className="min-h-screen bg-[#F9FAFB] flex flex-col">
+    <div className="min-h-screen bg-gray-50 flex flex-col">
       {/* Header */}
-      <header className="bg-[#0F172A] sticky top-0 z-50 border-b border-white/[0.06]">
+      <header className="bg-neutral-900 sticky top-0 z-50 border-b border-white/[0.06]">
         <div className="max-w-7xl mx-auto px-5 sm:px-8 h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-3">
             <PacklinxLogo variant="dark" />
@@ -52,7 +52,7 @@ export default async function KeywordsIndexPage() {
       </header>
 
       {/* Hero */}
-      <section className="bg-[#0F172A] border-b border-white/[0.06] py-12 px-5 sm:px-8">
+      <section className="bg-neutral-900 border-b border-white/[0.06] py-12 px-5 sm:px-8">
         <div className="max-w-4xl mx-auto text-center">
           <h1 className="text-[28px] sm:text-[36px] font-bold text-white leading-tight tracking-[-0.02em] mb-3">
             패키징 키워드 디렉터리
@@ -70,12 +70,12 @@ export default async function KeywordsIndexPage() {
             <Link
               key={slug}
               href={`/keywords/${slug}`}
-              className="group flex items-center justify-between bg-white border border-gray-200 rounded-xl px-5 py-3.5 hover:border-[#533afd]/40 hover:shadow-[0_4px_16px_rgba(83,58,253,0.08)] transition-all duration-150"
+              className="group flex items-center justify-between bg-white border border-gray-200 rounded-xl px-5 py-3.5 hover:border-stripe-purple/40 hover:shadow-[0_4px_16px_var(--color-stripe-purple-tint)] transition-all duration-150"
             >
-              <span className="text-[14px] font-medium text-gray-800 group-hover:text-[#533afd] transition-colors leading-snug">
+              <span className="text-[14px] font-medium text-gray-800 group-hover:text-stripe-purple transition-colors leading-snug">
                 {titleKo}
               </span>
-              <svg className="w-4 h-4 text-gray-300 group-hover:text-[#533afd] flex-shrink-0 ml-3 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <svg className="w-4 h-4 text-gray-300 group-hover:text-stripe-purple flex-shrink-0 ml-3 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
               </svg>
             </Link>
@@ -86,7 +86,7 @@ export default async function KeywordsIndexPage() {
           <p className="text-[13px] text-gray-400 mb-4">더 많은 업체를 찾고 계신가요?</p>
           <Link
             href="/"
-            className="inline-flex items-center gap-2 bg-[#533afd] hover:bg-[#4434d4] text-white font-semibold px-6 py-3 rounded-lg text-[14px] transition-colors"
+            className="inline-flex items-center gap-2 bg-stripe-purple hover:bg-stripe-purple-hover text-white font-semibold px-6 py-3 rounded-lg text-[14px] transition-colors"
           >
             전체 업체 검색하기
           </Link>
@@ -94,7 +94,7 @@ export default async function KeywordsIndexPage() {
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-white/[0.06] bg-[#0F172A] mt-auto">
+      <footer className="border-t border-white/[0.06] bg-neutral-900 mt-auto">
         <div className="max-w-7xl mx-auto px-5 sm:px-8 py-8">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div className="flex flex-col gap-2">

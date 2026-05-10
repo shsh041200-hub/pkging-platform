@@ -101,7 +101,7 @@ export default async function CompareSlugPage({ params }: Props) {
   return (
     <>
       <main className="max-w-7xl mx-auto px-4 sm:px-6 py-8 pb-32">
-        <Link href="/" className="text-sm text-blue-600 hover:underline mb-4 inline-block">
+        <Link href="/" className="text-sm text-stripe-purple hover:underline mb-4 inline-block">
           ← 목록으로
         </Link>
         <h1 className="text-xl font-bold text-gray-900 mb-6">
