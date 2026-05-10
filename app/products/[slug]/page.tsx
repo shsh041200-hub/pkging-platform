@@ -192,7 +192,7 @@ export default async function ProductPage({ params, searchParams }: Props) {
         <div className="max-w-7xl mx-auto">
           <div className="flex items-center gap-3 py-4 flex-wrap">
             <span className="text-[24px] leading-none flex-shrink-0">{guide.icon}</span>
-            <h1 className="text-[20px] font-light text-[#061b31] leading-tight">
+            <h1 className="text-[20px] font-light text-heading-deep-navy leading-tight">
               {guide.label} 업체
             </h1>
             {heroCount != null && (
@@ -218,7 +218,7 @@ export default async function ProductPage({ params, searchParams }: Props) {
             {companies.map((company) => (
               <article
                 key={company.id}
-                className="bg-white border border-[#e5edf5] rounded-xl overflow-hidden hover:border-[#533afd]/20 hover:shadow-[0_8px_24px_rgba(50,50,93,0.25),0_2px_4px_rgba(0,0,0,0.1)] hover:-translate-y-px transition-all duration-200 group relative"
+                className="bg-white border border-border-v04 rounded-xl overflow-hidden hover:border-stripe-purple/20 hover:shadow-[var(--shadow-elevated-v04)] hover:-translate-y-px transition-all duration-200 group relative"
               >
                 <div className="p-6">
                   <div className="flex items-start justify-between mb-3.5">
@@ -231,7 +231,7 @@ export default async function ProductPage({ params, searchParams }: Props) {
                     </div>
                   </div>
 
-                  <h2 className="text-base font-bold text-[#061b31] mb-1 leading-snug tracking-[-0.02em] line-clamp-1" title={company.name}>
+                  <h2 className="text-base font-bold text-heading-deep-navy mb-1 leading-snug tracking-[-0.02em] line-clamp-1" title={company.name}>
                     <Link
                       href={`/companies/${company.slug}`}
                       className="after:absolute after:inset-0 after:content-['']"
@@ -249,7 +249,7 @@ export default async function ProductPage({ params, searchParams }: Props) {
                       {(company.service_capabilities as string[] | null)?.length! > 0 && (
                         <div className="flex flex-wrap gap-1 mb-1">
                           {(company.service_capabilities as string[]).slice(0, 3).map((cap, i) => (
-                            <span key={i} className="text-[11px] font-medium bg-[rgba(83,58,253,0.06)] text-[#533afd] px-2 py-0.5 rounded">
+                            <span key={i} className="text-[11px] font-medium bg-stripe-purple/6 text-stripe-purple px-2 py-0.5 rounded">
                               {cap}
                             </span>
                           ))}
@@ -302,7 +302,7 @@ export default async function ProductPage({ params, searchParams }: Props) {
 
       {/* Product Guide */}
       <section className="max-w-7xl mx-auto px-5 sm:px-8 pb-8">
-        <div className="mt-8 bg-white border border-[#e5edf5] rounded-xl p-6 sm:p-8">
+        <div className="mt-8 bg-white border border-border-v04 rounded-xl p-6 sm:p-8">
           <p className="text-[14px] sm:text-[15px] text-gray-600 leading-relaxed mb-6">
             {guide.description}
           </p>
@@ -314,7 +314,7 @@ export default async function ProductPage({ params, searchParams }: Props) {
             <ul className="space-y-2">
               {guide.buyerPoints.map((point, i) => (
                 <li key={i} className="flex items-start gap-2.5 text-[13px] sm:text-[14px] text-gray-700 leading-relaxed">
-                  <svg className="w-4 h-4 text-[#533afd] flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <svg className="w-4 h-4 text-stripe-purple flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                   </svg>
                   {point}
@@ -349,7 +349,7 @@ export default async function ProductPage({ params, searchParams }: Props) {
             <Link
               key={key}
               href={`/products/${key}`}
-              className="inline-flex items-center gap-2 text-[13px] font-medium text-gray-700 bg-white border border-[#e5edf5] hover:border-[#533afd] hover:text-[#533afd] px-4 py-2 rounded-xl transition-all shadow-sm"
+              className="inline-flex items-center gap-2 text-[13px] font-medium text-gray-700 bg-white border border-border-v04 hover:border-stripe-purple hover:text-stripe-purple px-4 py-2 rounded-xl transition-all shadow-sm"
             >
               <span className="text-base">{PRODUCT_GUIDE[key].icon}</span>
               <span>{PRODUCT_GUIDE[key].label}</span>
@@ -378,18 +378,18 @@ export default async function ProductPage({ params, searchParams }: Props) {
       <section className="max-w-7xl mx-auto px-5 sm:px-8 pb-12">
         <Link
           href="/services/printing-design"
-          className="group flex items-center gap-4 bg-white border border-[#e5edf5] rounded-xl px-6 py-5 hover:border-[#533afd]/30 hover:shadow-[0_4px_12px_rgba(50,50,93,0.15)] transition-all duration-150"
+          className="group flex items-center gap-4 bg-white border border-border-v04 rounded-xl px-6 py-5 hover:border-stripe-purple/30 hover:shadow-[0_4px_12px_rgba(50,50,93,0.15)] transition-all duration-150"
         >
           <span className="text-2xl flex-shrink-0">🖨️</span>
           <div className="min-w-0 flex-1">
-            <span className="text-[14px] font-semibold text-gray-900 group-hover:text-[#533afd] transition-colors block">
+            <span className="text-[14px] font-semibold text-gray-900 group-hover:text-stripe-purple transition-colors block">
               인쇄·디자인 서비스가 필요하신가요?
             </span>
             <span className="text-[12px] text-gray-500 leading-relaxed block mt-0.5">
               패키징 발주 후 인쇄·디자인은 별도 작업 흐름입니다. 소량 맞춤 인쇄부터 패키지 브랜딩까지 전문 업체를 찾아보세요.
             </span>
           </div>
-          <svg className="w-5 h-5 text-gray-300 group-hover:text-[#533afd] flex-shrink-0 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+          <svg className="w-5 h-5 text-gray-300 group-hover:text-stripe-purple flex-shrink-0 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
           </svg>
         </Link>

@@ -54,6 +54,18 @@
   --color-info-200: #BFDBFE;
   --color-info-600: #2563EB;
   --color-info-700: #1D4ED8;
+
+  /* V04 Stripe-inspired design tokens */
+  --color-stripe-purple:       #533afd;
+  --color-stripe-purple-hover: #4434d4;
+  --color-stripe-purple-soft:  rgba(83, 58, 253, 0.05);
+  --color-stripe-purple-tint:  rgba(83, 58, 253, 0.08);
+  --color-stripe-purple-ring:  rgba(83, 58, 253, 0.12);
+  --color-heading-deep-navy:   #061b31;
+  --color-body-secondary:      #64748d;
+  --color-border-v04:          #e5edf5;
+  --shadow-elevated-v04: rgba(50,50,93,0.25) 0px 30px 45px -30px, rgba(0,0,0,0.10) 0px 18px 36px -18px;
+  --font-heading-display: 'sohne-var', 'SF Pro Display', -apple-system, sans-serif;
 }
 
 :root {
@@ -163,5 +175,11 @@
   .bg-dot-grid {
     background-image: radial-gradient(circle, #CBD5E1 0.75px, transparent 0.75px);
     background-size: 24px 24px;
+  }
+
+  .heading-display {
+    font-family: var(--font-heading-display);
+    font-weight: 300;
+    font-feature-settings: 'ss01';
   }
 }
