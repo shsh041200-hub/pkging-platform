@@ -135,7 +135,8 @@ export function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { slug } = await params;
+  const { slug: rawSlug } = await params;
+  const slug = decodeURIComponent(rawSlug);
   if (!isDynamicGuideSlug(slug)) return {};
   const guide = GUIDES[slug];
   const canonicalUrl = `${siteUrl}/guides/${slug}`;
@@ -158,7 +159,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function GuidePage({ params }: Props) {
-  const { slug } = await params;
+  const { slug: rawSlug } = await params;
+  const slug = decodeURIComponent(rawSlug);
   if (!isDynamicGuideSlug(slug)) notFound();
   const guide = GUIDES[slug];
 
