@@ -155,7 +155,7 @@ export default async function ServicePage({ params, searchParams }: Props) {
   }
 
   return (
-    <div className="min-h-screen bg-[#F9FAFB]">
+    <div className="min-h-screen bg-gray-50">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
@@ -166,7 +166,7 @@ export default async function ServicePage({ params, searchParams }: Props) {
       />
 
       {/* Header */}
-      <header className="bg-[#0F172A] sticky top-0 z-50 border-b border-white/[0.06]">
+      <header className="bg-neutral-900 sticky top-0 z-50 border-b border-white/[0.06]">
         <div className="max-w-7xl mx-auto px-5 sm:px-8 h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-3">
             <PacklinxLogo variant="dark" />
@@ -245,7 +245,7 @@ export default async function ServicePage({ params, searchParams }: Props) {
                       {(company.service_capabilities as string[] | null)?.length! > 0 && (
                         <div className="flex flex-wrap gap-1 mb-1">
                           {(company.service_capabilities as string[]).slice(0, 3).map((cap, i) => (
-                            <span key={i} className="text-[11px] font-medium bg-[#EFF6FF] text-[#2563EB] px-2 py-0.5 rounded">
+                            <span key={i} className="text-[11px] font-medium bg-info-50 text-info-600 px-2 py-0.5 rounded">
                               {cap}
                             </span>
                           ))}
@@ -310,7 +310,7 @@ export default async function ServicePage({ params, searchParams }: Props) {
             <ul className="space-y-2">
               {guide.buyerPoints.map((point, i) => (
                 <li key={i} className="flex items-start gap-2.5 text-[13px] sm:text-[14px] text-gray-700 leading-relaxed">
-                  <svg className="w-4 h-4 text-[#F97316] flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <svg className="w-4 h-4 text-stripe-purple flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                   </svg>
                   {point}
@@ -345,7 +345,7 @@ export default async function ServicePage({ params, searchParams }: Props) {
             <Link
               key={key}
               href={`/products/${key}`}
-              className="inline-flex items-center gap-2 text-[13px] font-medium text-gray-700 bg-white border border-gray-200 hover:border-[#C2410C] hover:text-[#C2410C] px-4 py-2 rounded-xl transition-all shadow-sm"
+              className="inline-flex items-center gap-2 text-[13px] font-medium text-gray-700 bg-white border border-gray-200 hover:border-stripe-purple hover:text-stripe-purple px-4 py-2 rounded-xl transition-all shadow-sm"
             >
               <span className="text-base">{PRODUCT_GUIDE[key].icon}</span>
               <span>{PRODUCT_GUIDE[key].label}</span>
@@ -355,7 +355,7 @@ export default async function ServicePage({ params, searchParams }: Props) {
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-white/[0.06] bg-[#0F172A] mt-auto">
+      <footer className="border-t border-white/[0.06] bg-neutral-900 mt-auto">
         <TermsNoticeFooterLine theme="dark" />
         <div className="max-w-7xl mx-auto px-5 sm:px-8 py-8">
           <div className="flex flex-wrap items-center justify-between gap-4">

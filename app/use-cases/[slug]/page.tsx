@@ -120,7 +120,7 @@ export default async function UseCaseLandingPage({ params }: Props) {
   }
 
   return (
-    <div className="min-h-screen bg-[#F9FAFB]">
+    <div className="min-h-screen bg-gray-50">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
@@ -131,7 +131,7 @@ export default async function UseCaseLandingPage({ params }: Props) {
       />
 
       {/* Header */}
-      <header className="bg-[#0F172A] sticky top-0 z-50 border-b border-white/[0.06]">
+      <header className="bg-neutral-900 sticky top-0 z-50 border-b border-white/[0.06]">
         <div className="max-w-7xl mx-auto px-5 sm:px-8 h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-3">
             <PacklinxLogo variant="dark" />
@@ -146,7 +146,7 @@ export default async function UseCaseLandingPage({ params }: Props) {
       </header>
 
       {/* Hero */}
-      <section className="bg-[#F8FAFC] bg-dot-grid border-b border-gray-100 pt-12 pb-14 sm:pt-16 sm:pb-18 px-5">
+      <section className="bg-neutral-50 bg-dot-grid border-b border-gray-100 pt-12 pb-14 sm:pt-16 sm:pb-18 px-5">
         <div className="max-w-3xl mx-auto">
           <nav className="text-sm text-gray-400 mb-6">
             <Link href="/" className="hover:text-gray-600 transition-colors">홈</Link>
@@ -169,7 +169,7 @@ export default async function UseCaseLandingPage({ params }: Props) {
             </p>
           )}
           {companies != null && (
-            <p className="text-[13px] text-[#C2410C] font-semibold mt-3">
+            <p className="text-[13px] text-stripe-purple font-semibold mt-3">
               {companies.length.toLocaleString()}개 업체
             </p>
           )}
@@ -218,7 +218,7 @@ export default async function UseCaseLandingPage({ params }: Props) {
                   {(company.service_capabilities as string[] | null)?.length ? (
                     <div className="mb-3 flex flex-wrap gap-1">
                       {(company.service_capabilities as string[]).slice(0, 3).map((cap, i) => (
-                        <span key={i} className="text-[11px] font-medium bg-[#EFF6FF] text-[#2563EB] px-2 py-0.5 rounded">
+                        <span key={i} className="text-[11px] font-medium bg-info-50 text-info-600 px-2 py-0.5 rounded">
                           {cap}
                         </span>
                       ))}
@@ -274,7 +274,7 @@ export default async function UseCaseLandingPage({ params }: Props) {
           </div>
           <Link
             href={categoryPath}
-            className="flex-shrink-0 px-5 py-2.5 bg-[#C2410C] text-white text-[13px] font-semibold rounded-lg hover:bg-[#9A3412] transition-colors"
+            className="flex-shrink-0 px-5 py-2.5 bg-stripe-purple text-white text-[13px] font-semibold rounded-lg hover:bg-stripe-purple-hover transition-colors"
           >
             전체 {categoryLabel} 업체 보기 →
           </Link>
@@ -282,7 +282,7 @@ export default async function UseCaseLandingPage({ params }: Props) {
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-white/[0.06] bg-[#0F172A] mt-auto py-8">
+      <footer className="border-t border-white/[0.06] bg-neutral-900 mt-auto py-8">
         <div className="max-w-7xl mx-auto px-5 sm:px-8">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div className="flex flex-col gap-2">

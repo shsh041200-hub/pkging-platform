@@ -6,7 +6,7 @@ export function GuidePageShell({ children }: { children: ReactNode }) {
     <div className="prose-guide max-w-3xl mx-auto w-full px-5 sm:px-8 py-10 sm:py-14">
       <nav
         aria-label="breadcrumb"
-        className="mb-6 text-sm text-gray-500 [&_a]:!text-gray-500 [&_a]:!no-underline hover:[&_a]:!text-[#C2410C]"
+        className="mb-6 text-sm text-gray-500 [&_a]:!text-gray-500 [&_a]:!no-underline hover:[&_a]:!text-stripe-purple"
       >
         <Link href="/">홈</Link>
         <span className="mx-2 text-gray-300">/</span>

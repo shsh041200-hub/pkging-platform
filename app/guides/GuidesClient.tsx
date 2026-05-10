@@ -183,7 +183,7 @@ const CATEGORY_SECTIONS: CategorySection[] = [
 
 function thumbBackground(variant: "default" | "alt" | "alt2") {
   if (variant === "alt") return "linear-gradient(135deg,#0f766e 0%,#10b981 100%)";
-  if (variant === "alt2") return "linear-gradient(135deg,#7c2d12 0%,#ea580c 100%)";
+  if (variant === "alt2") return "linear-gradient(135deg,#4434d4 0%,#533afd 100%)";
   return "linear-gradient(135deg,#0a3d62 0%,#1e6fb8 100%)";
 }
 
