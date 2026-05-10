@@ -1,8 +1,11 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // Enforce ISR revalidation interval (seconds). Backend can lower via on-demand revalidation.
-  // This is a page-level default; individual pages may override.
+  images: {
+    remotePatterns: [
+      { protocol: 'https', hostname: '*.supabase.co', pathname: '/storage/v1/object/public/**' },
+    ],
+  },
   async rewrites() {
     return [
       // PACAA-360: sitemap shard handler lives at /sitemaps/[id] to avoid
