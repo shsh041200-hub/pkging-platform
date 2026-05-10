@@ -37,7 +37,7 @@ const articleJsonLd = {
   url: canonicalUrl,
   inLanguage: "ko-KR",
   datePublished: "2026-05-08",
-  dateModified: "2026-05-08",
+  dateModified: "2026-05-10",
   author: {
     "@type": "Organization",
     name: "Packlinx 편집팀",
@@ -348,8 +348,8 @@ export default function PackagingRfqGuidePage() {
           </table>
 
           <p>
-            <Link href="/compare">
-              Packlinx 견적 비교 페이지에서 복수 업체를 한 번에 비교하세요 →
+            <Link href="/">
+              Packlinx 업체 디렉터리에서 포장 업체를 검색하세요 →
             </Link>
           </p>
         </section>
@@ -411,8 +411,8 @@ export default function PackagingRfqGuidePage() {
           </p>
 
           <p>
-            <Link href="/compare">
-              Packlinx에서 포장재 업체를 비교하고 견적을 요청하세요 →
+            <Link href="/">
+              Packlinx에서 포장재 업체를 검색하고 정보를 비교하세요 →
             </Link>
           </p>
         </section>
@@ -526,8 +526,8 @@ export default function PackagingRfqGuidePage() {
             발송하면 협상력과 조달 안정성이 동시에 높아집니다.
           </p>
           <p>
-            <Link href="/compare">
-              Packlinx 견적 비교 — 포장 업체를 한 곳에서 찾고 비교하세요 →
+            <Link href="/">
+              Packlinx — 포장 업체를 한 곳에서 찾고 비교하세요 →
             </Link>
           </p>
           <p>
