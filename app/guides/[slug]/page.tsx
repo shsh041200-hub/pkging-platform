@@ -44,6 +44,7 @@ const GUIDES: Record<DynamicGuideSlug, GuideContent> = {
     description:
       "100개부터 가능한 소량 맞춤 박스 디지털 인쇄 방식, 단가, 납기, 디자인 파일 준비 기준을 안내합니다. Packlinx 박스 업체 디렉토리와 함께 활용하세요.",
     datePublished: "2026-05-01",
+    redesignVersion: 1,
     body: <SmallQuantityCustomBoxContent />,
   },
   "corrugated-flute-types": {
@@ -51,6 +52,7 @@ const GUIDES: Record<DynamicGuideSlug, GuideContent> = {
     description:
       "골판지 박스 설계 시 A·B·C·E·F 플루트의 특성, 두께, 용도별 적합성을 비교합니다. Packlinx에서 골판지 제조 업체를 한눈에 비교하세요.",
     datePublished: "2026-05-01",
+    redesignVersion: 1,
     body: <CorugatedFluteTypesContent />,
   },
   "corrugated-box-supplier-selection": {
@@ -66,6 +68,7 @@ const GUIDES: Record<DynamicGuideSlug, GuideContent> = {
     description:
       "택배 박스 1호 130~180원, 2호 160~220원 (1,000개 기준). 수량 5,000개↑ 시 30~40% 할인. Packlinx에서 무료 견적 비교.",
     datePublished: "2026-05-01",
+    redesignVersion: 1,
     body: <ShippingBoxPricingContent />,
   },
   "cosmetic-packaging-box": {
@@ -101,6 +104,7 @@ const GUIDES: Record<DynamicGuideSlug, GuideContent> = {
     description:
       "이사 규모별 박스 수량 기준, 대량구매 단가 협상 포인트, 업체 선정 기준을 안내합니다.",
     datePublished: "2026-05-01",
+    redesignVersion: 1,
     body: <MovingBoxBulkPurchaseContent />,
   },
   "이사박스-사이즈-규격": {
@@ -108,6 +112,7 @@ const GUIDES: Record<DynamicGuideSlug, GuideContent> = {
     description:
       "이사박스 표준 규격표, 수납 물품별 적합 사이즈, 적재 기준을 정리합니다.",
     datePublished: "2026-05-01",
+    redesignVersion: 1,
     body: <MovingBoxSizeGuideContent />,
   },
   "2026-korea-packaging-trends": {
@@ -130,7 +135,8 @@ export function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { slug } = await params;
+  const { slug: rawSlug } = await params;
+  const slug = decodeURIComponent(rawSlug);
   if (!isDynamicGuideSlug(slug)) return {};
   const guide = GUIDES[slug];
   const canonicalUrl = `${siteUrl}/guides/${slug}`;
@@ -153,7 +159,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function GuidePage({ params }: Props) {
-  const { slug } = await params;
+  const { slug: rawSlug } = await params;
+  const slug = decodeURIComponent(rawSlug);
   if (!isDynamicGuideSlug(slug)) notFound();
   const guide = GUIDES[slug];
 
@@ -188,9 +195,23 @@ function GuideV1Page({
   slug: string;
   guide: GuideContent;
 }) {
-  // Route to per-slug content; Phase 2 will batch the remaining guides
   if (slug === "corrugated-box-supplier-selection") {
     return <CorrugatedBoxGuideV1 guide={guide} />;
+  }
+  if (slug === "corrugated-flute-types") {
+    return <GuideSlotV1Page guide={guide} data={SLOT_DATA_CORRUGATED_FLUTE} />;
+  }
+  if (slug === "shipping-box-pricing") {
+    return <GuideSlotV1Page guide={guide} data={SLOT_DATA_SHIPPING_PRICING} />;
+  }
+  if (slug === "small-quantity-custom-box") {
+    return <GuideSlotV1Page guide={guide} data={SLOT_DATA_SMALL_QUANTITY} />;
+  }
+  if (slug === "이사박스-사이즈-규격") {
+    return <GuideSlotV1Page guide={guide} data={SLOT_DATA_MOVING_SIZE} />;
+  }
+  if (slug === "이사박스-대량구매-가이드") {
+    return <GuideSlotV1Page guide={guide} data={SLOT_DATA_MOVING_BULK} />;
   }
   // Fallback to prose template for any other redesign-flagged guide
   return (
@@ -2766,3 +2787,580 @@ function KoreaPackagingTrends2026Content() {
     </>
   );
 }
+
+// ─── Phase 2 batch 1 — slot-based v1 template ────────────────────────────────
+
+type SlotCallout = {
+  variant: "info" | "warn" | "tip";
+  title: string;
+  body: string;
+};
+
+type SlotData = {
+  heroTag: string;
+  heroSubtitle?: string;
+  heroDateLabel: string;
+  heroReadTime: string;
+  tldr: Array<{ bold: string; text: string }>;
+  callouts: SlotCallout[];
+  checklistTitle: string;
+  checklist: string[];
+  faq: Array<{ question: string; answer: string }>;
+  sidebar: {
+    ctaHeadline: string;
+    ctaSubtext: string;
+    ctaButtonLabel: string;
+    ctaHref: string;
+    relatedGuides: Array<{ href: string; title: string; readTime: string }>;
+  };
+  endCta: {
+    headline: string;
+    subtext: string;
+    buttonLabel: string;
+    href: string;
+  };
+};
+
+function GuideSlotV1Page({
+  guide,
+  data,
+}: {
+  guide: GuideContent;
+  data: SlotData;
+}) {
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: data.faq.map((item) => ({
+      "@type": "Question",
+      name: item.question,
+      acceptedAnswer: { "@type": "Answer", text: item.answer.replace(/<[^>]+>/g, "") },
+    })),
+  };
+
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
+      <div className="-mx-5 sm:-mx-8 -mt-10 sm:-mt-14">
+        <GuideHero
+          tag={data.heroTag}
+          title={guide.title}
+          subtitle={data.heroSubtitle}
+          dateLabel={data.heroDateLabel}
+          readTime={data.heroReadTime}
+          category="박스·골판지"
+          categoryHref="/guides"
+          tldr={data.tldr}
+        />
+
+        <div
+          className="max-w-[1180px] mx-auto"
+          style={{
+            display: "grid",
+            gridTemplateColumns: "1fr 280px",
+            gap: "48px",
+            padding: "40px 24px 80px",
+          }}
+        >
+          <article
+            style={{
+              fontSize: "17px",
+              lineHeight: "1.78",
+              color: "var(--g-ink-2)",
+              maxWidth: "760px",
+            }}
+          >
+            {data.callouts.map((c, i) => (
+              <GuideCallout key={i} variant={c.variant} title={c.title}>
+                <p>{c.body}</p>
+              </GuideCallout>
+            ))}
+
+            <GuideChecklist title={data.checklistTitle} items={data.checklist} />
+
+            <h2
+              className="text-[22px] leading-[1.35] tracking-[-0.015em] mt-12 mb-4 text-[var(--g-ink)] font-extrabold"
+            >
+              자주 묻는 질문
+            </h2>
+
+            <GuideFaq items={data.faq} />
+
+            <GuideEndCta
+              headline={data.endCta.headline}
+              subtext={data.endCta.subtext}
+              buttonLabel={data.endCta.buttonLabel}
+              href={data.endCta.href}
+            />
+          </article>
+
+          <GuideSidebar
+            ctaHeadline={data.sidebar.ctaHeadline}
+            ctaSubtext={data.sidebar.ctaSubtext}
+            ctaButtonLabel={data.sidebar.ctaButtonLabel}
+            ctaHref={data.sidebar.ctaHref}
+            relatedGuides={data.sidebar.relatedGuides}
+          />
+        </div>
+      </div>
+    </>
+  );
+}
+
+// ─── Slot data — corrugated-flute-types ──────────────────────────────────────
+
+const SLOT_DATA_CORRUGATED_FLUTE: SlotData = {
+  heroTag: "박스·골판지 · 골 선택 가이드",
+  heroDateLabel: "2026-05 업데이트",
+  heroReadTime: "5분 읽기",
+  tldr: [
+    {
+      bold: "A골(4.7mm)",
+      text: "— 완충성 최고. 식품·가전 등 충격 민감 제품에 최적. 소재 사용량이 많아 단가는 높습니다.",
+    },
+    {
+      bold: "E골·F골(1.6mm 이하)",
+      text: "— 초박형으로 화장품·소매 박스 인쇄 품질이 탁월합니다. 적재 강도는 낮습니다.",
+    },
+    {
+      bold: "골 선택 순서",
+      text: "— 제품 무게·충격 민감도 → ECT 적층 강도 → 인쇄 정밀도 순으로 결정합니다.",
+    },
+  ],
+  callouts: [
+    {
+      variant: "info",
+      title: "골 두께 ≠ 강도",
+      body: "골 높이가 높을수록 완충성은 올라가지만 압축 강도(ECT)는 C골이 A골보다 높을 수 있습니다. 강도 설계 시 ECT 수치를 반드시 확인하세요.",
+    },
+    {
+      variant: "warn",
+      title: "E골 단독 사용 주의",
+      body: "E골은 인쇄 품질이 우수하지만 1kg 이상 중량 제품 단독 포장에는 부적합합니다. 이중벽(DW) 구조나 내부 보강재와 병용하세요.",
+    },
+    {
+      variant: "tip",
+      title: "골 방향 확인",
+      body: "박스 조립 방향과 골 방향이 수직이면 압축 강도가 최대 2배 차이납니다. 발주 전 제조사에 골 방향(MD/CD) 명시 요청을 권장합니다.",
+    },
+  ],
+  checklistTitle: "골 선택 전 확정 항목",
+  checklist: [
+    "<strong>내용물 무게</strong> — 단위 박스당 최대 적재 중량 확인",
+    "<strong>충격 민감도</strong> — 파손 발생 시 비용·클레임 빈도 검토",
+    "<strong>인쇄 정밀도</strong> — 로고·바코드 인쇄 해상도 요건 명시",
+    "<strong>ECT 강도 기준</strong> — 적재 단수 × 박스 중량으로 최소 ECT 산출",
+    "<strong>납기·MOQ</strong> — 골 유형별 제조사 재고 현황 및 최소 발주량 확인",
+  ],
+  faq: [
+    {
+      question: "A골·B골·C골 중 택배 배송에 가장 많이 쓰이는 골은?",
+      answer:
+        "일반 택배 박스에는 주로 C골(3.5mm)이 많이 사용됩니다. A골 대비 소재 효율이 높고, B골 대비 완충성이 우수해 널리 선택되나, 제품 특성과 업체 조건에 따라 최적 골은 달라질 수 있습니다. 업체 선정 기준은 <a href=\"/guides/corrugated-box-supplier-selection\">골판지 업체 선정 가이드</a>를 참고하세요.",
+    },
+    {
+      question: "E골과 F골의 차이는?",
+      answer:
+        "E골(1.6mm)은 소매 박스·마감재로 주로 쓰이고, F골(0.8mm)은 더 얇아 화장품·식품 소형 박스에 적합합니다. F골은 국내 취급 업체가 제한적이므로 발주 전 납기 확인이 필수입니다.",
+    },
+    {
+      question: "이중벽(Double Wall) 구조는 언제 사용하나요?",
+      answer:
+        "10kg 이상 중량 제품, 장거리 해상 운송, 또는 팰릿 적재 5단 이상인 경우 이중벽 구조(B+C, B+B)를 검토하세요. 단가는 약 1.5~2배지만 파손율 감소 효과로 총비용을 절감할 수 있습니다.",
+    },
+    {
+      question: "소량 맞춤 박스 제작 시 골 유형 선택은 어떻게 하나요?",
+      answer:
+        "소량(100~500매) 발주 시 재고형 C골 원지를 사용하는 업체가 납기·단가 면에서 유리합니다. 특수 골(E·F)은 소량 발주 시 원지 재단 손실비가 추가될 수 있습니다. 상세 발주 기준은 <a href=\"/guides/small-quantity-custom-box\">소량 맞춤 박스 가이드</a>를 참고하세요.",
+    },
+  ],
+  sidebar: {
+    ctaHeadline: "골판지 박스 업체 비교",
+    ctaSubtext: "골 종류·MOQ·인쇄 조건으로 필터링해 업체를 한눈에 비교하세요.",
+    ctaButtonLabel: "골 유형별 업체 지금 비교 →",
+    ctaHref: "/products/box",
+    relatedGuides: [
+      { href: "/guides/corrugated-box-supplier-selection", title: "골판지 업체 MOQ·납기·인증 비교", readTime: "7분" },
+      { href: "/guides/shipping-box-pricing", title: "택배 박스 수량별 단가 가이드", readTime: "4분" },
+      { href: "/guides/small-quantity-custom-box", title: "100~500매 소량 맞춤 박스 발주", readTime: "5분" },
+      { href: "/guides/packaging-material-complete-guide", title: "골판지·단프라·친환경 소재 비교", readTime: "6분" },
+    ],
+  },
+  endCta: {
+    headline: "골 유형별 업체 지금 비교",
+    subtext: "골판지 박스 전문 업체, 골 종류·MOQ·인쇄 조건으로 필터 비교",
+    buttonLabel: "업체 비교하기 →",
+    href: "/products/box",
+  },
+};
+
+// ─── Slot data — shipping-box-pricing ────────────────────────────────────────
+
+const SLOT_DATA_SHIPPING_PRICING: SlotData = {
+  heroTag: "박스·골판지 · 택배 박스 단가",
+  heroDateLabel: "2026-05 업데이트",
+  heroReadTime: "4분 읽기",
+  tldr: [
+    {
+      bold: "1호 기준 130~180원",
+      text: "— 1,000개 발주 기준 개당 단가(2026년 일반 시장 참고치). 5,000개 이상 대량 발주 시 추가 할인 협상이 가능합니다.",
+    },
+    {
+      bold: "사이즈 클수록 단가 상승폭 비선형",
+      text: "— 3호 이상은 소재 면적 증가로 2호 대비 단가가 약 50~70% 높습니다.",
+    },
+    {
+      bold: "500개 미만 발주는 디지털 인쇄 업체 선택",
+      text: "— 오프셋 대비 단가는 높지만 MOQ 없이 유연하게 발주합니다.",
+    },
+  ],
+  callouts: [
+    {
+      variant: "info",
+      title: "택배사 사이즈 기준 확인",
+      body: "한국 주요 택배사(CJ·한진·롯데 등)의 일반 택배 1호 구간은 통상 가로+세로+높이 합계 80cm 이내, 무게 5kg 이내 수준이나, 택배사·서비스별로 기준이 다릅니다. 발주 전 이용 택배사의 사이즈표를 반드시 확인하세요.",
+    },
+    {
+      variant: "warn",
+      title: "단가만 보면 총비용이 달라진다",
+      body: "박스 단가 외 인쇄비·형판비·운송비가 별도 청구되는 경우가 많습니다. 총 구매 비용(TCO) 기준으로 비교하지 않으면 실제 비용이 견적의 1.3~1.5배까지 늘어날 수 있습니다.",
+    },
+    {
+      variant: "tip",
+      title: "발주 물량 묶음 전략",
+      body: "같은 제조사에서 여러 사이즈를 한 번에 발주하면 운송비를 절감하고 단가 협상력이 높아집니다. 월 발주 물량을 합산한 뒤 분기 단위로 묶어 발주하는 것을 권장합니다.",
+    },
+  ],
+  checklistTitle: "택배 박스 발주 전 확정 항목",
+  checklist: [
+    "<strong>내용물 최대 치수</strong> — 가로·세로·높이 실측 후 박스 내경 기준 +20~30mm 여유 확인",
+    "<strong>내용물 무게</strong> — 택배사 사이즈 구간별 무게 제한 초과 여부 확인",
+    "<strong>월 평균 발주 물량</strong> — 물량 구간(500·1,000·3,000·5,000개)별 단가 시뮬레이션",
+    "<strong>인쇄 요건</strong> — 브랜드 로고·반송 주소 인쇄 여부, 도수(1도/2도/전면) 확정",
+    "<strong>납기 일정</strong> — 재고형(2~3일) vs 생산 주문형(5~10 영업일) 방식 선택",
+  ],
+  faq: [
+    {
+      question: "택배 박스 1,000개 주문 시 실제 총 비용은 얼마나 드나요?",
+      answer:
+        "1호 기준 단가 130~180원에서 1도 인쇄비(약 20~30원/개)·형판비(3~10만원 1회)·배송비를 합산하면 총비용은 약 18~28만원 수준입니다. 정확한 견적은 업체별로 다르므로 Packlinx에서 3곳 이상 비교 견적을 받으시기 바랍니다.",
+    },
+    {
+      question: "수량이 적을 때 단가를 낮추는 방법은?",
+      answer:
+        "500개 미만이라면 디지털 인쇄 방식 업체를 선택하면 형판비 없이 발주할 수 있습니다. 상세 소량 발주 옵션은 <a href=\"/guides/small-quantity-custom-box\">소량 맞춤 박스 가이드</a>를 참고하세요.",
+    },
+    {
+      question: "택배 박스 사이즈는 어떻게 결정하나요?",
+      answer:
+        "내용물 최대 치수에 완충재 두께(EPE 기준 10~20mm)를 더한 내경으로 결정합니다. 사이즈가 택배사 구간을 넘으면 추가 운임이 발생하므로 내경 기준보다 외경 기준 택배사 구간표를 먼저 확인하세요.",
+    },
+    {
+      question: "재고형 박스와 생산 주문형 박스의 차이는?",
+      answer:
+        "재고형은 표준 사이즈·무지(흰색/크라프트) 납기 2~3일이지만 사이즈 선택지가 제한됩니다. 생산 주문형은 맞춤 사이즈·인쇄가 가능하지만 납기 5~10 영업일, MOQ 500개 이상이 일반적입니다.",
+    },
+    {
+      question: "골판지 원지 등급에 따라 단가 차이가 크게 나나요?",
+      answer:
+        "단가는 원지 등급 명칭보다 원지 평량(g/㎡)과 골 종류(A·B·C)에 따라 결정됩니다. 골판지 원지 등급 상세 내용은 <a href=\"/guides/corrugated-flute-types\">골판지 플루트 유형 가이드</a>를 참고하세요.",
+    },
+  ],
+  sidebar: {
+    ctaHeadline: "택배 박스 업체 비교",
+    ctaSubtext: "사이즈·수량·인쇄 조건으로 필터링해 업체를 한눈에 비교하세요.",
+    ctaButtonLabel: "무료 견적 비교 →",
+    ctaHref: "/products/box",
+    relatedGuides: [
+      { href: "/guides/corrugated-flute-types", title: "A·B·C·E·F골 특성·용도 선택 가이드", readTime: "5분" },
+      { href: "/guides/small-quantity-custom-box", title: "100~500매 소량 맞춤 박스 발주", readTime: "5분" },
+      { href: "/guides/corrugated-box-supplier-selection", title: "골판지 업체 MOQ·납기 비교", readTime: "7분" },
+      { href: "/guides/packaging-tape-comparison", title: "OPP·크라프트·무소음 테이프 비교", readTime: "4분" },
+    ],
+  },
+  endCta: {
+    headline: "택배 박스 업체 무료 견적 비교",
+    subtext: "박스 전문 업체, 사이즈·수량·인쇄 조건으로 필터 비교",
+    buttonLabel: "업체 비교하기 →",
+    href: "/products/box",
+  },
+};
+
+// ─── Slot data — small-quantity-custom-box ───────────────────────────────────
+
+const SLOT_DATA_SMALL_QUANTITY: SlotData = {
+  heroTag: "박스·골판지 · 소량 맞춤 발주",
+  heroDateLabel: "2026-05 업데이트",
+  heroReadTime: "5분 읽기",
+  tldr: [
+    {
+      bold: "디지털 인쇄 100개부터",
+      text: "— 형판비 없이 최소 100개부터 맞춤 인쇄 박스 발주가 가능합니다.",
+    },
+    {
+      bold: "납기 5~7 영업일",
+      text: "— 디지털 인쇄 기준. 오프셋 인쇄 대비 2~3배 빠르지만 단가는 약 30~50% 높습니다.",
+    },
+    {
+      bold: "1,000개 넘으면 오프셋 전환 검토",
+      text: "— 단가 분기점은 보통 500~1,000개 구간. 수량이 늘수록 오프셋이 원가 효율적입니다.",
+    },
+  ],
+  callouts: [
+    {
+      variant: "info",
+      title: "디지털 vs 오프셋 선택 기준",
+      body: "1,000개 미만은 디지털 인쇄, 1,000개 이상은 오프셋이 원가 효율적입니다. 단, 색상 정밀도(Pantone 정합)가 중요한 경우 오프셋이 더 나은 결과를 줍니다.",
+    },
+    {
+      variant: "warn",
+      title: "파일 해상도 미준수 시 발주 지연",
+      body: "디지털 인쇄는 300dpi 이상 PDF/AI 파일을 요구합니다. 72dpi 웹용 파일로 발주하면 제조사에서 반려되어 납기가 3~5일 추가 지연될 수 있습니다.",
+    },
+    {
+      variant: "tip",
+      title: "샘플 선(先) 발주 권장",
+      body: "본 발주 전 샘플(1~5개)을 제작해 색상·치수·강도를 실물로 검수하면 불량 반품 리스크를 줄일 수 있습니다. 샘플 비용은 보통 3~10만원이며 본 발주 시 공제해 주는 업체도 있습니다.",
+    },
+  ],
+  checklistTitle: "소량 맞춤 박스 발주 전 확정 항목",
+  checklist: [
+    "<strong>박스 내경 치수</strong> — 내용물 + 완충재 두께 포함 최종 내경(W×D×H) mm 확정",
+    "<strong>발주 수량</strong> — 디지털(100~999개) vs 오프셋(1,000개 이상) 방식 선택 기준 확인",
+    "<strong>인쇄 도수·색상</strong> — 1도/2도/풀컬러(4도) 및 Pantone 지정 여부 명시",
+    "<strong>디자인 파일 규격</strong> — 300dpi 이상 PDF·AI·EPS, 도무송(die-cut) 선 레이어 분리",
+    "<strong>납기 요건</strong> — 판매 일정 역산 후 제조사 생산 리드타임 + 배송 여유일 확보",
+  ],
+  faq: [
+    {
+      question: "소량 맞춤 박스 100개 기준 단가는 얼마인가요?",
+      answer:
+        "박스 사이즈·인쇄 도수에 따라 다르나, 표준 C골 1호 기준 디지털 인쇄 1도는 개당 약 300~500원 수준입니다. 풀컬러(4도) 전면 인쇄는 500~900원까지 올라갈 수 있습니다. 정확한 견적은 Packlinx에서 소량 전문 업체에 문의하세요.",
+    },
+    {
+      question: "100개 이하로도 발주할 수 있나요?",
+      answer:
+        "일부 디지털 인쇄 전문 업체는 50개 이하 소량도 수용하지만 개당 단가가 높아집니다. Packlinx 업체 필터에서 '소량 가능' 조건으로 검색하면 해당 업체를 찾을 수 있습니다.",
+    },
+    {
+      question: "디자인 파일이 없어도 발주할 수 있나요?",
+      answer:
+        "네, 디자인 파일 작성 서비스를 제공하는 업체가 있습니다. 로고 파일과 텍스트 정보만 제공하면 업체가 전개도(die-cut) 레이아웃까지 제작합니다. 비용은 5~15만원 수준이며 2~3 영업일이 추가로 소요됩니다.",
+    },
+    {
+      question: "인쇄 품질이 중요한 브랜드 박스는 어떤 골을 선택해야 하나요?",
+      answer:
+        "인쇄 정밀도를 높이려면 E골(1.6mm) 또는 F골(0.8mm) 기반 박스를 선택하세요. C골 대비 표면이 균일해 디지털 인쇄 시 색상 재현율이 높습니다. 골 유형 상세 비교는 <a href=\"/guides/corrugated-flute-types\">골판지 플루트 유형 가이드</a>를 참고하세요.",
+    },
+    {
+      question: "친환경 소재로 맞춤 박스를 만들 수 있나요?",
+      answer:
+        "FSC 인증 원지 또는 재생 골판지로 소량 제작이 가능합니다. 다만 친환경 원지 수급이 제한적이어서 납기가 1~2주 더 소요될 수 있습니다. 친환경 포장재 전환 기준은 <a href=\"/guides/eco-friendly-packaging\">친환경 포장재 가이드</a>를 참고하세요.",
+    },
+  ],
+  sidebar: {
+    ctaHeadline: "소량 맞춤 박스 업체 비교",
+    ctaSubtext: "MOQ·인쇄 방식·납기 조건으로 필터링해 업체를 한눈에 비교하세요.",
+    ctaButtonLabel: "업체 바로 비교 →",
+    ctaHref: "/products/box",
+    relatedGuides: [
+      { href: "/guides/corrugated-flute-types", title: "A·B·E·F골 특성·인쇄 적합성 비교", readTime: "5분" },
+      { href: "/guides/shipping-box-pricing", title: "수량별 택배 박스 단가 기준표", readTime: "4분" },
+      { href: "/guides/corrugated-box-supplier-selection", title: "소량 전문 업체 선정 기준", readTime: "7분" },
+      { href: "/guides/eco-friendly-packaging", title: "FSC 인증 친환경 박스 전환 가이드", readTime: "6분" },
+    ],
+  },
+  endCta: {
+    headline: "소량 맞춤 박스 업체 바로 비교",
+    subtext: "박스 전문 업체, MOQ·인쇄 방식·납기 조건으로 필터 비교",
+    buttonLabel: "업체 비교하기 →",
+    href: "/products/box",
+  },
+};
+
+// ─── Slot data — 이사박스-사이즈-규격 ────────────────────────────────────────
+
+const SLOT_DATA_MOVING_SIZE: SlotData = {
+  heroTag: "박스·골판지 · 이사박스 규격",
+  heroDateLabel: "2026-05 업데이트",
+  heroReadTime: "4분 읽기",
+  tldr: [
+    {
+      bold: "표준 4호수(소·중·대·특대)",
+      text: "— 한국 이사업계 통용 규격. 소 310×210×220mm~특대 600×430×400mm(외경 기준, 제조사마다 ±20mm 차이 있음).",
+    },
+    {
+      bold: "1박스 권장 무게 15~20kg 이하",
+      text: "— 초과 적재 시 바닥 파손 위험. 무거운 짐(책·그릇)은 소 박스에 분산합니다.",
+    },
+    {
+      bold: "호수별 수납 기준",
+      text: "— 소=책·그릇류, 중=의류·잡화, 대=이불·쿠션, 특대=완충재와 함께 가전 보조 포장에 씁니다.",
+    },
+  ],
+  callouts: [
+    {
+      variant: "info",
+      title: "호수 명칭이 같아도 치수가 다를 수 있다",
+      body: "이사업체·박스 제조사마다 '소·중·대' 또는 '1호·2호·3호' 명칭이 같아도 외경 치수가 ±20mm 차이가 날 수 있습니다. 발주 전 업체 치수표를 반드시 확인하고 내경 기준으로 수납 테스트를 권장합니다.",
+    },
+    {
+      variant: "warn",
+      title: "과적 위험",
+      body: "이사박스 1개당 권장 무게는 15~20kg입니다. 초과 적재 시 바닥 파손뿐 아니라 운반 중 낙하 부상 사고 위험이 있습니다. 특히 책·그릇류는 소 박스에 나눠 담으세요.",
+    },
+    {
+      variant: "tip",
+      title: "박스 외면 표기",
+      body: "이사 전 박스 외면에 방·내용물·무게 표기 스티커를 붙이면 이사 당일 작업 효율이 크게 올라갑니다. 유성 매직 또는 라벨 프린터를 활용하세요.",
+    },
+  ],
+  checklistTitle: "이사박스 사이즈 선택 전 확정 항목",
+  checklist: [
+    "<strong>짐 품목 분류</strong> — 책/의류/주방/가전/침구 카테고리별 수납 계획 수립",
+    "<strong>박스 내경 치수 확인</strong> — 구매 전 업체별 외경·내경 치수표 비교 (제조사마다 상이)",
+    "<strong>적재 층수 계획</strong> — 이삿짐차 적재 높이 기준으로 층수별 무게 배분 확인",
+    "<strong>수량 추산</strong> — 방 개수 기준 소 5~8개·중 5~8개·대 3~5개가 1인 가구 평균 참고치",
+    "<strong>재사용 여부</strong> — 1회용 vs 다회용(이사업체 대여) 비용 비교",
+  ],
+  faq: [
+    {
+      question: "이사박스 소·중·대·특대 규격(외경 mm)과 용량(L)은 각각 어떻게 되나요?",
+      answer:
+        "국내 이사업계 통용 기준으로 소(310×210×220mm, 약 14L)·중(420×300×300mm, 약 38L)·대(480×370×360mm, 약 64L)·특대(600×430×400mm, 약 103L) 수준입니다. 정확한 치수는 제조사마다 ±20mm 차이가 있으므로 발주 전 업체 치수표를 확인하세요.",
+    },
+    {
+      question: "일반 가정 이사 시 어떤 호수를 가장 많이 사용하나요?",
+      answer:
+        "이삿짐 무게 균형을 위해 중 박스(약 38L)가 가장 많이 쓰입니다. 소 박스는 책·그릇 등 무거운 품목, 대 박스는 이불·쿠션 등 부피 큰 품목에 사용합니다. 3인 가족 기준 소 10개·중 15개·대 8개가 일반적인 참고 수량입니다.",
+    },
+    {
+      question: "이사박스를 대량으로 구매할 때 단가는 얼마나 되나요?",
+      answer:
+        "대량 구매 단가와 업체 선정 기준은 <a href=\"/guides/이사박스-대량구매-가이드\">이사박스 대량구매 가이드</a>에서 자세히 다룹니다.",
+    },
+    {
+      question: "이사박스 사이즈 커스텀 제작이 가능한가요?",
+      answer:
+        "가능하지만 최소 발주량(MOQ) 500매 이상이 일반적입니다. 100~500매 소량 맞춤 박스 제작 옵션은 <a href=\"/guides/small-quantity-custom-box\">소량 맞춤 박스 가이드</a>를 참고하세요.",
+    },
+    {
+      question: "이사박스를 효율적으로 적재하는 방법은?",
+      answer:
+        "무거운 박스를 아래에, 가벼운 박스를 위에 쌓고 박스 크기를 맞춰 빈 공간을 최소화합니다. 이삿짐차 기준 천장까지 수직 쌓기가 가능하도록 같은 높이 박스를 우선 선택하세요.",
+    },
+  ],
+  sidebar: {
+    ctaHeadline: "이사박스 업체 비교",
+    ctaSubtext: "사이즈·수량·납기 조건으로 필터링해 업체를 한눈에 비교하세요.",
+    ctaButtonLabel: "이사박스 업체 지금 비교 →",
+    ctaHref: "/products/box",
+    relatedGuides: [
+      { href: "/guides/이사박스-대량구매-가이드", title: "수량 기준·단가·업체 선정 가이드", readTime: "5분" },
+      { href: "/guides/corrugated-box-supplier-selection", title: "골판지 업체 MOQ·납기 비교", readTime: "7분" },
+      { href: "/guides/small-quantity-custom-box", title: "소량 맞춤 박스 발주 가이드", readTime: "5분" },
+      { href: "/guides/packaging-material-complete-guide", title: "골판지·단프라 소재 비교", readTime: "6분" },
+    ],
+  },
+  endCta: {
+    headline: "이사박스 업체 지금 비교",
+    subtext: "이사박스 전문 업체, 사이즈·수량·납기 조건으로 필터 비교",
+    buttonLabel: "업체 비교하기 →",
+    href: "/products/box",
+  },
+};
+
+// ─── Slot data — 이사박스-대량구매-가이드 ────────────────────────────────────
+
+const SLOT_DATA_MOVING_BULK: SlotData = {
+  heroTag: "박스·골판지 · 이사박스 대량구매",
+  heroDateLabel: "2026-05 업데이트",
+  heroReadTime: "5분 읽기",
+  tldr: [
+    {
+      bold: "500매 이상부터 제조사 직거래 협상 가능",
+      text: "— 발주 조건·업체·수량에 따라 단가 절감이 가능한 경우가 있습니다. 절감 폭은 업체마다 다르며 품질 검수와 납기 관리는 직접 수행해야 합니다.",
+    },
+    {
+      bold: "원지 평량(g/㎡)이 실질 강도 결정",
+      text: "— 골판지 등급 명칭보다 원지 평량 160~175g/㎡ 이상을 발주 사양서에 직접 명시하세요.",
+    },
+    {
+      bold: "이사 성수기(3·9월) 2~3주 선발주 필수",
+      text: "— 생산 주문형은 최소 7~10 영업일 소요. 성수기에는 품귀로 납기가 2~3주 추가될 수 있습니다.",
+    },
+  ],
+  callouts: [
+    {
+      variant: "info",
+      title: "대량 발주 단가 분기점",
+      body: "국내 골판지 이사박스 제조사는 500매·1,000매·3,000매·5,000매 단위로 단가 구간이 끊깁니다. 1,000매 이상이면 제조사 직거래, 500매 미만이면 도매상 구매가 유통·납기 면에서 유리한 경우가 많습니다. 절감 폭은 업체·물량 조건에 따라 다릅니다.",
+    },
+    {
+      variant: "warn",
+      title: "이사 성수기 품귀 주의",
+      body: "3월(학기 이사)·9월(추석 전후 이사) 성수기에는 박스 수급이 빡빡해집니다. 성수기 2~3주 전 선발주를 권장하며, 재고형 박스는 별도 창고 공간을 확보해야 합니다.",
+    },
+    {
+      variant: "tip",
+      title: "복수 업체 분산 발주",
+      body: "단일 업체 의존도를 낮추기 위해 메인 업체 70%·서브 업체 30% 비율로 분산 발주하면 공급 리스크를 줄일 수 있습니다. 성수기 전 서브 업체를 미리 등록해 두는 것을 추천합니다.",
+    },
+  ],
+  checklistTitle: "이사박스 대량 구매 전 확정 항목",
+  checklist: [
+    "<strong>연간 소요 수량 예측</strong> — 월 평균 이사 건수 × 건당 박스 수량으로 연간 총량 산출",
+    "<strong>박스 규격·등급 사양서</strong> — 외경 치수·원지 평량(g/㎡)·골 종류 명시 후 업체에 전달",
+    "<strong>납기 일정 역산</strong> — 성수기(3·9월) 수요 급증 감안한 선발주 스케줄 확정",
+    "<strong>보관 공간 확보</strong> — 팰릿 단위 적재 가능 여부, 창고 바닥 면적·높이 기준 확인",
+    "<strong>결제 조건 협상</strong> — 현금 선결제·어음·카드 결제 조건별 추가 할인 여부 확인",
+  ],
+  faq: [
+    {
+      question: "이사박스 대량 구매 시 골판지 등급별 차이는?",
+      answer:
+        "국내 골판지는 원지 평량(g/㎡) 기준으로 강도가 결정됩니다. 발주 사양서에 등급 명칭보다 원지 평량(160g·175g/㎡ 등)과 골 종류(A·B·C)를 직접 명시하는 것이 권장됩니다. 골 종류 상세 비교는 <a href=\"/guides/corrugated-flute-types\">골판지 플루트 유형 가이드</a>를 참고하세요.",
+    },
+    {
+      question: "제조사 직거래와 도매상 중 어느 채널이 유리한가요?",
+      answer:
+        "1,000매 이상 정기 발주는 제조사 직거래가 단가 면에서 유리합니다. 500매 미만 또는 다양한 사이즈를 혼합 발주할 때는 도매상이 재고 유연성 면에서 낫습니다. 업체 비교와 견적은 Packlinx에서 한번에 받아보세요.",
+    },
+    {
+      question: "대량 발주 납기는 얼마나 걸리나요?",
+      answer:
+        "재고형 표준 박스는 2~3 영업일, 생산 주문형(맞춤 사이즈·인쇄)은 7~10 영업일이 일반적입니다. 성수기(3·9월)에는 1~2주 추가 소요가 될 수 있으니 여유있게 발주하세요.",
+    },
+    {
+      question: "대량 구매 시 로고·인쇄 옵션은 어떻게 되나요?",
+      answer:
+        "1,000매 이상부터 1~2도 플렉소 인쇄가 가능하며 형판비는 업체별 5~15만원입니다. 소량(100~500매) 디지털 인쇄 옵션은 <a href=\"/guides/small-quantity-custom-box\">소량 맞춤 박스 가이드</a>를 참고하세요.",
+    },
+    {
+      question: "골판지와 단프라 중 이사박스로 어떤 소재가 나은가요?",
+      answer:
+        "일반 이사용은 골판지가 원가 효율적입니다. 단프라(PP 골판지)는 방습·내구성이 필요한 보관용 박스나 반복 사용 이사박스에 적합하지만 단가가 2~3배 높습니다. 소재 선택 기준 상세 내용은 <a href=\"/guides/packaging-material-complete-guide\">포장재 소재 완전 가이드</a>를 참고하세요.",
+    },
+  ],
+  sidebar: {
+    ctaHeadline: "이사박스 대량 발주 업체 비교",
+    ctaSubtext: "수량·원지 등급·납기 조건으로 필터링해 업체를 한눈에 비교하세요.",
+    ctaButtonLabel: "업체 비교하기 →",
+    ctaHref: "/products/box",
+    relatedGuides: [
+      { href: "/guides/이사박스-사이즈-규격", title: "이사박스 표준 규격표·적재 기준", readTime: "4분" },
+      { href: "/guides/corrugated-box-supplier-selection", title: "골판지 업체 MOQ·납기·인증 비교", readTime: "7분" },
+      { href: "/guides/small-quantity-custom-box", title: "소량(100~500매) 맞춤 박스 발주", readTime: "5분" },
+      { href: "/guides/packaging-material-complete-guide", title: "골판지·단프라·친환경 소재 비교", readTime: "6분" },
+    ],
+  },
+  endCta: {
+    headline: "이사박스 대량 발주 업체 비교",
+    subtext: "이사박스 전문 업체, 수량·원지 등급·납기 조건으로 필터 비교",
+    buttonLabel: "업체 비교하기 →",
+    href: "/products/box",
+  },
+};
