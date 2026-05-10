@@ -102,6 +102,7 @@ const GUIDES: Record<DynamicGuideSlug, GuideContent> = {
     description:
       "OPP 아크릴·핫멜트·크라프트·무소음 테이프의 점착력·내열·내한성 차이와 용도별 선택 기준을 정리합니다.",
     datePublished: "2026-05-01",
+    redesignVersion: 1,
     body: <PackagingTapeComparisonContent />,
   },
   "이사박스-대량구매-가이드": {
@@ -125,6 +126,7 @@ const GUIDES: Record<DynamicGuideSlug, GuideContent> = {
     description:
       "2026년 한국 포장재 시장의 5대 트렌드 — EPR 강화, 스마트 패키징 도입, 소량·맞춤 수요 증가, 단가 상승 대응, 이커머스 전용 설계 — 를 데이터 기반으로 분석합니다.",
     datePublished: "2026-05-07",
+    redesignVersion: 1,
     body: <KoreaPackagingTrends2026Content />,
   },
   "glass-metal-container-guide": {
@@ -139,6 +141,22 @@ const GUIDES: Record<DynamicGuideSlug, GuideContent> = {
     title: "포장 부자재 종류 완전 가이드 — 완충재·테이프·충전재 비교 + 환경 규제 (2026)",
     description:
       "에어캡(뽁뽁이)·EPE 폼·종이 완충재 등 완충재 종류, OPP·천·보안 테이프 선택 기준, 허니컴·우드울 충전재, 과대포장 환경 규제 대응, B2B 대량구매 단가 기준을 한곳에 정리했습니다.",
+    datePublished: "2026-05-01",
+    redesignVersion: 1,
+    body: null,
+  },
+  "packaging-printing-guide": {
+    title: "패키징 인쇄 공정 가이드 — 플렉소·오프셋·그라비아·디지털 비교",
+    description:
+      "패키징 인쇄 공정 4가지(플렉소·오프셋·그라비아·디지털) 비교, 수량·소재별 선택 기준, 식약처 잉크 규제, 발주 전 체크리스트를 정리합니다.",
+    datePublished: "2026-05-01",
+    redesignVersion: 1,
+    body: null,
+  },
+  "packaging-machinery-guide": {
+    title: "패키징 기계 가이드 — 충전기·밀봉기·라벨러 선택·ROI·인증",
+    description:
+      "패키징 기계 유형(충전기·밀봉기·라벨러) 비교, 자동화 ROI, KCs·CE 인증 확인 기준, 도입 체크리스트를 정리합니다.",
     datePublished: "2026-05-01",
     redesignVersion: 1,
     body: null,
@@ -254,6 +272,18 @@ function GuideV1Page({
   }
   if (slug === "packaging-accessories-guide") {
     return <GuideSlotV1Page guide={guide} data={SLOT_DATA_PACKAGING_ACCESSORIES} />;
+  }
+  if (slug === "packaging-tape-comparison") {
+    return <GuideSlotV1Page guide={guide} data={SLOT_DATA_PACKAGING_TAPE} />;
+  }
+  if (slug === "2026-korea-packaging-trends") {
+    return <GuideSlotV1Page guide={guide} data={SLOT_DATA_KOREA_TRENDS_2026} />;
+  }
+  if (slug === "packaging-printing-guide") {
+    return <GuideSlotV1Page guide={guide} data={SLOT_DATA_PACKAGING_PRINTING} />;
+  }
+  if (slug === "packaging-machinery-guide") {
+    return <GuideSlotV1Page guide={guide} data={SLOT_DATA_PACKAGING_MACHINERY} />;
   }
   // Fallback to prose template for any other redesign-flagged guide
   return (
@@ -4018,5 +4048,358 @@ const SLOT_DATA_PACKAGING_ACCESSORIES: SlotData = {
     subtext: "테이프·완충재·필름 취급 업체를 Packlinx에서 비교하세요",
     buttonLabel: "업체 비교하기 →",
     href: "/products/packaging-accessories",
+  },
+};
+
+// ─── Slot data — packaging-tape-comparison ───────────────────────────────────
+
+const SLOT_DATA_PACKAGING_TAPE: SlotData = {
+  heroTag: "소재 · 테이프 비교",
+  heroDateLabel: "2026-05 업데이트",
+  heroReadTime: "4분 읽기",
+  tldr: [
+    {
+      bold: "용도별 테이프 3종",
+      text: "— OPP(일반 박스 밀봉), 크라프트(고중량·이사용), 무소음(오피스·조용한 환경). 용도와 보관 온도를 먼저 확인하세요.",
+    },
+    {
+      bold: "점착력 vs 소음",
+      text: "— 무소음 테이프는 아크릴계 점착제를 사용해 박리 소음이 낮지만, 영하 환경에서는 점착력이 저하될 수 있습니다.",
+    },
+    {
+      bold: "단가 비교",
+      text: "— 50mm×100m 기준 OPP < 크라프트 < 무소음 순서가 일반적이며, 대량 구매 시 m당 단가 기준으로 비교하세요.",
+    },
+  ],
+  callouts: [
+    {
+      variant: "info",
+      title: "테이프 선택 핵심 기준",
+      body: "박스 무게·보관 온도·소음 민감도 세 가지를 먼저 확인하세요. 20kg 이상 박스에는 크라프트 또는 강점착 OPP, 오피스·야간 환경에는 무소음 테이프가 권장됩니다.",
+    },
+    {
+      variant: "warn",
+      title: "저온 창고 점착력 저하",
+      body: "무소음(아크릴계) 테이프는 영하 환경에서 점착력이 저하될 수 있습니다. 냉동·냉장 창고용은 저온 전용 핫멜트계 테이프를 별도로 검토하세요.",
+    },
+    {
+      variant: "tip",
+      title: "m당 단가로 비교하기",
+      body: "50m 제품과 100m 제품의 단가를 m당으로 환산하면 실제 비용 비교가 정확합니다. 연간 예상 사용량을 기준으로 공급사에 대량 단가를 요청하세요.",
+    },
+  ],
+  checklistTitle: "테이프 선택 전 확정 항목",
+  checklist: [
+    "<strong>박스 무게</strong> — 20kg 이상 여부로 크라프트 또는 강점착 OPP 선택 결정",
+    "<strong>보관 온도</strong> — 냉장·냉동 환경이면 저온 전용 테이프 선택",
+    "<strong>소음 민감도</strong> — 오피스·야간 작업 환경이면 무소음(아크릴계) 선택",
+    "<strong>규격 통일</strong> — 테이프 디스펜서 적합 폭(48/50mm) 사전 확인",
+    "<strong>단가 비교</strong> — m당 단가와 연간 예상 사용량 기준 견적 수령",
+  ],
+  faq: [
+    {
+      question: "OPP 테이프와 크라프트 테이프의 가장 큰 차이는 무엇인가요?",
+      answer:
+        "OPP는 투명 필름 기반으로 방수성이 있어 일반 박스 밀봉에 가장 널리 쓰입니다. 크라프트는 종이 기반으로 고중량 박스나 이사·물류 환경에서 더 강한 물리적 지지력을 제공합니다. 이사박스 패키징 전반은 <a href=\"/guides/이사박스-대량구매-가이드\">이사박스 대량구매 가이드</a>를 참조하세요.",
+    },
+    {
+      question: "무소음 테이프는 일반 OPP보다 점착력이 약한가요?",
+      answer:
+        "무소음 테이프는 아크릴계 점착제 특성상 일반 핫멜트 OPP보다 초기 점착력이 다소 낮을 수 있습니다. 단, 상온(15~30°C) 환경에서 일반 박스 밀봉에는 충분한 성능을 제공합니다. 저온 창고나 고중량 박스 용도라면 전용 스펙 테이프를 별도 검토하는 것이 안전합니다.",
+    },
+    {
+      question: "대량 구매 시 테이프 단가를 낮추는 방법은 무엇인가요?",
+      answer:
+        "연간 예상 사용량(m 또는 박스 기준)을 공급사에 제시하고 단가 협상을 진행하세요. 규격을 1~2종으로 통일하면 재고 관리가 단순해지고 대량 단가 적용이 쉬워집니다. 포장 부자재 전반 비용 최적화는 <a href=\"/guides/packaging-accessories-guide\">포장 부자재 가이드</a>를 참조하세요.",
+    },
+    {
+      question: "크라프트 테이프가 친환경적인가요?",
+      answer:
+        "크라프트 테이프의 종이 기재는 생분해 가능하지만, 아크릴·핫멜트 점착제는 분리배출이 필요합니다. 수용성 크라프트 테이프 등 완전 분리 가능 옵션도 있으나 국내 공급이 제한적입니다. 친환경 패키징 소재 선택 전반은 <a href=\"/guides/eco-friendly-packaging\">친환경 패키징 가이드</a>를 참조하세요.",
+    },
+  ],
+  sidebar: {
+    ctaHeadline: "테이프 공급사 비교하기",
+    ctaSubtext: "OPP·크라프트·무소음 테이프 공급사를 Packlinx에서 비교하세요.",
+    ctaButtonLabel: "업체 비교하기 →",
+    ctaHref: "/products/packaging-tape",
+    relatedGuides: [
+      { href: "/guides/packaging-accessories-guide", title: "포장 부자재 가이드", readTime: "5분" },
+      { href: "/guides/이사박스-대량구매-가이드", title: "이사박스 대량구매 가이드", readTime: "4분" },
+      { href: "/guides/eco-friendly-packaging", title: "친환경 패키징 가이드", readTime: "6분" },
+      { href: "/guides/packaging-material-complete-guide", title: "소재 종합 가이드", readTime: "7분" },
+    ],
+  },
+  endCta: {
+    headline: "테이프 공급사 비교하기",
+    subtext: "Packlinx에서 OPP·크라프트·무소음 테이프 공급사를 비교하세요",
+    buttonLabel: "업체 비교하기 →",
+    href: "/products/packaging-tape",
+  },
+};
+
+// ─── Slot data — 2026-korea-packaging-trends ─────────────────────────────────
+
+const SLOT_DATA_KOREA_TRENDS_2026: SlotData = {
+  heroTag: "트렌드 · 2026 패키징",
+  heroDateLabel: "2026-05 업데이트",
+  heroReadTime: "7분 읽기",
+  tldr: [
+    {
+      bold: "EPR 분담금 체계 변화",
+      text: "— 「자원의 절약과 재활용촉진에 관한 법률」에 따라 포장재 EPR 분담금 산정 방식이 변경됩니다. 정확한 적용 대상·단가·시행일은 한국환경공단 공지를 기준으로 확인하세요.",
+    },
+    {
+      bold: "재생원료 혼입 의무 확대",
+      text: "— 포장재 재질·구조 개선 지침에 따라 재생원료 사용 목표 비율이 단계적으로 상향되고 있으며, 소재 전환 로드맵 조기 수립이 권고됩니다.",
+    },
+    {
+      bold: "일회용 포장재 규제 단계적 강화",
+      text: "— 일회용품 제한 대상 품목과 업종이 연도별로 확대되고 있습니다. 현재 대상 여부와 시행일은 환경부 고시를 기준으로 확인하세요.",
+    },
+  ],
+  callouts: [
+    {
+      variant: "info",
+      title: "EPR 분담금 확인 경로",
+      body: "포장재 EPR 분담금 적용 여부·산정 방법은 한국환경공단(KECO) 자원순환포털 또는 환경부 고시를 직접 확인하세요. 본 가이드 내용은 참고용이며 최신 고시가 우선합니다.",
+    },
+    {
+      variant: "warn",
+      title: "법령 적용 여부는 공식 고시로 확인",
+      body: "「자원재활용법」·EPR·일회용품 규제의 시행일과 대상 품목은 환경부 고시 개정에 따라 변경됩니다. 본 가이드의 정보는 작성 시점 기준이며, 준수 여부는 반드시 공식 출처에서 확인하세요.",
+    },
+    {
+      variant: "tip",
+      title: "친환경 패키징으로 선제 전환",
+      body: "규제 대응과 별개로 재생원료·생분해 소재로의 전환은 바이어 ESG 요구에도 대응됩니다. 소재별 옵션은 /guides/eco-friendly-packaging을 참조하세요.",
+    },
+  ],
+  checklistTitle: "2026 트렌드 대응 체크리스트",
+  checklist: [
+    "<strong>EPR 대상 여부</strong> — 포장재 생산·수입 물량 기준 EPR 의무 대상 여부 한국환경공단 확인",
+    "<strong>재질·구조 개선</strong> — 환경부 포장재 재질·구조 개선 지침 적합 여부 점검",
+    "<strong>재생원료 비율</strong> — 포장재별 재생원료 혼입 목표 비율 공급사 자료 수령",
+    "<strong>일회용품 규제</strong> — 사용 중인 일회용 포장재의 규제 대상 여부·시행일 환경부 고시 확인",
+    "<strong>소재 전환 로드맵</strong> — 친환경 소재로의 연차별 전환 계획 수립",
+  ],
+  faq: [
+    {
+      question: "2026년 EPR(생산자책임재활용) 분담금은 어떻게 확인하나요?",
+      answer:
+        "「자원의 절약과 재활용촉진에 관한 법률」에 따른 EPR 분담금 단가·산정 방법·대상 포장재 종류는 한국환경공단 자원순환포털 또는 환경부 고시를 직접 확인하세요. 본 가이드는 트렌드 안내 목적이며 법적 자문이 아닙니다.",
+    },
+    {
+      question: "일회용 포장재 규제로 어떤 품목이 영향을 받나요?",
+      answer:
+        "「자원의 절약과 재활용촉진에 관한 법률」 및 관련 고시에 따라 일회용 포장재 규제 대상 품목과 업종이 단계적으로 확대되고 있습니다. 현재 적용 품목과 예정 품목의 시행일은 환경부 공식 고시를 기준으로 확인이 필요합니다.",
+    },
+    {
+      question: "재생원료 사용 의무화에 대비하려면 어떻게 해야 하나요?",
+      answer:
+        "현재 사용 중인 포장재의 소재별 재생원료 혼입 가능 여부를 공급사에 확인하고, 대체 소재 샘플 테스트를 선행하는 것이 권장됩니다. 친환경 포장재 옵션과 인증 기준은 <a href=\"/guides/eco-friendly-packaging\">친환경 패키징 가이드</a>를 참조하세요.",
+    },
+    {
+      question: "포장재 재질·구조 개선 지침을 준수하지 않으면 어떻게 되나요?",
+      answer:
+        "환경부 포장재 재질·구조 개선 지침을 위반한 포장재는 EPR 분담금 가산 또는 개선 명령의 대상이 될 수 있습니다. 구체적인 제재 내용과 적용 기준은 환경부 고시와 한국환경공단 안내를 직접 확인하세요.",
+    },
+    {
+      question: "중소기업도 EPR 의무를 적용받나요?",
+      answer:
+        "EPR 적용 기준은 포장재 출고·수입 물량 기준으로 일정 규모 이상의 사업자를 대상으로 합니다. 적용 예외 기준이 있을 수 있으므로 한국환경공단에 직접 문의하거나 환경부 고시를 참조하세요.",
+    },
+  ],
+  sidebar: {
+    ctaHeadline: "친환경 패키징 공급사 찾기",
+    ctaSubtext: "EPR 대응 친환경 패키징 공급사를 Packlinx에서 비교하세요.",
+    ctaButtonLabel: "업체 비교하기 →",
+    ctaHref: "/products/eco-friendly-packaging",
+    relatedGuides: [
+      { href: "/guides/eco-friendly-packaging", title: "친환경 패키징: EPR 규제 대응 소재 선택", readTime: "6분" },
+      { href: "/guides/plastic-container-guide", title: "플라스틱 용기 가이드: 규제 대상 소재 확인", readTime: "5분" },
+      { href: "/guides/packaging-material-complete-guide", title: "소재 종합 가이드: 재생원료 혼입 소재 비교", readTime: "7분" },
+      { href: "/guides/flexible-packaging-guide", title: "연포장 가이드: 친환경 파우치·필름 전환 옵션", readTime: "5분" },
+    ],
+  },
+  endCta: {
+    headline: "친환경 패키징 공급사 찾기",
+    subtext: "Packlinx에서 EPR 대응 친환경 패키징 공급사를 비교하세요",
+    buttonLabel: "업체 비교하기 →",
+    href: "/products/eco-friendly-packaging",
+  },
+};
+
+// ─── Slot data — packaging-printing-guide ────────────────────────────────────
+
+const SLOT_DATA_PACKAGING_PRINTING: SlotData = {
+  heroTag: "공정·인쇄 · 인쇄 공정 가이드",
+  heroDateLabel: "2026-05 업데이트",
+  heroReadTime: "6분 읽기",
+  tldr: [
+    {
+      bold: "인쇄 공정 4가지",
+      text: "— 플렉소·오프셋·그라비아·디지털. 수량·소재·색상 수에 따라 최적 공정이 달라집니다.",
+    },
+    {
+      bold: "색상 재현율과 MOQ",
+      text: "— 그라비아는 색 재현율이 가장 높지만 판 제작비로 인해 5만 매 이상 구간이 적정. 디지털은 500매 이하 소량에서 단가 경쟁력이 있습니다.",
+    },
+    {
+      bold: "잉크 선택이 규제 핵심",
+      text: "— 식품·화장품 패키징은 식약처 「기구 및 용기·포장의 기준 및 규격」 적합 잉크 사용 여부를 공급사에 반드시 확인하세요.",
+    },
+  ],
+  callouts: [
+    {
+      variant: "info",
+      title: "공정 선택 기준 요약",
+      body: "수량 1만 매 미만이면 디지털 또는 플렉소, 이상이면 오프셋·그라비아가 일반적으로 유리합니다. 전환 전 반드시 공급사와 색상 프루프를 거치세요.",
+    },
+    {
+      variant: "warn",
+      title: "VOC·친환경 잉크 표시 주의",
+      body: "친환경 마크 또는 저VOC 표시를 인쇄할 경우 공급사의 실제 인증서(발급 기관·인증 번호·유효 기간)를 반드시 원본으로 확인하세요. 미인증 표시는 표시광고법 위반 소지가 있습니다.",
+    },
+    {
+      variant: "tip",
+      title: "트리밍 손실 예산 포함",
+      body: "인쇄 발주 시 트리밍·블리드 여백 손실을 5~10% 추가로 계산하세요. 소량 발주일수록 단가 차이가 큽니다.",
+    },
+  ],
+  checklistTitle: "인쇄 발주 전 확정 항목",
+  checklist: [
+    "<strong>인쇄 공정 선택</strong> — 수량·소재 기준으로 플렉소·오프셋·그라비아·디지털 중 확정",
+    "<strong>색상 프루프</strong> — 양산 전 색상·레지스트레이션 오차 검수",
+    "<strong>잉크 규격 확인</strong> — 식품·화장품 패키징 적용 시 공급사에 식약처 기준 잉크 여부 확인",
+    "<strong>MOQ 및 판 제작비</strong> — 판 제작비 구조와 손익분기 수량 공급사와 협의",
+    "<strong>납기 일정</strong> — 인쇄→코팅→타발 포함 리드타임 명시 요청",
+  ],
+  faq: [
+    {
+      question: "플렉소와 그라비아 인쇄의 차이는 무엇인가요?",
+      answer:
+        "플렉소는 유연한 수지판을 사용해 골판지·필름 등 다양한 소재에 빠르게 인쇄할 수 있으며 중·대량에 적합합니다. 그라비아는 금속 롤에 이미지를 식각해 색상 재현율이 매우 높지만 판 제작비가 높아 5만 매 이상 대량 구간에서 단가 이점이 있습니다. 라벨 전용 인쇄 방식 비교는 <a href=\"/guides/label-printing-guide\">라벨 인쇄 가이드</a>를 참조하세요.",
+    },
+    {
+      question: "소량(500매 이하) 패키징 인쇄에 적합한 공정은 무엇인가요?",
+      answer:
+        "디지털 인쇄는 판 제작비 없이 소량부터 발주 가능해 500매 이하 구간에서 단가 경쟁력이 있습니다. 다만 특색 잉크(UV·형광) 구현에는 제약이 있을 수 있으므로 공급사와 샘플 검수를 거치는 것이 권장됩니다.",
+    },
+    {
+      question: "식품 용기에 인쇄할 때 잉크 규제가 있나요?",
+      answer:
+        "식품에 직접 접촉하는 패키징(내면 인쇄)은 식약처 「기구 및 용기·포장의 기준 및 규격」에 적합한 잉크를 사용해야 합니다. 외면 인쇄도 잉크 이행성(set-off) 기준이 적용될 수 있으므로 공급사에 식품용 잉크 여부를 명확히 확인하세요. 식품 패키징 소재 전반은 <a href=\"/guides/food-packaging-materials\">식품 포장재 가이드</a>를 참조하세요.",
+    },
+    {
+      question: "인쇄 납기를 단축하는 방법은 무엇인가요?",
+      answer:
+        "디자인 파일을 인쇄 규격(블리드·트리밍·색상 프로파일)에 맞게 미리 준비하면 교정 횟수가 줄어 납기가 단축됩니다. 연 단위 계약으로 롤 재고를 사전 확보하면 단납기 발주도 가능합니다.",
+    },
+  ],
+  sidebar: {
+    ctaHeadline: "패키징 인쇄 공급사 찾기",
+    ctaSubtext: "인쇄 공정별 패키징 공급사를 Packlinx에서 비교하세요.",
+    ctaButtonLabel: "업체 비교하기 →",
+    ctaHref: "/products/packaging-printing",
+    relatedGuides: [
+      { href: "/guides/label-printing-guide", title: "라벨 인쇄 가이드", readTime: "5분" },
+      { href: "/guides/packaging-material-complete-guide", title: "패키징 소재 종합 가이드", readTime: "7분" },
+      { href: "/guides/eco-friendly-packaging", title: "친환경 패키징", readTime: "6분" },
+      { href: "/guides/flexible-packaging-guide", title: "연포장 가이드", readTime: "5분" },
+    ],
+  },
+  endCta: {
+    headline: "패키징 인쇄 공급사 찾기",
+    subtext: "Packlinx에서 인쇄 공정별 패키징 공급사를 비교하세요",
+    buttonLabel: "업체 비교하기 →",
+    href: "/products/packaging-printing",
+  },
+};
+
+// ─── Slot data — packaging-machinery-guide ───────────────────────────────────
+
+const SLOT_DATA_PACKAGING_MACHINERY: SlotData = {
+  heroTag: "공정·인쇄 · 패키징 기계",
+  heroDateLabel: "2026-05 업데이트",
+  heroReadTime: "6분 읽기",
+  tldr: [
+    {
+      bold: "기계 유형 3가지",
+      text: "— 충전기·밀봉기·라벨러. 자동화 수준(수동·반자동·전자동)과 시간당 처리 속도를 기준으로 선택합니다.",
+    },
+    {
+      bold: "안전 인증 보유 여부 확인 필수",
+      text: "— 국내 유통 패키징 기계는 KCs 인증, 수출용은 CE 인증 보유 여부를 공급사에 원본 서류로 직접 확인하세요.",
+    },
+    {
+      bold: "총소유비용(TCO) 기준 비교",
+      text: "— 초기 구매가보다 소모품·유지보수·다운타임 비용을 포함한 TCO 기준으로 비교해야 정확합니다.",
+    },
+  ],
+  callouts: [
+    {
+      variant: "info",
+      title: "처리 속도와 자동화 단계",
+      body: "일 생산량 5,000개 미만이면 반자동, 이상이면 전자동 도입이 일반적으로 ROI 회수 기간이 빠릅니다. 시간당 처리 속도(BPM/PPM)를 공급사와 계약 전에 명확히 협의하세요.",
+    },
+    {
+      variant: "warn",
+      title: "KCs·CE 인증 원본 확인",
+      body: "기계 도입 시 공급사가 제시하는 인증 문서(인증 번호·발급 기관·유효 기간)를 반드시 원본으로 확인하세요. 인증 마크 보유 여부는 공급사 자체 주장만으로 확인이 불가합니다.",
+    },
+    {
+      variant: "tip",
+      title: "FAT(공장 인수 테스트) 계약 포함",
+      body: "고가 기계 도입 시 공장 인수 테스트(FAT)와 현장 설치 후 SAT를 계약에 포함하면 납품 후 분쟁을 줄일 수 있습니다.",
+    },
+  ],
+  checklistTitle: "패키징 기계 도입 전 확정 항목",
+  checklist: [
+    "<strong>처리 속도</strong> — BPM/PPM 기준 요구 생산량 충족 여부 확인",
+    "<strong>인증 서류</strong> — KCs(국내 유통) · CE(수출) 원본 인증서 수령",
+    "<strong>소모품 수급</strong> — 국내 AS 채널 및 소모품 수급 경로 사전 확인",
+    "<strong>설치 요건</strong> — 설치 면적·전원 규격(단상/3상)·환기 조건 확인",
+    "<strong>교육·유지보수</strong> — 운영자 교육 횟수·정기 유지보수 계약 포함 여부 협의",
+  ],
+  faq: [
+    {
+      question: "패키징 자동화 기계 ROI 기간은 얼마나 걸리나요?",
+      answer:
+        "일반적으로 반자동 기계는 1~2년, 전자동 라인은 2~3년 내 초기 투자비 회수를 목표로 합니다. 정확한 ROI는 현재 인건비·시간당 생산량·불량률 감소 효과를 기반으로 산출해야 합니다. 소재별 패키징 비용 구조는 <a href=\"/guides/packaging-material-complete-guide\">포장재 소재 완전 가이드</a>를 참조하세요.",
+    },
+    {
+      question: "패키징 기계 KCs 인증이 없으면 국내 사용이 불가한가요?",
+      answer:
+        "전기용품 및 생활용품 안전관리법 대상 품목에 해당하는 기계는 KCs 인증 없이 국내 유통·사용이 제한됩니다. 해당 여부는 국가기술표준원(KATS) 포털에서 확인 가능하며, 인증 마크 보유 여부는 공급사에 공식 인증서 원본을 요청해 확인하세요.",
+    },
+    {
+      question: "소량 다품종 생산에 적합한 기계는 무엇인가요?",
+      answer:
+        "규격 변경이 잦은 소량 다품종 환경에서는 빠른 사이즈 교체(퀵체인지)가 가능한 반자동 충전·밀봉 기계가 적합합니다. 서보 구동 방식은 초기 비용이 높지만 조정 시간과 불량률이 낮아 다품종 구간에서 TCO가 낮습니다.",
+    },
+    {
+      question: "기계 유지보수 비용을 낮추는 방법은 무엇인가요?",
+      answer:
+        "국내 AS 네트워크와 소모품 수급 채널을 구매 전에 확인하는 것이 핵심입니다. 기계와 함께 사용하는 포장 부자재 비용은 <a href=\"/guides/packaging-accessories-guide\">포장 부자재 가이드</a>에서, 테이프 비교는 <a href=\"/guides/packaging-tape-comparison\">포장 테이프 비교 가이드</a>에서 확인하세요.",
+    },
+  ],
+  sidebar: {
+    ctaHeadline: "패키징 기계 공급사 찾기",
+    ctaSubtext: "패키징 자동화 기계 공급사를 Packlinx에서 비교하세요.",
+    ctaButtonLabel: "업체 비교하기 →",
+    ctaHref: "/products/packaging-machinery",
+    relatedGuides: [
+      { href: "/guides/packaging-accessories-guide", title: "포장 부자재 가이드", readTime: "5분" },
+      { href: "/guides/flexible-packaging-guide", title: "연포장 가이드", readTime: "5분" },
+      { href: "/guides/packaging-printing-guide", title: "패키징 인쇄 공정 가이드", readTime: "6분" },
+      { href: "/guides/packaging-material-complete-guide", title: "소재 종합 가이드", readTime: "7분" },
+    ],
+  },
+  endCta: {
+    headline: "패키징 기계 공급사 찾기",
+    subtext: "Packlinx에서 패키징 자동화 기계 공급사를 비교하세요",
+    buttonLabel: "업체 비교하기 →",
+    href: "/products/packaging-machinery",
   },
 };

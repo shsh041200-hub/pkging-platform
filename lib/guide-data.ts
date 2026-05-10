@@ -13,8 +13,6 @@ export const STATIC_GUIDE_SLUGS = [
   "label-printing-guide",
   "flexible-packaging-guide",
   "plastic-container-guide",
-  "packaging-printing-guide",
-  "packaging-machinery-guide",
 ] as const;
 export type StaticGuideSlug = (typeof STATIC_GUIDE_SLUGS)[number];
 
@@ -35,6 +33,8 @@ export const DYNAMIC_GUIDE_SLUGS = [
   "2026-korea-packaging-trends",
   "glass-metal-container-guide",
   "packaging-accessories-guide",
+  "packaging-printing-guide",
+  "packaging-machinery-guide",
 ] as const;
 export type DynamicGuideSlug = (typeof DYNAMIC_GUIDE_SLUGS)[number];
 
@@ -89,8 +89,10 @@ export const GUIDE_META: GuideMeta[] = [
     description: "PET·PP·HDPE·PS·PC 소재 비교, 식품용 식약처 이행성 시험 기준, 사출·블로우·진공 성형 공법 차이, 금형비·MOQ·친환경 rPET 비용을 정리합니다." },
   // process (2)
   { slug: "packaging-printing-guide", category: "process",
-    title: "포장 인쇄 종류·후가공 완전 가이드 — 옵셋·플렉소·그라비어·디지털 비교",
-    description: "포장 인쇄 방식(옵셋·플렉소·그라비어·디지털) 비교, 코팅·박·엠보싱 등 후가공 종류, 식품 인쇄 잉크 규제, 파일 규격 체크리스트를 정리합니다." },
+    title: "패키징 인쇄 공정 가이드 — 플렉소·오프셋·그라비아·디지털 비교",
+    description: "패키징 인쇄 공정 4가지(플렉소·오프셋·그라비아·디지털) 비교, 수량·소재별 선택 기준, 식약처 잉크 규제, 발주 전 체크리스트를 정리합니다.",
+    redesignVersion: 1,
+    readTime: "6분" },
   // material (cont.)
   { slug: "glass-metal-container-guide", category: "material",
     title: "유리·금속 용기 완전 가이드 — 종류·소재·MOQ·인쇄 옵션 비교 (2026)",
@@ -137,8 +139,10 @@ export const GUIDE_META: GuideMeta[] = [
     description: "OPP 아크릴·핫멜트·크라프트·무소음 테이프의 점착력·내열·내한성 차이와 용도별 선택 기준을 정리합니다." },
   // process (cont.)
   { slug: "packaging-machinery-guide", category: "process",
-    title: "포장기계·자동화 완전 가이드 — 종류·ROI·도입 체크리스트 (2026년)",
-    description: "충전기·밀봉기·라벨러·박스포장기·팔레타이저 종류 비교, 자동화 ROI 계산식, 국내 주요 제조사 비교, 식약처·KC 인증 요건, 발주 전 체크리스트를 한 곳에 정리했습니다." },
+    title: "패키징 기계 가이드 — 충전기·밀봉기·라벨러 선택·ROI·인증",
+    description: "패키징 기계 유형(충전기·밀봉기·라벨러) 비교, 자동화 ROI, KCs·CE 인증 확인 기준, 도입 체크리스트를 정리합니다.",
+    redesignVersion: 1,
+    readTime: "6분" },
   // box (cont.)
   { slug: "이사박스-대량구매-가이드", category: "box",
     title: "이사박스 대량구매 가이드",
