@@ -542,7 +542,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
             <a
               key={slug}
               href={`https://keywords.packlinx.com/keywords/${slug}`}
-              className="text-[13px] text-[#533afd] bg-[#533afd]/[0.06] hover:bg-[#533afd]/[0.12] border border-[#533afd]/[0.15] hover:border-[#533afd]/[0.30] px-3 py-1.5 rounded-lg transition-colors"
+              className="text-[13px] text-stripe-purple bg-stripe-purple/6 hover:bg-stripe-purple/12 border border-stripe-purple/15 hover:border-stripe-purple/30 px-3 py-1.5 rounded-lg transition-colors"
             >
               {label}
             </a>
