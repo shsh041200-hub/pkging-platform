@@ -1,7 +1,12 @@
 import React from "react";
 import type { Metadata } from "next";
 import Link from "next/link";
-import { GuidePageShell } from "@/components/guide/GuidePageShell";
+import { GuideHero } from "@/components/guide/GuideHero";
+import { GuideCallout } from "@/components/guide/GuideCallout";
+import { GuideChecklist } from "@/components/guide/GuideChecklist";
+import { GuideFaq } from "@/components/guide/GuideFaq";
+import { GuideSidebar } from "@/components/guide/GuideSidebar";
+import { GuideEndCta } from "@/components/guide/GuideEndCta";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://packlinx.com";
 const canonicalUrl = `${siteUrl}/guides/packaging-machinery-guide`;
@@ -101,11 +106,57 @@ const faqJsonLd = {
   ],
 };
 
+const slotTldr = [
+  {
+    bold: "기계 유형 3가지",
+    text: "— 충전기·밀봉기·라벨러. 자동화 수준(수동·반자동·전자동)과 시간당 처리 속도를 기준으로 선택합니다.",
+  },
+  {
+    bold: "안전 인증 보유 여부 확인 필수",
+    text: "— 국내 유통 패키징 기계는 KCs 인증, 수출용은 CE 인증 보유 여부를 공급사에 원본 서류로 직접 확인하세요.",
+  },
+  {
+    bold: "총소유비용(TCO) 기준 비교",
+    text: "— 초기 구매가보다 소모품·유지보수·다운타임 비용을 포함한 TCO 기준으로 비교해야 정확합니다.",
+  },
+];
+
+const slotChecklist = [
+  "<strong>처리 속도</strong> — BPM/PPM 기준 요구 생산량 충족 여부 확인",
+  "<strong>인증 서류</strong> — KCs(국내 유통) · CE(수출) 원본 인증서 수령",
+  "<strong>소모품 수급</strong> — 국내 AS 채널 및 소모품 수급 경로 사전 확인",
+  "<strong>설치 요건</strong> — 설치 면적·전원 규격(단상/3상)·환기 조건 확인",
+  "<strong>교육·유지보수</strong> — 운영자 교육 횟수·정기 유지보수 계약 포함 여부 협의",
+];
+
+const slotFaq = [
+  {
+    question: "KCs 인증이 없는 수입 포장기계를 사용할 수 있나요?",
+    answer:
+      "KCs 안전인증 대상 품목이라면 인증 없이 국내 판매·사용이 불가합니다. 해외 직수입 기계라도 동일 기준이 적용되므로, 공급업체에 KCs 인증서를 반드시 요청하세요.",
+  },
+  {
+    question: "CE 인증 제품은 국내에서도 사용 가능한가요?",
+    answer:
+      "CE는 EU 시장 적합성 표시로, 국내 KCs와 별개 제도입니다. CE만 보유했다고 국내 KCs 요건을 충족하지 않으므로, 국내 도입 전 KCs 인증 여부를 별도로 확인해야 합니다.",
+  },
+  {
+    question: "반자동과 전자동 포장기 중 어떤 것이 유리한가요?",
+    answer:
+      "월 처리량 기준으로 판단하세요. 소량 다품종이라면 반자동이 유연성이 높고, 대량 단품종은 전자동이 장기적으로 단가 절감에 유리합니다. 공급업체 무상 시뮬레이션을 활용하시기 바랍니다.",
+  },
+  {
+    question: "포장기계 유지보수는 어떻게 준비해야 하나요?",
+    answer:
+      "공급업체 또는 공인 서비스센터와 유지보수 계약을 체결하는 것이 일반적입니다. 계약서에 부품 보증기간·응급 출동 SLA(서비스 수준)를 명시하면 운영 리스크를 줄일 수 있습니다.",
+  },
+];
+
 export default function PackagingMachineryGuidePage() {
   const hreflangKo = { rel: "alternate", hreflang: "ko-KR", href: canonicalUrl } as React.LinkHTMLAttributes<HTMLLinkElement>;
   const hreflangDefault = { rel: "alternate", hreflang: "x-default", href: canonicalUrl } as React.LinkHTMLAttributes<HTMLLinkElement>;
   return (
-    <GuidePageShell>
+    <div className="-mx-5 sm:-mx-8 -mt-10 sm:-mt-14">
       <link {...hreflangKo} />
       <link {...hreflangDefault} />
       <script
@@ -116,7 +167,31 @@ export default function PackagingMachineryGuidePage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
       />
-      <main>
+      <GuideHero
+        tag="공정·산업별 가이드"
+        title="포장기계·자동화 완전 가이드 — 종류·ROI·도입 체크리스트 (2026년)"
+        dateLabel="2026-05 업데이트"
+        readTime="10분 읽기"
+        category="공정·산업별"
+        categoryHref="/guides"
+        tldr={slotTldr}
+      />
+      <div
+        className="max-w-screen-xl mx-auto px-5 sm:px-8 mt-10 grid gap-10 items-start"
+        style={{ gridTemplateColumns: "1fr 280px" }}
+      >
+        <article>
+          <GuideCallout variant="info" title="포장기계 세분류">
+            포장기계는 용도별로 카톤에렉터, 씰링기, 슈링크 포장기, 스트레치 포장기, 진공 포장기 등으로 세분됩니다. 처리 대상 제품의 형상·크기·중량을 먼저 정의해야 적합한 기종을 선택할 수 있습니다.
+          </GuideCallout>
+          <GuideCallout variant="warn" title="KCs 안전인증 미보유 기계 사용 금지">
+            국내에서 전기를 사용하는 포장기계를 도입하려면 KCs 안전인증 대상 품목인지 먼저 확인하세요. 인증 대상임에도 마크가 없는 제품을 사용하면 「전기용품 및 생활용품 안전관리법」 위반이 됩니다. 공급업체에 KCs 인증서를 요청하시기 바랍니다.
+          </GuideCallout>
+          <GuideCallout variant="tip" title="KCs와 CE 분리 확인 필수">
+            EU 시장에 수출하는 제품을 패키징한다면 CE 적합성 표시(Declaration of Conformity)가 필요할 수 있습니다. 국내 KCs와 EU CE는 별개 제도이므로 각각 별도로 확인이 필요합니다. 두 인증을 동일하게 취급하지 마세요.
+          </GuideCallout>
+          <GuideChecklist title="포장기계 도입 전 확정 항목" items={slotChecklist} />
+          <main>
         <h1>포장기계·자동화 완전 가이드 — 종류·ROI·도입 체크리스트 (2026년)</h1>
         <p>
           식품·음료·화장품·물류 현장에서 포장 자동화 도입을 검토할 때 가장 먼저 부딪히는 질문은
@@ -688,7 +763,28 @@ export default function PackagingMachineryGuidePage() {
             </em>
           </p>
         </footer>
-      </main>
-    </GuidePageShell>
+          </main>
+          <GuideFaq items={slotFaq} />
+          <GuideEndCta
+            headline="포장기계 공급업체를 Packlinx에서 비교하세요"
+            subtext="KCs 인증 보유 업체를 포함, 기계 유형·처리량별 공급업체를 한 곳에서 확인할 수 있습니다."
+            buttonLabel="업체 비교하기 →"
+            href="/vendors?category=packaging-machinery"
+          />
+        </article>
+        <GuideSidebar
+          ctaHeadline="포장기계 공급업체 비교"
+          ctaSubtext="KCs 인증 보유 업체를 포함, 기계 유형·처리량별 공급업체를 비교하세요."
+          ctaButtonLabel="업체 찾기 →"
+          ctaHref="/vendors?category=packaging-machinery"
+          relatedGuides={[
+            { href: "/guides/packaging-material-complete-guide", title: "포장재 소재 완전 가이드", readTime: "6분" },
+            { href: "/guides/corrugated-box-supplier-selection", title: "골판지 박스 업체 선정 가이드", readTime: "7분" },
+            { href: "/guides/plastic-container-guide", title: "플라스틱 용기·병 종류 완전 가이드", readTime: "7분" },
+            { href: "/guides/packaging-printing-guide", title: "패키징 인쇄 공정 가이드", readTime: "8분" },
+          ]}
+        />
+      </div>
+    </div>
   );
 }

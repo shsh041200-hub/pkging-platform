@@ -99,6 +99,7 @@ const GUIDES: Record<DynamicGuideSlug, GuideContent> = {
     description:
       "OPP 아크릴·핫멜트·크라프트·무소음 테이프의 점착력·내열·내한성 차이와 용도별 선택 기준을 정리합니다.",
     datePublished: "2026-05-01",
+    redesignVersion: 1,
     body: <PackagingTapeComparisonContent />,
   },
   "이사박스-대량구매-가이드": {
@@ -122,6 +123,7 @@ const GUIDES: Record<DynamicGuideSlug, GuideContent> = {
     description:
       "2026년 한국 포장재 시장의 5대 트렌드 — EPR 강화, 스마트 패키징 도입, 소량·맞춤 수요 증가, 단가 상승 대응, 이커머스 전용 설계 — 를 데이터 기반으로 분석합니다.",
     datePublished: "2026-05-07",
+    redesignVersion: 1,
     body: <KoreaPackagingTrends2026Content />,
   },
 };
@@ -220,6 +222,12 @@ function GuideV1Page({
   }
   if (slug === "packaging-material-complete-guide") {
     return <GuideSlotV1Page guide={guide} data={SLOT_DATA_PACKAGING_MATERIAL} />;
+  }
+  if (slug === "packaging-tape-comparison") {
+    return <GuideSlotV1Page guide={guide} data={SLOT_DATA_TAPE_COMPARISON} />;
+  }
+  if (slug === "2026-korea-packaging-trends") {
+    return <GuideSlotV1Page guide={guide} data={SLOT_DATA_KOREA_TRENDS_2026} />;
   }
   // Fallback to prose template for any other redesign-flagged guide
   return (
@@ -3549,5 +3557,179 @@ const SLOT_DATA_PACKAGING_MATERIAL: SlotData = {
     subtext: "골판지·단프라·연포장 업체, 소재·MOQ·납기 조건으로 필터 비교",
     buttonLabel: "업체 비교하기 →",
     href: "/products/box",
+  },
+};
+
+// ─── Slot data — packaging-tape-comparison ───────────────────────────────────
+
+const SLOT_DATA_TAPE_COMPARISON: SlotData = {
+  heroTag: "소재·부자재 · 테이프 비교 가이드",
+  heroDateLabel: "2026-05 업데이트",
+  heroReadTime: "5분 읽기",
+  tldr: [
+    {
+      bold: "용도와 작업 환경이 테이프 선택 기준을 결정한다",
+      text: "— OPP·크라프트·저소음(무소음 테이프로도 표기됨) 각 소재는 봉함 강도·소음·환경 처리 방식에서 차이가 있으며, 용도별 적합성을 분리해 선택하면 비용 효율적입니다.",
+    },
+    {
+      bold: "박스 봉함 일반 용도에는 OPP가 표준적으로 사용된다",
+      text: "— 강한 점착력과 방습성으로 물류·창고 환경에 적합하며, 대량 발주 시 단가가 낮아집니다.",
+    },
+    {
+      bold: "친환경 폐기가 우선이라면 크라프트 테이프를 검토하라",
+      text: "— 종이 기재 크라프트 테이프는 분리 배출 시 종이류로 분류 가능하여 ESG 패키징 정책에 부합할 수 있습니다.",
+    },
+  ],
+  callouts: [
+    {
+      variant: "info",
+      title: "\"무소음 테이프\"는 마케팅 용어입니다",
+      body: "\"무소음 테이프\"는 시장에서 통용되는 마케팅 용어입니다. 엄밀히는 저소음(소음 감소) 테이프로, OPP 대비 테이프 박리 소음이 낮으나 완전 무음은 아닙니다. 야간 작업장·주거 인접 물류센터 등 소음 민감 환경에 적합합니다.",
+    },
+    {
+      variant: "warn",
+      title: "식품 접촉 포장 테이프 적합성 확인 필요",
+      body: "식품·의약품 포장 외면에 테이프를 사용할 경우 접착제 이행 가능성을 반드시 확인하세요. 식품 접촉 가능성이 있는 포장에는 해당 용도로 적합성이 확인된 테이프를 선택하는 것이 안전합니다.",
+    },
+    {
+      variant: "tip",
+      title: "크라프트 테이프 수작업 편의성",
+      body: "크라프트 테이프는 수(手)인열이 가능하여 테이프 커터기 없이도 사용 가능합니다. 소규모 포장 현장에서 작업 효율을 높일 수 있습니다.",
+    },
+  ],
+  checklistTitle: "테이프 선택 전 확정 항목",
+  checklist: [
+    "<strong>봉함 강도(접착력 N/25mm) 사양</strong> 확인 후 용도 적합성 검토",
+    "<strong>소음 민감 환경이라면</strong> 저소음(무소음) 테이프 적용 검토",
+    "<strong>ESG·친환경 기준이라면</strong> 크라프트 테이프 분리 배출 가능 여부 확인",
+    "<strong>물류 환경(온도·습도·표면 기재)에 맞게</strong> 점착제 종류 확인",
+    "<strong>대량 구매 전</strong> 샘플 테스트 및 접착 유지력 사전 검증",
+  ],
+  faq: [
+    {
+      question: "OPP, 크라프트, 저소음 테이프 중 어떤 것이 더 강한가요?",
+      answer:
+        "단순 강도보다 용도별 적합성으로 선택하세요. 일반 박스 봉함이라면 OPP, 친환경 폐기가 중요하면 크라프트, 야간·소음 민감 환경에는 저소음 테이프가 표준적으로 사용됩니다.",
+    },
+    {
+      question: "\"무소음 테이프\"와 \"저소음 테이프\"는 다른 건가요?",
+      answer:
+        "동일한 제품을 가리키는 경우가 많습니다. 시장에서는 마케팅 용어로 \"무소음\"이 통용되지만, 엄밀히는 저소음(소음 감소) 테이프입니다. 구매 시 제품 사양서에서 소음 감소 기준을 확인하세요.",
+    },
+    {
+      question: "크라프트 테이프는 분리수거가 가능한가요?",
+      answer:
+        "종이 기재 크라프트 테이프는 일반적으로 종이류로 분리 배출이 가능하나, 지역 지자체 분리수거 기준에 따라 달라질 수 있습니다. 접착제 잔류물 제거 후 배출하는 것이 안전합니다.",
+    },
+    {
+      question: "대량 구매 시 소재별 단가 차이가 큰가요?",
+      answer:
+        "소재·규격·발주량에 따라 다르므로 Packlinx를 통해 복수 업체 견적을 비교하는 것이 가장 정확합니다.",
+    },
+  ],
+  sidebar: {
+    ctaHeadline: "테이프 공급업체 비교",
+    ctaSubtext: "OPP·크라프트·저소음 테이프 전문 업체를 한 곳에서 찾고 견적을 바로 요청하세요.",
+    ctaButtonLabel: "업체 비교하기 →",
+    ctaHref: "/vendors?category=packaging-tape",
+    relatedGuides: [
+      { href: "/guides/packaging-material-complete-guide", title: "포장재 소재 완전 가이드", readTime: "6분" },
+      { href: "/guides/eco-friendly-packaging", title: "친환경 포장재 가이드", readTime: "6분" },
+      { href: "/guides/corrugated-box-supplier-selection", title: "골판지 포장 업체 선정 가이드", readTime: "7분" },
+      { href: "/guides/packaging-printing-guide", title: "패키징 인쇄 공정 가이드", readTime: "8분" },
+    ],
+  },
+  endCta: {
+    headline: "테이프 공급업체를 Packlinx에서 비교하세요",
+    subtext: "OPP·크라프트·저소음 테이프 전문 업체를 한 곳에서 찾고 견적을 바로 요청하세요.",
+    buttonLabel: "업체 비교하기 →",
+    href: "/vendors?category=packaging-tape",
+  },
+};
+
+// ─── Slot data — 2026-korea-packaging-trends ─────────────────────────────────
+
+const SLOT_DATA_KOREA_TRENDS_2026: SlotData = {
+  heroTag: "트렌드 · 2026 패키징 트렌드",
+  heroDateLabel: "2026-05 업데이트",
+  heroReadTime: "7분 읽기",
+  tldr: [
+    {
+      bold: "친환경·경량화·스마트 패키징이 2026년 한국 포장 시장을 재편하고 있다",
+      text: "— 규제 강화와 ESG 공급망 요구가 맞물려 포장재 선택의 기준이 빠르게 이동하고 있습니다.",
+    },
+    {
+      bold: "생산자책임재활용제도(EPR) 적용 범위가 확대되고 있다",
+      text: "— 「자원의 절약과 재활용촉진에 관한 법률」에 근거한 EPR 제도는 포장재 생산·수입 사업자의 재활용 의무를 강화하고 있으며, 대상 범위와 분담금 단가는 환경부 고시로 매년 갱신됩니다.",
+    },
+    {
+      bold: "일회용품 규제 대상 품목 및 시설 기준은 환경부 고시를 직접 확인해야 한다",
+      text: "— 「자원의 절약과 재활용촉진에 관한 법률」 §10 및 관련 환경부 고시에 따라 규제 대상이 갱신되므로, 사업자는 환경부 또는 한국환경공단 공지를 직접 확인하시기 바랍니다.",
+    },
+  ],
+  callouts: [
+    {
+      variant: "info",
+      title: "EPR 분담금 단가는 매년 갱신됩니다",
+      body: "EPR(생산자책임재활용제도) 분담금 단가는 환경부가 매년 고시로 갱신합니다. 사업자는 한국포장재재활용사업공제조합(KPRC) 또는 환경부 고시 공지 기준으로 연간 의무량과 단가를 확인하시기 바랍니다. 본 가이드는 특정 단가를 제시하지 않습니다.",
+    },
+    {
+      variant: "warn",
+      title: "일회용품 규제 대상은 고시 변경에 따라 갱신됩니다",
+      body: "일회용품 규제 대상 품목은 「자원의 절약과 재활용촉진에 관한 법률」 §10 및 시행령과 환경부 고시에 따라 갱신됩니다(2026-05 기준). 가이드에서 제시한 내용은 참고용이며, 최신 기준과 대상 품목은 환경부 또는 한국환경공단 공지에서 직접 확인하세요.",
+    },
+    {
+      variant: "tip",
+      title: "포장재 경량화로 EPR 분담금 부담 절감 가능",
+      body: "포장재 경량화·재사용 전환은 EPR 분담금 부담을 낮출 수 있는 실질적 방법입니다. 재활용 용이 등급이 높은 소재로 전환할 경우, 한국포장재재활용사업공제조합(KPRC)을 통해 분담금 감면 여부를 미리 확인하는 것이 좋습니다.",
+    },
+  ],
+  checklistTitle: "EPR·규제 대응 확정 항목",
+  checklist: [
+    "<strong>자사 포장재가 EPR 대상인지</strong> 「자원의 절약과 재활용촉진에 관한 법률」 §16 + 시행령 기준으로 확인",
+    "<strong>EPR 연간 의무량·분담금 단가를</strong> KPRC 또는 환경부 고시에서 최신 기준으로 확인",
+    "<strong>일회용품 규제 대상 품목·시설 여부를</strong> 환경부 또는 한국환경공단 공지에서 직접 확인",
+    "<strong>포장재 재활용 용이 등급(환경부 고시 기준)</strong> 진단 후 경량화·소재 전환 계획 수립",
+    "<strong>해외 ESG 공급망(EU PPWR 등) 요구 시</strong> 수출국 법령 기준 별도 확인",
+  ],
+  faq: [
+    {
+      question: "EPR 적용 대상 포장재인지 어떻게 확인하나요?",
+      answer:
+        "「자원의 절약과 재활용촉진에 관한 법률」 §16 및 시행령에 따른 대상 포장재 여부는 한국포장재재활용사업공제조합(KPRC) 또는 환경부 공지에서 확인할 수 있습니다. 특정 포장재의 대상 여부는 공제조합에 직접 문의하시기 바랍니다.",
+    },
+    {
+      question: "2026년에 달라지는 일회용품 규제는 무엇인가요?",
+      answer:
+        "일회용품 규제 대상 품목과 시설은 「자원의 절약과 재활용촉진에 관한 법률」 §10 및 환경부 고시 변경에 따라 갱신됩니다(2026-05 기준). 특정 품목의 규제 적용 여부는 환경부 또는 한국환경공단 공지에서 직접 확인하시기 바랍니다.",
+    },
+    {
+      question: "친환경 포장재로 전환하면 EPR 분담금이 줄어드나요?",
+      answer:
+        "환경부 고시에서 재활용 용이 등급이 높은 포장재는 분담금 산정 기준이 다를 수 있습니다. 정확한 감면 여부는 KPRC 또는 환경부 공지에서 확인하시기 바랍니다.",
+    },
+    {
+      question: "EU Packaging Regulation이 한국 수출 포장에도 영향을 미치나요?",
+      answer:
+        "EU 시장에 제품을 수출한다면 EU Packaging and Packaging Waste Regulation(PPWR) 요건이 적용될 수 있습니다. 국내 EPR과 별개 규제이므로, 수출국 법령에 맞는 포장재 기준을 별도로 확인해야 합니다.",
+    },
+  ],
+  sidebar: {
+    ctaHeadline: "2026 트렌드에 맞는 공급업체 찾기",
+    ctaSubtext: "친환경·재활용 포장 전문 업체를 한 곳에서 비교하고 견적을 요청할 수 있습니다.",
+    ctaButtonLabel: "업체 비교하기 →",
+    ctaHref: "/vendors?category=eco-packaging",
+    relatedGuides: [
+      { href: "/guides/eco-friendly-packaging", title: "친환경 포장재 가이드", readTime: "6분" },
+      { href: "/guides/packaging-material-complete-guide", title: "포장재 소재 완전 가이드", readTime: "6분" },
+      { href: "/guides/corrugated-box-supplier-selection", title: "골판지 포장 업체 선정 가이드", readTime: "7분" },
+      { href: "/guides/packaging-tape-comparison", title: "포장 테이프 소재 비교 가이드", readTime: "5분" },
+    ],
+  },
+  endCta: {
+    headline: "2026 포장 트렌드에 맞는 공급업체를 Packlinx에서 찾으세요",
+    subtext: "친환경·재활용 포장 전문 업체를 한 곳에서 비교하고 견적을 요청할 수 있습니다.",
+    buttonLabel: "업체 비교하기 →",
+    href: "/vendors?category=eco-packaging",
   },
 };

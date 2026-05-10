@@ -1,6 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { GuidePageShell } from "@/components/guide/GuidePageShell";
+import { GuideHero } from "@/components/guide/GuideHero";
+import { GuideCallout } from "@/components/guide/GuideCallout";
+import { GuideChecklist } from "@/components/guide/GuideChecklist";
+import { GuideFaq } from "@/components/guide/GuideFaq";
+import { GuideSidebar } from "@/components/guide/GuideSidebar";
+import { GuideEndCta } from "@/components/guide/GuideEndCta";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://packlinx.com";
 const canonicalUrl = `${siteUrl}/guides/packaging-printing-guide`;
@@ -94,9 +99,55 @@ const faqJsonLd = {
   ],
 };
 
+const slotTldr = [
+  {
+    bold: "인쇄 공정 4가지",
+    text: "— 플렉소·오프셋·그라비아·디지털. 수량·소재·색상 수에 따라 최적 공정이 달라집니다.",
+  },
+  {
+    bold: "색상 재현율과 MOQ",
+    text: "— 그라비아는 색 재현율이 가장 높지만 판 제작비로 인해 5만 매 이상 구간이 적정. 디지털은 500매 이하 소량에서 단가 경쟁력이 있습니다.",
+  },
+  {
+    bold: "잉크 선택이 규제 핵심",
+    text: "— 식품·화장품 패키징은 식약처 「기구 및 용기·포장의 기준 및 규격」 적합 잉크 사용 여부를 공급사에 반드시 확인하세요.",
+  },
+];
+
+const slotChecklist = [
+  "<strong>인쇄 공정 선택</strong> — 수량·소재 기준으로 플렉소·오프셋·그라비아·디지털 중 확정",
+  "<strong>색상 프루프</strong> — 양산 전 색상·레지스트레이션 오차 검수",
+  "<strong>잉크 규격 확인</strong> — 식품·화장품 패키징 적용 시 공급사에 식약처 기준 잉크 여부 확인",
+  "<strong>MOQ 및 판 제작비</strong> — 판 제작비 구조와 손익분기 수량 공급사와 협의",
+  "<strong>납기 일정</strong> — 인쇄→코팅→타발 포함 리드타임 명시 요청",
+];
+
+const slotFaq = [
+  {
+    question: "플렉소와 그라비아 인쇄의 차이는 무엇인가요?",
+    answer:
+      "플렉소는 유연한 수지판을 사용해 골판지·필름 등 다양한 소재에 빠르게 인쇄할 수 있으며 중·대량에 적합합니다. 그라비아는 금속 롤에 이미지를 식각해 색상 재현율이 매우 높지만 판 제작비가 높아 5만 매 이상 대량 구간에서 단가 이점이 있습니다. 라벨 전용 인쇄 방식 비교는 <a href=\"/guides/label-printing-guide\">라벨 인쇄 가이드</a>를 참조하세요.",
+  },
+  {
+    question: "소량(500매 이하) 패키징 인쇄에 적합한 공정은 무엇인가요?",
+    answer:
+      "디지털 인쇄는 판 제작비 없이 소량부터 발주 가능해 500매 이하 구간에서 단가 경쟁력이 있습니다. 다만 특색 잉크(UV·형광) 구현에는 제약이 있을 수 있으므로 공급사와 샘플 검수를 거치는 것이 권장됩니다.",
+  },
+  {
+    question: "식품 용기에 인쇄할 때 잉크 규제가 있나요?",
+    answer:
+      "식품에 직접 접촉하는 패키징(내면 인쇄)은 식약처 「기구 및 용기·포장의 기준 및 규격」에 적합한 잉크를 사용해야 합니다. 외면 인쇄도 잉크 이행성(set-off) 기준이 적용될 수 있으므로 공급사에 식품용 잉크 여부를 명확히 확인하세요. 식품 패키징 소재 전반은 <a href=\"/guides/food-packaging-materials\">식품 포장재 소재 가이드</a>를 참조하세요.",
+  },
+  {
+    question: "인쇄 납기를 단축하는 방법은 무엇인가요?",
+    answer:
+      "디자인 파일을 인쇄 규격(블리드·트리밍·색상 프로파일)에 맞게 미리 준비하면 교정 횟수가 줄어 납기가 단축됩니다. 연 단위 계약으로 롤 재고를 사전 확보하면 단납기 발주도 가능합니다.",
+  },
+];
+
 export default function PackagingPrintingGuidePage() {
   return (
-    <GuidePageShell>
+    <div className="-mx-5 sm:-mx-8 -mt-10 sm:-mt-14">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
@@ -105,7 +156,31 @@ export default function PackagingPrintingGuidePage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
       />
-      <main>
+      <GuideHero
+        tag="공정·인쇄 가이드"
+        title="포장 인쇄 종류·후가공 완전 가이드 — 옵셋·플렉소·그라비어·디지털 비교"
+        dateLabel="2026-05 업데이트"
+        readTime="8분 읽기"
+        category="공정·인쇄"
+        categoryHref="/guides"
+        tldr={slotTldr}
+      />
+      <div
+        className="max-w-screen-xl mx-auto px-5 sm:px-8 mt-10 grid gap-10 items-start"
+        style={{ gridTemplateColumns: "1fr 280px" }}
+      >
+        <article>
+          <GuideCallout variant="info" title="공정 선택 기준 요약">
+            수량 1만 매 미만이면 디지털 또는 플렉소, 이상이면 오프셋·그라비아가 일반적으로 유리합니다. 전환 전 반드시 공급사와 색상 프루프를 거치세요.
+          </GuideCallout>
+          <GuideCallout variant="warn" title="VOC·친환경 잉크 표시 주의">
+            친환경 마크 또는 저VOC 표시를 인쇄할 경우 공급사의 실제 인증서(발급 기관·인증 번호·유효 기간)를 반드시 원본으로 확인하세요. 미인증 표시는 표시광고법 위반 소지가 있습니다.
+          </GuideCallout>
+          <GuideCallout variant="tip" title="트리밍 손실 예산 포함">
+            인쇄 발주 시 트리밍·블리드 여백 손실을 5~10% 추가로 계산하세요. 소량 발주일수록 단가 차이가 큽니다.
+          </GuideCallout>
+          <GuideChecklist title="인쇄 발주 전 확정 항목" items={slotChecklist} />
+          <main>
         <h1>포장 인쇄 종류·후가공 완전 가이드 (2026년 최신판)</h1>
         <p>
           박스·라벨·연포장재를 발주할 때 인쇄 방식과 후가공 선택은 단가와 품질을 동시에 결정하는
@@ -516,55 +591,6 @@ export default function PackagingPrintingGuidePage() {
           </ul>
         </section>
 
-        <section>
-          <h2>자주 묻는 질문 (FAQ)</h2>
-
-          <div>
-            <h3>포장 인쇄 방식 중 소량 주문에 가장 적합한 것은 무엇인가요?</h3>
-            <p>
-              소량(500장 미만) 인쇄에는 디지털 인쇄가 가장 적합합니다. 판(plate) 제작 비용이 없고
-              납기가 1~3영업일로 짧습니다. 단, 장당 단가가 옵셋·플렉소보다 높아 수천 장 이상부터는
-              옵셋이나 플렉소를 검토하는 것이 경제적입니다.
-            </p>
-          </div>
-
-          <div>
-            <h3>유광 코팅과 무광 코팅은 어떤 차이가 있나요?</h3>
-            <p>
-              유광 코팅은 색상이 선명하고 광택이 높아 눈에 잘 띕니다. 무광 코팅은 반사가 없어
-              차분하고 고급스러운 분위기를 연출합니다. 식품·화장품 포장에서는 프리미엄 이미지를 위해
-              무광 코팅에 부분 UV를 결합하는 방식이 인기입니다.
-            </p>
-          </div>
-
-          <div>
-            <h3>식품 포장 인쇄 잉크에 규제가 있나요?</h3>
-            <p>
-              식품 접촉면에 직접 닿는 인쇄는 식약처 고시 기구 및 용기·포장의 기준 및 규격을
-              준수해야 합니다. 이행성(migration) 시험을 통과한 식품용 잉크를 사용해야 하며, 수성
-              잉크나 UV 경화형 잉크 중 식품 안전 인증 제품을 권장합니다.
-            </p>
-          </div>
-
-          <div>
-            <h3>금박·은박 후가공은 얼마나 비싼가요?</h3>
-            <p>
-              금박·은박(핫스탬핑)은 인쇄 단가의 30~80%가 추가됩니다. 박 면적이 클수록, 정밀도가
-              높을수록 단가가 올라갑니다. 소량 주문 시에는 디지털 금박 인쇄(골드 토너)로 대체해
-              비용을 절감할 수 있습니다.
-            </p>
-          </div>
-
-          <div>
-            <h3>인쇄 파일 제출 시 어떤 설정이 필요한가요?</h3>
-            <p>
-              블리드(재단 여유): 3~5mm, 해상도: 300dpi 이상, 컬러 모드: CMYK(RGB는 인쇄 시 색상
-              변환됨), 폰트: 윤곽선(아웃라인) 처리 필수입니다. 별색 사용 시 Pantone 번호를 명시하고,
-              업체에 따라 PDF/X-1a 또는 AI·PSD 원본 요청이 다를 수 있으므로 발주 전 확인하세요.
-            </p>
-          </div>
-        </section>
-
         <footer>
           <p>
             <em>
@@ -573,7 +599,28 @@ export default function PackagingPrintingGuidePage() {
             </em>
           </p>
         </footer>
-      </main>
-    </GuidePageShell>
+          </main>
+          <GuideFaq items={slotFaq} />
+          <GuideEndCta
+            headline="패키징 인쇄 공급사 찾기"
+            subtext="Packlinx에서 인쇄 공정별 패키징 공급사를 비교하세요"
+            buttonLabel="업체 비교하기 →"
+            href="/products/packaging-printing"
+          />
+        </article>
+        <GuideSidebar
+          ctaHeadline="패키징 인쇄 공급사 찾기"
+          ctaSubtext="Packlinx에서 인쇄 공정별 패키징 공급사를 비교하세요."
+          ctaButtonLabel="업체 찾기 →"
+          ctaHref="/products/packaging-printing"
+          relatedGuides={[
+            { href: "/guides/label-printing-guide", title: "라벨 인쇄 가이드", readTime: "5분" },
+            { href: "/guides/packaging-material-complete-guide", title: "패키징 소재 종합 가이드", readTime: "7분" },
+            { href: "/guides/eco-friendly-packaging", title: "친환경 패키징", readTime: "6분" },
+            { href: "/guides/flexible-packaging-guide", title: "연포장 가이드", readTime: "5분" },
+          ]}
+        />
+      </div>
+    </div>
   );
 }
