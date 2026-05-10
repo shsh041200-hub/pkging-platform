@@ -329,7 +329,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
             {!HIDE_ICON_CATEGORIES.has(categoryKey) && (
               <span className="text-[24px] leading-none flex-shrink-0">{icon}</span>
             )}
-            <h1 className="text-[20px] font-bold text-gray-900 leading-tight">
+            <h1 className="text-[20px] font-light text-[#061b31] leading-tight">
               {CATEGORY_H1_OVERRIDE[categoryKey] ?? `${label} 업체`}
             </h1>
             {heroCount != null && (
@@ -363,7 +363,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
             {companies.map((company) => (
               <article
                 key={company.id}
-                className="bg-white border border-gray-200 rounded-xl overflow-hidden hover:border-gray-300 hover:shadow-[0_8px_24px_rgba(0,0,0,0.08),0_2px_4px_rgba(0,0,0,0.04)] hover:-translate-y-px transition-all duration-200 group relative"
+                className="bg-white border border-[#e5edf5] rounded-xl overflow-hidden hover:border-[#533afd]/20 hover:shadow-[0_8px_24px_rgba(50,50,93,0.25),0_2px_4px_rgba(0,0,0,0.1)] hover:-translate-y-px transition-all duration-200 group relative"
               >
                 <div className="p-6">
                   <div className="flex items-start justify-between mb-3.5">
@@ -376,7 +376,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
                     </div>
                   </div>
 
-                  <h2 className="text-base font-bold text-gray-900 mb-1 leading-snug tracking-[-0.02em] line-clamp-1" title={company.name}>
+                  <h2 className="text-base font-bold text-[#061b31] mb-1 leading-snug tracking-[-0.02em] line-clamp-1" title={company.name}>
                     <Link
                       href={`/companies/${company.slug}`}
                       className="after:absolute after:inset-0 after:content-['']"
@@ -394,7 +394,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
                       {(company.service_capabilities as string[] | null)?.length! > 0 && (
                         <div className="flex flex-wrap gap-1 mb-1">
                           {(company.service_capabilities as string[]).slice(0, 3).map((cap, i) => (
-                            <span key={i} className="text-[11px] font-medium bg-[#EFF6FF] text-[#2563EB] px-2 py-0.5 rounded">
+                            <span key={i} className="text-[11px] font-medium bg-[rgba(83,58,253,0.06)] text-[#533afd] px-2 py-0.5 rounded">
                               {cap}
                             </span>
                           ))}
@@ -473,7 +473,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
         <section className="max-w-7xl mx-auto px-5 sm:px-8 pb-12">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-[13px] font-semibold text-gray-400 uppercase tracking-wider">관련 가이드</h2>
-            <Link href="/guides" className="text-[12px] text-[#2563EB] hover:text-[#1D4ED8] font-medium transition-colors">
+            <Link href="/guides" className="text-[12px] text-[#533afd] hover:text-[#4434d4] font-medium transition-colors">
               가이드 전체 보기 →
             </Link>
           </div>
@@ -482,14 +482,14 @@ export default async function CategoryPage({ params, searchParams }: Props) {
               <Link
                 key={post.id}
                 href={`/guides/${post.slug}`}
-                className="bg-white border border-gray-200 rounded-xl p-5 hover:border-gray-300 hover:shadow-sm transition-all group"
+                className="bg-white border border-[#e5edf5] rounded-xl p-5 hover:border-[#533afd]/30 hover:shadow-[0_4px_12px_rgba(50,50,93,0.15)] transition-all group"
               >
                 <p className="text-[11px] text-gray-400 mb-2">
                   {post.published_at
                     ? new Date(post.published_at).toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' })
                     : ''}
                 </p>
-                <h3 className="text-[14px] font-semibold text-gray-900 leading-snug mb-2 line-clamp-2 group-hover:text-[#C2410C] transition-colors">
+                <h3 className="text-[14px] font-semibold text-gray-900 leading-snug mb-2 line-clamp-2 group-hover:text-[#533afd] transition-colors">
                   {post.title}
                 </h3>
                 {post.excerpt && (
@@ -509,7 +509,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
             <Link
               key={key}
               href={`/categories/${key}`}
-              className="inline-flex items-center gap-2 text-[13px] font-medium text-gray-700 bg-white border border-gray-200 hover:border-[#C2410C] hover:text-[#C2410C] px-4 py-2 rounded-xl transition-all shadow-sm"
+              className="inline-flex items-center gap-2 text-[13px] font-medium text-gray-700 bg-white border border-[#e5edf5] hover:border-[#533afd] hover:text-[#533afd] px-4 py-2 rounded-xl transition-all shadow-sm"
             >
               <span className="text-base">{INDUSTRY_CATEGORY_ICONS[key]}</span>
               <span>{INDUSTRY_CATEGORY_LABELS[key]}</span>
