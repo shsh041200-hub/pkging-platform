@@ -685,6 +685,11 @@ export default function PackagingAccessoriesGuidePage() {
               </Link>
             </li>
             <li>
+              <Link href="/guides/electronics-packaging-design">
+                전자제품 패키징 디자인 가이드 — ESD 방지·완충재·인증 마크
+              </Link>
+            </li>
+            <li>
               <Link href="/guides/plastic-container-guide">
                 플라스틱 용기·병 종류 완전 가이드 — PET·PP·HDPE 소재 선택 + 식약처 기준
               </Link>

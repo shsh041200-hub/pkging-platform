@@ -634,6 +634,11 @@ export default function GlassMetalContainerGuidePage() {
               </Link>
             </li>
             <li>
+              <Link href="/guides/food-packaging-materials">
+                식품 패키징 소재 가이드 — 기준 및 규격·소재 선택·이행성 시험
+              </Link>
+            </li>
+            <li>
               <Link href="/guides/flexible-packaging-guide">
                 연포장재 완전 가이드 — 종류·소재·선택 기준
               </Link>
