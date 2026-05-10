@@ -30,6 +30,7 @@ const GUIDES: Record<DynamicGuideSlug, GuideContent> = {
     description:
       "식품 포장재에 적합한 소재 선택 기준, 위생 규제, 용도별 추천 소재를 정리합니다. Packlinx에서 검증된 식품 포장 업체를 비교해보세요.",
     datePublished: "2026-05-01",
+    redesignVersion: 1,
     body: <FoodPackagingMaterialsContent />,
   },
   "eco-friendly-packaging": {
@@ -77,6 +78,7 @@ const GUIDES: Record<DynamicGuideSlug, GuideContent> = {
     description:
       "화장품 박스 구조(싸바리·접이식), MOQ, 후가공(금박·코팅), 법정 표시 의무를 정리합니다.",
     datePublished: "2026-05-01",
+    redesignVersion: 1,
     body: <CosmeticPackagingBoxContent />,
   },
   "electronics-packaging-design": {
@@ -84,6 +86,7 @@ const GUIDES: Record<DynamicGuideSlug, GuideContent> = {
     description:
       "전자제품 택배 파손 원인, 완충재 소재(EPE·EPP·EPS), ECT 기준, ISTA 인증 요건을 정리합니다.",
     datePublished: "2026-05-01",
+    redesignVersion: 1,
     body: <ElectronicsPackagingDesignContent />,
   },
   "packaging-material-complete-guide": {
@@ -123,6 +126,22 @@ const GUIDES: Record<DynamicGuideSlug, GuideContent> = {
       "2026년 한국 포장재 시장의 5대 트렌드 — EPR 강화, 스마트 패키징 도입, 소량·맞춤 수요 증가, 단가 상승 대응, 이커머스 전용 설계 — 를 데이터 기반으로 분석합니다.",
     datePublished: "2026-05-07",
     body: <KoreaPackagingTrends2026Content />,
+  },
+  "glass-metal-container-guide": {
+    title: "유리·금속 용기 완전 가이드 — 종류·소재·MOQ·인쇄 옵션 비교 (2026)",
+    description:
+      "유리 용기(갈색·투명·청색, 병·단지·바이알)와 금속 캔(알루미늄·TFS·양철) 종류 비교, 식품·화장품·의약품별 선택 기준, B2B 구매 결정 비교표, MOQ·커스텀 성형 비용, 슈링크 라벨·직접 인쇄 옵션을 한곳에 정리했습니다.",
+    datePublished: "2026-05-01",
+    redesignVersion: 1,
+    body: null,
+  },
+  "packaging-accessories-guide": {
+    title: "포장 부자재 종류 완전 가이드 — 완충재·테이프·충전재 비교 + 환경 규제 (2026)",
+    description:
+      "에어캡(뽁뽁이)·EPE 폼·종이 완충재 등 완충재 종류, OPP·천·보안 테이프 선택 기준, 허니컴·우드울 충전재, 과대포장 환경 규제 대응, B2B 대량구매 단가 기준을 한곳에 정리했습니다.",
+    datePublished: "2026-05-01",
+    redesignVersion: 1,
+    body: null,
   },
 };
 
@@ -220,6 +239,21 @@ function GuideV1Page({
   }
   if (slug === "packaging-material-complete-guide") {
     return <GuideSlotV1Page guide={guide} data={SLOT_DATA_PACKAGING_MATERIAL} />;
+  }
+  if (slug === "food-packaging-materials") {
+    return <GuideSlotV1Page guide={guide} data={SLOT_DATA_FOOD_PACKAGING} />;
+  }
+  if (slug === "cosmetic-packaging-box") {
+    return <GuideSlotV1Page guide={guide} data={SLOT_DATA_COSMETIC_BOX} />;
+  }
+  if (slug === "electronics-packaging-design") {
+    return <GuideSlotV1Page guide={guide} data={SLOT_DATA_ELECTRONICS_PACKAGING} />;
+  }
+  if (slug === "glass-metal-container-guide") {
+    return <GuideSlotV1Page guide={guide} data={SLOT_DATA_GLASS_METAL} />;
+  }
+  if (slug === "packaging-accessories-guide") {
+    return <GuideSlotV1Page guide={guide} data={SLOT_DATA_PACKAGING_ACCESSORIES} />;
   }
   // Fallback to prose template for any other redesign-flagged guide
   return (
@@ -3549,5 +3583,440 @@ const SLOT_DATA_PACKAGING_MATERIAL: SlotData = {
     subtext: "골판지·단프라·연포장 업체, 소재·MOQ·납기 조건으로 필터 비교",
     buttonLabel: "업체 비교하기 →",
     href: "/products/box",
+  },
+};
+
+// ─── Slot data — food-packaging-materials ─────────────────────────────────────
+
+const SLOT_DATA_FOOD_PACKAGING: SlotData = {
+  heroTag: "소재·산업별 · 식품 패키징",
+  heroDateLabel: "2026-05 업데이트",
+  heroReadTime: "5분 읽기",
+  tldr: [
+    {
+      bold: "식품 접촉 소재 적합성",
+      text: "— 식약처 「기구 및 용기·포장의 기준 및 규격」 적합 여부를 반드시 확인해야 합니다.",
+    },
+    {
+      bold: "이행성 시험 항목 파악",
+      text: "— 소재 선택 전 내용물의 pH·지방 함량·충진 온도를 기준으로 이행성 시험 항목을 파악하세요.",
+    },
+    {
+      bold: "소재 조합 설계",
+      text: "— 종이·플라스틱·금속·유리 소재별 특성을 비교해 최적 패키징 조합을 설계하세요.",
+    },
+  ],
+  callouts: [
+    {
+      variant: "info",
+      title: "이행성 시험 성적서 수령 권장",
+      body: "식품 접촉 소재는 납·카드뮴·총용출량 등 식약처 규정 항목에 대한 이행성 시험 성적서를 제조사로부터 수령하는 것이 권장됩니다.",
+    },
+    {
+      variant: "warn",
+      title: "\"식품 등급\" 표기만으로는 불충분",
+      body: "\"식품 등급(Food Grade)\" 표기만으로는 법적 요건을 충족하지 않을 수 있습니다. 반드시 시험 성적서와 함께 규격 적합 여부를 확인하세요.",
+    },
+    {
+      variant: "tip",
+      title: "고온 충진 시 내열 소재 선택",
+      body: "고온 충진(레토르트·UHT)에는 일반 PE 대신 내열성 PP 또는 레토르트 파우치 전용 소재를 선택하면 변형 리스크를 낮출 수 있습니다.",
+    },
+  ],
+  checklistTitle: "소재 선택 전 확정 항목",
+  checklist: [
+    "식약처 「기구 및 용기·포장의 기준 및 규격」 최신 고시 버전 확인",
+    "내용물 특성(pH, 알코올 함량, 지방 함량, 충진 온도)에 따른 이행성 시험 항목 파악",
+    "제조사로부터 이행성 시험 성적서 수령 여부 확인",
+    "소재 조합(내층·중층·외층) 설계 후 기능성 검증",
+    "폐기물관리법에 따른 재활용 가능 소재 여부 사전 검토",
+  ],
+  faq: [
+    {
+      question: "식품 패키징에 사용 가능한 소재는 어떻게 확인하나요?",
+      answer:
+        '식약처 「기구 및 용기·포장의 기준 및 규격」 고시를 확인하세요. 플라스틱·금속·종이·유리 등 소재별 허용 물질과 이행성 시험 기준이 수록되어 있습니다.',
+    },
+    {
+      question: "PP와 PE의 식품 포장 적합성 차이는 무엇인가요?",
+      answer:
+        "PP는 내열성(약 120~140°C)이 PE보다 높아 레토르트·전자레인지용 용기에 적합합니다. PE는 저온(-20°C 이하)에서의 유연성이 우수해 냉동 식품 포장에 많이 사용됩니다.",
+    },
+    {
+      question: "친환경 식품 포장재로 전환 시 주의할 점은 무엇인가요?",
+      answer:
+        '생분해 소재도 식품 접촉 기준 적합성이 요구됩니다. 퇴비화 가능(compostable) 소재는 별도 인증을 확인하고, 내수성·차단성 기능을 기존 소재와 비교 검토하세요.',
+    },
+    {
+      question: "레토르트 파우치와 캔 중 비용 효율이 높은 것은 무엇인가요?",
+      answer:
+        "소량(5만 개 미만)에서는 레토르트 파우치가 초기 금형비 없이 제작 가능해 유리합니다. 대량(수백만 개)에서는 캔이 단가 면에서 경쟁력이 있습니다.",
+    },
+    {
+      question: "식품 패키징 인쇄 시 잉크 소재 관련 주의 사항이 있나요?",
+      answer:
+        "식품 접촉면 인쇄는 이행성 기준을 만족해야 합니다. 외면 인쇄라도 잉크 이행(set-off) 가능성이 있어 제조사에 식품 접촉 용도 잉크 사용 여부를 확인하는 것이 권장됩니다.",
+    },
+  ],
+  sidebar: {
+    ctaHeadline: "식품 패키징 소재 업체 찾기",
+    ctaSubtext: "식품 패키징 소재 공급사를 Packlinx에서 확인하세요.",
+    ctaButtonLabel: "업체 비교하기 →",
+    ctaHref: "/products/food-packaging",
+    relatedGuides: [
+      { href: "/guides/packaging-material-complete-guide", title: "패키징 소재 종합 가이드", readTime: "6분" },
+      { href: "/guides/glass-metal-container-guide", title: "유리·금속 용기 가이드", readTime: "5분" },
+      { href: "/guides/eco-friendly-packaging", title: "친환경 포장재 가이드", readTime: "6분" },
+      { href: "/guides/flexible-packaging-guide", title: "연포장 파우치·필름 가이드", readTime: "5분" },
+    ],
+  },
+  endCta: {
+    headline: "식품 패키징 소재 업체 찾기",
+    subtext: "식품 패키징 소재 공급사를 Packlinx에서 확인하세요",
+    buttonLabel: "업체 비교하기 →",
+    href: "/products/food-packaging",
+  },
+};
+
+// ─── Slot data — cosmetic-packaging-box ──────────────────────────────────────
+
+const SLOT_DATA_COSMETIC_BOX: SlotData = {
+  heroTag: "소재·산업별 · 화장품 패키징",
+  heroDateLabel: "2026-05 업데이트",
+  heroReadTime: "5분 읽기",
+  tldr: [
+    {
+      bold: "화장품법 §10 필수 기재",
+      text: "— 명칭·영업자 정보·제조번호·사용기한 또는 개봉 후 사용기간·전성분·사용할 때의 주의사항 등을 외장 박스에 표시해야 합니다. 단, 소용량(50mL/50g 이하)은 일부 항목이 면제될 수 있습니다.",
+    },
+    {
+      bold: "소재·화학 반응성 동시 검토",
+      text: "— 소재 선택 시 고급감과 차광성뿐 아니라 내용물과의 화학적 반응성(탈색·변형)을 함께 검토하세요.",
+    },
+    {
+      bold: "과대 포장 규제",
+      text: "— 2차 포장 공간 15% 이내 기준 준수 여부를 설계 단계에서 확인하세요.",
+    },
+  ],
+  callouts: [
+    {
+      variant: "info",
+      title: "화장품법 §10 필수 기재 사항",
+      body: "화장품 외장 박스에는 명칭·제조번호·사용기한 또는 개봉 후 사용기간·전성분·사용할 때의 주의사항 등을 기재해야 합니다 (화장품법 §10).",
+    },
+    {
+      variant: "warn",
+      title: "재활용 표기 시 단정 표현 지양",
+      body: "재활용 표기 시 \"처분됩니다\"와 같은 단정적 표현은 피하고, \"처분이 가능합니다\" 등 가능성 어조를 사용하세요 (환경부 분리배출 표시 지침 참고).",
+    },
+    {
+      variant: "tip",
+      title: "디자인 시스템 명문화로 생산 오류 감소",
+      body: "마스터 디자인 시스템(색상 코드·폰트·로고 여백 규칙)을 패키징 사양서에 명문화하면 생산 변경 시 비용과 오류를 줄일 수 있습니다.",
+    },
+  ],
+  checklistTitle: "발주 전 확정 항목",
+  checklist: [
+    "화장품법 §10 필수 기재 항목 전체 체크 (명칭·제조번호·사용기한 또는 개봉 후 사용기간·전성분·사용할 때의 주의사항·영업자 정보 등)",
+    "과대 포장 규제 기준 충족 여부 확인 (2차 포장 빈 공간 15% 이내)",
+    "소재 내광성·내수성 테스트 계획 수립 (자외선 노출 진열 환경 고려)",
+    "인쇄 색상 실물 교정(컬러 프루프) 진행 후 디지털 시안과 색차(ΔE) 확인",
+    "샘플 조립 후 내용물 취출 용이성 및 내부 충격 방지재 설계 검증",
+  ],
+  faq: [
+    {
+      question: "화장품 박스에 반드시 기재해야 할 사항은 무엇인가요?",
+      answer:
+        "화장품법 §10에 따라 명칭, 제조번호, 사용기한 또는 개봉 후 사용기간, 전성분, 사용할 때의 주의사항, 제조업자 및 수입업자 정보, 내용량 등을 기재해야 합니다. 단, 소용량(50mL/50g 이하) 화장품은 시행규칙에 따라 일부 항목 표시가 면제될 수 있습니다.",
+    },
+    {
+      question: "화장품 박스 소재로 가장 많이 사용되는 것은 무엇인가요?",
+      answer:
+        "아트지(코팅지)·크라프트지·마이크로플루트 골판지가 가장 많이 사용됩니다. 고급 라인에는 특수 지류(감압지·레인보우 박) 또는 리지드 박스가 활용됩니다.",
+    },
+    {
+      question: "화장품 박스 과대 포장 기준은 어떻게 되나요?",
+      answer:
+        "화장품류 2차 포장의 포장 공간 비율은 내용물 부피 대비 15% 이하, 포장 횟수는 2차 이내가 기준입니다 (「제품의 포장재질·포장방법에 관한 기준 등에 관한 규칙」 별표).",
+    },
+    {
+      question: "친환경 화장품 박스로 전환하려면 어떻게 해야 하나요?",
+      answer:
+        "FSC 인증 종이·재생 판지 사용, 수성 코팅·콩기름 잉크 적용, 열접착 대신 풀 부착 방식으로 분리 배출을 용이하게 설계하는 것이 기본입니다. 전환 전 현 공급업체와 단가 차이를 먼저 확인하세요.",
+    },
+  ],
+  sidebar: {
+    ctaHeadline: "화장품 박스 공급사 찾기",
+    ctaSubtext: "화장품 박스 공급사를 Packlinx에서 비교하세요.",
+    ctaButtonLabel: "업체 비교하기 →",
+    ctaHref: "/products/cosmetic-packaging",
+    relatedGuides: [
+      { href: "/guides/packaging-material-complete-guide", title: "패키징 소재 종합 가이드", readTime: "6분" },
+      { href: "/guides/glass-metal-container-guide", title: "유리·금속 용기 가이드", readTime: "5분" },
+      { href: "/guides/label-printing-guide", title: "라벨 인쇄 가이드", readTime: "5분" },
+      { href: "/guides/eco-friendly-packaging", title: "친환경 포장재 가이드", readTime: "6분" },
+    ],
+  },
+  endCta: {
+    headline: "화장품 박스 공급사 찾기",
+    subtext: "화장품 박스 공급사를 Packlinx에서 비교하세요",
+    buttonLabel: "업체 비교하기 →",
+    href: "/products/cosmetic-packaging",
+  },
+};
+
+// ─── Slot data — electronics-packaging-design ────────────────────────────────
+
+const SLOT_DATA_ELECTRONICS_PACKAGING: SlotData = {
+  heroTag: "소재·산업별 · 전자제품 패키징",
+  heroDateLabel: "2026-05 업데이트",
+  heroReadTime: "5분 읽기",
+  tldr: [
+    {
+      bold: "ESD·충격 흡수가 핵심",
+      text: "— 전자제품 패키징은 정전기 방지(ESD)와 충격 흡수가 핵심 설계 요소입니다.",
+    },
+    {
+      bold: "KC·CE·FCC 인증 마크",
+      text: "— 안전 인증 마크 부착 요건은 제조사 및 수입업자가 보유 여부를 확인해야 합니다.",
+    },
+    {
+      bold: "내장재 선택 기준",
+      text: "— PE폼·EPE·EPP·클램쉘은 제품 무게·취약 부위·낙하 높이 기준으로 결정하세요.",
+    },
+  ],
+  callouts: [
+    {
+      variant: "info",
+      title: "G값 테스트 기반 완충재 설계",
+      body: "완충재 두께는 낙하 높이별 G값(충격 가속도) 테스트를 기반으로 설계하면 운송 중 클레임을 줄일 수 있습니다.",
+    },
+    {
+      variant: "warn",
+      title: "ESD 소재 미적용 시 부품 손상 위험",
+      body: "ESD(정전기 방지) 포장 소재 미적용 시 반도체·PCB 손상이 발생할 수 있습니다. 민감 부품에는 반드시 방전 소재(핑크 폴리백, 실드백)를 사용하세요.",
+    },
+    {
+      variant: "tip",
+      title: "인증 마크 중복 표기 여부 조기 결정",
+      body: "인증 마크(KC·CE·FCC) 인쇄는 제품 본체에 부착되는 경우도 많으므로, 외박스 중복 표기 여부를 설계 초기에 결정하면 오표기 리스크를 줄일 수 있습니다.",
+    },
+  ],
+  checklistTitle: "발주 전 확정 항목",
+  checklist: [
+    "제품 취약 부위(스크린·커넥터·배터리) 기준 내장재 충격 흡수 구조 설계",
+    "ESD 민감 부품 해당 여부 확인 및 방전 소재 적용 계획 수립",
+    "KC·CE·FCC 등 인증 마크 보유 여부를 제조사에서 확인하고 표기 위치 결정",
+    "낙하 테스트(ISTA 1A 또는 ASTM D5276 기준) 및 진동 테스트 계획 수립",
+    "유통 경로(항공·해운·국내 택배)별 포장 등급 및 라벨링 요건 파악",
+  ],
+  faq: [
+    {
+      question: "전자제품 패키징 설계 시 가장 중요한 기준은 무엇인가요?",
+      answer:
+        "낙하 충격 흡수 성능과 ESD 방지가 가장 중요합니다. ISTA 또는 ASTM 기준에 따른 낙하·압축·진동 테스트를 통해 패키징 적합성을 검증하는 것이 권장됩니다.",
+    },
+    {
+      question: "EPE와 EPP 완충재 중 어느 것이 더 적합한가요?",
+      answer:
+        "EPE는 유연성이 높아 형상이 복잡한 제품에, EPP는 복원력이 뛰어나 반복 재사용이 필요한 B2B 리패키징에 적합합니다. 제품 무게와 취약 부위를 기준으로 선택하세요.",
+    },
+    {
+      question: "KC 인증 마크를 외박스에 표기해야 하나요?",
+      answer:
+        "KC 인증 마크 부착 의무는 제품 본체에 있으며, 외박스 표기 여부는 제품별 고시를 확인하는 것이 필요합니다. 인증 마크 보유 여부는 제조사 또는 수입업자에서 확인하세요.",
+    },
+    {
+      question: "글로벌 배송을 위한 전자제품 패키징 등급은 어떻게 선택하나요?",
+      answer:
+        "ISTA 2A(멀티 기후·항공 화물용) 또는 3A(완전한 유통 사이클 시뮬레이션)를 목표로 설계하면 국내외 유통 대응 범위가 넓어집니다. 항공 운송에는 배터리 관련 IATA 위험물 규정도 함께 확인하세요.",
+    },
+  ],
+  sidebar: {
+    ctaHeadline: "전자제품 포장 업체 찾기",
+    ctaSubtext: "Packlinx에서 ESD·완충재 취급 포장 공급사를 비교하세요.",
+    ctaButtonLabel: "업체 비교하기 →",
+    ctaHref: "/products/electronics-packaging",
+    relatedGuides: [
+      { href: "/guides/packaging-material-complete-guide", title: "패키징 소재 종합 가이드", readTime: "6분" },
+      { href: "/guides/packaging-accessories-guide", title: "포장 부자재 가이드", readTime: "5분" },
+      { href: "/guides/corrugated-flute-types", title: "골판지 플루트 종류 가이드", readTime: "5분" },
+      { href: "/guides/shipping-box-pricing", title: "배송 박스 가격 가이드", readTime: "5분" },
+    ],
+  },
+  endCta: {
+    headline: "전자제품 포장 업체 찾기",
+    subtext: "Packlinx에서 ESD·완충재 취급 포장 공급사를 비교하세요",
+    buttonLabel: "업체 비교하기 →",
+    href: "/products/electronics-packaging",
+  },
+};
+
+// ─── Slot data — glass-metal-container-guide ─────────────────────────────────
+
+const SLOT_DATA_GLASS_METAL: SlotData = {
+  heroTag: "소재·산업별 · 유리·금속 용기",
+  heroDateLabel: "2026-05 업데이트",
+  heroReadTime: "5분 읽기",
+  tldr: [
+    {
+      bold: "유리 용기",
+      text: "— 화학적 안정성과 고급감이 높아 식품·화장품·의약품 포장에 적합합니다.",
+    },
+    {
+      bold: "금속 캔",
+      text: "— 기밀성과 차광성이 우수해 장기 보존 식품에 가장 많이 활용됩니다.",
+    },
+    {
+      bold: "소재 선택 순서",
+      text: "— 내용물 특성·충진 방식·관련 법규 요건을 동시에 검토하세요.",
+    },
+  ],
+  callouts: [
+    {
+      variant: "info",
+      title: "유리 용기 운송 충격 대비 필수",
+      body: "유리 용기는 열·화학물질에 강하지만 무게가 무겁고 파손 위험이 있어 운송용 완충재 설계가 반드시 필요합니다.",
+    },
+    {
+      variant: "warn",
+      title: "금속 캔 산성 내용물 내면 코팅 확인",
+      body: "금속 캔에 산성 내용물(과일류, 식초 음료)을 담을 경우 내면 코팅 규격(BPA-free 여부)을 제조사에 명시 요청하세요.",
+    },
+    {
+      variant: "tip",
+      title: "라벨 면적 최소화로 재활용률 향상",
+      body: "유리 용기 재활용률을 높이려면 라벨 접착 면적을 30% 이하로 설계하여 색상별 분리 배출이 용이하도록 하세요.",
+    },
+  ],
+  checklistTitle: "발주 전 확정 항목",
+  checklist: [
+    "내용물 성상(pH, 온도, 지방 함량) 확인 후 소재 적합성 검토",
+    "제조사 규격서에서 내면 코팅·내열 온도·압력 사양 수령",
+    "식품 접촉 소재 기준 적합 여부 확인 (식약처 고시 기준 해당 시)",
+    "운송 충격 시험(drop test·vibration test) 계획 수립",
+    "공급업체 MOQ·리드타임·샘플 수령 일정 확인",
+  ],
+  faq: [
+    {
+      question: "유리 용기와 금속 캔 중 식품 보존에 더 적합한 것은 무엇인가요?",
+      answer:
+        "내용물 특성에 따라 다릅니다. 산소 차단이 중요한 음료·소스류는 금속 캔이, 이취 흡수 없이 원향을 유지해야 하는 고급 식품·화장품은 유리 용기가 유리합니다.",
+    },
+    {
+      question: "유리 용기의 내열성은 어느 정도인가요?",
+      answer:
+        "일반 소다석회 유리는 약 150°C, 붕규산 유리(파이렉스 계열)는 300°C 이상의 급격한 온도 변화를 견딥니다. 레토르트 충진에는 내열 규격 확인이 필수입니다.",
+    },
+    {
+      question: "금속 캔 내면 코팅의 주요 종류는 무엇인가요?",
+      answer:
+        "에폭시·아크릴·폴리에스터 코팅이 주로 사용됩니다. 최근 식품 업계에서는 BPA-free 아크릴 코팅이 표준으로 자리 잡는 추세입니다.",
+    },
+    {
+      question: "유리·금속 용기 최소 발주 수량(MOQ)은 어느 정도인가요?",
+      answer:
+        "유리 용기는 통상 5,000~10,000개, 금속 캔은 10,000개 이상이 일반적입니다. 소량이라면 재고 용기 구매 또는 공용 금형 활용을 검토하세요.",
+    },
+  ],
+  sidebar: {
+    ctaHeadline: "유리·금속 용기 공급사 찾기",
+    ctaSubtext: "Packlinx에서 유리·금속 용기 공급사를 한 번에 비교하세요.",
+    ctaButtonLabel: "업체 비교하기 →",
+    ctaHref: "/products/glass-metal-container",
+    relatedGuides: [
+      { href: "/guides/packaging-material-complete-guide", title: "패키징 소재 종합 가이드", readTime: "6분" },
+      { href: "/guides/food-packaging-materials", title: "식품 패키징 소재 가이드", readTime: "5분" },
+      { href: "/guides/eco-friendly-packaging", title: "친환경 포장재 가이드", readTime: "6분" },
+      { href: "/guides/plastic-container-guide", title: "플라스틱 용기 가이드", readTime: "5분" },
+    ],
+  },
+  endCta: {
+    headline: "유리·금속 용기 공급사 찾기",
+    subtext: "Packlinx에서 유리·금속 용기 공급사를 한 번에 비교하세요",
+    buttonLabel: "업체 비교하기 →",
+    href: "/products/glass-metal-container",
+  },
+};
+
+// ─── Slot data — packaging-accessories-guide ─────────────────────────────────
+
+const SLOT_DATA_PACKAGING_ACCESSORIES: SlotData = {
+  heroTag: "소재·산업별 · 포장 부자재",
+  heroDateLabel: "2026-05 업데이트",
+  heroReadTime: "5분 읽기",
+  tldr: [
+    {
+      bold: "포장 부자재",
+      text: "— 완충재·테이프·스트레치 필름·끈 등 제품 포장을 완성하는 보조 소재 전반을 의미합니다.",
+    },
+    {
+      bold: "규격 선정 기준",
+      text: "— 제품 무게·배송 방식·보관 환경(온습도)에 맞춘 규격을 선정해야 합니다.",
+    },
+    {
+      bold: "공급 안정성 확보",
+      text: "— 핵심 부자재는 복수 공급처를 유지하는 것이 리스크 관리에 유리합니다.",
+    },
+  ],
+  callouts: [
+    {
+      variant: "info",
+      title: "스트레치 필름 규격은 공급사에 문의",
+      body: "스트레치 필름은 두께(10~30μm)와 신장률(200~400%)에 따라 팔레타이징 효율이 크게 달라집니다. 제품 무게와 스택 높이에 맞는 규격을 공급사에 문의하세요.",
+    },
+    {
+      variant: "warn",
+      title: "저온 환경엔 저온용 테이프 사용",
+      body: "OPP 테이프는 저온 환경(-5°C 이하)에서 접착력이 급격히 저하됩니다. 냉동·냉장 물류에는 저온용 테이프(아크릴 또는 핫멜트 저온 사양)를 선택하세요.",
+    },
+    {
+      variant: "tip",
+      title: "에어백으로 보관 공간 절약",
+      body: "완충 에어백(Air Pillow)은 EPS 폼 대비 부피가 1/10 수준으로 보관 공간을 크게 절약할 수 있습니다. 소형 전자제품·잡화 배송에 도입을 검토해 보세요.",
+    },
+  ],
+  checklistTitle: "발주 전 확정 항목",
+  checklist: [
+    "주요 부자재(테이프·완충재·스트레치 필름·코너 보호재) 종류별 현재 사용 규격 목록화",
+    "배송 경로(택배·화물·항공)별 부자재 요건 파악 및 표준화",
+    "보관 환경(온습도·UV 노출) 기준 테이프·필름 접착력 유지 기간 확인",
+    "핵심 부자재 공급업체 복수화 계획 수립 (최소 2개 업체 이상)",
+    "연간 소비량 기반 LOT 발주 vs. 단건 발주 비용 비교 분석",
+  ],
+  faq: [
+    {
+      question: "국내 물류 현장에서 가장 많이 쓰이는 포장 부자재는 무엇인가요?",
+      answer:
+        "OPP 테이프·PE 완충 에어백·에어캡(버블랩)·코너 보호대·스트레치 필름·PP 끈이 가장 빈번하게 사용됩니다.",
+    },
+    {
+      question: "친환경 부자재로 전환 시 어떤 제품을 검토해야 하나요?",
+      answer:
+        "종이 테이프(water-activated tape)·재생 에어캡·옥수수 전분 완충재(PLA 기반)·FSC 인증 코너 보호재가 대표적입니다. 기능성(접착력·강도)과 단가를 기존 제품과 비교 후 단계적으로 전환하세요.",
+    },
+    {
+      question: "스트레치 필름 구매 시 확인해야 할 스펙은 무엇인가요?",
+      answer:
+        "두께(μm)·신장률(%)·인장 강도(N/mm²)·롤 중량(kg)과 함께, 핸드 랩 vs. 기계용 구분과 코어 사이즈(76mm/150mm)를 반드시 확인하세요.",
+    },
+  ],
+  sidebar: {
+    ctaHeadline: "포장 부자재 공급사 찾기",
+    ctaSubtext: "테이프·완충재·필름 취급 업체를 Packlinx에서 비교하세요.",
+    ctaButtonLabel: "업체 비교하기 →",
+    ctaHref: "/products/packaging-accessories",
+    relatedGuides: [
+      { href: "/guides/corrugated-flute-types", title: "골판지 플루트 종류 가이드", readTime: "5분" },
+      { href: "/guides/electronics-packaging-design", title: "전자제품 패키징 디자인 가이드", readTime: "5분" },
+      { href: "/guides/shipping-box-pricing", title: "배송 박스 가격 가이드", readTime: "5분" },
+      { href: "/guides/small-quantity-custom-box", title: "소량 맞춤 박스 가이드", readTime: "5분" },
+    ],
+  },
+  endCta: {
+    headline: "포장 부자재 공급사 찾기",
+    subtext: "테이프·완충재·필름 취급 업체를 Packlinx에서 비교하세요",
+    buttonLabel: "업체 비교하기 →",
+    href: "/products/packaging-accessories",
   },
 };
