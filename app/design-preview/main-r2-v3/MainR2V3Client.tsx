@@ -238,7 +238,7 @@ export default function MainR2V3Client() {
           {/* Slim hero */}
           <section className="mb-8">
             <h1 className="text-[28px] sm:text-[36px] font-light text-heading-deep-navy leading-[1.15] tracking-[-0.8px] mb-3">
-              패키징 업체 디렉토리
+              패키징 업체 검색 플랫폼
             </h1>
             <div className="flex flex-col sm:flex-row gap-3 sm:items-center mb-3">
               <div className="flex gap-0 flex-1 max-w-lg">
@@ -255,7 +255,7 @@ export default function MainR2V3Client() {
                 </button>
               </div>
               <p className="text-[13px] text-body-secondary">
-                사업자등록번호 검증된 업체 포함 · <span className="font-semibold text-heading-deep-navy">1,380개</span> 등록
+                <span className="font-semibold text-heading-deep-navy">1,380개</span> 등록
               </p>
             </div>
           </section>

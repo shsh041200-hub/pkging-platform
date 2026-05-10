@@ -153,7 +153,7 @@ export default function MainR2V2Page() {
                 어떻게 검증하나요?
               </h3>
               <p className="text-[12px] text-body-secondary leading-relaxed flex-1">
-                사업자등록번호 검증된 업체 포함. 공개된 출처에서 자동 수집 후 확인.
+                공개된 출처에서 자동 수집 후 확인.
               </p>
               <Link
                 href="/guides/packaging-vendor-selection"

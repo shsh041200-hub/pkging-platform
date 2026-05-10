@@ -87,7 +87,7 @@ export default function MainR2V1Page() {
                 한 곳에서 찾으세요
               </h1>
               <p className="text-[16px] sm:text-[18px] text-body-secondary leading-relaxed mb-8 max-w-lg">
-                사업자등록번호 검증된 업체 포함. 식품·이커머스·화장품·의약·전자 전 분야.
+                식품·이커머스·화장품·의약·전자 전 분야.
               </p>
 
               {/* Search bar inline */}
