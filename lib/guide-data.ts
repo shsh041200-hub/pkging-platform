@@ -13,8 +13,6 @@ export const STATIC_GUIDE_SLUGS = [
   "label-printing-guide",
   "flexible-packaging-guide",
   "plastic-container-guide",
-  "packaging-printing-guide",
-  "packaging-machinery-guide",
 ] as const;
 export type StaticGuideSlug = (typeof STATIC_GUIDE_SLUGS)[number];
 
@@ -35,6 +33,8 @@ export const DYNAMIC_GUIDE_SLUGS = [
   "2026-korea-packaging-trends",
   "glass-metal-container-guide",
   "packaging-accessories-guide",
+  "packaging-printing-guide",
+  "packaging-machinery-guide",
 ] as const;
 export type DynamicGuideSlug = (typeof DYNAMIC_GUIDE_SLUGS)[number];
 

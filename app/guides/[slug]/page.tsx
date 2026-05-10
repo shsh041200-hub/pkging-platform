@@ -101,8 +101,9 @@ const GUIDES: Record<DynamicGuideSlug, GuideContent> = {
     title: "포장 테이프 완전 비교 가이드 — OPP·크라프트·무소음 테이프",
     description:
       "OPP 아크릴·핫멜트·크라프트·무소음 테이프의 점착력·내열·내한성 차이와 용도별 선택 기준을 정리합니다.",
-    datePublished: "2026-05-01",
-    body: <PackagingTapeComparisonContent />,
+    datePublished: "2026-05-10",
+    redesignVersion: 1,
+    body: null,
   },
   "이사박스-대량구매-가이드": {
     title: "이사박스 대량구매 가이드 — 수량 기준·단가·업체 선정",
@@ -124,8 +125,9 @@ const GUIDES: Record<DynamicGuideSlug, GuideContent> = {
     title: "2026 한국 패키징 트렌드 리포트 — 친환경·스마트·이커머스 변화 분석",
     description:
       "2026년 한국 포장재 시장의 5대 트렌드 — EPR 강화, 스마트 패키징 도입, 소량·맞춤 수요 증가, 단가 상승 대응, 이커머스 전용 설계 — 를 데이터 기반으로 분석합니다.",
-    datePublished: "2026-05-07",
-    body: <KoreaPackagingTrends2026Content />,
+    datePublished: "2026-05-10",
+    redesignVersion: 1,
+    body: null,
   },
   "glass-metal-container-guide": {
     title: "유리·금속 용기 완전 가이드 — 종류·소재·MOQ·인쇄 옵션 비교 (2026)",
@@ -140,6 +142,22 @@ const GUIDES: Record<DynamicGuideSlug, GuideContent> = {
     description:
       "에어캡(뽁뽁이)·EPE 폼·종이 완충재 등 완충재 종류, OPP·천·보안 테이프 선택 기준, 허니컴·우드울 충전재, 과대포장 환경 규제 대응, B2B 대량구매 단가 기준을 한곳에 정리했습니다.",
     datePublished: "2026-05-01",
+    redesignVersion: 1,
+    body: null,
+  },
+  "packaging-printing-guide": {
+    title: "포장 인쇄 종류·후가공 완전 가이드 — 옵셋·플렉소·그라비어·디지털 비교",
+    description:
+      "포장 인쇄 방식(옵셋·플렉소·그라비어·디지털) 비교, 코팅·박·엠보싱 등 후가공 종류, 식품 인쇄 잉크 규제, 파일 규격 체크리스트를 정리합니다.",
+    datePublished: "2026-05-10",
+    redesignVersion: 1,
+    body: null,
+  },
+  "packaging-machinery-guide": {
+    title: "포장기계·자동화 완전 가이드 — 종류·ROI·도입 체크리스트 (2026년)",
+    description:
+      "충전기·밀봉기·라벨러·박스포장기·팔레타이저 종류 비교, 자동화 ROI 계산식, 국내 주요 제조사 비교, 식약처·KC 인증 요건, 발주 전 체크리스트를 한 곳에 정리했습니다.",
+    datePublished: "2026-05-10",
     redesignVersion: 1,
     body: null,
   },
@@ -254,6 +272,18 @@ function GuideV1Page({
   }
   if (slug === "packaging-accessories-guide") {
     return <GuideSlotV1Page guide={guide} data={SLOT_DATA_PACKAGING_ACCESSORIES} />;
+  }
+  if (slug === "packaging-tape-comparison") {
+    return <GuideSlotV1Page guide={guide} data={SLOT_DATA_PACKAGING_TAPE} />;
+  }
+  if (slug === "2026-korea-packaging-trends") {
+    return <GuideSlotV1Page guide={guide} data={SLOT_DATA_KOREA_TRENDS_2026} />;
+  }
+  if (slug === "packaging-printing-guide") {
+    return <GuideSlotV1Page guide={guide} data={SLOT_DATA_PACKAGING_PRINTING} />;
+  }
+  if (slug === "packaging-machinery-guide") {
+    return <GuideSlotV1Page guide={guide} data={SLOT_DATA_PACKAGING_MACHINERY} />;
   }
   // Fallback to prose template for any other redesign-flagged guide
   return (
@@ -4018,5 +4048,353 @@ const SLOT_DATA_PACKAGING_ACCESSORIES: SlotData = {
     subtext: "테이프·완충재·필름 취급 업체를 Packlinx에서 비교하세요",
     buttonLabel: "업체 비교하기 →",
     href: "/products/packaging-accessories",
+  },
+};
+
+// ─── Slot data — packaging-tape-comparison ───────────────────────────────────
+
+const SLOT_DATA_PACKAGING_TAPE: SlotData = {
+  heroTag: "소재 · 포장 테이프 비교",
+  heroDateLabel: "2026-05 업데이트",
+  heroReadTime: "5분 읽기",
+  tldr: [
+    {
+      bold: "용도와 작업 환경이 테이프 선택 기준을 결정한다",
+      text: "— OPP·크라프트·저소음(무소음 테이프로도 표기됨) 각 소재는 봉함 강도·소음·환경 처리 방식에서 차이가 있으며, 용도별 적합성을 분리해 선택하면 비용 효율적입니다.",
+    },
+    {
+      bold: "박스 봉함 일반 용도에는 OPP가 표준적으로 사용된다",
+      text: "— 강한 점착력과 방습성으로 물류·창고 환경에 적합하며, 대량 발주 시 단가가 낮아집니다.",
+    },
+    {
+      bold: "친환경 폐기가 우선이라면 크라프트 테이프를 검토하라",
+      text: "— 종이 기재 크라프트 테이프는 분리 배출 시 종이류로 분류 가능하여 ESG 패키징 정책에 부합할 수 있습니다.",
+    },
+  ],
+  callouts: [
+    {
+      variant: "info",
+      title: "\"무소음 테이프\"는 마케팅 용어",
+      body: "\"무소음 테이프\"는 시장에서 통용되는 마케팅 용어입니다. 엄밀히는 저소음(소음 감소) 테이프로, OPP 대비 테이프 박리 소음이 낮으나 완전 무음은 아닙니다. 야간 작업장·주거 인접 물류센터 등 소음 민감 환경에 적합합니다.",
+    },
+    {
+      variant: "warn",
+      title: "식품·의약품 포장 외면 테이프 접착제 이행 확인 필수",
+      body: "식품·의약품 포장 외면에 테이프를 사용할 경우 접착제 이행 가능성을 반드시 확인하세요. 식품 접촉 가능성이 있는 포장에는 해당 용도로 적합성이 확인된 테이프를 선택하는 것이 안전합니다.",
+    },
+    {
+      variant: "tip",
+      title: "크라프트 테이프는 손으로 찢기 가능",
+      body: "크라프트 테이프는 수(手)인열이 가능하여 테이프 커터기 없이도 사용 가능합니다. 소규모 포장 현장에서 작업 효율을 높일 수 있습니다.",
+    },
+  ],
+  checklistTitle: "발주 전 확정 항목",
+  checklist: [
+    "봉함 강도(접착력 N/25mm) 사양 확인 후 용도 적합성 검토",
+    "소음 민감 환경이라면 저소음(무소음) 테이프 적용 검토",
+    "ESG·친환경 기준이라면 크라프트 테이프 분리 배출 가능 여부 확인",
+    "물류 환경(온도·습도·표면 기재)에 맞게 점착제 종류 확인",
+    "대량 구매 전 샘플 테스트 및 접착 유지력 사전 검증",
+  ],
+  faq: [
+    {
+      question: "OPP, 크라프트, 저소음 테이프 중 어떤 것이 더 강한가요?",
+      answer:
+        "단순 강도보다 용도별 적합성으로 선택하세요. 일반 박스 봉함이라면 OPP, 친환경 폐기가 중요하면 크라프트, 야간·소음 민감 환경에는 저소음 테이프가 표준적으로 사용됩니다.",
+    },
+    {
+      question: "\"무소음 테이프\"와 \"저소음 테이프\"는 다른 건가요?",
+      answer:
+        "동일한 제품을 가리키는 경우가 많습니다. 시장에서는 마케팅 용어로 \"무소음\"이 통용되지만, 엄밀히는 저소음(소음 감소) 테이프입니다. 구매 시 제품 사양서에서 소음 감소 기준을 확인하세요.",
+    },
+    {
+      question: "크라프트 테이프는 분리수거가 가능한가요?",
+      answer:
+        "종이 기재 크라프트 테이프는 일반적으로 종이류로 분리 배출이 가능하나, 지역 지자체 분리수거 기준에 따라 달라질 수 있습니다. 접착제 잔류물 제거 후 배출하는 것이 안전합니다.",
+    },
+    {
+      question: "대량 구매 시 소재별 단가 차이가 큰가요?",
+      answer:
+        "소재·규격·발주량에 따라 다르므로 Packlinx를 통해 복수 업체 견적을 비교하는 것이 가장 정확합니다.",
+    },
+  ],
+  sidebar: {
+    ctaHeadline: "테이프 공급업체 찾기",
+    ctaSubtext: "OPP·크라프트·저소음 테이프 전문 업체를 Packlinx에서 비교하세요.",
+    ctaButtonLabel: "업체 비교하기 →",
+    ctaHref: "/vendors?category=packaging-tape",
+    relatedGuides: [
+      { href: "/guides/packaging-material-complete-guide", title: "포장재 소재 완전 가이드", readTime: "6분" },
+      { href: "/guides/eco-friendly-packaging", title: "친환경 포장재 가이드", readTime: "6분" },
+      { href: "/guides/corrugated-flute-types", title: "골판지 플루트 종류 가이드", readTime: "5분" },
+      { href: "/guides/packaging-printing-guide", title: "패키징 인쇄 공정 가이드", readTime: "5분" },
+    ],
+  },
+  endCta: {
+    headline: "테이프 공급업체를 Packlinx에서 비교하세요",
+    subtext: "OPP·크라프트·저소음 테이프 전문 업체를 한 곳에서 찾고 견적을 바로 요청하세요.",
+    buttonLabel: "업체 비교하기 →",
+    href: "/vendors?category=packaging-tape",
+  },
+};
+
+// ─── Slot data — 2026-korea-packaging-trends ─────────────────────────────────
+
+const SLOT_DATA_KOREA_TRENDS_2026: SlotData = {
+  heroTag: "트렌드 · 2026 한국 패키징",
+  heroDateLabel: "2026-05 업데이트",
+  heroReadTime: "6분 읽기",
+  tldr: [
+    {
+      bold: "친환경·경량화·스마트 패키징이 2026년 한국 포장 시장을 재편하고 있다",
+      text: "— 규제 강화와 ESG 공급망 요구가 맞물려 포장재 선택의 기준이 빠르게 이동하고 있습니다.",
+    },
+    {
+      bold: "생산자책임재활용제도(EPR) 적용 범위가 확대되고 있다",
+      text: "— 「자원의 절약과 재활용촉진에 관한 법률」에 근거한 EPR 제도는 포장재 생산·수입 사업자의 재활용 의무를 강화하고 있으며, 대상 범위와 분담금 단가는 환경부 고시로 매년 갱신됩니다.",
+    },
+    {
+      bold: "일회용품 규제 대상 품목 및 시설 기준은 환경부 고시를 직접 확인해야 한다",
+      text: "— 「자원의 절약과 재활용촉진에 관한 법률」 §10 및 관련 환경부 고시에 따라 규제 대상이 갱신되므로, 사업자는 환경부 또는 한국환경공단 공지를 직접 확인하시기 바랍니다.",
+    },
+  ],
+  callouts: [
+    {
+      variant: "info",
+      title: "EPR 분담금 단가는 환경부 고시로 매년 갱신",
+      body: "EPR(생산자책임재활용제도) 분담금 단가는 환경부가 매년 고시로 갱신합니다. 사업자는 한국포장재재활용사업공제조합(KPRC) 또는 환경부 고시 공지 기준으로 연간 의무량과 단가를 확인하시기 바랍니다. 본 가이드는 특정 단가를 제시하지 않습니다.",
+    },
+    {
+      variant: "warn",
+      title: "일회용품 규제 대상은 환경부 공지에서 직접 확인",
+      body: "일회용품 규제 대상 품목은 「자원의 절약과 재활용촉진에 관한 법률」 §10 및 시행령과 환경부 고시에 따라 갱신됩니다(2026-05 기준). 가이드에서 제시한 내용은 참고용이며, 최신 기준과 대상 품목은 환경부 또는 한국환경공단 공지에서 직접 확인하세요.",
+    },
+    {
+      variant: "tip",
+      title: "경량화·재사용 전환으로 EPR 분담금 부담 절감 검토 가능",
+      body: "포장재 경량화·재사용 전환은 EPR 분담금 부담을 낮출 수 있는 실질적 방법입니다. 재활용 용이 등급이 높은 소재로 전환할 경우, 한국포장재재활용사업공제조합(KPRC)을 통해 분담금 감면 여부를 미리 확인하는 것이 좋습니다.",
+    },
+  ],
+  checklistTitle: "사업자 확인 항목",
+  checklist: [
+    "자사 포장재가 EPR 대상인지 「자원의 절약과 재활용촉진에 관한 법률」 §16 + 시행령 기준으로 확인",
+    "EPR 연간 의무량·분담금 단가를 KPRC 또는 환경부 고시에서 최신 기준으로 확인",
+    "일회용품 규제 대상 품목·시설 여부를 환경부 또는 한국환경공단 공지에서 직접 확인",
+    "포장재 재활용 용이 등급(환경부 고시 기준) 진단 후 경량화·소재 전환 계획 수립",
+    "해외 ESG 공급망(EU PPWR 등) 요구 시 수출국 법령 기준 별도 확인",
+  ],
+  faq: [
+    {
+      question: "EPR 적용 대상 포장재인지 어떻게 확인하나요?",
+      answer:
+        "「자원의 절약과 재활용촉진에 관한 법률」 §16 및 시행령에 따른 대상 포장재 여부는 한국포장재재활용사업공제조합(KPRC) 또는 환경부 공지에서 확인할 수 있습니다. 특정 포장재의 대상 여부는 공제조합에 직접 문의하시기 바랍니다.",
+    },
+    {
+      question: "2026년에 달라지는 일회용품 규제는 무엇인가요?",
+      answer:
+        "일회용품 규제 대상 품목과 시설은 「자원의 절약과 재활용촉진에 관한 법률」 §10 및 환경부 고시 변경에 따라 갱신됩니다(2026-05 기준). 특정 품목의 규제 적용 여부는 환경부 또는 한국환경공단 공지에서 직접 확인하시기 바랍니다.",
+    },
+    {
+      question: "친환경 포장재로 전환하면 EPR 분담금이 줄어드나요?",
+      answer:
+        "환경부 고시에서 재활용 용이 등급이 높은 포장재는 분담금 산정 기준이 다를 수 있습니다. 정확한 감면 여부는 KPRC 또는 환경부 공지에서 확인하시기 바랍니다.",
+    },
+    {
+      question: "EU Packaging Regulation이 한국 수출 포장에도 영향을 미치나요?",
+      answer:
+        "EU 시장에 제품을 수출한다면 EU Packaging and Packaging Waste Regulation(PPWR) 요건이 적용될 수 있습니다. 국내 EPR과 별개 규제이므로, 수출국 법령에 맞는 포장재 기준을 별도로 확인해야 합니다.",
+    },
+  ],
+  sidebar: {
+    ctaHeadline: "친환경·규제 대응 포장 업체 찾기",
+    ctaSubtext: "2026 트렌드에 맞는 공급업체를 Packlinx에서 한 번에 비교하세요.",
+    ctaButtonLabel: "업체 비교하기 →",
+    ctaHref: "/vendors?category=eco-packaging",
+    relatedGuides: [
+      { href: "/guides/eco-friendly-packaging", title: "친환경 포장재 가이드", readTime: "6분" },
+      { href: "/guides/packaging-material-complete-guide", title: "포장재 소재 완전 가이드", readTime: "6분" },
+      { href: "/guides/packaging-accessories-guide", title: "포장 부자재 종류 가이드", readTime: "5분" },
+      { href: "/guides/glass-metal-container-guide", title: "유리·금속 용기 가이드", readTime: "5분" },
+    ],
+  },
+  endCta: {
+    headline: "2026 포장 트렌드에 맞는 공급업체를 Packlinx에서 찾으세요",
+    subtext: "친환경·재활용 포장 전문 업체를 한 곳에서 비교하고 견적을 요청할 수 있습니다.",
+    buttonLabel: "업체 비교하기 →",
+    href: "/vendors?category=eco-packaging",
+  },
+};
+
+// ─── Slot data — packaging-printing-guide ────────────────────────────────────
+
+const SLOT_DATA_PACKAGING_PRINTING: SlotData = {
+  heroTag: "공정·인쇄 · 패키징 인쇄 공정",
+  heroDateLabel: "2026-05 업데이트",
+  heroReadTime: "5분 읽기",
+  tldr: [
+    {
+      bold: "인쇄 방식 선택이 포장 단가와 품질을 결정한다",
+      text: "— 오프셋·디지털·플렉소 등 공정별 최소 발주량·색상 수·기재 적합성 차이를 사전 파악하면 과잉 비용을 줄일 수 있습니다.",
+    },
+    {
+      bold: "환경 인증은 공급업체 주장이 아닌 인증서로 직접 확인해야 한다",
+      text: "— 환경부 환경표지 또는 ISO 14001 등 공식 인증 보유 여부를 견적 단계에서 인증서로 요청하는 것이 안전합니다.",
+    },
+    {
+      bold: "식품 접촉 포장은 식약처 고시 기준 적합 잉크 사용 업체를 선택해야 한다",
+      text: "— 「기구 및 용기·포장의 기준 및 규격」(식품의약품안전처 고시 기준) 적합 소재·잉크 사용 여부를 사전 확인하세요.",
+    },
+  ],
+  callouts: [
+    {
+      variant: "info",
+      title: "VOC 함량 낮은 잉크 사용 여부 사전 확인",
+      body: "잉크 종류에 따라 인쇄 후 냄새·이행성이 달라집니다. VOC 함량 낮은 잉크(저VOC 잉크) 사용 여부를 발주 전 공급업체에 확인하면 식품·의약품 포장 클레임을 사전에 방지할 수 있습니다.",
+    },
+    {
+      variant: "warn",
+      title: "친환경 인쇄 주장은 공식 인증서로 반드시 검증",
+      body: "\"친환경 인쇄\"는 규제 기관이 정의한 단일 기준이 없습니다. 공급업체의 친환경 주장은 환경부 환경표지·GR인증·ISO 14001 등 공식 인증서로 반드시 검증하세요. 인증서 없는 친환경 단정 표현은 표시광고법 §3 위반 소지가 있으며, Packlinx는 특정 업체의 인증 사실을 단정하지 않습니다.",
+    },
+    {
+      variant: "tip",
+      title: "소량·다품종은 디지털, 풀컬러 대량은 오프셋",
+      body: "단색·2도 인쇄는 플렉소·스크린, 풀컬러 고화질은 오프셋·디지털 UV, 소량 다품종은 디지털이 비용 효율적입니다. 수량·색상·기재를 먼저 정리한 뒤 견적을 요청하세요.",
+    },
+  ],
+  checklistTitle: "발주 전 확정 항목",
+  checklist: [
+    "인쇄 방식(오프셋/디지털/플렉소/그라비아)과 최소 발주량 확인",
+    "기재(종이·PET·PE 등)와 잉크 호환성 사전 검토",
+    "식품 접촉 포장의 경우 식약처 고시 기준 적합 잉크·코팅 사용 여부 확인",
+    "친환경 인쇄 요구 시 공식 인증서(환경표지/ISO 14001 등) 직접 요청·확인",
+    "교정쇄(색상 시편) 수령 후 승인, 본 인쇄 진행 전 품질 기준 합의",
+  ],
+  faq: [
+    {
+      question: "소량 주문 시 어떤 인쇄 방식이 유리한가요?",
+      answer:
+        "디지털 인쇄는 판(plate) 제작 비용이 없어 소량(보통 1,000부 미만)에서 단가 경쟁력이 있습니다. 다만 색 재현율은 오프셋 대비 차이가 있으므로 샘플 확인 후 결정하는 것이 좋습니다.",
+    },
+    {
+      question: "VOC 함량 낮은 잉크는 어떻게 확인하나요?",
+      answer:
+        "공급업체에 MSDS(물질안전보건자료) 제공을 요청하거나, 환경부 환경표지 인증 제품 여부를 인증서로 확인하는 방법이 있습니다.",
+    },
+    {
+      question: "식품 포장 인쇄에는 어떤 기준이 적용되나요?",
+      answer:
+        "식품의약품안전처 고시 「기구 및 용기·포장의 기준 및 규격」에 따라 식품 접촉면 소재·잉크에 대한 안전 기준이 적용됩니다. 공급업체에 해당 기준 적합 확인서 제출을 요구하는 것이 안전합니다.",
+    },
+    {
+      question: "해외(EU) 수출 포장에도 인쇄 기준이 있나요?",
+      answer:
+        "EU는 Regulation (EC) No 1935/2004(식품 접촉 소재 기준)이 적용됩니다. 수출 포장이라면 수입국 법령에 맞는 잉크·소재 사용 여부를 발주 전 확인하세요.",
+    },
+  ],
+  sidebar: {
+    ctaHeadline: "인쇄 공정별 포장 업체 찾기",
+    ctaSubtext: "공정·기재·인쇄 방식별 공급업체를 비교하고 견적을 바로 요청할 수 있습니다.",
+    ctaButtonLabel: "업체 비교하기 →",
+    ctaHref: "/vendors?category=packaging-printing",
+    relatedGuides: [
+      { href: "/guides/label-printing-guide", title: "라벨 인쇄 업체 선정 가이드", readTime: "5분" },
+      { href: "/guides/packaging-material-complete-guide", title: "포장재 소재 완전 가이드", readTime: "6분" },
+      { href: "/guides/eco-friendly-packaging", title: "친환경 포장재 가이드", readTime: "6분" },
+      { href: "/guides/food-packaging-materials", title: "식품 포장재 소재 가이드", readTime: "5분" },
+    ],
+  },
+  endCta: {
+    headline: "인쇄 공정에 맞는 포장 업체, Packlinx에서 찾으세요",
+    subtext: "공정·기재·인쇄 방식별 공급업체를 비교하고 견적을 바로 요청할 수 있습니다.",
+    buttonLabel: "업체 비교하기 →",
+    href: "/vendors?category=packaging-printing",
+  },
+};
+
+// ─── Slot data — packaging-machinery-guide ───────────────────────────────────
+
+const SLOT_DATA_PACKAGING_MACHINERY: SlotData = {
+  heroTag: "공정·인쇄 · 포장기계 가이드",
+  heroDateLabel: "2026-05 업데이트",
+  heroReadTime: "5분 읽기",
+  tldr: [
+    {
+      bold: "자동화 수준이 포장 라인 선택을 결정한다",
+      text: "— 반자동·전자동·완전자동 구분과 시간당 처리량(BPM/CPM)을 먼저 정의해야 과잉·과소 투자를 막을 수 있습니다.",
+    },
+    {
+      bold: "국내 도입 시 KCs 안전인증 대상 여부를 반드시 확인하라",
+      text: "— 「전기용품 및 생활용품 안전관리법」 상 KCs 인증 대상 기계는 인증 마크 없이 판매·사용이 불가합니다. 공급업체에 인증서 제출을 요청하는 것이 안전합니다.",
+    },
+    {
+      bold: "TCO(총 소유 비용)로 선택하라",
+      text: "— 초기 구매가뿐 아니라 부품 수급·유지보수 계약·소모품 단가를 포함한 5년 TCO 기준으로 비교해야 합니다.",
+    },
+  ],
+  callouts: [
+    {
+      variant: "info",
+      title: "처리 대상 제품 형상·크기부터 정의",
+      body: "포장기계는 용도별로 카톤에렉터, 씰링기, 슈링크 포장기, 스트레치 포장기, 진공 포장기 등으로 세분됩니다. 처리 대상 제품의 형상·크기·중량을 먼저 정의해야 적합한 기종을 선택할 수 있습니다.",
+    },
+    {
+      variant: "warn",
+      title: "전기 사용 포장기계 — KCs 인증 대상 여부 확인 필수",
+      body: "국내에서 전기를 사용하는 포장기계를 도입하려면 KCs 안전인증 대상 품목인지 먼저 확인하세요. 인증 대상임에도 마크가 없는 제품을 사용하면 「전기용품 및 생활용품 안전관리법」 위반이 됩니다. 공급업체에 KCs 인증서를 요청하시기 바랍니다.",
+    },
+    {
+      variant: "tip",
+      title: "국내 KCs와 EU CE는 별개 제도 — 혼동 금지",
+      body: "EU 시장에 수출하는 제품을 패키징한다면 CE 적합성 표시(Declaration of Conformity)가 필요할 수 있습니다. 국내 KCs와 EU CE는 별개 제도이므로 각각 별도로 확인이 필요합니다.",
+    },
+  ],
+  checklistTitle: "발주 전 확정 항목",
+  checklist: [
+    "처리 대상 제품 형상·크기·중량·시간당 처리량(BPM) 사전 정의",
+    "국내 도입 기계의 KCs 안전인증 대상 여부 및 인증서 보유 여부 확인",
+    "산업안전보건법령 상 안전기준 준수 여부 점검",
+    "부품 수급 안정성·유지보수 계약·소모품 단가 포함 5년 TCO 산정",
+    "설치 후 시운전·조작자 교육 포함 여부 계약서에 명시",
+  ],
+  faq: [
+    {
+      question: "KCs 인증이 없는 수입 포장기계를 사용할 수 있나요?",
+      answer:
+        "KCs 안전인증 대상 품목이라면 인증 없이 국내 판매·사용이 불가합니다. 해외 직수입 기계라도 동일 기준이 적용되므로, 공급업체에 KCs 인증서를 반드시 요청하세요.",
+    },
+    {
+      question: "CE 인증 제품은 국내에서도 사용 가능한가요?",
+      answer:
+        "CE는 EU 시장 적합성 표시로, 국내 KCs와 별개 제도입니다. CE만 보유했다고 국내 KCs 요건을 충족하지 않으므로, 국내 도입 전 KCs 인증 여부를 별도로 확인해야 합니다.",
+    },
+    {
+      question: "반자동과 전자동 포장기 중 어떤 것이 유리한가요?",
+      answer:
+        "월 처리량 기준으로 판단하세요. 소량 다품종이라면 반자동이 유연성이 높고, 대량 단품종은 전자동이 장기적으로 단가 절감에 유리합니다. 공급업체 무상 시뮬레이션을 활용하시기 바랍니다.",
+    },
+    {
+      question: "포장기계 유지보수는 어떻게 준비해야 하나요?",
+      answer:
+        "공급업체 또는 공인 서비스센터와 유지보수 계약을 체결하는 것이 일반적입니다. 계약서에 부품 보증기간·응급 출동 SLA(서비스 수준)를 명시하면 운영 리스크를 줄일 수 있습니다.",
+    },
+  ],
+  sidebar: {
+    ctaHeadline: "포장기계 공급업체 찾기",
+    ctaSubtext: "KCs 인증 보유 업체를 포함, 기계 유형·처리량별 공급업체를 한 곳에서 확인할 수 있습니다.",
+    ctaButtonLabel: "업체 비교하기 →",
+    ctaHref: "/vendors?category=packaging-machinery",
+    relatedGuides: [
+      { href: "/guides/packaging-material-complete-guide", title: "포장재 소재 완전 가이드", readTime: "6분" },
+      { href: "/guides/corrugated-flute-types", title: "골판지 플루트 종류 가이드", readTime: "5분" },
+      { href: "/guides/food-packaging-materials", title: "식품 포장재 소재 가이드", readTime: "5분" },
+      { href: "/guides/packaging-printing-guide", title: "패키징 인쇄 공정 가이드", readTime: "5분" },
+    ],
+  },
+  endCta: {
+    headline: "포장기계 공급업체를 Packlinx에서 비교하세요",
+    subtext: "KCs 인증 보유 업체를 포함, 기계 유형·처리량별 공급업체를 한 곳에서 확인할 수 있습니다.",
+    buttonLabel: "업체 비교하기 →",
+    href: "/vendors?category=packaging-machinery",
   },
 };
