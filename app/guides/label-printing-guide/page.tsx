@@ -652,7 +652,7 @@ export default function LabelPrintingGuidePage() {
             </section>
 
             <section>
-              <h2>9. Packlinx에서 라벨 인쇄 업체 견적 비교하기</h2>
+              <h2>9. Packlinx에서 라벨 인쇄 업체 정보 비교하기</h2>
               <p>
                 Packlinx는 국내 라벨·스티커 인쇄 업체가 등록된 B2B 패키징 디렉토리입니다. 업체별 전문
                 분야(소량 특화, 대량 생산, 특수 소재), 평균 응답 시간, 납기 이력을 기준으로 필터링할 수

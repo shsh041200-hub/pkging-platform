@@ -582,7 +582,7 @@ export default function PlasticContainerGuidePage() {
             </section>
 
             <section>
-              <h2>8. Packlinx에서 플라스틱 용기 공급업체 견적 비교하기</h2>
+              <h2>8. Packlinx에서 플라스틱 용기 공급업체 정보 비교하기</h2>
               <p>
                 Packlinx는 국내 플라스틱 용기·병 제조사와 구매 담당자를 연결하는
                 B2B 패키징 디렉토리입니다. 소재·성형 공법·식품 안전 인증·지역 조건으로

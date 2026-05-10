@@ -68,7 +68,7 @@ const GUIDES: Record<DynamicGuideSlug, GuideContent> = {
   "shipping-box-pricing": {
     title: "택배 박스 가격표 (2026) — 사이즈별 단가·수량 할인·업체 비교",
     description:
-      "택배 박스 1호 130~180원, 2호 160~220원 (1,000개 기준). 수량 5,000개↑ 시 30~40% 할인. Packlinx에서 무료 견적 비교.",
+      "택배 박스 1호 130~180원, 2호 160~220원 (1,000개 기준). 수량 5,000개↑ 시 30~40% 할인. Packlinx에서 업체 정보 비교.",
     datePublished: "2026-05-01",
     redesignVersion: 1,
     body: <ShippingBoxPricingContent />,
@@ -3144,7 +3144,7 @@ const SLOT_DATA_SHIPPING_PRICING: SlotData = {
   sidebar: {
     ctaHeadline: "택배 박스 업체 비교",
     ctaSubtext: "사이즈·수량·인쇄 조건으로 필터링해 업체를 한눈에 비교하세요.",
-    ctaButtonLabel: "무료 견적 비교 →",
+    ctaButtonLabel: "업체 바로 비교 →",
     ctaHref: "/products/box",
     relatedGuides: [
       { href: "/guides/corrugated-flute-types", title: "A·B·C·E·F골 특성·용도 선택 가이드", readTime: "5분" },
@@ -3154,7 +3154,7 @@ const SLOT_DATA_SHIPPING_PRICING: SlotData = {
     ],
   },
   endCta: {
-    headline: "택배 박스 업체 무료 견적 비교",
+    headline: "택배 박스 업체 정보 비교",
     subtext: "박스 전문 업체, 사이즈·수량·인쇄 조건으로 필터 비교",
     buttonLabel: "업체 비교하기 →",
     href: "/products/box",
@@ -4294,7 +4294,7 @@ const SLOT_DATA_PACKAGING_PRINTING: SlotData = {
   ],
   sidebar: {
     ctaHeadline: "인쇄 공정별 포장 업체 찾기",
-    ctaSubtext: "공정·기재·인쇄 방식별 공급업체를 비교하고 견적을 바로 요청할 수 있습니다.",
+    ctaSubtext: "공정·기재·인쇄 방식별 공급업체 정보를 한눈에 비교할 수 있습니다.",
     ctaButtonLabel: "업체 비교하기 →",
     ctaHref: "/vendors?category=packaging-printing",
     relatedGuides: [
@@ -4306,7 +4306,7 @@ const SLOT_DATA_PACKAGING_PRINTING: SlotData = {
   },
   endCta: {
     headline: "인쇄 공정에 맞는 포장 업체, Packlinx에서 찾으세요",
-    subtext: "공정·기재·인쇄 방식별 공급업체를 비교하고 견적을 바로 요청할 수 있습니다.",
+    subtext: "공정·기재·인쇄 방식별 공급업체 정보를 한눈에 비교할 수 있습니다.",
     buttonLabel: "업체 비교하기 →",
     href: "/vendors?category=packaging-printing",
   },

@@ -9,7 +9,7 @@ interface TermsNoticeFooterLineProps {
 }
 
 const COPY = {
-  text: '※ 개인정보처리방침이 2026년 5월 8일(개정 4회) 변경되었습니다.',
+  text: '※ 개인정보처리방침이 2026년 5월 10일(개정 5회) 변경되었습니다.',
   linkLabel: '자세히 →',
 } as const
 

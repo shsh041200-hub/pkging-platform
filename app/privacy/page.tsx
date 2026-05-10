@@ -6,7 +6,7 @@ import { BusinessRegistrationInfo } from '@/components/BusinessRegistrationInfo'
 
 export const metadata: Metadata = {
   title: '개인정보처리방침 — Packlinx',
-  description: 'Packlinx 개인정보처리방침 — 최종 개정일 2026년 5월 8일 (개정 4회)',
+  description: 'Packlinx 개인정보처리방침 — 최종 개정일 2026년 5월 10일 (개정 5회)',
 }
 
 export default function PrivacyPage() {
@@ -28,19 +28,19 @@ export default function PrivacyPage() {
       <main className="max-w-3xl mx-auto px-4 sm:px-6 py-10 pb-16">
         <h1 className="text-2xl font-bold text-neutral-900 mb-2">개인정보처리방침</h1>
         <p className="text-sm text-neutral-500 mb-1">최초 시행일: 2026년 4월 19일</p>
-        <p className="text-sm text-neutral-500 mb-6">시행일: 2026년 5월 8일 (개정 4회)</p>
+        <p className="text-sm text-neutral-500 mb-6">시행일: 2026년 5월 10일 (개정 5회)</p>
 
         <div className="bg-amber-50 border-l-4 border-amber-500 px-4 py-3 mb-4 rounded-r">
-          <p className="text-sm font-medium text-amber-900 mb-1">개인정보처리방침 개정 안내 (2026-05-08)</p>
+          <p className="text-sm font-medium text-amber-900 mb-1">개인정보처리방침 개정 안내 (2026-05-10)</p>
           <p className="text-sm text-amber-800">
-            견적 의뢰 기능 도입에 따라 처리 목적·항목·보유기간·제3자 제공 항목이 추가됩니다.
-            주요 변경사항: 견적 의뢰 시 수집되는 이메일·회사명 등을 선택 공급업체에 제공 (PIPA §17 사전 동의 후).
+            견적 의뢰 기능이 폐지됨에 따라 관련 처리 목적·항목·보유기간·제3자 제공 항목이 삭제됩니다.
+            본 서비스는 정보제공 디렉토리로서 견적 의뢰 양식을 운영하지 않으며, 관련 개인정보를 추가 수집하지 않습니다.
             변경 이력은 하단 &apos;변경 이력&apos; 참조.
           </p>
         </div>
 
         <div className="bg-brand-50 border-l-4 border-brand-700 px-4 py-3 mb-8 rounded-r">
-          <p className="text-sm text-neutral-900">본 문서의 최신 개정(개정 4회)은 2026-05-08 부터 시행됩니다.</p>
+          <p className="text-sm text-neutral-900">본 문서의 최신 개정(개정 5회)은 2026-05-10 부터 시행됩니다.</p>
         </div>
 
         <div className="space-y-8 text-sm text-neutral-700 leading-relaxed">
@@ -89,20 +89,6 @@ export default function PrivacyPage() {
               <li><strong>법적 근거</strong>: 「개인정보 보호법」 제35조(열람), 제36조(정정·삭제), 제37조(처리정지)에 따른 정보주체의 권리 행사 처리</li>
             </ul>
 
-            <h3 className="font-medium text-neutral-800 mb-2 mt-4">④ 견적 의뢰 양식을 통한 수집 (quote_requests)</h3>
-            <ul className="list-disc list-inside space-y-1 ml-2">
-              <li><strong>수집 항목</strong>: 이메일 주소, 회사명, 요청 수량·규격, 납기 희망일, 요구사항 내용</li>
-              <li><strong>수집 방법</strong>: 이용자가 비교 페이지 견적 의뢰 양식에 직접 입력하여 제출</li>
-              <li>
-                <strong>법적 근거</strong>: 「개인정보 보호법」 제15조(수집·이용 동의), 제17조(제3자 제공 동의) —
-                이용자의 사전 명시적 동의 후 수집.
-                동의는 수집·이용 동의와 제3자 제공 동의로 분리하여 각각 취득합니다 (PIPA §22(3) 묶음 동의 금지).
-              </li>
-              <li>
-                <strong>선택 여부</strong>: 견적 의뢰 양식 이용 자체가 선택사항입니다.
-                양식을 이용하지 않아도 검색·비교 서비스는 정상 이용 가능합니다.
-              </li>
-            </ul>
           </section>
 
           <section>
@@ -121,7 +107,6 @@ export default function PrivacyPage() {
               <li>광고·마케팅 캠페인 효과 측정 (UTM 파라미터 분석)</li>
               <li>정보주체의 권리 행사(열람·정정·삭제·처리정지) 처리</li>
               <li>법령상 의무 이행 및 분쟁 대응</li>
-              <li>견적 의뢰 접수 및 선정된 공급업체에의 견적 요청 전달</li>
             </ol>
           </section>
 
@@ -148,10 +133,6 @@ export default function PrivacyPage() {
                     <td className="border border-neutral-200 px-3 py-2">정보 정정·삭제 요청 기록 (opt_out_requests)</td>
                     <td className="border border-neutral-200 px-3 py-2">처리 완료 후 3년 (분쟁 대응 목적)</td>
                   </tr>
-                  <tr>
-                    <td className="border border-neutral-200 px-3 py-2">견적 의뢰 정보 (quote_requests)</td>
-                    <td className="border border-neutral-200 px-3 py-2">수집일로부터 1년 (만료 시 자동 파기 — PIPA §39-3)</td>
-                  </tr>
                 </tbody>
               </table>
             </div>
@@ -166,34 +147,8 @@ export default function PrivacyPage() {
               <li>다른 법률에 특별한 규정이 있거나 법령상 의무를 준수하기 위하여 불가피한 경우</li>
               <li>수사기관이 「형사소송법」, 「통신비밀보호법」 등 법령에 정한 절차와 방법에 따라 요구한 경우</li>
             </ol>
-
-            <h3 className="font-medium text-neutral-800 mb-2">견적 의뢰 기능에 따른 제3자 제공 (PIPA §17, 사전 동의 기반)</h3>
-            <p className="mb-2 text-neutral-600 text-xs">
-              이용자가 견적 의뢰 양식 제출 시 &apos;개인정보 제3자 제공 동의&apos;를 선택한 경우에 한하여 아래와 같이 제공합니다.
-            </p>
-            <div className="overflow-x-auto mb-2">
-              <table className="w-full text-sm border-collapse">
-                <thead>
-                  <tr className="bg-neutral-100">
-                    <th className="border border-neutral-200 px-3 py-2 text-left font-medium text-neutral-800">제공받는 자</th>
-                    <th className="border border-neutral-200 px-3 py-2 text-left font-medium text-neutral-800">제공받는 자의 이용목적</th>
-                    <th className="border border-neutral-200 px-3 py-2 text-left font-medium text-neutral-800">제공 항목</th>
-                    <th className="border border-neutral-200 px-3 py-2 text-left font-medium text-neutral-800">보유·이용기간</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td className="border border-neutral-200 px-3 py-2">이용자가 비교·선택한 패키징 공급업체<br /><span className="text-xs text-neutral-500">(폼 제출 시 화면에 사명 명시)</span></td>
-                    <td className="border border-neutral-200 px-3 py-2">견적 작성 및 회신, 후속 영업 커뮤니케이션</td>
-                    <td className="border border-neutral-200 px-3 py-2">이메일 주소, 회사명, 요청 수량·규격, 납기 희망일, 요구사항 내용</td>
-                    <td className="border border-neutral-200 px-3 py-2">각 공급업체의 개인정보 처리방침에 따름 (또는 동의 철회 시까지)</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
             <p className="text-xs text-neutral-500">
-              ※ PIPA §17(2)1호에 따라 제공받는 자(업체 사명)는 견적 의뢰 양식 상단에 실명으로 명시됩니다.
-              이용자는 동의를 거부할 권리가 있으며, 거부 시 해당 업체로의 견적 의뢰가 제한됩니다.
+              ※ 회사는 정보제공 디렉토리 서비스로서 이용자 개인정보를 공급업체 등 제3자에게 제공하는 별도 기능을 운영하지 않습니다.
             </p>
           </section>
 
@@ -399,7 +354,7 @@ export default function PrivacyPage() {
           <section>
             <h2 className="text-base font-semibold text-neutral-900 mb-3">부칙</h2>
             <ol className="list-decimal list-inside space-y-1 ml-2">
-              <li>본 처리방침은 2026년 5월 8일부터 적용합니다. (개정 4회)</li>
+              <li>본 처리방침은 2026년 5월 10일부터 적용합니다. (개정 5회)</li>
               <li>이전 처리방침은 별도 보관하며, 요청 시 제공합니다.</li>
             </ol>
           </section>
@@ -422,6 +377,11 @@ export default function PrivacyPage() {
                 2026년 5월 8일 (개정 4회): 견적 의뢰 기능 도입에 따른 처리방침 갱신 — 제2조 ④항 견적 의뢰 수집 항목 신설, 제3조 처리목적 추가, 제4조 보유기간 추가, 제5조 제3자 제공(공급업체) 항목 신설 (PIPA §30)
                 <br />
                 <span className="ml-4 text-neutral-500">(PACAA-322 견적 의뢰 폼 — Legal Counsel 자문 PACAA-346 반영)</span>
+              </li>
+              <li>
+                2026년 5월 10일 (개정 5회): 견적 의뢰 기능 폐지 — 제2조 ④항(quote_requests 수집 항목), 제3조 견적 의뢰 처리목적, 제4조 quote_requests 보유기간 행, 제5조 견적 의뢰 제3자 제공 표 삭제. 본 서비스는 정보제공 디렉토리로서 견적 의뢰 관련 개인정보를 추가 수집·제공하지 않습니다.
+                <br />
+                <span className="ml-4 text-neutral-500">(PACAA-466 견적 의뢰 기능 폐지 — 정보제공 디렉토리 정체성 재정렬)</span>
               </li>
             </ul>
           </section>

@@ -591,7 +591,7 @@ export default function FlexiblePackagingGuidePage() {
         </section>
 
         <section>
-          <h2>8. Packlinx에서 연포장재 공급업체 견적 비교하기</h2>
+          <h2>8. Packlinx에서 연포장재 공급업체 정보 비교하기</h2>
           <p>
             Packlinx는 국내 연포장재 제조사와 구매 담당자를 연결하는 B2B 패키징 디렉토리입니다.
             파우치 종류·소재·식품 안전 인증·지역 조건으로 업체를 필터링하고, 동일 사양으로 여러

@@ -3,7 +3,6 @@ import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { getCompaniesBySlugs, computeCompleteness } from '@/lib/compare-data'
 import CompareCart from '@/app/components/CompareCart'
-import QuoteRequestForm from '@/app/components/QuoteRequestForm'
 import CompareTable from './CompareTable'
 
 export const dynamic = 'force-dynamic'
@@ -53,12 +52,8 @@ export default async function ComparePage({ searchParams }: Props) {
           벤더 비교 <span className="text-gray-400 text-base font-normal">({companies.length}개)</span>
         </h1>
         <CompareTable companies={companies} completeness={completeness} />
-        {companies.length > 0 && <QuoteRequestForm companies={companies} />}
-        {/* 통신판매중개자 고지문 §20 — compare page footer */}
         <footer className="mt-6 rounded border border-[#e5edf5] bg-[#f8fafc] px-4 py-3 text-xs leading-relaxed text-[#64748d]">
-          Packlinx는 통신판매중개자로서 거래 당사자가 아닙니다. 판매자와 구매자 간 거래에서 발생하는 의무와 책임은
-          각 당사자에게 있으며, Packlinx는 이에 대한 책임을 부담하지 않습니다. (전자상거래 등에서의 소비자보호에
-          관한 법률 §20)
+          Packlinx는 패키징 업체에 대한 공개 정보를 정리해 제공하는 디렉토리 서비스입니다. 거래·견적 의뢰는 직접 중개하지 않으며, 업체 연락은 각 업체의 공식 채널을 이용해 주세요.
         </footer>
       </main>
       <CompareCart />
