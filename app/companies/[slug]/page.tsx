@@ -262,14 +262,14 @@ export default async function CompanyPage({ params }: Props) {
 
       {/* Breadcrumb */}
       <div className="max-w-[800px] mx-auto px-4 sm:px-6 pt-5 pb-0">
-        <Link href="/" className="text-sm text-[#2563EB] hover:text-[#1D4ED8] inline-flex items-center gap-1 transition-colors">
+        <Link href="/" className="text-sm text-[#533afd] hover:text-[#4434d4] inline-flex items-center gap-1 transition-colors">
           ← 목록으로
         </Link>
       </div>
 
       <main className="max-w-[800px] mx-auto px-4 sm:px-6 pt-5 pb-20 md:pb-16 space-y-4">
-        {/* Company Hero Card */}
-        <div className="bg-white border border-gray-200 rounded-xl p-5 sm:p-7 xl:p-10">
+        {/* Company Hero Card — V04: blue-tint shadow rgba(50,50,93,0.25) + #e5edf5 border */}
+        <div className="bg-white border border-[#e5edf5] rounded-xl p-5 sm:p-7 xl:p-10" style={{ boxShadow: 'rgba(50,50,93,0.25) 0px 30px 45px -30px, rgba(0,0,0,0.1) 0px 18px 36px -18px' }}>
           <div className="flex items-start gap-4 mb-6">
             <CompanyIcon
               iconUrl={company.icon_url ?? null}
@@ -281,7 +281,11 @@ export default async function CompanyPage({ params }: Props) {
 
             <div className="flex-1 min-w-0">
               <div className="flex flex-wrap items-center gap-2 mb-2">
-                <h1 className="text-[28px] font-bold text-gray-900 tracking-[-0.025em] leading-tight">{company.name}</h1>
+                {/* V04: #061b31 deep navy heading + sohne-var weight 300 */}
+                <h1
+                  className="text-[28px] font-light text-[#061b31] tracking-[-0.025em] leading-tight"
+                  style={{ fontFamily: "'sohne-var', 'SF Pro Display', -apple-system, sans-serif", fontWeight: 300, fontFeatureSettings: '"ss01"' }}
+                >{company.name}</h1>
                 <AddToCompareButton slug={slug} name={company.name} />
               </div>
               <div className="flex flex-wrap items-center gap-2">
@@ -453,12 +457,12 @@ export default async function CompanyPage({ params }: Props) {
 
         {/* Company Description — no left border */}
         {company.description && (
-          <div className="bg-white border border-gray-200 rounded-xl p-6 sm:p-8">
-            <h2 className="text-[14px] font-semibold text-gray-800 mb-3">
+          <div className="bg-white border border-[#e5edf5] rounded-xl p-6 sm:p-8">
+            <h2 className="text-[14px] font-light text-[#061b31] mb-3" style={{ fontFamily: "'sohne-var', 'SF Pro Display', -apple-system, sans-serif", fontWeight: 300, fontFeatureSettings: '"ss01"' }}>
               업체 소개
             </h2>
             <div>
-              <p className="text-[15px] text-gray-700 leading-[1.8] whitespace-pre-line">
+              <p className="text-[15px] text-[#64748d] leading-[1.8] whitespace-pre-line">
                 {company.description}
               </p>
             </div>
@@ -467,11 +471,11 @@ export default async function CompanyPage({ params }: Props) {
 
         {/* 취급 제품 + 보유 인증 — 하나의 카드로 통합 */}
         {(company.products && (company.products as string[]).length > 0) || hasCertifications ? (
-          <div className="bg-white border border-gray-200 rounded-xl p-5">
+          <div className="bg-white border border-[#e5edf5] rounded-xl p-5">
             {/* 취급 제품 */}
             {company.products && (company.products as string[]).length > 0 && (
               <>
-                <h2 className="text-[14px] font-semibold text-gray-800 mb-3">취급 제품</h2>
+                <h2 className="text-[14px] font-light text-[#061b31] mb-3" style={{ fontFamily: "'sohne-var', 'SF Pro Display', -apple-system, sans-serif", fontWeight: 300, fontFeatureSettings: '"ss01"' }}>취급 제품</h2>
                 <div className="flex flex-wrap gap-2 mb-5">
                   {(company.products as string[]).map((product: string, i: number) => (
                     <span
@@ -488,7 +492,7 @@ export default async function CompanyPage({ params }: Props) {
             {/* 보유 인증 */}
             {hasCertifications ? (
               <div className={company.products && (company.products as string[]).length > 0 ? 'border-t border-gray-100 pt-5' : ''}>
-                <h2 className="text-[14px] font-semibold text-gray-800 mb-3">보유 인증</h2>
+                <h2 className="text-[14px] font-light text-[#061b31] mb-3" style={{ fontFamily: "'sohne-var', 'SF Pro Display', -apple-system, sans-serif", fontWeight: 300, fontFeatureSettings: '"ss01"' }}>보유 인증</h2>
                 {Object.entries(certsByCategory).map(([cat, items]) => {
                   const catKey = cat as CertificationCategory
                   return (
@@ -528,7 +532,7 @@ export default async function CompanyPage({ params }: Props) {
         {/* Portfolio Gallery */}
         {hasPortfolios && (
           <div className="bg-white border border-gray-200 rounded-xl p-5">
-            <h2 className="text-[14px] font-semibold text-gray-800 mb-3">
+            <h2 className="text-[14px] font-light text-[#061b31] mb-3" style={{ fontFamily: "'sohne-var', 'SF Pro Display', -apple-system, sans-serif", fontWeight: 300, fontFeatureSettings: '"ss01"' }}>
               포트폴리오
             </h2>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
@@ -564,7 +568,7 @@ export default async function CompanyPage({ params }: Props) {
         {/* Service Capabilities — neutral gray */}
         {hasServiceCapabilities && (
           <div className="bg-white border border-gray-200 rounded-xl p-5">
-            <h2 className="text-[14px] font-semibold text-gray-800 mb-3">
+            <h2 className="text-[14px] font-light text-[#061b31] mb-3" style={{ fontFamily: "'sohne-var', 'SF Pro Display', -apple-system, sans-serif", fontWeight: 300, fontFeatureSettings: '"ss01"' }}>
               서비스 역량
             </h2>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
@@ -588,7 +592,7 @@ export default async function CompanyPage({ params }: Props) {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {hasTargetIndustries && (
               <div className="bg-white border border-gray-200 rounded-xl p-5">
-                <h2 className="text-[14px] font-semibold text-gray-800 mb-3">
+                <h2 className="text-[14px] font-light text-[#061b31] mb-3" style={{ fontFamily: "'sohne-var', 'SF Pro Display', -apple-system, sans-serif", fontWeight: 300, fontFeatureSettings: '"ss01"' }}>
                   주요 납품 산업
                 </h2>
                 <div className="flex flex-wrap gap-2">
@@ -606,7 +610,7 @@ export default async function CompanyPage({ params }: Props) {
 
             {hasKeyClients && (
               <div className="bg-white border border-gray-200 rounded-xl p-5">
-                <h2 className="text-[14px] font-semibold text-gray-800 mb-3">
+                <h2 className="text-[14px] font-light text-[#061b31] mb-3" style={{ fontFamily: "'sohne-var', 'SF Pro Display', -apple-system, sans-serif", fontWeight: 300, fontFeatureSettings: '"ss01"' }}>
                   주요 납품처
                 </h2>
                 <div className="flex flex-wrap gap-2">
@@ -638,7 +642,7 @@ export default async function CompanyPage({ params }: Props) {
           <div className="bg-white border border-gray-200 rounded-xl p-5">
             <div className="mb-4">
               <div className="flex items-center justify-between">
-                <h2 className="text-[14px] font-semibold text-gray-800">
+                <h2 className="text-[14px] font-light text-[#061b31]" style={{ fontFamily: "'sohne-var', 'SF Pro Display', -apple-system, sans-serif", fontWeight: 300, fontFeatureSettings: '"ss01"' }}>
                   비슷한 업체
                 </h2>
                 <div className="flex items-center gap-3">
@@ -650,7 +654,7 @@ export default async function CompanyPage({ params }: Props) {
                   {industryCats[0] && (
                     <Link
                       href={`/categories/${industryCats[0]}`}
-                      className="text-[12px] text-[#2563EB] hover:text-[#1D4ED8] font-medium transition-colors"
+                      className="text-[12px] text-[#533afd] hover:text-[#4434d4] font-medium transition-colors"
                     >
                       전체 보기 →
                     </Link>
@@ -676,7 +680,7 @@ export default async function CompanyPage({ params }: Props) {
                       size="sm"
                       linkUrl={null}
                     />
-                    <span className="text-[13px] font-semibold text-gray-900 group-hover:text-[#C2410C] transition-colors line-clamp-1">
+                    <span className="text-[13px] font-semibold text-gray-900 group-hover:text-[#533afd] transition-colors line-clamp-1">
                       {simplifyCompanyName(rel.name)}
                     </span>
                   </div>
@@ -694,7 +698,7 @@ export default async function CompanyPage({ params }: Props) {
         {/* Category links — same industry category pages */}
         {industryCats.length > 0 && (
           <div className="bg-white border border-gray-200 rounded-xl p-5">
-            <h2 className="text-[14px] font-semibold text-gray-800 mb-4">
+            <h2 className="text-[14px] font-light text-[#061b31] mb-4" style={{ fontFamily: "'sohne-var', 'SF Pro Display', -apple-system, sans-serif", fontWeight: 300, fontFeatureSettings: '"ss01"' }}>
               같은 카테고리의 다른 업체 보기
             </h2>
             <div className="flex flex-wrap gap-2">
@@ -706,7 +710,7 @@ export default async function CompanyPage({ params }: Props) {
                   <Link
                     key={cat}
                     href={`/categories/${cat}`}
-                    className="inline-flex items-center gap-1.5 text-[13px] font-medium text-[#2563EB] bg-[#EFF6FF] hover:bg-[#dbeafe] px-3 py-2 rounded-lg transition-colors"
+                    className="inline-flex items-center gap-1.5 text-[13px] font-medium text-[#533afd] bg-[rgba(83,58,253,0.05)] hover:bg-[rgba(83,58,253,0.1)] px-3 py-2 rounded-lg transition-colors"
                   >
                     <span>{INDUSTRY_CATEGORY_ICONS[catKey]}</span>
                     <span>{catLabel} 업체 보기</span>
