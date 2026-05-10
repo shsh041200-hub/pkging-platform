@@ -724,7 +724,7 @@ export default async function HomePage({
               <span className="font-semibold text-gray-900">{filteredCount ?? 0}</span>개 업체
             </p>
             {industry && (
-              <span className="text-[11px] bg-[#EFF6FF] text-[#2563EB] font-medium px-2.5 py-1 rounded-full">
+              <span className="text-[11px] bg-[rgba(83,58,253,0.06)] text-[#533afd] font-medium px-2.5 py-1 rounded-full">
                 {INDUSTRY_CATEGORY_LABELS[industry as IndustryCategory]}
               </span>
             )}
@@ -732,10 +732,10 @@ export default async function HomePage({
               <Link
                 key={mat}
                 href={buildMaterialUrl(mat)}
-                className="text-[11px] bg-[#EFF6FF] text-[#2563EB] font-medium px-2.5 py-1 rounded-full flex items-center gap-1 hover:bg-[#DBEAFE] transition-colors"
+                className="text-[11px] bg-[rgba(83,58,253,0.06)] text-[#533afd] font-medium px-2.5 py-1 rounded-full flex items-center gap-1 hover:bg-[rgba(83,58,253,0.12)] transition-colors"
               >
                 {MATERIAL_TYPE_LABELS[mat]}
-                <span className="text-[#2563EB]/60 text-[10px] leading-none">×</span>
+                <span className="text-[#533afd]/60 text-[10px] leading-none">×</span>
               </Link>
             ))}
             {selectedForms.map((pf) => (
@@ -820,7 +820,7 @@ export default async function HomePage({
               </Link>
             )}
             {q && (
-              <span className="text-[11px] bg-[#EFF6FF] text-[#2563EB] font-medium px-2.5 py-1 rounded-full">
+              <span className="text-[11px] bg-[rgba(83,58,253,0.06)] text-[#533afd] font-medium px-2.5 py-1 rounded-full">
                 &ldquo;{q}&rdquo;
               </span>
             )}
@@ -871,7 +871,7 @@ export default async function HomePage({
                       size="sm"
                       linkUrl={company.website ?? null}
                     />
-                    <h2 className="text-base font-bold text-gray-900 leading-snug tracking-[-0.02em] line-clamp-1 flex-1 min-w-0" title={company.name}>
+                    <h2 className="text-base font-bold text-[#061b31] leading-snug tracking-[-0.02em] line-clamp-1 flex-1 min-w-0" title={company.name}>
                       <Link
                         href={`/companies/${company.slug}`}
                         className="after:absolute after:inset-0 after:content-['']"
