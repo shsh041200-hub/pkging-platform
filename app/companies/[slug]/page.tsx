@@ -531,7 +531,7 @@ export default async function CompanyPage({ params }: Props) {
 
         {/* Portfolio Gallery */}
         {hasPortfolios && (
-          <div className="bg-white border border-gray-200 rounded-xl p-5">
+          <div className="bg-white border border-[#e5edf5] rounded-xl p-5">
             <h2 className="text-[14px] font-light text-[#061b31] mb-3" style={{ fontFamily: "'sohne-var', 'SF Pro Display', -apple-system, sans-serif", fontWeight: 300, fontFeatureSettings: '"ss01"' }}>
               포트폴리오
             </h2>
@@ -567,7 +567,7 @@ export default async function CompanyPage({ params }: Props) {
 
         {/* Service Capabilities — neutral gray */}
         {hasServiceCapabilities && (
-          <div className="bg-white border border-gray-200 rounded-xl p-5">
+          <div className="bg-white border border-[#e5edf5] rounded-xl p-5">
             <h2 className="text-[14px] font-light text-[#061b31] mb-3" style={{ fontFamily: "'sohne-var', 'SF Pro Display', -apple-system, sans-serif", fontWeight: 300, fontFeatureSettings: '"ss01"' }}>
               서비스 역량
             </h2>
@@ -591,7 +591,7 @@ export default async function CompanyPage({ params }: Props) {
         {(hasTargetIndustries || hasKeyClients) && (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {hasTargetIndustries && (
-              <div className="bg-white border border-gray-200 rounded-xl p-5">
+              <div className="bg-white border border-[#e5edf5] rounded-xl p-5">
                 <h2 className="text-[14px] font-light text-[#061b31] mb-3" style={{ fontFamily: "'sohne-var', 'SF Pro Display', -apple-system, sans-serif", fontWeight: 300, fontFeatureSettings: '"ss01"' }}>
                   주요 납품 산업
                 </h2>
@@ -609,7 +609,7 @@ export default async function CompanyPage({ params }: Props) {
             )}
 
             {hasKeyClients && (
-              <div className="bg-white border border-gray-200 rounded-xl p-5">
+              <div className="bg-white border border-[#e5edf5] rounded-xl p-5">
                 <h2 className="text-[14px] font-light text-[#061b31] mb-3" style={{ fontFamily: "'sohne-var', 'SF Pro Display', -apple-system, sans-serif", fontWeight: 300, fontFeatureSettings: '"ss01"' }}>
                   주요 납품처
                 </h2>
@@ -617,7 +617,7 @@ export default async function CompanyPage({ params }: Props) {
                   {(company.key_clients as string[]).map((client: string, i: number) => (
                     <span
                       key={i}
-                      className="text-[12px] font-medium bg-white text-gray-500 border border-gray-200 px-3 py-1.5 rounded"
+                      className="text-[12px] font-medium bg-white text-gray-500 border border-[#e5edf5] px-3 py-1.5 rounded"
                     >
                       {client}
                     </span>
@@ -639,7 +639,7 @@ export default async function CompanyPage({ params }: Props) {
         )}
         {/* Normal section: hidden when opted out */}
         {!company.similar_optout_at && similarCompanies.length > 0 && (
-          <div className="bg-white border border-gray-200 rounded-xl p-5">
+          <div className="bg-white border border-[#e5edf5] rounded-xl p-5">
             <div className="mb-4">
               <div className="flex items-center justify-between">
                 <h2 className="text-[14px] font-light text-[#061b31]" style={{ fontFamily: "'sohne-var', 'SF Pro Display', -apple-system, sans-serif", fontWeight: 300, fontFeatureSettings: '"ss01"' }}>
@@ -697,7 +697,7 @@ export default async function CompanyPage({ params }: Props) {
 
         {/* Category links — same industry category pages */}
         {industryCats.length > 0 && (
-          <div className="bg-white border border-gray-200 rounded-xl p-5">
+          <div className="bg-white border border-[#e5edf5] rounded-xl p-5">
             <h2 className="text-[14px] font-light text-[#061b31] mb-4" style={{ fontFamily: "'sohne-var', 'SF Pro Display', -apple-system, sans-serif", fontWeight: 300, fontFeatureSettings: '"ss01"' }}>
               같은 카테고리의 다른 업체 보기
             </h2>
