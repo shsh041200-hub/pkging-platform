@@ -1,17 +1,17 @@
 @import "tailwindcss";
 
 @theme {
-  /* Brand (LINX Orange) — Tailwind v4 color tokens */
-  --color-brand-50:  #FFF7ED;
-  --color-brand-100: #FFEDD5;
-  --color-brand-200: #FED7AA;
-  --color-brand-300: #FDBA74;
-  --color-brand-400: #FB923C;
-  --color-brand-500: #F97316;
-  --color-brand-600: #EA580C;
-  --color-brand-700: #C2410C;
-  --color-brand-800: #9A3412;
-  --color-brand-900: #7C2D12;
+  /* Brand (Stripe Purple V04) — Tailwind v4 color tokens */
+  --color-brand-50:  #F0EEFF;
+  --color-brand-100: #E3DFFF;
+  --color-brand-200: #C4BAFF;
+  --color-brand-300: #A395FF;
+  --color-brand-400: #806FFF;
+  --color-brand-500: #533AFD;
+  --color-brand-600: #4434D4;
+  --color-brand-700: #3624A8;
+  --color-brand-800: #2A1C80;
+  --color-brand-900: #1C1454;
 
   /* Neutral (PACK Slate) */
   --color-neutral-50:  #F8FAFC;
@@ -59,10 +59,10 @@
 :root {
   --font-primary: var(--font-pretendard), -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 
-  /* Brand (LINX Orange) */
-  --color-brand:         #C2410C;
-  --color-brand-hover:   #9A3412;
-  --color-brand-light:   #FFF7ED;
+  /* Brand (Stripe Purple V04) */
+  --color-brand:         #533AFD;
+  --color-brand-hover:   #4434D4;
+  --color-brand-light:   #F0EEFF;
 
   /* Neutral (PACK Slate — logo-exact values) */
   --color-navy:          #0F172A;
