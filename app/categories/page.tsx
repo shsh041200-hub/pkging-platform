@@ -105,7 +105,7 @@ export default async function CategoriesIndexPage() {
       {/* Page hero */}
       <section className="bg-white border-b border-gray-100 px-5 sm:px-8 py-10 sm:py-14">
         <div className="max-w-3xl mx-auto text-center">
-          <h1 className="text-[28px] sm:text-[36px] font-extrabold text-[#0F172A] leading-tight tracking-[-0.02em] mb-3">
+          <h1 className="text-[28px] sm:text-[36px] font-light text-[#061b31] leading-tight tracking-[-0.02em] mb-3">
             분야별 패키징 업체 찾기
           </h1>
           <p className="text-[15px] text-[#64748B] leading-relaxed">
@@ -121,12 +121,12 @@ export default async function CategoriesIndexPage() {
             <Link
               key={cat}
               href={`/categories/${cat}`}
-              className="group flex items-start gap-4 bg-white border border-gray-200 rounded-xl px-5 py-5 hover:border-[#C2410C]/30 hover:bg-[#FFF7ED] hover:shadow-[0_4px_12px_rgba(0,0,0,0.06)] transition-all duration-150"
+              className="group flex items-start gap-4 bg-white border border-[#e5edf5] rounded-xl px-5 py-5 hover:border-[#533afd]/30 hover:bg-[#533afd]/[0.04] hover:shadow-[0_4px_12px_rgba(50,50,93,0.15)] transition-all duration-150"
             >
               <span className="text-[28px] leading-none flex-shrink-0 mt-0.5">{INDUSTRY_CATEGORY_ICONS[cat as IndustryCategory]}</span>
               <div className="min-w-0 flex-1">
                 <div className="flex items-baseline justify-between gap-2 flex-wrap">
-                  <span className="text-[16px] font-bold text-gray-900 group-hover:text-[#C2410C] transition-colors leading-tight">
+                  <span className="text-[16px] font-bold text-gray-900 group-hover:text-[#533afd] transition-colors leading-tight">
                     {INDUSTRY_CATEGORY_LABELS[cat as IndustryCategory]}
                   </span>
                   <span className="text-[12px] font-medium text-gray-400 flex-shrink-0">
@@ -137,7 +137,7 @@ export default async function CategoriesIndexPage() {
                   {INDUSTRY_CATEGORY_DESCRIPTIONS[cat as IndustryCategory]}
                 </p>
               </div>
-              <svg className="w-5 h-5 text-gray-300 group-hover:text-[#C2410C] flex-shrink-0 self-center transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <svg className="w-5 h-5 text-gray-300 group-hover:text-[#533afd] flex-shrink-0 self-center transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
               </svg>
             </Link>
