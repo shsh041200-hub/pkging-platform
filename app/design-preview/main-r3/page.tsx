@@ -101,23 +101,23 @@ const VARIANTS = [
 
 const DIFF_COLOR: Record<string, string> = {
   low: 'bg-slate-100 text-slate-600',
-  mid: 'bg-[rgba(83,58,253,0.08)] text-[#533afd]',
+  mid: 'bg-brand-500/[0.08] text-brand-500',
 }
 
 export default function R3IndexPage() {
   return (
-    <div className="min-h-screen bg-[#f6f9fc] font-sans">
+    <div className="min-h-screen bg-neutral-50 font-sans">
       {/* Header */}
-      <header className="bg-[#061b31] sticky top-0 z-50 border-b border-white/10">
+      <header className="bg-neutral-900 sticky top-0 z-50 border-b border-neutral-800">
         <div className="max-w-6xl mx-auto px-5 h-14 flex items-center justify-between">
           <span className="text-white font-semibold tracking-tight text-lg">Packlinx</span>
-          <Link href="/" className="text-[#b9b9f9] text-sm hover:text-white transition-colors">← 실제 사이트</Link>
+          <Link href="/" className="text-brand-200 text-sm hover:text-white transition-colors">← 실제 사이트</Link>
         </div>
       </header>
 
       {/* Index hero */}
-      <section className="bg-[#061b31] border-b border-white/10 px-5 py-16 text-center">
-        <p className="text-xs font-semibold tracking-widest uppercase text-[#b9b9f9] mb-4">INTERNAL PREVIEW ONLY · noindex</p>
+      <section className="bg-neutral-900 border-b border-neutral-800 px-5 py-16 text-center">
+        <p className="text-xs font-semibold tracking-widest uppercase text-brand-200 mb-4">INTERNAL PREVIEW ONLY · noindex</p>
         <h1 className="text-[32px] sm:text-[40px] font-light text-white leading-[1.1] tracking-[-0.04em] mb-4">
           r3 메인페이지 10 variant 비교
         </h1>
@@ -134,10 +134,10 @@ export default function R3IndexPage() {
             <Link
               key={v.id}
               href={v.href}
-              className="group relative bg-white border border-[#e5edf5] rounded-xl overflow-hidden hover:border-[#533afd]/40 hover:shadow-[rgba(83,58,253,0.10)_0px_12px_32px] transition-all"
+              className="group relative bg-white border border-neutral-200 rounded-xl overflow-hidden hover:border-brand-500/40 hover:shadow-lg transition-all"
             >
               {/* iframe thumbnail */}
-              <div className="relative w-full h-40 bg-[#f6f9fc] border-b border-[#e5edf5] overflow-hidden">
+              <div className="relative w-full h-40 bg-neutral-50 border-b border-neutral-200 overflow-hidden">
                 <iframe
                   src={v.href}
                   className="absolute top-0 left-0 w-[1280px] h-[800px] pointer-events-none"
@@ -149,7 +149,7 @@ export default function R3IndexPage() {
                 />
                 {/* CMO pick badge */}
                 {v.cmoPick && (
-                  <div className="absolute top-2 right-2 bg-[#533afd] text-white text-[10px] font-semibold px-2 py-0.5 rounded-full z-10">
+                  <div className="absolute top-2 right-2 bg-brand-500 text-white text-[10px] font-semibold px-2 py-0.5 rounded-full z-10">
                     CMO {v.cmoPick}위 픽
                   </div>
                 )}
@@ -158,29 +158,29 @@ export default function R3IndexPage() {
               {/* Card info */}
               <div className="p-5">
                 <div className="flex items-start justify-between gap-2 mb-2">
-                  <h2 className="text-[15px] font-semibold text-[#061b31] group-hover:text-[#533afd] transition-colors leading-snug">
+                  <h2 className="text-[15px] font-semibold text-neutral-900 group-hover:text-brand-500 transition-colors leading-snug">
                     {v.label}
                   </h2>
                   <span className={`flex-shrink-0 text-[10px] font-semibold px-2 py-0.5 rounded uppercase tracking-wide ${DIFF_COLOR[v.difficulty]}`}>
                     {v.difficulty}
                   </span>
                 </div>
-                <p className="text-[11px] font-medium text-[#533afd] bg-[rgba(83,58,253,0.06)] px-2 py-0.5 rounded inline-block mb-3">
+                <p className="text-[11px] font-medium text-brand-500 bg-brand-500/[0.06] px-2 py-0.5 rounded inline-block mb-3">
                   {v.axis}
                 </p>
-                <p className="text-[12px] text-[#64748d] leading-relaxed">{v.diff}</p>
+                <p className="text-[12px] text-neutral-500 leading-relaxed">{v.diff}</p>
               </div>
 
               {/* Hover CTA */}
-              <div className="absolute inset-0 bg-[rgba(83,58,253,0.02)] opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
+              <div className="absolute inset-0 bg-brand-500/[0.02] opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
             </Link>
           ))}
         </div>
       </main>
 
       {/* Footer note */}
-      <footer className="border-t border-[#e5edf5] bg-white px-5 py-8 text-center">
-        <p className="text-xs text-[#64748d]">
+      <footer className="border-t border-neutral-200 bg-white px-5 py-8 text-center">
+        <p className="text-xs text-neutral-500">
           이 페이지는 보드 픽을 위한 내부 비교용입니다. noindex 적용 · 외부 미공개
         </p>
       </footer>

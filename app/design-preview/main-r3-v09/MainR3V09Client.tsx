@@ -7,7 +7,7 @@ export function MainR3V09Client() {
   return (
     <div className="min-h-screen font-sans">
       {/* Header — dark */}
-      <header className="sticky top-0 z-50 border-b border-white/[0.08]" style={{ background: '#0f0f10' }}>
+      <header className="bg-neutral-950 sticky top-0 z-50 border-b border-white/[0.08]">
         <div className="max-w-6xl mx-auto px-5 h-14 flex items-center justify-between">
           <Link href="/design-preview/main-r3" className="text-white font-semibold tracking-tight text-lg">Packlinx</Link>
           <nav className="flex items-center gap-4 text-sm text-slate-400">
@@ -20,8 +20,7 @@ export function MainR3V09Client() {
 
       {/* Dark hero — full-screen */}
       <section
-        className="relative min-h-[80vh] flex items-center justify-center px-5 py-24 border-b border-white/[0.08]"
-        style={{ background: '#0f0f10' }}
+        className="bg-neutral-950 relative min-h-[80vh] flex items-center justify-center px-5 py-24 border-b border-white/[0.08]"
       >
         {/* Subtle grain texture overlay */}
         <div
@@ -39,13 +38,13 @@ export function MainR3V09Client() {
         />
 
         <div className="relative z-10 max-w-2xl mx-auto text-center">
-          <p className="text-xs font-semibold tracking-widest uppercase text-[#b9b9f9] mb-6">포장재 업체 검색 플랫폼</p>
+          <p className="text-xs font-semibold tracking-widest uppercase text-brand-200 mb-6">포장재 업체 검색 플랫폼</p>
           <h1 className="text-[44px] sm:text-[60px] font-light text-white leading-[1.05] tracking-[-0.05em] mb-8">
             포장재 파트너를<br />지금 찾으세요
           </h1>
 
           {/* Embedded search */}
-          <form className="flex rounded-xl overflow-hidden border border-white/20 bg-white/[0.06] backdrop-blur-sm focus-within:border-[#533afd]/60 focus-within:bg-white/[0.08] transition-all mb-8">
+          <form className="flex rounded-xl overflow-hidden border border-white/20 bg-white/[0.06] backdrop-blur-sm focus-within:border-brand-500/60 focus-within:bg-white/[0.08] transition-all mb-8">
             <input
               type="search"
               placeholder="업체명, 제품, 소재로 검색..."
@@ -53,7 +52,7 @@ export function MainR3V09Client() {
             />
             <button
               type="submit"
-              className="bg-white text-[#061b31] hover:bg-white/90 font-medium px-6 py-4 transition-colors flex-shrink-0 text-sm m-1 rounded-lg"
+              className="bg-white text-neutral-900 hover:bg-white/90 font-medium px-6 py-4 transition-colors flex-shrink-0 text-sm m-1 rounded-lg"
             >
               검색
             </button>
@@ -65,14 +64,14 @@ export function MainR3V09Client() {
               <Link
                 key={cat.label}
                 href={cat.href}
-                className="text-[13px] text-slate-300 border border-white/20 px-3.5 py-1.5 rounded-full hover:border-[#b9b9f9] hover:text-white hover:bg-white/[0.05] transition-all"
+                className="text-[13px] text-slate-300 border border-white/20 px-3.5 py-1.5 rounded-full hover:border-brand-200 hover:text-white hover:bg-white/[0.05] transition-all"
               >
                 {cat.label}
               </Link>
             ))}
             <Link
               href="/"
-              className="text-[13px] text-[#b9b9f9] border border-[#533afd]/40 bg-[rgba(83,58,253,0.08)] px-3.5 py-1.5 rounded-full hover:bg-[rgba(83,58,253,0.15)] transition-all"
+              className="text-[13px] text-brand-200 border border-brand-500/40 bg-brand-500/[0.08] px-3.5 py-1.5 rounded-full hover:bg-brand-500/[0.15] transition-all"
             >
               카테고리 둘러보기
             </Link>
@@ -83,29 +82,29 @@ export function MainR3V09Client() {
       </section>
 
       {/* Light section — vendor cards */}
-      <section className="bg-white border-b border-[#e5edf5]">
+      <section className="bg-white border-b border-neutral-200">
         <div className="max-w-6xl mx-auto px-5 py-20">
-          <h2 className="text-xl font-light text-[#061b31] tracking-[-0.02em] mb-8">
+          <h2 className="text-xl font-light text-neutral-900 tracking-[-0.02em] mb-8">
             등록 업체 둘러보기
-            <Link href="/" className="ml-4 text-[13px] text-[#533afd] font-normal">전체 보기 →</Link>
+            <Link href="/" className="ml-4 text-[13px] text-brand-500 font-normal">전체 보기 →</Link>
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {SAMPLE_VENDORS.slice(0, 6).map((v) => (
               <Link
                 key={v.name}
                 href={v.href}
-                className="group border border-[#e5edf5] rounded-xl p-5 bg-white hover:border-[#533afd]/30 hover:shadow-[rgba(83,58,253,0.08)_0px_12px_32px] transition-all"
+                className="group border border-neutral-200 rounded-xl p-5 bg-white hover:border-brand-500/30 hover:shadow-lg transition-all"
               >
                 <div className="flex items-center gap-3 mb-3">
-                  <div className="w-9 h-9 rounded-lg bg-[rgba(83,58,253,0.08)] flex items-center justify-center flex-shrink-0">
-                    <span className="text-[#533afd] font-bold text-sm">{v.name[0]}</span>
+                  <div className="w-9 h-9 rounded-lg bg-brand-500/[0.08] flex items-center justify-center flex-shrink-0">
+                    <span className="text-brand-500 font-bold text-sm">{v.name[0]}</span>
                   </div>
                   <div>
-                    <h3 className="font-semibold text-[#061b31] text-[14px] leading-snug">{v.name}</h3>
-                    <p className="text-[11px] text-[#64748d]">{v.region}</p>
+                    <h3 className="font-semibold text-neutral-900 text-[14px] leading-snug">{v.name}</h3>
+                    <p className="text-[11px] text-neutral-500">{v.region}</p>
                   </div>
                 </div>
-                <span className="text-[12px] font-medium text-[#533afd] bg-[rgba(83,58,253,0.06)] px-2.5 py-1 rounded">
+                <span className="text-[12px] font-medium text-brand-500 bg-brand-500/[0.06] px-2.5 py-1 rounded">
                   {v.category}
                 </span>
               </Link>
@@ -115,32 +114,32 @@ export function MainR3V09Client() {
       </section>
 
       {/* Guide content */}
-      <section className="bg-[#f6f9fc]">
+      <section className="bg-neutral-50">
         <div className="max-w-6xl mx-auto px-5 py-16">
-          <h2 className="text-xl font-light text-[#061b31] tracking-[-0.02em] mb-8">
+          <h2 className="text-xl font-light text-neutral-900 tracking-[-0.02em] mb-8">
             포장재 가이드
-            <Link href="/guides" className="ml-4 text-[13px] text-[#533afd] font-normal">전체 보기 →</Link>
+            <Link href="/guides" className="ml-4 text-[13px] text-brand-500 font-normal">전체 보기 →</Link>
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {SAMPLE_GUIDES.slice(0, 2).map((g) => (
               <Link
                 key={g.title}
                 href={g.href}
-                className="group border border-[#e5edf5] rounded-lg p-5 bg-white hover:border-[#533afd]/20 transition-colors"
+                className="group border border-neutral-200 rounded-lg p-5 bg-white hover:border-brand-500/20 transition-colors"
               >
-                <span className="text-[11px] font-medium text-[#533afd] bg-[rgba(83,58,253,0.06)] px-2.5 py-1 rounded mb-3 inline-block">{g.category}</span>
-                <h3 className="text-[14px] font-medium text-[#061b31] leading-snug group-hover:text-[#533afd] transition-colors">{g.title}</h3>
+                <span className="text-[11px] font-medium text-brand-500 bg-brand-500/[0.06] px-2.5 py-1 rounded mb-3 inline-block">{g.category}</span>
+                <h3 className="text-[14px] font-medium text-neutral-900 leading-snug group-hover:text-brand-500 transition-colors">{g.title}</h3>
               </Link>
             ))}
           </div>
         </div>
       </section>
 
-      <footer className="text-slate-400 text-xs py-8 px-5 border-t border-white/[0.08]" style={{ background: '#0f0f10' }}>
+      <footer className="bg-neutral-950 text-slate-400 text-xs py-8 px-5 border-t border-white/[0.08]">
         <div className="max-w-6xl mx-auto flex flex-wrap items-center justify-between gap-4">
           <span className="text-white font-semibold">Packlinx</span>
           <span>© 2026 PACKLINX. 업체 정보는 공개된 출처에서 수집되었습니다.</span>
-          <Link href="/design-preview/main-r3" className="text-[#b9b9f9] hover:text-white transition-colors">← r3 비교 목록</Link>
+          <Link href="/design-preview/main-r3" className="text-brand-200 hover:text-white transition-colors">← r3 비교 목록</Link>
         </div>
       </footer>
     </div>
