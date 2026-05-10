@@ -94,11 +94,11 @@ const jsonLd = {
 }
 
 const CERT_CATEGORY_COLORS: Record<CertificationCategory, { active: string; inactive: string }> = {
-  quality:       { active: 'bg-blue-500 text-white border-blue-500',   inactive: 'text-blue-700 border-blue-200 bg-blue-50 hover:border-blue-400' },
-  food_safety:   { active: 'bg-green-600 text-white border-green-600', inactive: 'text-green-700 border-green-200 bg-green-50 hover:border-green-400' },
+  quality:       { active: 'bg-brand-500 text-white border-brand-500',   inactive: 'text-brand-700 border-brand-200 bg-brand-50 hover:border-brand-400' },
+  food_safety:   { active: 'bg-success-600 text-white border-success-600', inactive: 'text-success-700 border-success-200 bg-success-50 hover:border-success-600' },
   environmental: { active: 'bg-emerald-600 text-white border-emerald-600', inactive: 'text-emerald-700 border-emerald-200 bg-emerald-50 hover:border-emerald-400' },
-  pharma:        { active: 'bg-purple-600 text-white border-purple-600', inactive: 'text-purple-700 border-purple-200 bg-purple-50 hover:border-purple-400' },
-  general:       { active: 'bg-gray-700 text-white border-gray-700',   inactive: 'text-gray-600 border-gray-200 bg-gray-50 hover:border-gray-400' },
+  pharma:        { active: 'bg-brand-700 text-white border-brand-700', inactive: 'text-brand-700 border-brand-200 bg-brand-50 hover:border-brand-400' },
+  general:       { active: 'bg-neutral-700 text-white border-neutral-700',   inactive: 'text-neutral-600 border-neutral-200 bg-neutral-50 hover:border-neutral-400' },
 }
 
 function categoryToSlug(key: IndustryCategory): string {
@@ -705,7 +705,7 @@ export default async function HomePage({
             {activeCerts.map((certId) => {
               const ct = CERTIFICATION_TYPES.find((c) => c.id === certId)
               return (
-                <span key={certId} className="text-[11px] bg-green-50 text-green-700 font-medium px-2.5 py-1 rounded-full border border-green-200">
+                <span key={certId} className="text-[11px] bg-success-50 text-success-700 font-medium px-2.5 py-1 rounded-full border border-success-200">
                   {ct?.label ?? certId}
                 </span>
               )
@@ -807,7 +807,7 @@ export default async function HomePage({
                     </div>
                     {company.avg_rating != null && company.review_count > 0 && (
                       <div className="flex items-center gap-1 flex-shrink-0">
-                        <svg className="w-3 h-3 text-amber-400" fill="currentColor" viewBox="0 0 20 20">
+                        <svg className="w-3 h-3 text-neutral-400" fill="currentColor" viewBox="0 0 20 20">
                           <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                         </svg>
                         <span className="text-[11px] font-semibold text-gray-700">{Number(company.avg_rating).toFixed(1)}</span>
