@@ -131,7 +131,7 @@ function isDynamicGuideSlug(slug: string): slug is DynamicGuideSlug {
 }
 
 export function generateStaticParams() {
-  return DYNAMIC_GUIDE_SLUGS.map((slug) => ({ slug }));
+  return DYNAMIC_GUIDE_SLUGS.map((slug) => ({ slug: encodeURIComponent(slug) }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
