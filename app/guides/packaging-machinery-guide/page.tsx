@@ -131,24 +131,24 @@ const slotChecklist = [
 
 const slotFaq = [
   {
-    question: "KCs 인증이 없는 수입 포장기계를 사용할 수 있나요?",
+    question: "패키징 자동화 기계 ROI 기간은 얼마나 걸리나요?",
     answer:
-      "KCs 안전인증 대상 품목이라면 인증 없이 국내 판매·사용이 불가합니다. 해외 직수입 기계라도 동일 기준이 적용되므로, 공급업체에 KCs 인증서를 반드시 요청하세요.",
+      "일반적으로 반자동 기계는 1~2년, 전자동 라인은 2~3년 내 초기 투자비 회수를 목표로 합니다. 정확한 ROI는 현재 인건비·시간당 생산량·불량률 감소 효과를 기반으로 산출해야 합니다. 소재별 패키징 비용 구조는 <a href=\"/guides/packaging-material-complete-guide\">패키징 소재 종합 가이드</a>를 참조하세요.",
   },
   {
-    question: "CE 인증 제품은 국내에서도 사용 가능한가요?",
+    question: "패키징 기계 KCs 인증이 없으면 국내 사용이 불가한가요?",
     answer:
-      "CE는 EU 시장 적합성 표시로, 국내 KCs와 별개 제도입니다. CE만 보유했다고 국내 KCs 요건을 충족하지 않으므로, 국내 도입 전 KCs 인증 여부를 별도로 확인해야 합니다.",
+      "전기용품 및 생활용품 안전관리법 대상 품목에 해당하는 기계는 KCs 인증 없이 국내 유통·사용이 제한됩니다. 해당 여부는 국가기술표준원(KATS) 포털에서 확인 가능하며, 인증 마크 보유 여부는 공급사에 공식 인증서 원본을 요청해 확인하세요.",
   },
   {
-    question: "반자동과 전자동 포장기 중 어떤 것이 유리한가요?",
+    question: "소량 다품종 생산에 적합한 기계는 무엇인가요?",
     answer:
-      "월 처리량 기준으로 판단하세요. 소량 다품종이라면 반자동이 유연성이 높고, 대량 단품종은 전자동이 장기적으로 단가 절감에 유리합니다. 공급업체 무상 시뮬레이션을 활용하시기 바랍니다.",
+      "규격 변경이 잦은 소량 다품종 환경에서는 빠른 사이즈 교체(퀵체인지)가 가능한 반자동 충전·밀봉 기계가 적합합니다. 서보 구동 방식은 초기 비용이 높지만 조정 시간과 불량률이 낮아 다품종 구간에서 TCO가 낮습니다.",
   },
   {
-    question: "포장기계 유지보수는 어떻게 준비해야 하나요?",
+    question: "기계 유지보수 비용을 낮추는 방법은 무엇인가요?",
     answer:
-      "공급업체 또는 공인 서비스센터와 유지보수 계약을 체결하는 것이 일반적입니다. 계약서에 부품 보증기간·응급 출동 SLA(서비스 수준)를 명시하면 운영 리스크를 줄일 수 있습니다.",
+      "국내 AS 네트워크와 소모품 수급 채널을 구매 전에 확인하는 것이 핵심입니다. 기계와 함께 사용하는 포장 부자재 비용은 <a href=\"/guides/packaging-accessories-guide\">포장 부자재 가이드</a>에서, 테이프 비교는 <a href=\"/guides/packaging-tape-comparison\">테이프 비교 가이드</a>에서 확인하세요.",
   },
 ];
 
@@ -181,14 +181,14 @@ export default function PackagingMachineryGuidePage() {
         style={{ gridTemplateColumns: "1fr 280px" }}
       >
         <article>
-          <GuideCallout variant="info" title="포장기계 세분류">
-            포장기계는 용도별로 카톤에렉터, 씰링기, 슈링크 포장기, 스트레치 포장기, 진공 포장기 등으로 세분됩니다. 처리 대상 제품의 형상·크기·중량을 먼저 정의해야 적합한 기종을 선택할 수 있습니다.
+          <GuideCallout variant="info" title="처리 속도와 자동화 단계">
+            일 생산량 5,000개 미만이면 반자동, 이상이면 전자동 도입이 일반적으로 ROI 회수 기간이 빠릅니다. 시간당 처리 속도(BPM/PPM)를 공급사와 계약 전에 명확히 협의하세요.
           </GuideCallout>
-          <GuideCallout variant="warn" title="KCs 안전인증 미보유 기계 사용 금지">
-            국내에서 전기를 사용하는 포장기계를 도입하려면 KCs 안전인증 대상 품목인지 먼저 확인하세요. 인증 대상임에도 마크가 없는 제품을 사용하면 「전기용품 및 생활용품 안전관리법」 위반이 됩니다. 공급업체에 KCs 인증서를 요청하시기 바랍니다.
+          <GuideCallout variant="warn" title="KCs·CE 인증 원본 확인">
+            기계 도입 시 공급사가 제시하는 인증 문서(인증 번호·발급 기관·유효 기간)를 반드시 원본으로 확인하세요. 인증 마크 보유 여부는 공급사 자체 주장만으로 확인이 불가합니다.
           </GuideCallout>
-          <GuideCallout variant="tip" title="KCs와 CE 분리 확인 필수">
-            EU 시장에 수출하는 제품을 패키징한다면 CE 적합성 표시(Declaration of Conformity)가 필요할 수 있습니다. 국내 KCs와 EU CE는 별개 제도이므로 각각 별도로 확인이 필요합니다. 두 인증을 동일하게 취급하지 마세요.
+          <GuideCallout variant="tip" title="FAT(공장 인수 테스트) 계약 포함">
+            고가 기계 도입 시 공장 인수 테스트(FAT)와 현장 설치 후 SAT를 계약에 포함하면 납품 후 분쟁을 줄일 수 있습니다.
           </GuideCallout>
           <GuideChecklist title="포장기계 도입 전 확정 항목" items={slotChecklist} />
           <main>
@@ -766,22 +766,22 @@ export default function PackagingMachineryGuidePage() {
           </main>
           <GuideFaq items={slotFaq} />
           <GuideEndCta
-            headline="포장기계 공급업체를 Packlinx에서 비교하세요"
-            subtext="KCs 인증 보유 업체를 포함, 기계 유형·처리량별 공급업체를 한 곳에서 확인할 수 있습니다."
+            headline="패키징 기계 공급사 찾기"
+            subtext="Packlinx에서 패키징 자동화 기계 공급사를 비교하세요"
             buttonLabel="업체 비교하기 →"
-            href="/vendors?category=packaging-machinery"
+            href="/products/packaging-machinery"
           />
         </article>
         <GuideSidebar
-          ctaHeadline="포장기계 공급업체 비교"
-          ctaSubtext="KCs 인증 보유 업체를 포함, 기계 유형·처리량별 공급업체를 비교하세요."
+          ctaHeadline="패키징 기계 공급사 찾기"
+          ctaSubtext="Packlinx에서 패키징 자동화 기계 공급사를 비교하세요."
           ctaButtonLabel="업체 찾기 →"
-          ctaHref="/vendors?category=packaging-machinery"
+          ctaHref="/products/packaging-machinery"
           relatedGuides={[
-            { href: "/guides/packaging-material-complete-guide", title: "포장재 소재 완전 가이드", readTime: "6분" },
-            { href: "/guides/corrugated-box-supplier-selection", title: "골판지 박스 업체 선정 가이드", readTime: "7분" },
-            { href: "/guides/plastic-container-guide", title: "플라스틱 용기·병 종류 완전 가이드", readTime: "7분" },
-            { href: "/guides/packaging-printing-guide", title: "패키징 인쇄 공정 가이드", readTime: "8분" },
+            { href: "/guides/packaging-accessories-guide", title: "포장 부자재 가이드", readTime: "5분" },
+            { href: "/guides/flexible-packaging-guide", title: "연포장 가이드", readTime: "5분" },
+            { href: "/guides/packaging-printing-guide", title: "패키징 인쇄 공정 가이드", readTime: "6분" },
+            { href: "/guides/packaging-material-complete-guide", title: "소재 종합 가이드", readTime: "7분" },
           ]}
         />
       </div>

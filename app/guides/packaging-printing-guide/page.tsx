@@ -126,7 +126,7 @@ const slotFaq = [
   {
     question: "플렉소와 그라비아 인쇄의 차이는 무엇인가요?",
     answer:
-      "플렉소는 유연한 수지판을 사용해 골판지·필름 등 다양한 소재에 빠르게 인쇄할 수 있으며 중·대량에 적합합니다. 그라비아는 금속 롤에 이미지를 식각해 색상 재현율이 매우 높지만 판 제작비가 높아 5만 매 이상 대량 구간에서 단가 이점이 있습니다. 라벨 전용 인쇄 방식 비교는 <a href=\"/guides/label-printing-guide\">라벨 인쇄 가이드</a>를 참조하세요.",
+      '플렉소는 유연한 수지판을 사용해 골판지·필름 등 다양한 소재에 빠르게 인쇄할 수 있으며 중·대량에 적합합니다. 그라비아는 금속 롤에 이미지를 식각해 색상 재현율이 매우 높지만 판 제작비가 높아 5만 매 이상 대량 구간에서 단가 이점이 있습니다. 라벨 전용 인쇄 방식 비교는 <a href="/guides/label-printing-guide">라벨 인쇄 가이드</a>를 참조하세요.',
   },
   {
     question: "소량(500매 이하) 패키징 인쇄에 적합한 공정은 무엇인가요?",
@@ -136,7 +136,7 @@ const slotFaq = [
   {
     question: "식품 용기에 인쇄할 때 잉크 규제가 있나요?",
     answer:
-      "식품에 직접 접촉하는 패키징(내면 인쇄)은 식약처 「기구 및 용기·포장의 기준 및 규격」에 적합한 잉크를 사용해야 합니다. 외면 인쇄도 잉크 이행성(set-off) 기준이 적용될 수 있으므로 공급사에 식품용 잉크 여부를 명확히 확인하세요. 식품 패키징 소재 전반은 <a href=\"/guides/food-packaging-materials\">식품 포장재 소재 가이드</a>를 참조하세요.",
+      '식품에 직접 접촉하는 패키징(내면 인쇄)은 식약처 「기구 및 용기·포장의 기준 및 규격」에 적합한 잉크를 사용해야 합니다. 외면 인쇄도 잉크 이행성(set-off) 기준이 적용될 수 있으므로 공급사에 식품용 잉크 여부를 명확히 확인하세요. 식품 패키징 소재 전반은 <a href="/guides/food-packaging-materials">식품 포장재 소재 가이드</a>를 참조하세요.',
   },
   {
     question: "인쇄 납기를 단축하는 방법은 무엇인가요?",
@@ -602,22 +602,22 @@ export default function PackagingPrintingGuidePage() {
           </main>
           <GuideFaq items={slotFaq} />
           <GuideEndCta
-            headline="패키징 인쇄 공급사 찾기"
-            subtext="Packlinx에서 인쇄 공정별 패키징 공급사를 비교하세요"
+            headline="인쇄 공정에 맞는 포장 업체, Packlinx에서 찾으세요"
+            subtext="공정·기재·인쇄 방식별 공급업체를 비교하고 견적을 바로 요청할 수 있습니다."
             buttonLabel="업체 비교하기 →"
             href="/products/packaging-printing"
           />
         </article>
         <GuideSidebar
-          ctaHeadline="패키징 인쇄 공급사 찾기"
-          ctaSubtext="Packlinx에서 인쇄 공정별 패키징 공급사를 비교하세요."
+          ctaHeadline="인쇄 공정별 포장 업체 찾기"
+          ctaSubtext="공정·기재·인쇄 방식별 공급업체를 비교하고 견적을 바로 요청할 수 있습니다."
           ctaButtonLabel="업체 찾기 →"
           ctaHref="/products/packaging-printing"
           relatedGuides={[
-            { href: "/guides/label-printing-guide", title: "라벨 인쇄 가이드", readTime: "5분" },
-            { href: "/guides/packaging-material-complete-guide", title: "패키징 소재 종합 가이드", readTime: "7분" },
-            { href: "/guides/eco-friendly-packaging", title: "친환경 패키징", readTime: "6분" },
-            { href: "/guides/flexible-packaging-guide", title: "연포장 가이드", readTime: "5분" },
+            { href: "/guides/food-packaging-materials", title: "식품 포장재 위생·인증 기준", readTime: "5분" },
+            { href: "/guides/eco-friendly-packaging", title: "친환경 포장재 전환 가이드", readTime: "6분" },
+            { href: "/guides/flexible-packaging-guide", title: "파우치·필름 연포장 가이드", readTime: "5분" },
+            { href: "/guides/label-printing-guide", title: "라벨 인쇄 업체 선정 가이드", readTime: "7분" },
           ]}
         />
       </div>
