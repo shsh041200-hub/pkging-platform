@@ -429,10 +429,10 @@ export default async function HomePage({
         <div className="relative z-10 flex flex-col items-center text-center px-6 sm:px-8 py-16 lg:py-24">
           {/* Text content */}
           <div className="max-w-3xl mx-auto w-full">
-            <div className="inline-block text-[11px] font-semibold tracking-widest uppercase text-[#C2410C] bg-[#C2410C]/[0.08] border border-[#C2410C]/[0.15] px-3 py-1.5 rounded-full mb-5">
+            <div className="inline-block text-[11px] font-semibold tracking-widest uppercase text-[#533afd] bg-[#533afd]/[0.08] border border-[#533afd]/[0.15] px-3 py-1.5 rounded-full mb-5">
               패키징 파트너 검색의 시작점
             </div>
-            <h1 className="text-[32px] sm:text-[40px] lg:text-[48px] font-extrabold text-[#0F172A] leading-[1.15] tracking-[-0.03em] mb-4">
+            <h1 className="text-[32px] sm:text-[40px] lg:text-[48px] font-light text-[#061b31] leading-[1.15] tracking-[-0.96px] mb-4">
               패키징에 필요한 모든 업체,<br />여기서 한 번에 찾으세요
             </h1>
             <p className="text-[15px] sm:text-[16px] text-[#64748B] leading-relaxed max-w-[520px] mx-auto">
@@ -444,7 +444,7 @@ export default async function HomePage({
 
           {/* Search bar */}
           <div className="max-w-[560px] lg:max-w-[720px] w-full mx-auto mt-8">
-            <form method="GET" className="flex rounded-xl overflow-hidden border border-gray-200 shadow-[0_2px_8px_rgba(0,0,0,0.06)] focus-within:border-[#C2410C] focus-within:shadow-[0_2px_8px_rgba(0,0,0,0.06),0_0_0_3px_rgba(194,65,12,0.12)] transition-shadow">
+            <form method="GET" className="flex rounded-xl overflow-hidden border border-gray-200 shadow-[0_2px_8px_rgba(0,0,0,0.06)] focus-within:border-[#533afd] focus-within:shadow-[0_2px_8px_rgba(0,0,0,0.06),0_0_0_3px_rgba(83,58,253,0.12)] transition-shadow">
               <input
                 name="q"
                 defaultValue={q}
@@ -453,7 +453,7 @@ export default async function HomePage({
               />
               <button
                 type="submit"
-                className="bg-[#C2410C] hover:bg-[#9A3412] text-white font-semibold px-6 py-3 transition-colors text-sm flex-shrink-0 m-1.5 rounded-lg"
+                className="bg-[#533afd] hover:bg-[#4434d4] text-white font-semibold px-6 py-3 transition-colors text-sm flex-shrink-0 m-1.5 rounded-lg"
               >
                 검색
               </button>
@@ -479,11 +479,11 @@ export default async function HomePage({
                   <Link
                     key={cat}
                     href={`/categories/${categoryToSlug(cat)}`}
-                    className="group flex items-center gap-2.5 bg-white border border-gray-200 rounded-lg px-3 py-2.5 hover:border-[#C2410C]/30 hover:bg-[#FFF7ED] transition-all duration-150"
+                    className="group flex items-center gap-2.5 bg-white border border-[#e5edf5] rounded-lg px-3 py-2.5 hover:border-[#533afd]/30 hover:bg-[#533afd]/[0.04] transition-all duration-150"
                   >
                     <span className="text-base flex-shrink-0">{INDUSTRY_CATEGORY_ICONS[cat]}</span>
                     <div className="min-w-0 text-left">
-                      <span className="text-[13px] font-semibold text-gray-900 group-hover:text-[#C2410C] transition-colors block leading-tight">
+                      <span className="text-[13px] font-semibold text-gray-900 group-hover:text-[#533afd] transition-colors block leading-tight">
                         {INDUSTRY_CATEGORY_LABELS[cat]}
                       </span>
                       <span className="text-[11px] text-gray-400">{categoryCounts[cat]}개</span>
@@ -499,22 +499,22 @@ export default async function HomePage({
                 </div>
                 <Link
                   href="/services/printing-design"
-                  className="group flex items-center gap-4 bg-white border border-gray-200 rounded-xl px-5 py-4 hover:border-[#C2410C]/30 hover:bg-[#FFF7ED] transition-all duration-150"
+                  className="group flex items-center gap-4 bg-white border border-[#e5edf5] rounded-xl px-5 py-4 hover:border-[#533afd]/30 hover:bg-[#533afd]/[0.04] transition-all duration-150"
                 >
                   <span className="flex-shrink-0 w-8 h-8 flex items-center justify-center">
-                    <svg className="w-6 h-6 text-gray-500 group-hover:text-[#C2410C] transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.6}>
+                    <svg className="w-6 h-6 text-gray-500 group-hover:text-[#533afd] transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.6}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0110.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0l.229 2.523a1.125 1.125 0 01-1.12 1.227H7.231c-.662 0-1.18-.568-1.12-1.227L6.34 18m11.318 0h1.091A2.25 2.25 0 0021 15.75V9.456c0-1.081-.768-2.015-1.837-2.175a48.055 48.055 0 00-1.913-.247M6.34 18H5.25A2.25 2.25 0 013 15.75V9.456c0-1.081.768-2.015 1.837-2.175a48.041 48.041 0 011.913-.247m10.5 0a48.536 48.536 0 00-10.5 0m10.5 0V3.375c0-.621-.504-1.125-1.125-1.125h-8.25c-.621 0-1.125.504-1.125 1.125v3.659M18.25 7.034l-.057-.022M6.75 7.034c-.018-.007-.036-.014-.057-.022" />
                     </svg>
                   </span>
                   <div className="min-w-0 flex-1">
-                    <span className="text-[14px] font-semibold text-gray-900 group-hover:text-[#C2410C] transition-colors block">
+                    <span className="text-[14px] font-semibold text-gray-900 group-hover:text-[#533afd] transition-colors block">
                       인쇄·디자인 서비스
                     </span>
                     <span className="text-[12px] text-gray-500 leading-relaxed block mt-0.5">
                       패키지 인쇄·디자인이 필요하신가요? 소량 맞춤 인쇄부터 브랜드 패키징까지
                     </span>
                   </div>
-                  <svg className="w-5 h-5 text-gray-300 group-hover:text-[#C2410C] flex-shrink-0 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <svg className="w-5 h-5 text-gray-300 group-hover:text-[#533afd] flex-shrink-0 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
                   </svg>
                 </Link>
@@ -569,7 +569,7 @@ export default async function HomePage({
                         href={buildMaterialUrl(mat)}
                         className={`flex-shrink-0 px-2.5 py-1.5 rounded text-[11px] font-medium transition-all border ${
                           isActive
-                            ? 'bg-[#C2410C] text-white border-[#C2410C]'
+                            ? 'bg-[#533afd] text-white border-[#533afd]'
                             : 'text-gray-500 border-gray-200 hover:text-gray-700 hover:border-gray-300 bg-white'
                         }`}
                       >
@@ -590,7 +590,7 @@ export default async function HomePage({
                         href={buildFormUrl(pf)}
                         className={`flex-shrink-0 px-2.5 py-1.5 rounded text-[11px] font-medium transition-all border ${
                           isActive
-                            ? 'bg-[#7C3AED] text-white border-[#7C3AED]'
+                            ? 'bg-[#533afd] text-white border-[#533afd]'
                             : 'text-gray-500 border-gray-200 hover:text-gray-700 hover:border-gray-300 bg-white'
                         }`}
                       >
@@ -840,7 +840,7 @@ export default async function HomePage({
             {companies.map((company) => (
               <article
                 key={company.id}
-                className="bg-white border border-gray-200 rounded-xl overflow-hidden hover:border-gray-300 hover:shadow-[0_8px_24px_rgba(0,0,0,0.08),0_2px_4px_rgba(0,0,0,0.04)] hover:-translate-y-px transition-all duration-200 group relative flex flex-col min-h-[260px] max-h-[280px]"
+                className="bg-white border border-[#e5edf5] rounded-xl overflow-hidden hover:border-[#533afd]/20 hover:shadow-[0_8px_24px_rgba(50,50,93,0.25),0_2px_4px_rgba(0,0,0,0.1)] hover:-translate-y-px transition-all duration-200 group relative flex flex-col min-h-[260px] max-h-[280px]"
               >
                 <div className="p-6 flex flex-col flex-1 overflow-hidden">
                   <div className="flex items-start justify-between mb-3">
@@ -955,11 +955,11 @@ export default async function HomePage({
                   <Link
                     key={cat}
                     href={`/categories/${categoryToSlug(cat)}`}
-                    className="group flex items-center gap-2.5 bg-white border border-gray-200 rounded-lg px-3 py-2.5 hover:border-[#C2410C]/30 hover:bg-[#FFF7ED] transition-all duration-150"
+                    className="group flex items-center gap-2.5 bg-white border border-[#e5edf5] rounded-lg px-3 py-2.5 hover:border-[#533afd]/30 hover:bg-[#533afd]/[0.04] transition-all duration-150"
                   >
                     <span className="text-base flex-shrink-0">{INDUSTRY_CATEGORY_ICONS[cat]}</span>
                     <div className="min-w-0 text-left">
-                      <span className="text-[13px] font-semibold text-gray-900 group-hover:text-[#C2410C] transition-colors block leading-tight">
+                      <span className="text-[13px] font-semibold text-gray-900 group-hover:text-[#533afd] transition-colors block leading-tight">
                         {INDUSTRY_CATEGORY_LABELS[cat]}
                       </span>
                       <span className="text-[11px] text-gray-400">{categoryCounts[cat]}개</span>
