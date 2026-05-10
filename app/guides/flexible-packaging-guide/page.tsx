@@ -1,7 +1,12 @@
 import React from "react";
 import type { Metadata } from "next";
 import Link from "next/link";
-import { GuidePageShell } from "@/components/guide/GuidePageShell";
+import { GuideHero } from "@/components/guide/GuideHero";
+import { GuideCallout } from "@/components/guide/GuideCallout";
+import { GuideChecklist } from "@/components/guide/GuideChecklist";
+import { GuideFaq } from "@/components/guide/GuideFaq";
+import { GuideSidebar } from "@/components/guide/GuideSidebar";
+import { GuideEndCta } from "@/components/guide/GuideEndCta";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://packlinx.com";
 const canonicalUrl = `${siteUrl}/guides/flexible-packaging-guide`;
@@ -106,6 +111,37 @@ const faqJsonLd = {
   ],
 };
 
+// ─── v1 slot data ─────────────────────────────────────────────────────────────
+
+const slotTldr = [
+  { bold: "파우치·필름 선택은 내용물 기체 차단 요건이 핵심", text: "— 산소 차단(OTR)·수분 차단(WVTR) 수치를 먼저 정의합니다." },
+  { bold: "알루미늄 라미네이트 = 최고 차단성", text: "— 커피·분말 식품 장기 보관에 최적, 단가는 PE 필름 대비 3~5배 높습니다." },
+  { bold: "MOQ 3,000~10,000매", text: "— 연포장 생산 특성상 소량 발주는 단가가 급격히 높아집니다." },
+];
+
+const slotFaq = [
+  {
+    question: "파우치와 비닐 봉지의 차이는 무엇인가요?",
+    answer: "파우치는 복합 필름(2층 이상 라미네이트) 구조로 내용물 보호·차단 성능이 높고, 지퍼락·이지필 등 기능성 개봉 구조를 추가할 수 있습니다. 비닐 봉지는 단층 또는 2층 PE 필름으로 내용물 보호 기능이 낮지만 단가가 훨씬 저렴합니다.",
+  },
+  {
+    question: "연포장 MOQ는 얼마나 되나요?",
+    answer: '그라비아 인쇄 기준 3,000~10,000매가 일반적입니다. 무지(白) 또는 디지털 인쇄 방식을 사용하면 500~1,000매 소량 발주가 가능하지만 단가는 높아집니다. 소량 발주 옵션은 <a href="/guides/small-quantity-custom-box">소량 맞춤 박스 가이드</a>를 참고하세요.',
+  },
+  {
+    question: "커피·분말 제품 장기 보관에 적합한 파우치 소재는 무엇인가요?",
+    answer: "알루미늄 라미네이트(AL/PET/PE 구조)가 산소·수분·광선 차단 성능이 가장 높아 장기 보관에 적합합니다. 단가는 PE 단층 필름 대비 3~5배 높지만 유효기간 연장 효과로 총비용을 줄일 수 있습니다.",
+  },
+  {
+    question: "친환경 연포장 소재로 전환할 수 있나요?",
+    answer: 'GRS 인증 재생 PE·PP 필름이나 PLA·PBAT 혼합 생분해 필름으로 전환이 가능합니다. 단, 생분해 필름은 차단 성능이 일반 필름보다 낮고 MOQ·납기가 길어질 수 있습니다. 친환경 소재 전환 기준은 <a href="/guides/eco-friendly-packaging">친환경 포장재 가이드</a>를 참고하세요.',
+  },
+  {
+    question: "연포장 그라비아 인쇄 형판비는 얼마나 드나요?",
+    answer: '색상당 30~80만 원이 일반적이며, 8도 풀컬러 기준 240~640만 원입니다. 형판은 동일 소재·색상 재주문 시 재사용 가능합니다. 인쇄 비용 절감 방법은 <a href="/guides/packaging-printing-guide">인쇄 방식 가이드</a>를 참고하세요.',
+  },
+];
+
 export default function FlexiblePackagingGuidePage() {
   // Spread lowercase `hreflang` prop to bypass React 19 camelCase hoisting serialiser.
   // React 19 outputs hrefLang= (camelCase) for metadata alternates; direct JSX spread
@@ -113,7 +149,7 @@ export default function FlexiblePackagingGuidePage() {
   const hreflangKo = { rel: "alternate", hreflang: "ko-KR", href: canonicalUrl } as React.LinkHTMLAttributes<HTMLLinkElement>;
   const hreflangDefault = { rel: "alternate", hreflang: "x-default", href: canonicalUrl } as React.LinkHTMLAttributes<HTMLLinkElement>;
   return (
-    <GuidePageShell>
+    <div className="-mx-5 sm:-mx-8 -mt-10 sm:-mt-14">
       <link {...hreflangKo} />
       <link {...hreflangDefault} />
       <script
@@ -124,8 +160,40 @@ export default function FlexiblePackagingGuidePage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
       />
-      <main>
-        <h1>연포장재 완전 가이드 — 종류·소재·식품별 선택 기준 (2026년)</h1>
+      <GuideHero
+        tag="소재·친환경 · 연포장 가이드"
+        title="연포장재 완전 가이드 — 종류·소재·식품별 선택 기준 (2026년)"
+        dateLabel="2026-05 업데이트"
+        readTime="6분 읽기"
+        category="소재"
+        categoryHref="/guides"
+        tldr={slotTldr}
+      />
+      <div
+        className="max-w-[1180px] mx-auto"
+        style={{ display: "grid", gridTemplateColumns: "1fr 280px", gap: "48px", padding: "40px 24px 80px" }}
+      >
+        <article style={{ fontSize: "17px", lineHeight: "1.78", color: "var(--g-ink-2)", maxWidth: "760px" }}>
+          <GuideCallout variant="info" title="연포장 층 구조 이해">
+            <p>연포장 필름은 외층(인쇄·내마모)·중간층(차단)·내층(실링) 3층 구조로 구성됩니다. 차단 요건이 높을수록 중간층에 알루미늄 호일 또는 EVOH를 추가해 층수를 늘립니다. 층수가 늘어날수록 단가와 MOQ가 높아집니다.</p>
+          </GuideCallout>
+          <GuideCallout variant="warn" title="식품 용도 내층 소재 법적 요건">
+            <p>식품에 직접 접촉하는 내층 소재는 식약처 기준을 충족해야 합니다. PE·PP·PET 중에서도 등급·규격에 따라 허용 여부가 다르므로 발주 전 업체에 식품 접촉 이행성 시험 성적서를 반드시 요청하세요.</p>
+          </GuideCallout>
+          <GuideCallout variant="tip" title="파일럿 롤 선발주 권장">
+            <p>연포장은 필름 표면 특성·인쇄 색상이 실제 생산에서 달라질 수 있습니다. 본 발주 전 소량 파일럿 롤(200~500m)로 인쇄 품질·밀봉 강도를 검수하면 대량 불량 리스크를 줄일 수 있습니다.</p>
+          </GuideCallout>
+          <GuideChecklist
+            title="연포장 발주 전 확정 항목"
+            items={[
+              "<strong>OTR·WVTR 기준 정의</strong> — 내용물 유효기간 기준 산소·수분 차단 요건(cc/m²·day) 산출",
+              "<strong>내층 소재 법적 요건 확인</strong> — 식품·화장품 용도 시 식약처·화장품법 허용 소재 검토",
+              "<strong>실링 방식 결정</strong> — 3면·4면·스탠드업 파우치 구조 및 지퍼락·이지필 옵션 명시",
+              "<strong>인쇄 도수·그라비아 형판비</strong> — 4~8도 그라비아 기준 형판비(색상당 30~80만 원) 포함",
+              "<strong>MOQ·발주 주기 계획</strong> — 최소 발주량(3,000~10,000매) 충족을 위한 제품 SKU 통합",
+            ]}
+          />
+          <main>
         <p>
           식품·화장품·커피·밀키트 구매 담당자가 연포장재를 처음 발주하거나 기존 소재를 교체할 때
           가장 먼저 마주치는 질문은 같습니다. &ldquo;어떤 소재와 구조를 선택해야 할까?&rdquo;
@@ -650,7 +718,29 @@ export default function FlexiblePackagingGuidePage() {
             </em>
           </p>
         </footer>
-      </main>
-    </GuidePageShell>
+          </main>
+          <h2 className="text-[22px] leading-[1.35] tracking-[-0.015em] mt-12 mb-4 text-[var(--g-ink)] font-extrabold">자주 묻는 질문</h2>
+          <GuideFaq items={slotFaq} />
+          <GuideEndCta
+            headline="연포장 파우치 업체 바로 비교"
+            subtext="파우치·필름 전문 업체, 소재·차단 규격·MOQ로 필터 비교"
+            buttonLabel="업체 비교하기 →"
+            href="/products/film"
+          />
+        </article>
+        <GuideSidebar
+          ctaHeadline="연포장 파우치 업체 비교"
+          ctaSubtext="소재·차단 규격·MOQ 조건으로 필터링해 업체를 한눈에 비교하세요."
+          ctaButtonLabel="업체 바로 비교 →"
+          ctaHref="/products/film"
+          relatedGuides={[
+            { href: "/guides/packaging-material-complete-guide", title: "골판지·단프라·연포장 소재 종합 비교", readTime: "6분" },
+            { href: "/guides/eco-friendly-packaging", title: "FSC·GRS·생분해 인증 소재 전환 가이드", readTime: "6분" },
+            { href: "/guides/food-packaging-materials", title: "식품 포장재 위생·식약처 기준", readTime: "5분" },
+            { href: "/guides/packaging-printing-guide", title: "그라비아·플렉소·디지털 인쇄 비교", readTime: "5분" },
+          ]}
+        />
+      </div>
+    </div>
   );
 }
