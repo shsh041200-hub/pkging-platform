@@ -1081,7 +1081,7 @@ function EcoFriendlyPackagingContent() {
 
       <EndCta
         title="친환경 포장재 업체 바로 비교"
-        subtitle="FSC·GRS 인증 업체, 소재·MOQ·납기 조건으로 필터 비교"
+        subtitle="FSC·GRS 인증 여부 표시 업체, 발주 전 인증서 직접 확인 필요"
         href="/products/box"
       />
     </>
