@@ -36,6 +36,7 @@ const GUIDES: Record<DynamicGuideSlug, GuideContent> = {
     description:
       "FSC 인증, 생분해 필름(PLA/PBAT), 재생 PET(rPET) 등 친환경 포장재 전환 기준과 ESG 보고서 활용법을 정리합니다.",
     datePublished: "2026-05-01",
+    redesignVersion: 1,
     body: <EcoFriendlyPackagingContent />,
   },
   "small-quantity-custom-box": {
@@ -88,6 +89,7 @@ const GUIDES: Record<DynamicGuideSlug, GuideContent> = {
     description:
       "골판지, 단프라(PP 골판지), 친환경 소재의 용도별 선택 기준과 MOQ·납기를 정리합니다.",
     datePublished: "2026-05-01",
+    redesignVersion: 1,
     body: <PackagingMaterialCompleteGuideContent />,
   },
   "packaging-tape-comparison": {
@@ -898,6 +900,35 @@ function EcoFriendlyPackagingContent() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
 
+      <TldrBlock
+        bullets={[
+          <><strong>FSC·GRS 인증 확인이 첫 단계</strong> — 공급 업체에 인증서 사본을 요청해 인증 범위를 검증합니다.</>,
+          <><strong>전환 비용 20~40% 상승</strong> — FSC 인증 원지·재생 PET(rPET)는 일반 소재 대비 단가가 높습니다.</>,
+          <><strong>ESG 공시 로드맵 6~18개월</strong> — 소재 전환 → 인증 확보 → ESG 보고 순으로 진행합니다.</>,
+        ]}
+      />
+
+      <CalloutBox variant="info" title="포장재 친환경 인증 체계">
+        FSC는 산림 관리, GRS는 재생 원료 비율, 생분해 인증은 TÜV Austria OK Compost 또는 KS M ISO 17088 기준입니다. 인증 유형마다 적용 범위가 다르므로 소재 선택 전 인증서 적용 범위를 반드시 확인하세요.
+      </CalloutBox>
+      <CalloutBox variant="warn" title='"생분해" 표시 규제 주의'>
+        국내 표시광고법 §3에 따라 공인 시험 성적서 없는 &ldquo;생분해&rdquo; 표시는 부당 표시에 해당할 수 있습니다. 납품 업체에 EN 13432 또는 KS M ISO 17088 생분해 인증 성적서를 반드시 요청하세요.
+      </CalloutBox>
+      <CalloutBox variant="tip" title="단계별 전환 전략">
+        전 제품을 한 번에 전환하면 MOQ·납기 부담이 커집니다. 물량이 많은 외포장 1종부터 파일럿 전환 후 인증서 확보와 ESG 문서화를 병행하는 단계별 접근을 권장합니다.
+      </CalloutBox>
+
+      <ChecklistCard
+        heading="친환경 포장재 전환 전 확정 항목"
+        items={[
+          <><strong>인증서 수집</strong> — 공급 업체 FSC·GRS·생분해 인증서 사본 및 범위 확인</>,
+          <><strong>소재별 TCO 산출</strong> — 일반 소재 대비 전환 소재 총비용(단가·MOQ·납기) 비교</>,
+          <><strong>수급 리드타임 확인</strong> — 친환경 소재 조달 추가 리드타임(최대 2~4주) 파악</>,
+          <><strong>ESG 보고 데이터 항목 정의</strong> — GRI 301 또는 TCFD 기준 필요 데이터 목록 작성</>,
+          <><strong>파일럿 발주 검수</strong> — 샘플 수령 후 강도·인쇄 품질·인증 실물 확인</>,
+        ]}
+      />
+
       <p>
         친환경 포장재 전환은 ESG 경영 요구가 높아지면서 선택이 아닌 필수가 되고 있습니다.
         그러나 인증 종류가 많고 소재별 분해 조건이 달라 오해가 생기기 쉽습니다. 이 가이드에서는
@@ -1017,6 +1048,42 @@ function EcoFriendlyPackagingContent() {
           </em>
         </p>
       </footer>
+
+      <FaqSlot
+        items={[
+          {
+            q: "친환경 포장재로 전환하면 비용이 얼마나 오르나요?",
+            a: "FSC 인증 원지 골판지 박스는 일반 박스 대비 약 15~25%, GRS 인증 재생 PET(rPET)는 버진 PET 대비 약 10~20%, PLA 생분해 필름은 일반 PE 필름 대비 30~50% 단가가 높습니다. 소재·MOQ·공급 업체에 따라 폭이 크므로 Packlinx에서 복수 견적을 비교하시기 바랍니다.",
+          },
+          {
+            q: "FSC 인증과 GRS 인증의 차이는 무엇인가요?",
+            a: <>FSC(Forest Stewardship Council)는 산림의 지속가능한 관리를 인증하며 원지·종이 기반 소재에 주로 적용됩니다. GRS(Global Recycled Standard)는 재생 원료 함량과 공급망 투명성을 인증하며 재생 PET·PP·골판지 등에 적용됩니다. 인증 업체 선정 기준은 <Link href="/guides/corrugated-box-supplier-selection">골판지 박스 업체 선정 가이드</Link>를 참고하세요.</>,
+          },
+          {
+            q: "PLA 생분해 포장재, 국내에서 실제로 처리되나요?",
+            a: "PLA는 산업적 퇴비화 조건(60°C 이상)에서 생분해되며, 일반 매립이나 가정 퇴비화에서는 분해가 매우 느립니다. 국내 산업 퇴비화 시설이 제한적이므로 PLA 도입 전 실제 처리 경로를 사전에 확인하세요.",
+          },
+          {
+            q: "ESG 보고서에 포장재 전환 실적을 어떻게 기재하나요?",
+            a: <>GRI 301(소재) 기준에 따라 재생·인증 소재 비율(%)과 탄소 배출 절감량(tCO₂e)을 기재합니다. 공급 업체에서 LCA(수명주기 평가) 데이터 또는 인증서를 받아 근거 자료로 보관하세요. 2026 패키징 트렌드는 <Link href="/guides/2026-korea-packaging-trends">2026 한국 패키징 트렌드 리포트</Link>에서 확인하세요.</>,
+          },
+        ]}
+      />
+
+      <SidebarGuides
+        guides={[
+          { href: "/guides/packaging-material-complete-guide", label: "골판지·단프라·친환경 소재 종합 비교", readTime: "⏱ 6분" },
+          { href: "/guides/food-packaging-materials", label: "식품 포장재 위생·인증 기준 가이드", readTime: "⏱ 5분" },
+          { href: "/guides/2026-korea-packaging-trends", label: "2026 한국 패키징 트렌드 리포트", readTime: "⏱ 7분" },
+          { href: "/guides/flexible-packaging-guide", label: "파우치·필름 연포장 소재 선택 가이드", readTime: "⏱ 5분" },
+        ]}
+      />
+
+      <EndCta
+        title="친환경 포장재 업체 바로 비교"
+        subtitle="FSC·GRS 인증 업체, 소재·MOQ·납기 조건으로 필터 비교"
+        href="/products/box"
+      />
     </>
   );
 }
@@ -2278,6 +2345,35 @@ function PackagingMaterialCompleteGuideContent() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
 
+      <TldrBlock
+        bullets={[
+          <><strong>골판지·단프라·연포장</strong> — 소재 선택은 내용물 무게·방습·인쇄 요건 3가지로 결정합니다.</>,
+          <><strong>소재별 MOQ 3~10배 차이</strong> — 단프라·알루미늄 라미네이트는 골판지 대비 MOQ가 높습니다.</>,
+          <><strong>복합 소재 전환 시 Total Cost 계산</strong> — 단가만 비교하면 납기·형판비 차이를 놓칩니다.</>,
+        ]}
+      />
+
+      <CalloutBox variant="info" title="소재별 특성 한눈에 비교">
+        골판지는 압축 강도·인쇄 적합성이 우수하고, 단프라(PP 골판지)는 방습·내구성, 연포장 필름은 밀봉성·중량 절감에 강점이 있습니다. 용도별 최적 소재를 선택하려면 내용물 물성(무게·수분·기체 차단 요건)을 먼저 정의하세요.
+      </CalloutBox>
+      <CalloutBox variant="warn" title="소재 변경은 인증 재검토 필요">
+        식품·의약품 포장재는 소재를 변경하면 식약처 기준 재확인 및 이행성 시험이 필요합니다. 소재 전환 전 반드시 현행 인증 서류가 새 소재에도 적용되는지 확인하세요.
+      </CalloutBox>
+      <CalloutBox variant="tip" title="소량 다품종 발주 시 소재 통합">
+        여러 SKU의 포장재 소재를 통합하면 발주 수량이 늘어 MOQ를 충족하기 쉽고 단가 협상력이 높아집니다. 소재 종류를 줄이는 방향으로 제품 라인업을 정비하는 것을 권장합니다.
+      </CalloutBox>
+
+      <ChecklistCard
+        heading="소재 선택 전 확정 항목"
+        items={[
+          <><strong>내용물 물성 정의</strong> — 무게·수분·기체 차단 요건·내열 조건 문서화</>,
+          <><strong>법정 인증 요건 확인</strong> — 식품·화장품·의약품 포장 시 소재별 식약처 기준 검토</>,
+          <><strong>MOQ·납기 비교</strong> — 소재별 제조사 MOQ 및 생산 리드타임 일람표 작성</>,
+          <><strong>형판비·초기 비용 산출</strong> — 맞춤 소재·연포장 형판비를 TCO에 포함</>,
+          <><strong>친환경 전환 가능 여부</strong> — FSC·GRS 인증 소재 대체 옵션 및 단가 차이 확인</>,
+        ]}
+      />
+
       <p>
         포장재 소재 선택은 내용물 보호, 유통 환경, 비용, 환경 규제를 종합적으로 고려해야 합니다.
         소재를 잘못 선택하면 파손, 규제 위반, 과잉 비용이 발생합니다. 이 가이드에서는 주요 소재별
@@ -2386,6 +2482,46 @@ function PackagingMaterialCompleteGuideContent() {
           </em>
         </p>
       </footer>
+
+      <FaqSlot
+        items={[
+          {
+            q: "골판지와 단프라(PP 골판지) 중 어느 소재가 더 나은가요?",
+            a: <>일반 배송용 박스에는 골판지가 원가 효율적입니다. 단프라(PP 골판지)는 방습·내구성이 필요한 냉장·냉동 물류, 반복 사용 박스, 야외 보관 제품에 적합하지만 단가가 2~3배 높습니다. 소재 선택 기준 상세 내용은 <Link href="/guides/eco-friendly-packaging">친환경 포장재 가이드</Link>에서도 확인하세요.</>,
+          },
+          {
+            q: "연포장(파우치·필름)과 경질 용기의 주요 차이점은 무엇인가요?",
+            a: <>연포장은 중량이 가볍고 밀봉성·기체 차단이 우수하며 대량 생산에 유리합니다. 경질 용기는 보호력·재사용성이 높지만 금형 초기 비용이 큽니다. 연포장 소재 상세 선택 기준은 <Link href="/guides/flexible-packaging-guide">연포장재 가이드</Link>를 참고하세요.</>,
+          },
+          {
+            q: "화장품 포장 소재 선택 시 주의할 점은 무엇인가요?",
+            a: <>화장품 용기·포장은 「화장품법」에 따라 이물질 용출, 내용물 변질 방지 기준을 준수해야 합니다. PET·PP·유리 소재가 주로 사용되며, 라벨 표시 의무 사항도 반드시 확인하세요. 화장품 박스 구조와 후가공은 <Link href="/guides/cosmetic-packaging-box">화장품 박스 가이드</Link>에서 확인하세요.</>,
+          },
+          {
+            q: "식품 포장재로 사용 가능한 소재는 어떻게 확인하나요?",
+            a: <>식약처 「기구 및 용기·포장의 기준 및 규격」에서 식품 접촉 허용 소재를 확인하고, 업체에 KOLAS 인정 시험기관 발급 시험성적서를 요청하세요. 식품 포장재 소재 선택 상세 기준은 <Link href="/guides/food-packaging-materials">식품 포장재 가이드</Link>를 참고하세요.</>,
+          },
+          {
+            q: "소재 전환 시 발주 MOQ는 어떻게 맞추나요?",
+            a: <>단프라·알루미늄 라미네이트 등 특수 소재는 MOQ가 높습니다. 여러 SKU를 동일 소재로 통합하거나, 소량 맞춤 발주 옵션을 제공하는 업체를 Packlinx에서 찾아보세요. 소량 박스 발주 기준은 <Link href="/guides/small-quantity-custom-box">소량 맞춤 박스 가이드</Link>를 참고하세요.</>,
+          },
+        ]}
+      />
+
+      <SidebarGuides
+        guides={[
+          { href: "/guides/eco-friendly-packaging", label: "FSC·GRS·생분해 인증 소재 전환 가이드", readTime: "⏱ 6분" },
+          { href: "/guides/flexible-packaging-guide", label: "파우치·필름 연포장 소재 선택 기준", readTime: "⏱ 5분" },
+          { href: "/guides/food-packaging-materials", label: "식품 포장재 위생·인증 기준", readTime: "⏱ 5분" },
+          { href: "/guides/corrugated-flute-types", label: "A·B·C·E·F골 특성·용도 비교", readTime: "⏱ 5분" },
+        ]}
+      />
+
+      <EndCta
+        title="소재별 포장재 업체 바로 비교"
+        subtitle="골판지·단프라·연포장 업체, 소재·MOQ·납기 조건으로 필터 비교"
+        href="/products/box"
+      />
     </>
   );
 }

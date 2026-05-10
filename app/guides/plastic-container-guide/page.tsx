@@ -1,5 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import {
+  TldrBlock,
+  CalloutBox,
+  ChecklistCard,
+  FaqSlot,
+  SidebarGuides,
+  EndCta,
+} from "@/components/GuideSlotV1";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://packlinx.com";
 const canonicalUrl = `${siteUrl}/guides/plastic-container-guide`;
@@ -116,6 +124,36 @@ export default function PlasticContainerGuidePage() {
           플라스틱 용기·병 종류 완전 가이드 — PET·PP·HDPE 소재 선택 + 식약처
           기준 (2026)
         </h1>
+
+        <TldrBlock
+          bullets={[
+            <><strong>소재 선택 핵심 3가지</strong> — 식약처 허용 소재 여부·내열 온도·투명도 요건으로 PET·PP·HDPE를 결정합니다.</>,
+            <><strong>금형 초기 비용 300~1,000만 원</strong> — 커스텀 용기는 금형비가 양산 단가와 별도 발생합니다.</>,
+            <><strong>소량 발주 = 표준 금형 활용</strong> — 기존 범용 금형 사용 시 500~1,000개 소량 발주가 가능합니다.</>,
+          ]}
+        />
+
+        <CalloutBox variant="info" title="소재별 내열·용도 기준">
+          PET는 투명도 높고 음료·식품 병에 적합하나 내열성이 낮습니다(70°C 이하). PP는 내열성이 높아(120°C) 전자레인지 용기에 적합합니다. HDPE는 세제·약품 등 화학 저항성이 필요한 용기에 사용됩니다. 식품 접촉 시 소재별 식약처 기준 충족 여부를 반드시 확인하세요.
+        </CalloutBox>
+        <CalloutBox variant="warn" title="PC 소재 식품 접촉 제한">
+          PC(폴리카보네이트)는 비스페놀 A 용출 우려로 식품 직접 접촉용 사용이 제한됩니다. 식품 포장 용도로 발주할 때 업체에 반드시 PC 미사용 여부와 식약처 이행성 시험 성적서를 요청하세요.
+        </CalloutBox>
+        <CalloutBox variant="tip" title="표준 금형으로 초기 비용 절감">
+          커스텀 금형 없이 기존 범용 규격(원형·사각 트레이 등)을 사용하면 금형비 없이 500개 이상 소량 발주가 가능합니다. 제품 디자인 확정 전 표준 금형 활용 가능성을 업체와 먼저 협의하세요.
+        </CalloutBox>
+
+        <ChecklistCard
+          heading="플라스틱 용기 발주 전 확정 항목"
+          items={[
+            <><strong>소재·내열 온도 확정</strong> — PET·PP·HDPE·PS 중 내용물·사용 환경 기준 소재 선택</>,
+            <><strong>식약처 기준 확인</strong> — 식품·화장품 용도 시 이행성 시험 성적서 업체 요청</>,
+            <><strong>커스텀 vs 표준 금형 결정</strong> — 맞춤 형상 필요 여부 및 금형 초기 비용 TCO 포함</>,
+            <><strong>용량·두께 사양 확정</strong> — 내용물 밀도·충전량 기준 내경·두께(mm) 명시</>,
+            <><strong>뚜껑·마감 구조 결정</strong> — 스크류캡·스냅캡·히트씰·압착 방식 중 선택</>,
+          ]}
+        />
+
         <p>
           음료·식품·화장품·생활용품 구매 담당자가 플라스틱 용기·병을 발주할 때
           가장 먼저 마주치는 질문은 같습니다. &ldquo;어떤 소재를 선택해야 하고,
@@ -621,6 +659,46 @@ export default function PlasticContainerGuidePage() {
             </em>
           </p>
         </footer>
+
+        <FaqSlot
+          items={[
+            {
+              q: "식품용 플라스틱 용기에 사용 가능한 소재는 무엇인가요?",
+              a: "식약처가 허용하는 식품 접촉 소재는 PET·PP·HDPE·PS(내열 등급) 등입니다. PC(폴리카보네이트)는 비스페놀 A 용출 우려로 식품 접촉용 사용이 제한됩니다. 발주 전 업체에 KOLAS 인정 시험기관이 발급한 이행성 시험 성적서를 요청하세요.",
+            },
+            {
+              q: "PET 병과 PP 용기의 차이는 무엇인가요?",
+              a: <>PET는 투명도가 높고 음료·주스 병에 주로 사용됩니다. 내열성이 낮아(70°C 이하) 고온 충전 시 내열 PET가 필요합니다. PP는 반투명이며 내열성이 높아(120°C) 전자레인지 용기·반찬통·식품 트레이에 적합합니다. 소재 종합 비교는 <Link href="/guides/packaging-material-complete-guide">포장재 소재 완전 가이드</Link>를 참고하세요.</>,
+            },
+            {
+              q: "커스텀 금형 제작 비용과 기간은 어떻게 되나요?",
+              a: "국내 사출 금형 기준 단순 형상은 300~800만 원, 복잡한 형상·핫런너 금형은 1,000만 원 이상이며 제작 기간은 4~8주입니다. 블로우 금형은 200~500만 원 수준입니다. 금형비는 초기 1회성 비용으로 양산 단가와 별도입니다.",
+            },
+            {
+              q: "친환경 플라스틱 용기(rPET)로 전환 시 추가 비용은 얼마나 드나요?",
+              a: <>GRS 인증 재생 PET(rPET)는 버진 PET 대비 약 10~25% 단가가 높습니다. PLA 등 바이오플라스틱은 50~100% 이상 비용이 상승하고 산업 퇴비화 처리가 필요합니다. 친환경 소재 전환 전략은 <Link href="/guides/eco-friendly-packaging">친환경 포장재 가이드</Link>를 참고하세요.</>,
+            },
+            {
+              q: "소량(500개 미만) 플라스틱 용기 발주가 가능한가요?",
+              a: "기존 범용 표준 금형을 사용하면 500~1,000개 소량 발주가 가능합니다. 커스텀 금형이 필요한 경우 금형비 회수를 위해 최소 3,000~5,000개 이상 발주가 일반적입니다. Packlinx에서 소량 발주 가능한 플라스틱 용기 업체를 찾아보세요.",
+            },
+          ]}
+        />
+
+        <SidebarGuides
+          guides={[
+            { href: "/guides/packaging-material-complete-guide", label: "소재별 용도·MOQ·납기 종합 비교", readTime: "⏱ 6분" },
+            { href: "/guides/glass-metal-container-guide", label: "유리·금속 캔 용기 선택 가이드", readTime: "⏱ 6분" },
+            { href: "/guides/eco-friendly-packaging", label: "rPET·생분해 소재 전환 인증 가이드", readTime: "⏱ 6분" },
+            { href: "/guides/food-packaging-materials", label: "식품 접촉 포장재 식약처 기준", readTime: "⏱ 5분" },
+          ]}
+        />
+
+        <EndCta
+          title="플라스틱 용기 업체 바로 비교"
+          subtitle="용기 전문 업체, 소재·금형 유무·MOQ 조건으로 필터 비교"
+          href="/products/container"
+        />
       </main>
     </>
   );

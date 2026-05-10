@@ -1,5 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import {
+  TldrBlock,
+  CalloutBox,
+  ChecklistCard,
+  FaqSlot,
+  SidebarGuides,
+  EndCta,
+} from "@/components/GuideSlotV1";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://packlinx.com";
 const canonicalUrl = `${siteUrl}/guides/label-printing-guide`;
@@ -131,6 +139,36 @@ export default function LabelPrintingGuidePage() {
       />
       <main>
         <h1>라벨 인쇄 업체 선정 가이드 (2026년 최신판)</h1>
+
+        <TldrBlock
+          bullets={[
+            <><strong>라벨 인쇄 3대 선택 기준</strong> — 소재(PP·PE·PET·종이)·인쇄 방식(플렉소·디지털·오프셋)·후가공(코팅·형타) 순으로 결정합니다.</>,
+            <><strong>소량 500장 이하 = 디지털 인쇄</strong> — 형판비 없이 빠른 납기(2~3일)로 발주 가능합니다.</>,
+            <><strong>식품·화장품 라벨은 법정 표시 확인 필수</strong> — 「식품표시법」·「화장품법」 기재 의무 항목을 사전에 검토합니다.</>,
+          ]}
+        />
+
+        <CalloutBox variant="info" title="라벨 소재별 용도 구분">
+          PP·PE 합성지는 방수·내구성이 우수해 음료·세제에, PET 투명 라벨은 투명 용기 무라벨 효과에, 종이 라벨은 인쇄 발색·친환경 이미지에 적합합니다. 냉장·냉동 보관 제품은 내한성 점착제 사양을 반드시 지정하세요.
+        </CalloutBox>
+        <CalloutBox variant="warn" title="식품·화장품 라벨 법정 표시 의무">
+          식품표시법에 따라 제조일·유통기한·알레르기 유발 물질·영양성분 등을 지정 크기·위치에 표시해야 합니다. 화장품은 전성분·사용기한·사용 방법이 필수 기재 항목입니다. 법정 항목 누락 시 회수·판매 중지 처분이 가능합니다.
+        </CalloutBox>
+        <CalloutBox variant="tip" title="바코드·QR 인쇄 해상도 사전 확인">
+          바코드는 최소 300dpi, QR 코드는 400dpi 이상에서 스캐너 인식률이 안정됩니다. 인쇄 전 업체에 바코드 그레이딩 테스트(Grade C 이상)를 요청하면 유통 현장 불량을 사전에 방지할 수 있습니다.
+        </CalloutBox>
+
+        <ChecklistCard
+          heading="라벨 발주 전 확정 항목"
+          items={[
+            <><strong>법정 표시 항목 목록</strong> — 식품·화장품·의약외품 관련 법령의 필수 기재 항목 사전 검토</>,
+            <><strong>라벨 소재·점착제 사양</strong> — 부착 환경(냉장·냉동·방수) 기준 소재·점착제 타입 명시</>,
+            <><strong>인쇄 방식·수량 결정</strong> — 500장 미만 디지털 / 이상 플렉소·오프셋 분기점 확인</>,
+            <><strong>형타(다이컷) 형상</strong> — 라벨 컷팅 형상 및 롤·시트 납품 형태 결정</>,
+            <><strong>바코드 그레이딩 테스트</strong> — 인쇄 후 스캐너 인식 테스트 업체 수행 여부 확인</>,
+          ]}
+        />
+
         <p>
           라벨·스티커 인쇄를 처음 발주하거나 기존 거래 업체를 교체하려는 담당자가 가장 먼저
           마주치는 질문은 언제나 같습니다. &ldquo;어떤 업체에 견적을 요청해야 할까?&rdquo; 인쇄
@@ -733,6 +771,46 @@ export default function LabelPrintingGuidePage() {
             </em>
           </p>
         </footer>
+
+        <FaqSlot
+          items={[
+            {
+              q: "라벨 인쇄 소량 발주 시 최소 수량은 얼마인가요?",
+              a: "디지털 인쇄 방식은 형판 없이 100~500장부터 발주가 가능합니다. 플렉소·오프셋은 형판비(색상당 10~30만 원)가 발생하여 500장 미만 발주 시 개당 단가가 크게 높아집니다. 발주 수량 기준에 따라 인쇄 방식을 선택하세요.",
+            },
+            {
+              q: "식품 라벨 법정 표시 항목은 무엇인가요?",
+              a: "「식품표시법」에 따라 제품명·내용량·원재료·알레르기 유발 물질·영양성분·제조일(또는 유통기한)·제조업체 정보가 필수 기재 항목입니다. 글자 크기(최소 8포인트 이상), 색상 대비, 위치 기준도 규정되어 있습니다. 구체적 기준은 식약처 고시를 직접 확인하세요.",
+            },
+            {
+              q: "냉동 식품 라벨 소재는 어떤 것을 선택해야 하나요?",
+              a: "냉동(-18°C 이하) 환경에서는 내한성 PP 합성지 또는 PET 필름 라벨에 내한성 점착제를 조합해야 합니다. 일반 점착제는 저온에서 박리 현상이 발생합니다. 발주 전 업체에 냉동 내구성 테스트 결과를 요청하세요.",
+            },
+            {
+              q: "투명 라벨과 일반 종이 라벨의 차이는 무엇인가요?",
+              a: "PET·PP 투명 라벨은 용기에 부착했을 때 무라벨(no-label look) 효과를 줍니다. 음료·화장품 투명 용기에 적합하지만 발색이 종이 대비 다소 낮습니다. 종이 라벨은 인쇄 발색이 우수하고 친환경 이미지를 줄 수 있지만 방수 처리가 별도로 필요합니다.",
+            },
+            {
+              q: "라벨 인쇄 후 후가공 옵션에는 어떤 것이 있나요?",
+              a: <>유광·무광 코팅, 부분 UV 코팅, 엠보스(박), 홀로그램, 방수 라미네이트 등이 있습니다. 후가공은 개당 원가를 10~30% 높이지만 브랜드 고급감과 내구성을 향상시킵니다. 라벨 인쇄·후가공 업체 비교는 <Link href="/guides/packaging-printing-guide">포장 인쇄 가이드</Link>를 참고하세요.</>,
+            },
+          ]}
+        />
+
+        <SidebarGuides
+          guides={[
+            { href: "/guides/packaging-printing-guide", label: "그라비아·플렉소·디지털 인쇄 비교", readTime: "⏱ 5분" },
+            { href: "/guides/food-packaging-materials", label: "식품 포장재 위생·인증 기준", readTime: "⏱ 5분" },
+            { href: "/guides/cosmetic-packaging-box", label: "화장품 박스 후가공·법정 표시 가이드", readTime: "⏱ 5분" },
+            { href: "/guides/flexible-packaging-guide", label: "파우치·필름 연포장 소재 가이드", readTime: "⏱ 5분" },
+          ]}
+        />
+
+        <EndCta
+          title="라벨 인쇄 업체 바로 비교"
+          subtitle="라벨 전문 업체, 소재·인쇄 방식·MOQ 조건으로 필터 비교"
+          href="/products/label"
+        />
       </main>
     </>
   );
