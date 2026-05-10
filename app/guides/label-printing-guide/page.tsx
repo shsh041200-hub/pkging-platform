@@ -403,8 +403,8 @@ export default function LabelPrintingGuidePage() {
               <blockquote>
                 <p>
                   동일 사양으로 복수 업체에 견적을 요청하면 10~30% 비용 차이를 발견하는 경우가 흔합니다.{" "}
-                  <Link href="/products/label">Packlinx 라벨 업체 목록</Link>에서 여러 업체에
-                  견적을 요청해 보세요.
+                  <Link href="/products/label">Packlinx 라벨 업체 목록</Link>에서 여러 업체의
+                  정보를 비교한 뒤 직접 문의해 보세요.
                 </p>
               </blockquote>
             </section>
@@ -656,7 +656,7 @@ export default function LabelPrintingGuidePage() {
               <p>
                 Packlinx는 국내 라벨·스티커 인쇄 업체가 등록된 B2B 패키징 디렉토리입니다. 업체별 전문
                 분야(소량 특화, 대량 생산, 특수 소재), 평균 응답 시간, 납기 이력을 기준으로 필터링할 수
-                있어, 동일한 사양으로 여러 업체에 견적을 요청하고 비교하는 과정을 단축할 수 있습니다.
+                있어, 동일한 사양으로 여러 업체의 정보를 비교하는 과정을 단축할 수 있습니다.
               </p>
               <p>
                 <strong>견적 비교 권장 절차:</strong>

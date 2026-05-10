@@ -595,7 +595,7 @@ export default function FlexiblePackagingGuidePage() {
           <p>
             Packlinx는 국내 연포장재 제조사와 구매 담당자를 연결하는 B2B 패키징 디렉토리입니다.
             파우치 종류·소재·식품 안전 인증·지역 조건으로 업체를 필터링하고, 동일 사양으로 여러
-            업체에 견적을 요청해 비교하는 과정을 단축할 수 있습니다.
+            업체의 정보를 비교하는 과정을 단축할 수 있습니다.
           </p>
           <p>
             <strong>견적 비교 권장 절차:</strong>
