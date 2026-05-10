@@ -231,7 +231,7 @@ export default async function ProductPage({ params, searchParams }: Props) {
                     </div>
                   </div>
 
-                  <h2 className="text-base font-bold text-gray-900 mb-1 leading-snug tracking-[-0.02em] line-clamp-1" title={company.name}>
+                  <h2 className="text-base font-bold text-[#061b31] mb-1 leading-snug tracking-[-0.02em] line-clamp-1" title={company.name}>
                     <Link
                       href={`/companies/${company.slug}`}
                       className="after:absolute after:inset-0 after:content-['']"
@@ -249,7 +249,7 @@ export default async function ProductPage({ params, searchParams }: Props) {
                       {(company.service_capabilities as string[] | null)?.length! > 0 && (
                         <div className="flex flex-wrap gap-1 mb-1">
                           {(company.service_capabilities as string[]).slice(0, 3).map((cap, i) => (
-                            <span key={i} className="text-[11px] font-medium bg-[#EFF6FF] text-[#2563EB] px-2 py-0.5 rounded">
+                            <span key={i} className="text-[11px] font-medium bg-[rgba(83,58,253,0.06)] text-[#533afd] px-2 py-0.5 rounded">
                               {cap}
                             </span>
                           ))}
@@ -302,7 +302,7 @@ export default async function ProductPage({ params, searchParams }: Props) {
 
       {/* Product Guide */}
       <section className="max-w-7xl mx-auto px-5 sm:px-8 pb-8">
-        <div className="mt-8 bg-white border border-gray-200 rounded-xl p-6 sm:p-8">
+        <div className="mt-8 bg-white border border-[#e5edf5] rounded-xl p-6 sm:p-8">
           <p className="text-[14px] sm:text-[15px] text-gray-600 leading-relaxed mb-6">
             {guide.description}
           </p>

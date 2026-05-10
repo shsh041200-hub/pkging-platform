@@ -126,7 +126,7 @@ export default async function CategoriesIndexPage() {
               <span className="text-[28px] leading-none flex-shrink-0 mt-0.5">{INDUSTRY_CATEGORY_ICONS[cat as IndustryCategory]}</span>
               <div className="min-w-0 flex-1">
                 <div className="flex items-baseline justify-between gap-2 flex-wrap">
-                  <span className="text-[16px] font-bold text-gray-900 group-hover:text-[#533afd] transition-colors leading-tight">
+                  <span className="text-[16px] font-bold text-[#061b31] group-hover:text-[#533afd] transition-colors leading-tight">
                     {INDUSTRY_CATEGORY_LABELS[cat as IndustryCategory]}
                   </span>
                   <span className="text-[12px] font-medium text-gray-400 flex-shrink-0">
