@@ -29,7 +29,7 @@ const GUIDES: Record<DynamicGuideSlug, GuideContent> = {
   "food-packaging-materials": {
     title: "식품 포장재 소재 가이드 — 용도별 소재 선택 기준 정리",
     description:
-      "식품 포장재에 적합한 소재 선택 기준, 위생 규제, 용도별 추천 소재를 정리합니다. Packlinx에 등록된 식품 포장 업체를 비교해보세요.",
+      "식품 포장재에 적합한 소재 선택 기준, 위생 규제, 용도별 적합 소재를 정리합니다. Packlinx에 등록된 식품 포장 업체를 비교해보세요.",
     datePublished: "2026-05-01",
     redesignVersion: 1,
     body: <FoodPackagingMaterialsContent />,
@@ -811,7 +811,7 @@ function FoodPackagingMaterialsContent() {
       </section>
 
       <section>
-        <h2>3. 용도별 소재 추천</h2>
+        <h2>3. 용도별 소재 선택</h2>
         <ul>
           <li>
             <strong>냉동식품:</strong> PE 또는 나일론/PE 복합 필름. 저온에서 접착력과 유연성이
@@ -865,7 +865,7 @@ function CorugatedFluteTypesContent() {
         name: "골판지 A골과 B골의 실질적인 차이는 무엇인가요?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "A골은 두께 약 5mm에 완충성이 최고 수준이며 가전·가구 등 무거운 제품과 장거리 운송에 적합합니다. B골은 두께 약 3mm로 가장 범용적인 택배 박스 표준이며 완충성과 인쇄 적합성의 균형이 좋습니다. B골 대비 A골 단가는 약 15~20% 높습니다.",
+          text: "A골은 두께 약 5mm에 완충성이 가장 높은 편이며 가전·가구 등 무거운 제품과 장거리 운송에 적합합니다. B골은 두께 약 3mm로 가장 범용적인 택배 박스 표준이며 완충성과 인쇄 적합성의 균형이 좋습니다. B골 대비 A골 단가는 약 15~20% 높습니다.",
         },
       },
       {
@@ -932,7 +932,7 @@ function CorugatedFluteTypesContent() {
               <td>A 플루트</td>
               <td>약 4.7</td>
               <td>33±3</td>
-              <td>쿠션성 최고, 압축 강도 우수</td>
+              <td>쿠션성 우수, 압축 강도 우수</td>
               <td>유리·도자기 포장, 고중량 제품</td>
             </tr>
             <tr>
@@ -2001,7 +2001,7 @@ function MovingBoxSizeGuideContent() {
       </section>
 
       <section>
-        <h2>2. 물품별 사이즈 추천</h2>
+        <h2>2. 물품별 권장 사이즈</h2>
         <ul>
           <li><strong>책·서류:</strong> 2호. 무거우므로 가득 채우지 말고 15kg 이하로 제한.</li>
           <li><strong>의류·의복:</strong> 3호~4호. 접어서 넣으면 부피 절감.</li>
@@ -2212,7 +2212,7 @@ function ElectronicsPackagingDesignContent() {
         name: "EPE, EPP, EPS 완충재 중 전자제품에 가장 적합한 소재는 무엇인가요?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "노트북·태블릿(1~3kg)에는 EPE 성형 완충재가 표준입니다. 서버·산업용 장비(20kg 이상)에는 반복 충격에도 복원력이 높은 EPP를 추천합니다. EPS(스티로폼)는 1회 충격 후 변형되어 복원력이 낮고, EPE나 종이 펄프 몰드로 전환하는 기업이 늘고 있습니다.",
+          text: "노트북·태블릿(1~3kg)에는 EPE 성형 완충재가 표준입니다. 서버·산업용 장비(20kg 이상)에는 반복 충격에도 복원력이 높은 EPP가 적합합니다. EPS(스티로폼)는 1회 충격 후 변형되어 복원력이 낮고, EPE나 종이 펄프 몰드로 전환하는 기업이 늘고 있습니다.",
         },
       },
       {
@@ -2277,7 +2277,7 @@ function ElectronicsPackagingDesignContent() {
             </tr>
             <tr>
               <td>EPP(발포 폴리프로필렌)</td>
-              <td>반복 충격 복원력 최고</td>
+              <td>반복 충격 복원력 우수</td>
               <td>높음</td>
               <td>서버·산업용 장비(20kg+)</td>
               <td>필요(고가)</td>
@@ -2645,7 +2645,7 @@ function PackagingTapeComparisonContent() {
               <td>중간</td>
               <td>중간</td>
               <td>800~1,200원</td>
-              <td>골판지 접착력 최고, 친환경</td>
+              <td>골판지 접착력 우수, 친환경</td>
             </tr>
             <tr>
               <td>종이 테이프(수활성)</td>
@@ -3043,7 +3043,7 @@ const SLOT_DATA_CORRUGATED_FLUTE: SlotData = {
   tldr: [
     {
       bold: "A골(4.7mm)",
-      text: "— 완충성 최고. 식품·가전 등 충격 민감 제품에 최적. 소재 사용량이 많아 단가는 높습니다.",
+      text: "— 완충성 우수. 식품·가전 등 충격 민감 제품에 최적. 소재 사용량이 많아 단가는 높습니다.",
     },
     {
       bold: "E골·F골(1.6mm 이하)",
@@ -3431,7 +3431,7 @@ const SLOT_DATA_MOVING_BULK: SlotData = {
     {
       variant: "tip",
       title: "복수 업체 분산 발주",
-      body: "단일 업체 의존도를 낮추기 위해 메인 업체 70%·서브 업체 30% 비율로 분산 발주하면 공급 리스크를 줄일 수 있습니다. 성수기 전 서브 업체를 미리 등록해 두는 것을 추천합니다.",
+      body: "단일 업체 의존도를 낮추기 위해 메인 업체 70%·서브 업체 30% 비율로 분산 발주하면 공급 리스크를 줄일 수 있습니다. 성수기 전 서브 업체를 미리 등록해 두는 것이 좋습니다.",
     },
   ],
   checklistTitle: "이사박스 대량 구매 전 확정 항목",
