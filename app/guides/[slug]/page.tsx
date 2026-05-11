@@ -28,7 +28,7 @@ const GUIDES: Record<DynamicGuideSlug, GuideContent> = {
   "food-packaging-materials": {
     title: "식품 포장재 소재 가이드 — 용도별 소재 선택 기준 정리",
     description:
-      "식품 포장재에 적합한 소재 선택 기준, 위생 규제, 용도별 추천 소재를 정리합니다. Packlinx에서 검증된 식품 포장 업체를 비교해보세요.",
+      "식품 포장재에 적합한 소재 선택 기준, 위생 규제, 용도별 추천 소재를 정리합니다. Packlinx에 등록된 식품 포장 업체를 비교해보세요.",
     datePublished: "2026-05-01",
     redesignVersion: 1,
     body: <FoodPackagingMaterialsContent />,
@@ -60,7 +60,7 @@ const GUIDES: Record<DynamicGuideSlug, GuideContent> = {
   "corrugated-box-supplier-selection": {
     title: "골판지 박스 업체 선정 가이드 — MOQ·납기·인쇄·인증 비교",
     description:
-      "골판지 박스 업체 선정 시 MOQ, 납기, 인쇄 방식, 물류 접근성, 인증 기준을 항목별로 비교합니다. Packlinx에서 검증된 골판지 박스 업체를 빠르게 찾아보세요.",
+      "골판지 박스 업체 선정 시 MOQ, 납기, 인쇄 방식, 물류 접근성, 인증 기준을 항목별로 비교합니다. Packlinx에 등록된 골판지 박스 업체를 빠르게 찾아보세요.",
     datePublished: "2026-05-01",
     redesignVersion: 1,
     body: <CorrugatedBoxSupplierSelectionContent />,
