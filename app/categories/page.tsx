@@ -44,9 +44,13 @@ const jsonLd = {
 export default async function CategoriesIndexPage() {
   const supabase = await createClient()
 
+  // Category counts
   const categoryCountResults = await Promise.all(
     INDUSTRY_CATEGORIES.map((cat) =>
-      supabase.from('companies').select('*', { count: 'exact', head: true }).contains('industry_categories', [cat])
+      supabase
+        .from('companies')
+        .select('*', { count: 'exact', head: true })
+        .contains('industry_categories', [cat])
     )
   )
 
@@ -55,47 +59,54 @@ export default async function CategoriesIndexPage() {
     categoryCounts[cat] = categoryCountResults[i].count ?? 0
   })
 
+  // Top 3 vendor names per category for preview chips
+  const topVendorResults = await Promise.all(
+    INDUSTRY_CATEGORIES.map((cat) =>
+      supabase
+        .from('companies')
+        .select('name')
+        .contains('industry_categories', [cat])
+        .order('is_verified', { ascending: false })
+        .order('cert_count', { ascending: false })
+        .order('name', { ascending: true })
+        .limit(3)
+    )
+  )
+
+  const topVendors: Record<string, string[]> = {}
+  INDUSTRY_CATEGORIES.forEach((cat, i) => {
+    topVendors[cat] = (topVendorResults[i].data ?? []).map((c) => c.name)
+  })
+
+  const activeCategories = INDUSTRY_CATEGORIES.filter((cat) => categoryCounts[cat] > 0)
+  const emptyCategories = INDUSTRY_CATEGORIES.filter((cat) => categoryCounts[cat] === 0)
+  const totalVendors = Object.values(categoryCounts).reduce((sum, n) => sum + n, 0)
+
   return (
-    <div className="min-h-screen bg-[#F9FAFB] flex flex-col">
+    <div className="min-h-screen bg-neutral-50 flex flex-col">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      {/* Header */}
-      <header className="bg-[#0F172A] sticky top-0 z-50 border-b border-white/[0.06]">
-        <div className="max-w-7xl mx-auto px-5 sm:px-8 h-16 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-3">
-            <PacklinxLogo variant="dark" />
-            <span className="hidden sm:inline text-slate-400 text-[11px] font-medium tracking-widest uppercase">패키징 업체 검색 플랫폼</span>
+      {/* Header — V05 white style */}
+      <header className="bg-white sticky top-0 z-50 border-b border-border-v04">
+        <div className="max-w-6xl mx-auto px-5 h-14 flex items-center justify-between">
+          <Link href="/" className="flex items-center">
+            <PacklinxLogo variant="light" />
           </Link>
-          <nav className="flex items-center gap-3">
+          <nav className="flex items-center gap-4 text-sm text-neutral-500">
+            <Link href="/" className="hover:text-heading-deep-navy transition-colors">
+              전체 업체 보기
+            </Link>
             <Link
               href="/categories"
               aria-current="page"
-              className="flex items-center gap-1.5 text-white text-sm font-semibold px-3.5 py-2 border border-white/[0.30] bg-white/[0.08] rounded-full focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:ring-white/40 focus-visible:ring-offset-[#0F172A]"
+              className="text-heading-deep-navy font-semibold"
             >
-              <svg className="w-4 h-4 text-slate-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z" />
-              </svg>
               카테고리
             </Link>
-            <Link
-              href="/services/printing-design"
-              className="flex items-center gap-1.5 text-slate-200 hover:text-white text-sm font-medium px-3.5 py-2 border border-white/[0.15] hover:border-white/[0.30] hover:bg-white/[0.06] rounded-full transition-colors focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:ring-white/40 focus-visible:ring-offset-[#0F172A]"
-            >
-              <svg className="w-4 h-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0110.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0l.229 2.523a1.125 1.125 0 01-1.12 1.227H7.231c-.662 0-1.18-.568-1.12-1.227L6.34 18m11.318 0h1.091A2.25 2.25 0 0021 15.75V9.456c0-1.081-.768-2.015-1.837-2.175a48.055 48.055 0 00-1.913-.247M6.34 18H5.25A2.25 2.25 0 013 15.75V9.456c0-1.081.768-2.015 1.837-2.175a48.041 48.041 0 011.913-.247m10.5 0a48.536 48.536 0 00-10.5 0m10.5 0V3.375c0-.621-.504-1.125-1.125-1.125h-8.25c-.621 0-1.125.504-1.125 1.125v3.659M18.25 7.034l-.057-.022M6.75 7.034c-.018-.007-.036-.014-.057-.022" />
-              </svg>
-              인쇄·디자인
-            </Link>
-            <Link
-              href="/guides"
-              className="flex items-center gap-1.5 text-slate-200 hover:text-white text-sm font-medium px-3.5 py-2 border border-white/[0.15] hover:border-white/[0.30] hover:bg-white/[0.06] rounded-full transition-colors focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:ring-white/40 focus-visible:ring-offset-[#0F172A]"
-            >
-              <svg className="w-4 h-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
-              </svg>
+            <Link href="/guides" className="hover:text-heading-deep-navy transition-colors">
               가이드
             </Link>
           </nav>
@@ -103,59 +114,121 @@ export default async function CategoriesIndexPage() {
       </header>
 
       {/* Page hero */}
-      <section className="bg-white border-b border-gray-100 px-5 sm:px-8 py-10 sm:py-14">
+      <section className="bg-white border-b border-border-v04 px-5 py-14 sm:py-20">
         <div className="max-w-3xl mx-auto text-center">
-          <h1 className="text-[28px] sm:text-[36px] font-light text-heading-deep-navy leading-tight tracking-[-0.02em] mb-3">
+          <h1 className="text-[32px] sm:text-[44px] font-light text-heading-deep-navy leading-[1.1] tracking-[-0.03em] mb-4">
             분야별 패키징 업체 찾기
           </h1>
-          <p className="text-[15px] text-[#64748B] leading-relaxed">
+          <p className="text-[15px] text-neutral-500 leading-relaxed mb-3">
             카테고리를 선택해 내 제품에 맞는 업체를 빠르게 탐색하세요.
+          </p>
+          <p className="text-[13px] text-neutral-400">
+            {totalVendors.toLocaleString()}개 업체 · {activeCategories.length}개 분야 · 무료 이용
           </p>
         </div>
       </section>
 
       {/* Category grid */}
-      <main className="flex-1 max-w-4xl mx-auto w-full px-5 sm:px-8 py-10">
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {INDUSTRY_CATEGORIES.filter((cat) => categoryCounts[cat] > 0).map((cat) => (
-            <Link
-              key={cat}
-              href={`/categories/${cat}`}
-              className="group flex items-start gap-4 bg-white border border-border-v04 rounded-xl px-5 py-5 hover:border-stripe-purple/30 hover:bg-stripe-purple/4 hover:shadow-[0_4px_12px_rgba(50,50,93,0.15)] transition-all duration-150"
-            >
-              <span className="text-[28px] leading-none flex-shrink-0 mt-0.5">{INDUSTRY_CATEGORY_ICONS[cat as IndustryCategory]}</span>
-              <div className="min-w-0 flex-1">
-                <div className="flex items-baseline justify-between gap-2 flex-wrap">
-                  <span className="text-[16px] font-bold text-heading-deep-navy group-hover:text-stripe-purple transition-colors leading-tight">
-                    {INDUSTRY_CATEGORY_LABELS[cat as IndustryCategory]}
-                  </span>
-                  <span className="text-[12px] font-medium text-gray-400 flex-shrink-0">
-                    {categoryCounts[cat].toLocaleString()}개
+      <main className="flex-1 max-w-6xl mx-auto w-full px-5 sm:px-8 py-12">
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          {activeCategories.map((cat) => {
+            const count = categoryCounts[cat]
+            const vendors = topVendors[cat] ?? []
+            const isThin = count > 0 && count < 10
+
+            return (
+              <Link
+                key={cat}
+                href={`/categories/${cat}`}
+                className="group bg-white border border-border-v04 rounded-xl p-6 hover:border-stripe-purple/30 hover:shadow-[rgba(83,58,253,0.06)_0px_4px_16px] transition-all duration-200 flex flex-col gap-4"
+              >
+                {/* Icon + count row */}
+                <div className="flex items-start justify-between">
+                  <div className="w-12 h-12 rounded-xl bg-stripe-purple/6 flex items-center justify-center group-hover:bg-stripe-purple/10 transition-colors flex-shrink-0">
+                    <span className="text-2xl leading-none">{INDUSTRY_CATEGORY_ICONS[cat as IndustryCategory]}</span>
+                  </div>
+                  <span className="text-[12px] font-semibold text-neutral-400 tabular-nums mt-1">
+                    {count.toLocaleString()}개 업체
                   </span>
                 </div>
-                <p className="text-[13px] text-gray-500 leading-relaxed mt-1">
-                  {INDUSTRY_CATEGORY_DESCRIPTIONS[cat as IndustryCategory]}
-                </p>
-              </div>
-              <svg className="w-5 h-5 text-gray-300 group-hover:text-stripe-purple flex-shrink-0 self-center transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-              </svg>
-            </Link>
-          ))}
+
+                {/* Label + description */}
+                <div>
+                  <h2 className="text-[16px] font-semibold text-heading-deep-navy group-hover:text-stripe-purple transition-colors leading-snug mb-1.5">
+                    {INDUSTRY_CATEGORY_LABELS[cat as IndustryCategory]}
+                  </h2>
+                  <p className="text-[13px] text-neutral-500 leading-relaxed">
+                    {INDUSTRY_CATEGORY_DESCRIPTIONS[cat as IndustryCategory]}
+                  </p>
+                </div>
+
+                {/* Vendor preview chips */}
+                {vendors.length > 0 && (
+                  <div className="flex flex-wrap gap-1.5 mt-auto pt-2 border-t border-border-v04">
+                    {vendors.map((name) => (
+                      <span
+                        key={name}
+                        className="text-[11px] text-neutral-500 bg-neutral-100 px-2 py-0.5 rounded-md truncate max-w-[120px]"
+                      >
+                        {name}
+                      </span>
+                    ))}
+                    {isThin && (
+                      <span className="text-[11px] text-neutral-400 italic self-center ml-0.5">
+                        소규모 분야
+                      </span>
+                    )}
+                  </div>
+                )}
+
+                {/* CTA arrow */}
+                <div className="flex items-center gap-1 text-[13px] font-medium text-neutral-400 group-hover:text-stripe-purple transition-colors mt-auto">
+                  <span>업체 보기</span>
+                  <svg className="w-4 h-4 transition-transform group-hover:translate-x-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                  </svg>
+                </div>
+              </Link>
+            )
+          })}
         </div>
 
-        <div className="mt-10 text-center">
-          <Link href="/" className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-gray-800 transition-colors">
+        {/* Empty categories — polite treatment */}
+        {emptyCategories.length > 0 && (
+          <div className="mt-8 border border-border-v04 rounded-xl bg-white px-6 py-5">
+            <p className="text-[13px] text-neutral-400 leading-relaxed">
+              <span className="font-medium text-neutral-500">등록 예정 분야:</span>{' '}
+              {emptyCategories
+                .map((cat) => INDUSTRY_CATEGORY_LABELS[cat as IndustryCategory])
+                .join(', ')}
+              {' — 업체 등록 후 노출됩니다.'}
+            </p>
+          </div>
+        )}
+
+        {/* Back to full search */}
+        <div className="mt-10 flex items-center justify-center gap-3">
+          <Link
+            href="/"
+            className="inline-flex items-center gap-2 bg-stripe-purple hover:bg-stripe-purple-hover text-white text-[14px] font-medium px-5 py-2.5 rounded-lg transition-colors"
+          >
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
-            업체명이나 제품으로 직접 검색하기
+            업체명·제품으로 직접 검색
+          </Link>
+          <Link
+            href="/guides"
+            className="inline-flex items-center gap-2 border border-border-v04 bg-white hover:border-stripe-purple/30 text-heading-deep-navy text-[14px] font-medium px-5 py-2.5 rounded-lg transition-colors"
+          >
+            포장재 가이드 보기
           </Link>
         </div>
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-white/[0.06] bg-[#0F172A] mt-auto">
+      <footer className="border-t border-white/[0.06] bg-slate-900 mt-auto">
         <div className="max-w-7xl mx-auto px-5 sm:px-8 py-8">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div className="flex flex-col gap-2">
