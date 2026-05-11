@@ -26,7 +26,8 @@ jobs:
           HTTP_STATUS=$(echo "$RESPONSE" | tail -1)
           BODY=$(echo "$RESPONSE" | head -n -1)
 
-          if [ "$HTTP_STATUS" != "200" ]; then
+          # Supabase Management API returns 200 or 201 on success
+          if [[ "$HTTP_STATUS" != "200" && "$HTTP_STATUS" != "201" ]]; then
             echo "::error::Supabase query failed (HTTP $HTTP_STATUS): $BODY"
             exit 1
           fi
