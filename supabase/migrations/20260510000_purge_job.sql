@@ -26,8 +26,14 @@ BEGIN
 END;
 $$;
 
--- Register cron job (idempotent: unschedule first)
-SELECT cron.unschedule('purge-expired-quote-requests');
+-- Register cron job (idempotent: IF EXISTS guard required — cron.unschedule raises on missing job in pg_cron 1.6)
+DO $$
+BEGIN
+  IF EXISTS (SELECT 1 FROM cron.job WHERE jobname = 'purge-expired-quote-requests') THEN
+    PERFORM cron.unschedule('purge-expired-quote-requests');
+  END IF;
+END
+$$;
 SELECT cron.schedule(
   'purge-expired-quote-requests',
   '0 2 * * *',
