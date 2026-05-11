@@ -28,6 +28,7 @@ import { CompanyViewTracker } from './CompanyViewTracker'
 import { OwnerControls } from './OwnerControls'
 import { CompanyIcon } from '@/components/CompanyIcon'
 import { CertBadge } from '@/components/CertBadge'
+import { VerificationRevokedBanner } from '@/components/VerificationRevokedBanner'
 import { simplifyCompanyName } from '@/lib/simplify-company-name'
 import AddToCompareButton from '@/app/components/AddToCompareButton'
 import CompareCart from '@/app/components/CompareCart'
@@ -259,6 +260,16 @@ export default async function CompanyPage({ params }: Props) {
           </nav>
         </div>
       </header>
+
+      {/* LC §5-B 박탈 배너 — is_verified=false AND reason=audit_2026Q2_evidence_missing 인 경우만 표시 (PACAA-532) */}
+      {company.is_verified === false && company.verification_revoked_reason === 'audit_2026Q2_evidence_missing' && (
+        <VerificationRevokedBanner
+          slug={slug}
+          companyId={company.id}
+          revokedAt={company.verification_revoked_at}
+          reason={company.verification_revoked_reason}
+        />
+      )}
 
       {/* Breadcrumb */}
       <div className="max-w-[800px] mx-auto px-4 sm:px-6 pt-5 pb-0">
