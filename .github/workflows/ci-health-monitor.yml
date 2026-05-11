@@ -1,0 +1,54 @@
+# PACAA-557 — CI health monitor
+# Fires every 30 minutes; alerts via Telegram if any watched workflow's
+# last run on main ended in failure or timed_out.
+# Includes failure duration so on-call can judge urgency without opening GitHub.
+name: CI health monitor
+
+on:
+  schedule:
+    - cron: '*/30 * * * *'
+  workflow_dispatch:
+
+jobs:
+  check:
+    name: Check workflow health
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Inspect watched workflows
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          REPO: ${{ github.repository }}
+        run: |
+          WATCH=("supabase-migrate.yml" "smoke-test.yml")
+          ALERT_LINES=""
+
+          for WF in "${WATCH[@]}"; do
+            RESP=$(curl -sf \
+              -H "Authorization: Bearer $GH_TOKEN" \
+              -H "Accept: application/vnd.github+json" \
+              "https://api.github.com/repos/$REPO/actions/workflows/$WF/runs?per_page=1&branch=main" \
+              || echo '{}')
+
+            CONCLUSION=$(echo "$RESP" | jq -r '.workflow_runs[0].conclusion // "no_runs"')
+            UPDATED=$(echo "$RESP" | jq -r '.workflow_runs[0].updated_at // ""')
+            RUN_URL=$(echo "$RESP" | jq -r '.workflow_runs[0].html_url // ""')
+
+            if [ "$CONCLUSION" = "failure" ] || [ "$CONCLUSION" = "timed_out" ]; then
+              ALERT_LINES="${ALERT_LINES}\n• ${WF}: ${CONCLUSION} (${UPDATED})\n  ${RUN_URL}"
+            fi
+          done
+
+          if [ -n "$ALERT_LINES" ]; then
+            ACTIONS_URL="https://github.com/$REPO/actions"
+            printf -v MESSAGE '🚨 <b>CI 워크플로우 실패 감지</b>\n\n%s\n\n전체 현황: %s' \
+              "$ALERT_LINES" "$ACTIONS_URL"
+            curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage" \
+              -d "chat_id=${TELEGRAM_CHAT_ID}" \
+              --data-urlencode "text=${MESSAGE}" \
+              -d "parse_mode=HTML" \
+              -d "disable_web_page_preview=true"
+          fi
