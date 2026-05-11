@@ -10,6 +10,7 @@ import {
   type IndustryCategory,
 } from '@/types'
 import { createClient } from '@/lib/supabase/server'
+import { VendorDirectoryDisclaimer } from '@/components/VendorDirectoryDisclaimer'
 
 export const revalidate = 300
 
@@ -226,6 +227,11 @@ export default async function CategoriesIndexPage() {
           </Link>
         </div>
       </main>
+
+      {/* Vendor Directory Disclaimer — Legal §5-A (PACAA-591) */}
+      <div className="max-w-7xl mx-auto px-5 sm:px-8 pb-6 text-center">
+        <VendorDirectoryDisclaimer />
+      </div>
 
       {/* Footer */}
       <footer className="border-t border-white/[0.06] bg-slate-900 mt-auto">
