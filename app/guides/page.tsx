@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { GUIDE_META } from "@/lib/guide-data";
-import { GuidesClient } from "./GuidesClient";
+import { GuidesHubV1Client } from "./GuidesHubV1Client";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.packlinx.com";
 const canonicalUrl = `${siteUrl}/guides`;
@@ -26,5 +26,5 @@ export const metadata: Metadata = {
 
 export default function GuidesIndexPage() {
   const totalGuides = GUIDE_META.length;
-  return <GuidesClient totalGuides={totalGuides} />;
+  return <GuidesHubV1Client totalGuides={totalGuides} />;
 }

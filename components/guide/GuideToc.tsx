@@ -50,12 +50,19 @@ export function GuideToc({ items }: GuideTocProps) {
           return (
             <li
               key={item.id}
-              className={[
-                "px-[14px] py-[6px] cursor-pointer border-l-2 -ml-[2px] transition-colors",
+              className="px-[14px] py-[6px] cursor-pointer border-l-2 -ml-[2px] transition-colors"
+              style={
                 isActive
-                  ? "text-[var(--g-brand)] border-l-[var(--g-brand)] font-semibold"
-                  : "text-[var(--g-ink-3)] border-l-transparent hover:text-[var(--g-ink-2)]",
-              ].join(" ")}
+                  ? {
+                      color: "var(--color-brand-500)",
+                      borderLeftColor: "var(--color-brand-500)",
+                      fontWeight: 600,
+                    }
+                  : {
+                      color: "var(--g-ink-3)",
+                      borderLeftColor: "transparent",
+                    }
+              }
               onClick={() => {
                 document.getElementById(item.id)?.scrollIntoView({ behavior: "smooth" });
                 setActiveId(item.id);
