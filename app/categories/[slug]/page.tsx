@@ -27,6 +27,7 @@ import { WebsiteFavicon } from '@/components/WebsiteFavicon'
 import { Pagination } from '@/components/Pagination'
 import AddToCompareButton from '@/app/components/AddToCompareButton'
 import CompareCart from '@/app/components/CompareCart'
+import { VerifiedTooltip } from '@/components/VerifiedTooltip'
 
 const PAGE_SIZE = 30
 
@@ -368,6 +369,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
                 <div className="p-6">
                   <div className="flex items-start justify-between mb-3.5">
                     <div className="flex flex-wrap gap-1.5">
+                      {company.is_verified && <VerifiedTooltip />}
                       {company.material_type && (
                         <span className="text-[11px] font-medium bg-gray-100 text-gray-500 px-2 py-0.5 rounded">
                           {MATERIAL_TYPE_LABELS[company.material_type as MaterialType]}
@@ -574,6 +576,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
               <Link href="/privacy" className="hover:text-slate-200 transition-colors">개인정보처리방침</Link>
               <Link href="/terms" className="hover:text-slate-200 transition-colors">이용약관</Link>
               <Link href="/opt-out?type=takedown" className="hover:text-slate-200 transition-colors">권리침해 신고</Link>
+              <Link href="/faq#what-is-jeongbo-deungrok" className="hover:text-slate-200 transition-colors">Packlinx 자체 등록 기준 안내</Link>
             </div>
           </div>
         </div>

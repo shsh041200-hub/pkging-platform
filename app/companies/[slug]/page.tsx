@@ -32,6 +32,7 @@ import { VerificationRevokedBanner } from '@/components/VerificationRevokedBanne
 import { simplifyCompanyName } from '@/lib/simplify-company-name'
 import AddToCompareButton from '@/app/components/AddToCompareButton'
 import CompareCart from '@/app/components/CompareCart'
+import { VerifiedTooltip } from '@/components/VerifiedTooltip'
 
 type Props = {
   params: Promise<{ slug: string }>
@@ -307,6 +308,7 @@ export default async function CompanyPage({ params }: Props) {
                     {new Date().getFullYear() - (company.founded_year as number)}년 전통
                   </span>
                 )}
+                {company.is_verified && <VerifiedTooltip />}
               </div>
               {/* Inline cert badges — top 3 */}
               {hasCertifications && (
@@ -775,6 +777,7 @@ export default async function CompanyPage({ params }: Props) {
               <Link href="/privacy" className="hover:text-slate-200 transition-colors">개인정보처리방침</Link>
               <Link href="/terms" className="hover:text-slate-200 transition-colors">이용약관</Link>
               <Link href="/opt-out?type=takedown" className="hover:text-slate-200 transition-colors">권리침해 신고</Link>
+              <Link href="/faq#what-is-jeongbo-deungrok" className="hover:text-slate-200 transition-colors">Packlinx 자체 등록 기준 안내</Link>
             </div>
           </div>
         </div>
