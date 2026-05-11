@@ -17,6 +17,10 @@ jobs:
     timeout-minutes: 5
 
     steps:
+      - name: Install curl
+        # ubuntu-24.04 runner image 20260413.86.1+ no longer ships curl.
+        run: sudo apt-get update && sudo apt-get install -y curl
+
       - name: Resolve base URL
         id: url
         run: |
