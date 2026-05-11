@@ -344,6 +344,109 @@ export default function TermsPage() {
             </ol>
           </section>
 
+          {/* 별표 — Vendor 정보 등록 기준 (PACAA-516 / LC §4-A 의무 노출) */}
+          <section id="appendix-vendor-registration" className="border-t-2 border-neutral-200 pt-8">
+            <h2 className="text-base font-semibold text-neutral-900 mb-1">
+              별표 — Vendor 「정보 등록」 부여 기준 (Packlinx 자체 등록 절차)
+            </h2>
+            <p className="text-xs text-neutral-500 mb-4">
+              시행일: 2026년 5월 11일 (보드 승인) ·{' '}
+              <a
+                href="https://github.com/shsh041200-hub/pkging-platform/blob/main/docs/legal/vendor-verification-criteria.md"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline hover:text-neutral-700"
+              >
+                원문 전문 보기
+              </a>
+            </p>
+
+            <div className="bg-amber-50 border-l-4 border-amber-400 px-4 py-3 rounded-r mb-5 text-sm text-neutral-800 leading-relaxed">
+              <strong>§0 — 본 표시의 법적 성격 (한정 문구):</strong> 본 표시(
+              <code className="bg-amber-100 px-1 rounded text-xs font-mono">정보 등록</code>
+              )는 외부 공인 인증기관(예: KS, ISO, Korean Standards Association, 한국정보통신기술협회 등)이 발급한 인증이
+              아닙니다. Packlinx 가 자체적으로 운영하는 등록 절차에 따라, 아래 객관적·실증 가능한 기준을 만족한 업체에
+              한해 부여되는 표시입니다.
+            </div>
+
+            <div className="space-y-5 text-sm text-neutral-700">
+              <div>
+                <h3 className="font-semibold text-neutral-900 mb-2">§1 — 부여 기준 (5가지 모두 충족 필요)</h3>
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm border-collapse">
+                    <thead>
+                      <tr className="bg-neutral-100">
+                        <th className="border border-neutral-200 px-3 py-2 text-left font-medium text-neutral-800">#</th>
+                        <th className="border border-neutral-200 px-3 py-2 text-left font-medium text-neutral-800">항목</th>
+                        <th className="border border-neutral-200 px-3 py-2 text-left font-medium text-neutral-800">검증 방법</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td className="border border-neutral-200 px-3 py-2 font-medium">1</td>
+                        <td className="border border-neutral-200 px-3 py-2">사업자등록번호(BRN) 유효성</td>
+                        <td className="border border-neutral-200 px-3 py-2">국세청 사업자등록상태 조회 — &quot;계속사업자&quot; 상태 확인</td>
+                      </tr>
+                      <tr>
+                        <td className="border border-neutral-200 px-3 py-2 font-medium">2</td>
+                        <td className="border border-neutral-200 px-3 py-2">법인·사업자 명의 일치</td>
+                        <td className="border border-neutral-200 px-3 py-2">국세청 조회 결과의 상호 = 등록 상호</td>
+                      </tr>
+                      <tr>
+                        <td className="border border-neutral-200 px-3 py-2 font-medium">3</td>
+                        <td className="border border-neutral-200 px-3 py-2">웹사이트 도메인 실재성</td>
+                        <td className="border border-neutral-200 px-3 py-2">HTTP 정상 응답 + 도메인 소유자가 사업자와 동일 주체로 합리적으로 추정 가능</td>
+                      </tr>
+                      <tr>
+                        <td className="border border-neutral-200 px-3 py-2 font-medium">4</td>
+                        <td className="border border-neutral-200 px-3 py-2">통신판매업 신고 여부</td>
+                        <td className="border border-neutral-200 px-3 py-2">공정거래위원회 통신판매사업자 조회 (미해당 업체는 면제 사유 기록)</td>
+                      </tr>
+                      <tr>
+                        <td className="border border-neutral-200 px-3 py-2 font-medium">5</td>
+                        <td className="border border-neutral-200 px-3 py-2">최소 1회 양방향 연락 가능성 확인</td>
+                        <td className="border border-neutral-200 px-3 py-2">대표 이메일 또는 전화로 응답 1회 확인</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <p className="text-xs text-neutral-500 mt-2">
+                  실증 자료 보존 기간: 부여 후 최소 3년 (표시광고법 §4 (1) 대비).
+                </p>
+              </div>
+
+              <div>
+                <h3 className="font-semibold text-neutral-900 mb-2">§2 — 갱신 주기</h3>
+                <ul className="list-disc list-inside space-y-1 ml-1 leading-relaxed">
+                  <li>정기 갱신: 12개월(연 1회) — 사업자등록·명의 일치 재조회 필수.</li>
+                  <li>이벤트 트리거 즉시 재검증: 업체 상호·사업자번호·도메인 변경, 이용자 신고 3건 이상 누적.</li>
+                  <li>재검증 실패 시 표시 즉시 박탈.</li>
+                </ul>
+              </div>
+
+              <div>
+                <h3 className="font-semibold text-neutral-900 mb-2">§3 — 박탈 사유</h3>
+                <p className="mb-1 leading-relaxed">다음 중 하나라도 해당하면 「정보 등록」 표시가 즉시 철회됩니다.</p>
+                <ol className="list-decimal list-inside space-y-1 ml-1 leading-relaxed">
+                  <li>사업자등록 상태가 휴업자·폐업자·말소로 전환된 경우</li>
+                  <li>도메인 미응답이 14일 이상 지속된 경우</li>
+                  <li>최근 90일 내 양방향 연락 가능성 재확인 실패</li>
+                  <li>통신판매업 신고가 직권 말소되거나 신고 의무 미이행이 발견된 경우</li>
+                  <li>업체 본인의 박탈 요청</li>
+                  <li>사실 조사 결과 부여 기준(§1) 중 어느 하나가 충족되지 않음이 확인된 경우</li>
+                  <li>표시광고법·전자상거래법 위반으로 공정거래위원회 처분을 받은 사실이 공시된 경우</li>
+                </ol>
+                <p className="text-xs text-neutral-500 mt-3 leading-relaxed">
+                  박탈 시 업체에게 사유와 재신청 절차가 통지됩니다.{' '}
+                  <Link href="/faq#what-is-jeongbo-deungrok" className="underline hover:text-neutral-700">
+                    FAQ — 「정보 등록」은 무엇인가요?
+                  </Link>
+                  도 함께 참고하세요.
+                </p>
+              </div>
+            </div>
+          </section>
+
           <section>
             <h2 className="text-base font-semibold text-neutral-900 mb-3">변경 이력</h2>
             <ul className="list-disc list-inside space-y-1 ml-2">
@@ -352,6 +455,13 @@ export default function TermsPage() {
                 2026년 5월 2일: &quot;비슷한 업체&quot; 자동 노출 관련 조항 신설·보완
                 <br />
                 <span className="ml-4 text-neutral-500">(이용약관 제4조·제12조, 개인정보처리방침 제3조·제7조)</span>
+              </li>
+              <li>
+                2026년 5월 11일: 별표 &quot;Vendor 정보 등록 기준&quot; 추가 (§0~§3 전문)
+                <br />
+                <span className="ml-4 text-neutral-500">
+                  (표시광고법 §3(3) 기만적 표시광고 방지 — Legal Counsel 자문 기반, PACAA-509)
+                </span>
               </li>
             </ul>
           </section>
@@ -364,6 +474,7 @@ export default function TermsPage() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6">
           <div className="flex flex-wrap gap-4 text-xs text-slate-400 justify-center mb-3">
             <Link href="/" className="hover:text-slate-600">홈</Link>
+            <Link href="/faq" className="hover:text-slate-600">자주 묻는 질문</Link>
             <Link href="/privacy" className="hover:text-slate-600">개인정보처리방침</Link>
             <Link href="/terms" className="hover:text-slate-600 font-medium text-slate-600">이용약관</Link>
             <Link href="/opt-out" className="hover:text-slate-600">정보 삭제·수정 요청</Link>
