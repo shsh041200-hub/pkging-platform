@@ -32,6 +32,7 @@ import { Pagination } from '@/components/Pagination'
 import { BusinessRegistrationInfo } from '@/components/BusinessRegistrationInfo'
 import { HomeHero } from './HomeHero'
 import { VerifiedTooltip } from '@/components/VerifiedTooltip'
+import { VendorDirectoryDisclaimer } from '@/components/VendorDirectoryDisclaimer'
 
 const PAGE_SIZE = 30
 
@@ -926,6 +927,11 @@ export default async function HomePage({
           </div>
         )}
       </section>}
+
+      {/* Vendor Directory Disclaimer — Legal §5-A (PACAA-591) */}
+      <div className="max-w-7xl mx-auto px-5 sm:px-8 pb-6 text-center">
+        <VendorDirectoryDisclaimer />
+      </div>
 
       {/* Footer */}
       <footer className="border-t border-white/[0.06] bg-slate-900 mt-auto">

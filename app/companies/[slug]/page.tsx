@@ -33,6 +33,7 @@ import { simplifyCompanyName } from '@/lib/simplify-company-name'
 import AddToCompareButton from '@/app/components/AddToCompareButton'
 import CompareCart from '@/app/components/CompareCart'
 import { VerifiedTooltip } from '@/components/VerifiedTooltip'
+import { VendorDirectoryDisclaimer } from '@/components/VendorDirectoryDisclaimer'
 
 type Props = {
   params: Promise<{ slug: string }>
@@ -807,6 +808,11 @@ export default async function CompanyPage({ params }: Props) {
               </div>
             </div>
           )}
+
+          {/* Vendor Directory Disclaimer — Legal §5-A (PACAA-591) */}
+          <div className="border-t border-neutral-100 pt-5 text-center">
+            <VendorDirectoryDisclaimer />
+          </div>
 
           {/* AI Disclaimer */}
           <div className="border-t border-neutral-100 pt-5 text-center">
