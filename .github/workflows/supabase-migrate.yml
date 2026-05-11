@@ -12,6 +12,10 @@ jobs:
   migrate:
     runs-on: ubuntu-latest
     steps:
+      - name: Install curl
+        # ubuntu-24.04 runner image 20260413.86.1+ no longer ships curl.
+        run: sudo apt-get update && sudo apt-get install -y curl
+
       - uses: actions/checkout@v4
 
       - uses: supabase/setup-cli@v1
