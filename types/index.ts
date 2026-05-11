@@ -375,6 +375,8 @@ export interface Company {
   review_count: number
   avg_rating: number | null
   is_verified: boolean
+  verification_revoked_reason: string | null
+  verification_revoked_at: string | null
   price_tier: PriceTier | null
   cold_retention_hours: number | null
   dry_ice_available: boolean | null
