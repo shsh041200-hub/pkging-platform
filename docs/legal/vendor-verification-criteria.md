@@ -1,14 +1,15 @@
 ---
 title: Vendor "is_verified" 부여·갱신·박탈 기준 (Packlinx 자체 등록 절차)
-owner: Operations Lead (운영 owner, 미정 → CEO 지명 필요)
+owner: CEO (Packlinx 대표)
 legal_reviewer: Legal Counsel
 applicable_law:
   - 표시광고법 §3 (3) 기만적 표시광고 금지
   - 표시광고법 §4 (1) 실증의 의무
   - 전자상거래법 §13 (통신판매업자 신원정보)
   - PIPA §15 (수집·이용 근거)
-revision: draft-r1
-status: 자문 초안 (Legal Counsel) — 보드 승인 전
+revision: r1
+status: 시행 (보드 승인 2026-05-11)
+operations_sop: docs/legal/vendor-operations-sop.md
 ---
 
 # Vendor `is_verified` 부여 기준 (Packlinx 자체 등록 절차)
@@ -133,11 +134,10 @@ WHERE v.is_verified = true;
 
 ## 6. 책임자 (Operations Owner)
 
-- **운영 owner (미정):** 본 문서 §1~3 의 운용·증빙 보존·박탈 결정의 단일 책임자. **CEO 가 1주 내 지명 필요.**
-- **법률 자문:** Legal Counsel — 본 문서 개정 시 사전 검토.
+- **운영 owner: CEO (Packlinx 대표).** 본 문서 §1~3 의 운용·증빙 보존·박탈 결정의 단일 책임자. 보드 결정 (PACAA-507, 2026-05-11): solo-operated 단계에서는 운영 owner 와 의사결정 owner 를 분리할 잉여 자원이 없으므로 CEO 가 단일 책임자. 별도 운영 인력 채용은 vendor 수가 단일 운영자 처리 한계를 초과하는 시점에 재검토.
+- **법률 자문:** Legal Counsel — 본 문서 개정 시 사전 검토. 박탈 결정 중 §3-7 (공시 처분 기반 박탈) 은 LC 사전 검토 필수.
 - **기술 owner:** Backend Engineer — §5 의 audit 및 evidence schema 유지.
-
-운영 owner 미지명 상태에서 `is_verified` 라벨을 유지하는 것은 표시광고법 §4(1) 실증 의무의 책임 소재가 공백이 된다는 뜻이므로, **owner 지명 전에는 라벨/배지를 임시 비활성화** (또는 PACAA-508 라벨 변경을 먼저 출시) 하는 것이 안전.
+- **운영 SOP:** `docs/legal/vendor-operations-sop.md` — §1~5 의 일상 운영 절차 (신규 등록 / 정기 갱신 / 이벤트 트리거 / 박탈 / 통지 / evidence 보존 / 공정위 자료 요구 SLA) 명문화.
 
 ---
 
