@@ -263,6 +263,7 @@ export default async function KeywordPage({ params }: Props) {
               <Link href="/privacy" className="hover:text-slate-200 transition-colors">개인정보처리방침</Link>
               <Link href="/terms" className="hover:text-slate-200 transition-colors">이용약관</Link>
               <Link href="/opt-out?type=takedown" className="hover:text-slate-200 transition-colors">권리침해 신고</Link>
+              <Link href="/faq#what-is-jeongbo-deungrok" className="hover:text-slate-200 transition-colors">Packlinx 자체 등록 기준 안내</Link>
             </div>
           </div>
         </div>
