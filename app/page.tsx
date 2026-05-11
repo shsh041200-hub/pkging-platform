@@ -31,6 +31,7 @@ import { SortDropdown } from '@/components/SortDropdown'
 import { Pagination } from '@/components/Pagination'
 import { BusinessRegistrationInfo } from '@/components/BusinessRegistrationInfo'
 import { HomeHero } from './HomeHero'
+import { VerifiedTooltip } from '@/components/VerifiedTooltip'
 
 const PAGE_SIZE = 30
 
@@ -799,6 +800,7 @@ export default async function HomePage({
                 <div className="p-6 flex flex-col flex-1 overflow-hidden">
                   <div className="flex items-start justify-between mb-3">
                     <div className="flex flex-wrap gap-1.5">
+                      {company.is_verified && <VerifiedTooltip />}
                       {(company.industry_categories as string[])?.slice(0, 2).map((cat: string) => (
                         <span key={cat} className="text-[11px] font-medium bg-gray-100 text-gray-600 px-2 py-0.5 rounded">
                           {INDUSTRY_CATEGORY_LABELS[cat as IndustryCategory] ?? cat}

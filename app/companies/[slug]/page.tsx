@@ -32,6 +32,7 @@ import { VerificationRevokedBanner } from '@/components/VerificationRevokedBanne
 import { simplifyCompanyName } from '@/lib/simplify-company-name'
 import AddToCompareButton from '@/app/components/AddToCompareButton'
 import CompareCart from '@/app/components/CompareCart'
+import { VerifiedTooltip } from '@/components/VerifiedTooltip'
 
 type Props = {
   params: Promise<{ slug: string }>
@@ -307,6 +308,7 @@ export default async function CompanyPage({ params }: Props) {
                     {new Date().getFullYear() - (company.founded_year as number)}년 전통
                   </span>
                 )}
+                {company.is_verified && <VerifiedTooltip />}
               </div>
               {/* Inline cert badges — top 3 */}
               {hasCertifications && (
