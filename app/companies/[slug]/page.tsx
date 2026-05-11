@@ -50,6 +50,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     .from('companies')
     .select('name, description, category, phone, products, founded_year')
     .eq('slug', slug)
+    .eq('is_hidden', false)
     .single()
 
   if (!company) return { title: '업체를 찾을 수 없습니다' }
@@ -104,6 +105,7 @@ export default async function CompanyPage({ params }: Props) {
     .from('companies')
     .select('*')
     .eq('slug', slug)
+    .eq('is_hidden', false)
     .single()
 
   if (!company) notFound()
