@@ -56,7 +56,7 @@ const ROWS: Row[] = [
     getValue: (c) => String(c.founded_year ?? ''),
   },
   {
-    label: '인증 여부',
+    label: '정보 등록',
     render: (c) => <BoolCell val={c.is_verified} />,
     getValue: (c) => String(c.is_verified),
   },

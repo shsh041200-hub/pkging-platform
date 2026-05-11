@@ -65,7 +65,7 @@ export const CATEGORY_GUIDE_CONTENT: Record<IndustryCategory, CategoryGuideData>
   'electronics-industrial': {
     categoryId: 'electronics-industrial',
     categoryLabel: '전자·산업 포장',
-    description: '전자·산업 포장재는 정전기 방지(ESD)와 충격 흡수 성능이 핵심입니다. 부품·완제품 규격에 맞는 맞춤형 트레이, 완충 폼, 방청 소재 전문 업체를 Packlinx에서 신속하게 비교하고 검증된 파트너를 찾아보세요.',
+    description: '전자·산업 포장재는 정전기 방지(ESD)와 충격 흡수 성능이 핵심입니다. 부품·완제품 규격에 맞는 맞춤형 트레이, 완충 폼, 방청 소재 전문 업체를 Packlinx에서 신속하게 비교하고 적합한 파트너를 찾아보세요.',
     buyerPoints: [
       'ESD(정전기방지) 인증 소재 사용 여부 필수 확인',
       '완충 폼(EPE·EPS·EVA·PU폼) 맞춤 제작 가능 여부',
