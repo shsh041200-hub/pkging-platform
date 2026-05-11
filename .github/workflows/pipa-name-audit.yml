@@ -1,0 +1,78 @@
+name: PIPA Name Audit (PACAA-585 Step 2)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  audit:
+    name: Run pipa_name_audit.sql on prod
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Query prod companies for PII in name field
+        id: audit
+        env:
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+          SUPABASE_PROJECT_REF: ${{ secrets.SUPABASE_PROJECT_REF }}
+        run: |
+          RESPONSE=$(curl -s -w "\n%{http_code}" \
+            -X POST "https://api.supabase.com/v1/projects/${SUPABASE_PROJECT_REF}/database/query" \
+            -H "Authorization: Bearer ${SUPABASE_ACCESS_TOKEN}" \
+            -H "Content-Type: application/json" \
+            -d "$(python3 -c "import json; print(json.dumps({'query': open('scripts/pipa_name_audit.sql').read()}))")")
+
+          HTTP_STATUS=$(echo "$RESPONSE" | tail -1)
+          BODY=$(echo "$RESPONSE" | head -n -1)
+
+          if [ "$HTTP_STATUS" != "200" ]; then
+            echo "::error::Supabase query failed (HTTP $HTTP_STATUS): $BODY"
+            exit 1
+          fi
+
+          echo "$BODY" > /tmp/pipa_audit_results.json
+
+          ROW_COUNT=$(python3 -c "import json; d=json.load(open('/tmp/pipa_audit_results.json')); print(len(d))")
+          echo "row_count=$ROW_COUNT" >> "$GITHUB_OUTPUT"
+
+      - name: Write Step Summary
+        env:
+          ROW_COUNT: ${{ steps.audit.outputs.row_count }}
+        run: |
+          {
+            echo "## PACAA-585 Step 2 — companies.name PII Audit"
+            echo ""
+            echo "**Contaminated rows found: ${ROW_COUNT}**"
+            echo ""
+          } >> "$GITHUB_STEP_SUMMARY"
+
+          if [ "$ROW_COUNT" = "0" ]; then
+            echo ":white_check_mark: No PII patterns found in companies.name — constraint is clean." >> "$GITHUB_STEP_SUMMARY"
+          else
+            {
+              echo "| slug | name (truncated 80) | pii_pattern |"
+              echo "|------|---------------------|-------------|"
+              python3 -c "
+          import json
+          rows = json.load(open('/tmp/pipa_audit_results.json'))
+          for r in rows:
+              slug = str(r.get('slug', ''))
+              name = str(r.get('name', ''))[:80].replace('|', '\|')
+              pat  = str(r.get('pii_pattern', ''))
+              print(f'| {slug} | {name} | {pat} |')
+          "
+            } >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "_Full JSON: see artifact \`pipa-name-audit-\${{ github.run_id }}\`_" >> "$GITHUB_STEP_SUMMARY"
+
+          cat /tmp/pipa_audit_results.json
+
+      - name: Upload audit artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: pipa-name-audit-${{ github.run_id }}
+          path: /tmp/pipa_audit_results.json
+          retention-days: 30
