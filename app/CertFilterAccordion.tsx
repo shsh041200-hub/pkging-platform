@@ -28,7 +28,7 @@ export function CertFilterAccordion({
       <button
         onClick={() => setOpen(!open)}
         className={`text-[11px] font-medium flex items-center gap-1.5 py-1 transition-colors ${
-          activeCerts.length > 0 ? 'text-green-700 hover:text-green-800' : 'text-gray-400 hover:text-gray-600'
+          activeCerts.length > 0 ? 'text-brand-600 hover:text-brand-700' : 'text-neutral-400 hover:text-neutral-600'
         }`}
       >
         <svg
@@ -42,7 +42,7 @@ export function CertFilterAccordion({
         </svg>
         인증 필터
         {activeCerts.length > 0 && (
-          <span className="bg-green-600 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full leading-none">
+          <span className="bg-brand-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full leading-none">
             {activeCerts.length}
           </span>
         )}
