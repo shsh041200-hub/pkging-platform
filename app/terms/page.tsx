@@ -365,7 +365,7 @@ export default function TermsPage() {
               <strong>§0 — 본 표시의 법적 성격 (한정 문구):</strong> 본 표시(
               <code className="bg-amber-100 px-1 rounded text-xs font-mono">정보 등록</code>
               )는 외부 공인 인증기관(예: KS, ISO, Korean Standards Association, 한국정보통신기술협회 등)이 발급한 인증이
-              아닙니다. Packlinx 가 자체적으로 운영하는 등록 절차에 따라, 아래 객관적·실증 가능한 기준을 만족한 업체에
+              아닙니다. Packlinx 가 자체적으로 운영하는 등록 절차에 따라, 객관적·실증 가능한 기준을 만족한 업체에
               한해 부여되는 표시입니다.
             </div>
 
