@@ -1,6 +1,7 @@
 'use client'
 
-import { useState, useRef, useCallback } from 'react'
+import { useState, useRef, useCallback, useEffect } from 'react'
+import { createPortal } from 'react-dom'
 import Link from 'next/link'
 
 const DISCLAIMER =
@@ -8,39 +9,94 @@ const DISCLAIMER =
 
 export function VerifiedTooltip() {
   const [open, setOpen] = useState(false)
+  const [pos, setPos] = useState<{ top: number; left: number } | null>(null)
+  const badgeRef = useRef<HTMLSpanElement>(null)
   const hideTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  const calcPos = useCallback(() => {
+    if (!badgeRef.current) return
+    const rect = badgeRef.current.getBoundingClientRect()
+    setPos({
+      top: rect.top - 8,   // viewport-relative, used with position:fixed
+      left: rect.left,
+    })
+  }, [])
 
   const show = useCallback(() => {
     if (hideTimer.current) clearTimeout(hideTimer.current)
+    calcPos()
     setOpen(true)
-  }, [])
+  }, [calcPos])
 
   const hide = useCallback(() => {
-    hideTimer.current = setTimeout(() => setOpen(false), 120)
+    hideTimer.current = setTimeout(() => setOpen(false), 200)
   }, [])
 
-  const toggle = useCallback((e: React.MouseEvent | React.TouchEvent) => {
+  const handleTouchEnd = useCallback((e: React.TouchEvent) => {
     e.preventDefault()
     e.stopPropagation()
-    setOpen((v) => !v)
-  }, [])
+    if (open) {
+      setOpen(false)
+    } else {
+      calcPos()
+      setOpen(true)
+    }
+  }, [open, calcPos])
+
+  // Close on scroll/resize
+  useEffect(() => {
+    if (!open) return
+    const close = () => setOpen(false)
+    window.addEventListener('scroll', close, { passive: true })
+    window.addEventListener('resize', close, { passive: true })
+    return () => {
+      window.removeEventListener('scroll', close)
+      window.removeEventListener('resize', close)
+    }
+  }, [open])
+
+  const tooltip = open && pos ? (
+    <span
+      style={{
+        position: 'fixed',
+        top: pos.top,
+        left: pos.left,
+        transform: 'translateY(-100%)',
+        zIndex: 9999,
+        width: '18rem',
+        maxWidth: 'calc(100vw - 2rem)',
+      }}
+      className="bg-white border border-gray-200 rounded-lg shadow-lg p-3 text-left pointer-events-auto"
+      onMouseEnter={() => { if (hideTimer.current) clearTimeout(hideTimer.current) }}
+      onMouseLeave={hide}
+      role="tooltip"
+    >
+      <p className="text-[12px] text-gray-700 leading-relaxed mb-2">{DISCLAIMER}</p>
+      <Link
+        href="/faq#what-is-jeongbo-deungrok"
+        className="text-[12px] text-emerald-700 font-medium underline underline-offset-2 hover:text-emerald-900 transition-colors"
+        onClick={(e) => e.stopPropagation()}
+      >
+        정보 등록 기준 안내
+      </Link>
+    </span>
+  ) : null
 
   return (
-    <span className="relative inline-flex items-center">
-      {/* Badge */}
+    <span className="relative inline-flex items-center z-10">
       <span
+        ref={badgeRef}
         className="inline-flex items-center gap-1 text-[11px] font-medium px-2 py-0.5 rounded border bg-emerald-50 text-emerald-700 border-emerald-200 select-none cursor-default"
         onMouseEnter={show}
         onMouseLeave={hide}
-        onClick={toggle}
-        onTouchEnd={toggle}
+        onTouchEnd={handleTouchEnd}
         aria-label="정보 등록 업체 — 한정 문구 보기"
         role="button"
         tabIndex={0}
         onKeyDown={(e) => {
           if (e.key === 'Enter' || e.key === ' ') {
             e.preventDefault()
-            setOpen((v) => !v)
+            if (open) { setOpen(false) } else { calcPos(); setOpen(true) }
           }
         }}
       >
@@ -58,24 +114,9 @@ export function VerifiedTooltip() {
         </svg>
       </span>
 
-      {/* Tooltip */}
-      {open && (
-        <span
-          className="absolute z-50 bottom-full left-0 mb-2 w-72 max-w-[calc(100vw-2rem)] bg-white border border-gray-200 rounded-lg shadow-lg p-3 text-left pointer-events-auto"
-          onMouseEnter={show}
-          onMouseLeave={hide}
-          role="tooltip"
-        >
-          <p className="text-[12px] text-gray-700 leading-relaxed mb-2">{DISCLAIMER}</p>
-          <Link
-            href="/faq#what-is-jeongbo-deungrok"
-            className="text-[12px] text-emerald-700 font-medium underline underline-offset-2 hover:text-emerald-900 transition-colors"
-            onClick={(e) => e.stopPropagation()}
-          >
-            정보 등록 기준 안내
-          </Link>
-        </span>
-      )}
+      {typeof document !== 'undefined' && tooltip
+        ? createPortal(tooltip, document.body)
+        : null}
     </span>
   )
 }
