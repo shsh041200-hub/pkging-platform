@@ -3,7 +3,6 @@
 import Link from 'next/link'
 import { useState } from 'react'
 import type { CompanyFull } from '@/lib/compare-data'
-import AddToCompareButton from '@/app/components/AddToCompareButton'
 
 // ── Field helpers ─────────────────────────────────────────────────────────────
 
@@ -167,15 +166,12 @@ function CompletenessBadge({ pct }: { pct: number }) {
       ? 'text-green-700 bg-green-50 border-green-200'
       : pct >= 50
         ? 'text-amber-700 bg-amber-50 border-amber-200'
-        : 'text-gray-500 bg-gray-50 border-gray-200'
+        : 'text-neutral-500 bg-neutral-50 border-neutral-200'
   return (
     <span className="inline-flex flex-col items-center gap-0.5 mt-1.5">
       <span className={`text-[10px] font-medium border px-1.5 py-0.5 rounded leading-tight ${colorCls}`}>
         프로필 {pct}%
       </span>
-      {pct < 50 && (
-        <span className="text-[9px] text-gray-400">벤더님 보강 필요</span>
-      )}
     </span>
   )
 }
@@ -260,20 +256,11 @@ export default function CompareTable({ companies, completeness }: Props) {
                     )}
                     <span className="block font-bold text-heading-deep-navy leading-snug text-[15px]">{c.name}</span>
                     {c.is_verified && (
-                      <span className="inline-block mt-1 text-[10px] font-semibold text-green-700 bg-green-50 border border-green-200 px-1.5 py-0.5 rounded">
-                        ✓ 인증
+                      <span className="inline-block mt-1 text-[10px] font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-1.5 py-0.5 rounded">
+                        정보 등록
                       </span>
                     )}
                     <CompletenessBadge pct={completeness[i] ?? 0} />
-                  </th>
-                ))}
-                {Array.from({ length: 3 - companies.length }).map((_, i) => (
-                  <th
-                    key={`ph-${i}`}
-                    scope="col"
-                    className="text-center px-4 py-3 border-b border-l border-neutral-100 min-w-[140px] text-neutral-300 text-xs"
-                  >
-                    <Link href="/" className="text-neutral-300 hover:text-neutral-500">+ 벤더 추가</Link>
                   </th>
                 ))}
               </tr>
@@ -292,9 +279,6 @@ export default function CompareTable({ companies, completeness }: Props) {
                       {row.render(c)}
                     </td>
                   ))}
-                  {Array.from({ length: 3 - companies.length }).map((_, i) => (
-                    <td key={`ph-${i}`} className="px-4 py-3 border-b border-l border-neutral-50" />
-                  ))}
                 </tr>
               ))}
             </tbody>
@@ -310,7 +294,6 @@ export default function CompareTable({ companies, completeness }: Props) {
                       >
                         프로필 보기
                       </Link>
-                      <AddToCompareButton slug={c.slug} name={c.name} />
                       {c.website && (
                         <a
                           href={c.website}
@@ -327,9 +310,6 @@ export default function CompareTable({ companies, completeness }: Props) {
                       )}
                     </div>
                   </td>
-                ))}
-                {Array.from({ length: 3 - companies.length }).map((_, i) => (
-                  <td key={`ph-${i}`} className="border-t border-l border-neutral-100 px-4 py-5" />
                 ))}
               </tr>
             </tfoot>
