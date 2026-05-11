@@ -101,7 +101,7 @@ const FEATURED: FeaturedCard[] = [
   {
     slug: "2026-korea-packaging-trends",
     thumbVariant: "default",
-    badge: "📈 이번 주 추천",
+    badge: "📈 이번 주 인기",
     tag: "트렌드 리포트",
     title: "2026 한국 패키징 트렌드 5가지 — 규제·소재·공급망 일괄 정리",
     meta: ["⏱ 8분 읽기", "📅 2026-04", "👁 2.1k 조회"],

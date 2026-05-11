@@ -865,7 +865,7 @@ function CorugatedFluteTypesContent() {
         name: "골판지 A골과 B골의 실질적인 차이는 무엇인가요?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "A골은 두께 약 5mm에 완충성이 최고 수준이며 가전·가구 등 무거운 제품과 장거리 운송에 적합합니다. B골은 두께 약 3mm로 가장 범용적인 택배 박스 표준이며 완충성과 인쇄 적합성의 균형이 좋습니다. B골 대비 A골 단가는 약 15~20% 높습니다.",
+          text: "A골은 두께 약 5mm에 완충성이 뛰어나며 가전·가구 등 무거운 제품과 장거리 운송에 적합합니다. B골은 두께 약 3mm로 가장 범용적인 택배 박스 표준이며 완충성과 인쇄 적합성의 균형이 좋습니다. B골 대비 A골 단가는 약 15~20% 높습니다.",
         },
       },
       {
@@ -932,7 +932,7 @@ function CorugatedFluteTypesContent() {
               <td>A 플루트</td>
               <td>약 4.7</td>
               <td>33±3</td>
-              <td>쿠션성 최고, 압축 강도 우수</td>
+              <td>쿠션성 뛰어남, 압축 강도 우수</td>
               <td>유리·도자기 포장, 고중량 제품</td>
             </tr>
             <tr>
@@ -2277,7 +2277,7 @@ function ElectronicsPackagingDesignContent() {
             </tr>
             <tr>
               <td>EPP(발포 폴리프로필렌)</td>
-              <td>반복 충격 복원력 최고</td>
+              <td>반복 충격 복원력 뛰어남</td>
               <td>높음</td>
               <td>서버·산업용 장비(20kg+)</td>
               <td>필요(고가)</td>
@@ -2645,7 +2645,7 @@ function PackagingTapeComparisonContent() {
               <td>중간</td>
               <td>중간</td>
               <td>800~1,200원</td>
-              <td>골판지 접착력 최고, 친환경</td>
+              <td>골판지 접착력 강함, 친환경</td>
             </tr>
             <tr>
               <td>종이 테이프(수활성)</td>
@@ -3043,7 +3043,7 @@ const SLOT_DATA_CORRUGATED_FLUTE: SlotData = {
   tldr: [
     {
       bold: "A골(4.7mm)",
-      text: "— 완충성 최고. 식품·가전 등 충격 민감 제품에 최적. 소재 사용량이 많아 단가는 높습니다.",
+      text: "— 완충성 뛰어남. 식품·가전 등 충격 민감 제품에 적합. 소재 사용량이 많아 단가는 높습니다.",
     },
     {
       bold: "E골·F골(1.6mm 이하)",
