@@ -285,7 +285,7 @@ export function CompareV1Client() {
     <div className="min-h-screen bg-neutral-50">
 
       {/* ── V05 Dark sticky header ── */}
-      <header className="bg-[#0F172A] sticky top-0 z-50 border-b border-white/[0.06]">
+      <header className="bg-slate-900 sticky top-0 z-50 border-b border-white/[0.06]">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-3">
             <PacklinxLogo variant="dark" />
@@ -318,7 +318,7 @@ export function CompareV1Client() {
                 {compA.name} <span className="text-neutral-400 font-light">vs</span> {compB.name}
               </h1>
               <p className="text-sm text-body-secondary">
-                {compA.is_verified && compB.is_verified ? '두 업체 모두 정보 등록 완료 ✓' : '패키징 업체 상세 비교'}
+                {compA.is_verified && compB.is_verified ? '두 업체 모두 정보 등록 ✓' : '패키징 업체 상세 비교'}
               </p>
             </div>
 
@@ -419,8 +419,8 @@ export function CompareV1Client() {
                     >
                       <span className="block font-bold text-heading-deep-navy leading-snug text-[15px]">{c.name}</span>
                       {c.is_verified && (
-                        <span className="inline-block mt-1 text-[10px] font-semibold text-green-700 bg-green-50 border border-green-200 px-1.5 py-0.5 rounded">
-                          ✓ 인증
+                        <span className="inline-block mt-1 text-[10px] font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-1.5 py-0.5 rounded">
+                          정보 등록
                         </span>
                       )}
                       <CompletenessBadge pct={c.completeness} />
