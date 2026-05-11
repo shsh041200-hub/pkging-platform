@@ -2,18 +2,8 @@ import { createClient as createSupabaseClient } from '@supabase/supabase-js'
 import { INDUSTRY_CATEGORIES } from '@/types'
 import { PRODUCT_SLUGS } from '@/data/productGuide'
 import { SERVICE_SLUGS } from '@/data/serviceGuide'
-
-// Static guide pages with dedicated app/guides/<slug>/page.tsx routes.
-// These are not in blog_posts and must be listed explicitly.
-const STATIC_GUIDE_SLUGS = [
-  'label-printing-guide',
-  'flexible-packaging-guide',
-  'plastic-container-guide',
-  'packaging-printing-guide',
-  'glass-metal-container-guide',
-  'packaging-accessories-guide',
-  'packaging-machinery-guide',
-]
+import { ALL_GUIDE_SLUGS } from '@/lib/guide-data'
+import { listKeywordSlugs } from '@/lib/keyword-data'
 
 // PACAA-116 sitemap shard.
 // Emits raw UTF-8 URLs (no percent-encoding) per the canonical ADR. Only
@@ -24,6 +14,10 @@ const STATIC_GUIDE_SLUGS = [
 // internal metadata routing conflict with app/sitemap.ts (PACAA-360).
 // A rewrite in next.config.js maps /sitemap/:id → /sitemaps/:id so the
 // public URL /sitemap/0, /sitemap/1 etc. remains unchanged.
+//
+// PACAA-578: shard 0 is now the single content shard (static + guides +
+// keywords + compare). Vendor company pages live in shards 1..N.
+// /sitemap.xml is the <sitemapindex> root (app/sitemap.xml/route.ts).
 
 export const revalidate = 3600
 export const dynamicParams = true
@@ -36,6 +30,11 @@ export async function generateStaticParams() {
 
 const COMPANIES_PER_SITEMAP = 50_000
 const SUPABASE_PAGE_SIZE = 1_000
+
+// Blog posts that live at /blog/<slug> (not guides).
+const BLOG_POST_SLUGS = [
+  { slug: 'packaging-rfq-guide', lastmod: '2026-05-08' },
+]
 
 function siteUrl() {
   return (process.env.NEXT_PUBLIC_SITE_URL ?? 'https://www.packlinx.com').replace(/\/$/, '')
@@ -79,6 +78,10 @@ ${body}
 
 async function staticEntries(): Promise<Entry[]> {
   const root = siteUrl()
+  const now = new Date().toISOString()
+
+  // DB guides: exclude slugs already covered by ALL_GUIDE_SLUGS to avoid duplicates.
+  const staticGuideSet = new Set<string>(ALL_GUIDE_SLUGS)
   const { data: guidePosts } = await supabase()
     .from('blog_posts')
     .select('slug, published_at')
@@ -87,26 +90,36 @@ async function staticEntries(): Promise<Entry[]> {
     .order('published_at', { ascending: false })
     .range(0, SUPABASE_PAGE_SIZE - 1)
 
-  const now = new Date().toISOString()
   const out: Entry[] = [
+    // Core navigation
     { url: root, lastmod: now, changefreq: 'daily', priority: 1 },
+    { url: `${root}/categories`, lastmod: now, changefreq: 'weekly', priority: 0.9 },
     { url: `${root}/guides`, lastmod: now, changefreq: 'daily', priority: 0.7 },
+    { url: `${root}/faq`, lastmod: now, changefreq: 'monthly', priority: 0.5 },
+    { url: `${root}/terms`, lastmod: now, changefreq: 'yearly', priority: 0.3 },
   ]
+
+  // Category pages
   for (const key of INDUSTRY_CATEGORIES) {
     out.push({ url: `${root}/categories/${key}`, lastmod: now, changefreq: 'weekly', priority: 0.8 })
   }
+
+  // Product + service guide landing pages
   for (const slug of PRODUCT_SLUGS) {
     out.push({ url: `${root}/products/${slug}`, lastmod: now, changefreq: 'weekly', priority: 0.7 })
   }
   for (const slug of SERVICE_SLUGS) {
     out.push({ url: `${root}/services/${slug}`, lastmod: now, changefreq: 'weekly', priority: 0.7 })
   }
-  for (const slug of STATIC_GUIDE_SLUGS) {
+
+  // All guide slugs (static + dynamic) from the single source of truth
+  for (const slug of ALL_GUIDE_SLUGS) {
     out.push({ url: `${root}/guides/${slug}`, lastmod: now, changefreq: 'monthly', priority: 0.7 })
   }
-  const dbGuideSlugs = new Set(STATIC_GUIDE_SLUGS)
+
+  // DB guides not already in ALL_GUIDE_SLUGS
   for (const p of guidePosts ?? []) {
-    if (dbGuideSlugs.has(p.slug)) continue
+    if (staticGuideSet.has(p.slug)) continue
     out.push({
       url: `${root}/guides/${p.slug}`,
       lastmod: p.published_at ?? now,
@@ -114,6 +127,18 @@ async function staticEntries(): Promise<Entry[]> {
       priority: 0.6,
     })
   }
+
+  // Blog posts at /blog/<slug>
+  for (const post of BLOG_POST_SLUGS) {
+    out.push({ url: `${root}/blog/${post.slug}`, lastmod: post.lastmod, changefreq: 'monthly', priority: 0.8 })
+  }
+
+  // Keyword landing pages
+  const keywordSlugs = await listKeywordSlugs()
+  for (const slug of keywordSlugs) {
+    out.push({ url: `${root}/keywords/${slug}`, lastmod: now, changefreq: 'daily', priority: 0.8 })
+  }
+
   return out
 }
 
