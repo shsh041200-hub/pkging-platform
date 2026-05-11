@@ -3,23 +3,22 @@
 import Link from 'next/link'
 import { useState } from 'react'
 import type { CompanyFull } from '@/lib/compare-data'
-import AddToCompareButton from '@/app/components/AddToCompareButton'
 
 // ── Field helpers ─────────────────────────────────────────────────────────────
 
 function BoolCell({ val }: { val: boolean | null | undefined }) {
-  if (val == null) return <span className="text-gray-200">—</span>
+  if (val == null) return <span className="text-neutral-300">—</span>
   return val
-    ? <span className="text-green-600 font-medium" aria-label="예">✓</span>
-    : <span className="text-gray-200" aria-label="아니오">—</span>
+    ? <span className="text-green-600 font-semibold" aria-label="예">✓</span>
+    : <span className="text-neutral-300" aria-label="아니오">—</span>
 }
 
 function BadgesCell({ items }: { items: string[] | null | undefined }) {
-  if (!items?.length) return <span className="text-gray-200">—</span>
+  if (!items?.length) return <span className="text-neutral-300">—</span>
   return (
     <div className="flex flex-wrap gap-1 justify-center">
       {items.map((b) => (
-        <span key={b} className="text-[11px] bg-blue-50 text-blue-700 px-1.5 py-0.5 rounded">
+        <span key={b} className="text-[11px] bg-brand-50 text-brand-700 border border-brand-100 px-1.5 py-0.5 rounded">
           {b}
         </span>
       ))}
@@ -28,8 +27,8 @@ function BadgesCell({ items }: { items: string[] | null | undefined }) {
 }
 
 function TextCell({ val }: { val: string | number | null | undefined }) {
-  if (val == null || val === '') return <span className="text-gray-200">—</span>
-  return <span className="text-sm">{String(val)}</span>
+  if (val == null || val === '') return <span className="text-neutral-300">—</span>
+  return <span className="text-sm text-neutral-800">{String(val)}</span>
 }
 
 const PRICE_TIER_LABEL: Record<string, string> = { budget: '예산형', mid: '중간가', premium: '프리미엄' }
@@ -68,15 +67,15 @@ const ROWS: Row[] = [
   {
     label: '소재 유형',
     render: (c) => c.material_type
-      ? <span className="text-[11px] bg-gray-100 text-gray-600 px-2 py-0.5 rounded">{MATERIAL_LABEL[c.material_type] ?? c.material_type}</span>
-      : <span className="text-gray-200">—</span>,
+      ? <span className="text-[11px] bg-neutral-100 text-neutral-600 px-2 py-0.5 rounded">{MATERIAL_LABEL[c.material_type] ?? c.material_type}</span>
+      : <span className="text-neutral-300">—</span>,
     getValue: (c) => c.material_type ?? '',
   },
   {
     label: '포장 형태',
     render: (c) => c.packaging_form
-      ? <span className="text-[11px] bg-gray-100 text-gray-600 px-2 py-0.5 rounded">{c.packaging_form}</span>
-      : <span className="text-gray-200">—</span>,
+      ? <span className="text-[11px] bg-neutral-100 text-neutral-600 px-2 py-0.5 rounded">{c.packaging_form}</span>
+      : <span className="text-neutral-300">—</span>,
     getValue: (c) => c.packaging_form ?? '',
   },
   {
@@ -92,36 +91,36 @@ const ROWS: Row[] = [
   {
     label: '인쇄 방식',
     render: (c) => c.print_method
-      ? <span className="text-[11px] bg-gray-100 text-gray-600 px-2 py-0.5 rounded">{c.print_method}</span>
-      : <span className="text-gray-200">—</span>,
+      ? <span className="text-[11px] bg-neutral-100 text-neutral-600 px-2 py-0.5 rounded">{c.print_method}</span>
+      : <span className="text-neutral-300">—</span>,
     getValue: (c) => c.print_method ?? '',
   },
   {
     label: '최소 발주량(MOQ)',
     render: (c) => c.moq_value != null
-      ? <span className="text-sm">{c.moq_value.toLocaleString('ko-KR')}{c.moq_unit ? ` ${c.moq_unit}` : ''}</span>
-      : <span className="text-gray-200">—</span>,
+      ? <span className="text-sm font-semibold text-heading-deep-navy">{c.moq_value.toLocaleString('ko-KR')}<span className="text-xs font-normal text-neutral-500 ml-0.5">{c.moq_unit ?? ''}</span></span>
+      : <span className="text-neutral-300">—</span>,
     getValue: (c) => c.moq_value != null ? `${c.moq_value}${c.moq_unit ?? ''}` : '',
   },
   {
     label: '표준 납기',
     render: (c) => c.lead_time_standard_days != null
-      ? <span className="text-sm">{c.lead_time_standard_days}일</span>
-      : <span className="text-gray-200">—</span>,
+      ? <span className="text-sm font-semibold text-heading-deep-navy">{c.lead_time_standard_days}<span className="text-xs font-normal text-neutral-500 ml-0.5">일</span></span>
+      : <span className="text-neutral-300">—</span>,
     getValue: (c) => String(c.lead_time_standard_days ?? ''),
   },
   {
     label: '급행 납기',
     render: (c) => c.lead_time_express_days != null
       ? <span className="text-sm">{c.lead_time_express_days}일</span>
-      : <span className="text-gray-200">—</span>,
+      : <span className="text-neutral-300">—</span>,
     getValue: (c) => String(c.lead_time_express_days ?? ''),
   },
   {
     label: '가격대',
     render: (c) => c.price_tier
-      ? <span className="text-[11px] bg-gray-100 text-gray-600 px-2 py-0.5 rounded">{PRICE_TIER_LABEL[c.price_tier] ?? c.price_tier}</span>
-      : <span className="text-gray-200">—</span>,
+      ? <span className="text-[11px] bg-neutral-100 text-neutral-600 px-2 py-0.5 rounded">{PRICE_TIER_LABEL[c.price_tier] ?? c.price_tier}</span>
+      : <span className="text-neutral-300">—</span>,
     getValue: (c) => c.price_tier ?? '',
   },
   {
@@ -147,8 +146,8 @@ const ROWS: Row[] = [
   {
     label: '평점',
     render: (c) => c.avg_rating != null
-      ? <span className="text-sm">★ {c.avg_rating.toFixed(1)} <span className="text-gray-400 text-xs">({c.review_count}건)</span></span>
-      : <span className="text-gray-200">—</span>,
+      ? <span className="text-sm">★ {c.avg_rating.toFixed(1)} <span className="text-neutral-400 text-xs">({c.review_count}건)</span></span>
+      : <span className="text-neutral-300">—</span>,
     getValue: (c) => String(c.avg_rating ?? ''),
   },
 ]
@@ -167,15 +166,12 @@ function CompletenessBadge({ pct }: { pct: number }) {
       ? 'text-green-700 bg-green-50 border-green-200'
       : pct >= 50
         ? 'text-amber-700 bg-amber-50 border-amber-200'
-        : 'text-gray-500 bg-gray-50 border-gray-200'
+        : 'text-neutral-500 bg-neutral-50 border-neutral-200'
   return (
     <span className="inline-flex flex-col items-center gap-0.5 mt-1.5">
       <span className={`text-[10px] font-medium border px-1.5 py-0.5 rounded leading-tight ${colorCls}`}>
         프로필 {pct}%
       </span>
-      {pct < 50 && (
-        <span className="text-[9px] text-gray-400">벤더님 보강 필요</span>
-      )}
     </span>
   )
 }
@@ -215,10 +211,10 @@ export default function CompareTable({ companies, completeness }: Props) {
           <button
             onClick={handleToggle}
             aria-pressed={showDiffOnly}
-            className={`text-xs font-medium border rounded-lg px-3 py-1.5 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 ${
+            className={`text-xs font-medium border rounded-lg px-3 py-1.5 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-stripe-purple ${
               showDiffOnly
-                ? 'bg-blue-600 text-white border-blue-600 hover:bg-blue-700'
-                : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
+                ? 'bg-stripe-purple text-white border-stripe-purple hover:bg-stripe-purple-hover'
+                : 'bg-white text-neutral-700 border-neutral-300 hover:bg-neutral-50'
             }`}
           >
             {showDiffOnly ? '전체 항목 보기' : '차이만 보기'}
@@ -227,18 +223,18 @@ export default function CompareTable({ companies, completeness }: Props) {
       )}
 
       {/* Table */}
-      <div className="overflow-x-auto -mx-4 sm:mx-0 rounded-xl border border-gray-200">
+      <div className="overflow-x-auto -mx-4 sm:mx-0 rounded-xl border border-border-v04 bg-white" style={{ boxShadow: 'var(--shadow-elevated-v04)' }}>
         {allSame ? (
-          <div className="py-12 text-center text-sm text-gray-400">
+          <div className="py-12 text-center text-sm text-neutral-400">
             모든 항목이 동일합니다
           </div>
         ) : (
           <table className="border-collapse w-full min-w-[480px] text-sm">
             <thead>
-              <tr className="bg-gray-50">
+              <tr className="bg-neutral-50/80">
                 <th
                   scope="col"
-                  className="sticky left-0 z-10 bg-gray-50 text-left text-xs text-gray-500 font-medium px-4 py-3 border-b border-r border-gray-200 min-w-[110px]"
+                  className="sticky left-0 z-10 bg-neutral-50 text-left text-xs text-neutral-500 font-medium px-4 py-3 border-b border-r border-border-v04 min-w-[110px]"
                 >
                   항목
                 </th>
@@ -246,7 +242,7 @@ export default function CompareTable({ companies, completeness }: Props) {
                   <th
                     key={c.slug}
                     scope="col"
-                    className="text-center px-4 py-3 border-b border-l border-gray-200 min-w-[180px] align-top"
+                    className="text-center px-4 py-3 border-b border-l border-border-v04 min-w-[200px] align-top"
                   >
                     {c.icon_url && (
                       // eslint-disable-next-line @next/next/no-img-element
@@ -258,74 +254,62 @@ export default function CompareTable({ companies, completeness }: Props) {
                         className="mx-auto mb-1.5 rounded object-contain"
                       />
                     )}
-                    <span className="block font-bold text-gray-900 leading-snug">{c.name}</span>
+                    <span className="block font-bold text-heading-deep-navy leading-snug text-[15px]">{c.name}</span>
                     {c.is_verified && (
-                      <span className="inline-block mt-1 text-[10px] font-medium text-green-700 bg-green-50 border border-green-200 px-1.5 py-0.5 rounded">
-                        ✓ 인증
+                      <span className="inline-block mt-1 text-[10px] font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-1.5 py-0.5 rounded">
+                        정보 등록
                       </span>
                     )}
                     <CompletenessBadge pct={completeness[i] ?? 0} />
-                  </th>
-                ))}
-                {Array.from({ length: 3 - companies.length }).map((_, i) => (
-                  <th
-                    key={`ph-${i}`}
-                    scope="col"
-                    className="text-center px-4 py-3 border-b border-l border-gray-100 min-w-[140px] text-gray-300 text-xs"
-                  >
-                    <Link href="/" className="text-gray-300 hover:text-gray-500">+ 벤더 추가</Link>
                   </th>
                 ))}
               </tr>
             </thead>
             <tbody>
               {visibleRows.map((row, idx) => (
-                <tr key={row.label} className={idx % 2 === 1 ? 'bg-gray-50/50' : 'bg-white'}>
+                <tr key={row.label} className={idx % 2 === 1 ? 'bg-neutral-50/40' : 'bg-white'}>
                   <th
                     scope="row"
-                    className="sticky left-0 z-10 bg-inherit text-left text-xs font-medium text-gray-500 px-4 py-3 border-b border-r border-gray-100 whitespace-nowrap"
+                    className="sticky left-0 z-10 bg-inherit text-left text-xs font-medium text-neutral-500 px-4 py-3 border-b border-r border-neutral-100 whitespace-nowrap"
                   >
                     {row.label}
                   </th>
                   {companies.map((c) => (
-                    <td key={c.slug} className="px-4 py-3 border-b border-l border-gray-100 text-center align-middle">
+                    <td key={c.slug} className="px-4 py-3 border-b border-l border-neutral-100 text-center align-middle">
                       {row.render(c)}
                     </td>
-                  ))}
-                  {Array.from({ length: 3 - companies.length }).map((_, i) => (
-                    <td key={`ph-${i}`} className="px-4 py-3 border-b border-l border-gray-50" />
                   ))}
                 </tr>
               ))}
             </tbody>
             <tfoot>
               <tr>
-                <td className="sticky left-0 z-10 bg-white border-t border-r border-gray-200 px-4 py-4" />
-                {companies.map((c) => (
-                  <td key={c.slug} className="border-t border-l border-gray-200 px-4 py-4 text-center align-middle">
-                    <div className="flex flex-col gap-2 items-center">
+                <td className="sticky left-0 z-10 bg-white border-t border-r border-border-v04 px-4 py-5" />
+                {companies.map((c, i) => (
+                  <td key={c.slug} className="border-t border-l border-border-v04 px-4 py-5 text-center align-middle">
+                    <div className="flex flex-col gap-2.5 items-center">
                       <Link
                         href={`/companies/${c.slug}`}
-                        className="text-xs font-medium text-gray-700 border border-gray-300 rounded-lg px-3 py-1.5 hover:bg-gray-50 transition-colors"
+                        className="text-xs font-medium text-neutral-700 border border-neutral-300 rounded-lg px-3 py-2 hover:bg-neutral-50 transition-colors"
                       >
                         프로필 보기
                       </Link>
-                      <AddToCompareButton slug={c.slug} name={c.name} />
                       {c.website && (
                         <a
                           href={c.website}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-xs font-medium text-white bg-orange-600 hover:bg-orange-700 rounded-lg px-3 py-1.5 transition-colors"
+                          className={`text-xs font-semibold rounded-lg px-4 py-2 transition-colors whitespace-nowrap ${
+                            i === 0
+                              ? 'text-white bg-stripe-purple hover:bg-stripe-purple-hover'
+                              : 'text-stripe-purple border border-stripe-purple-ring bg-stripe-purple-soft hover:bg-stripe-purple-tint'
+                          }`}
                         >
                           문의하기 ↗
                         </a>
                       )}
                     </div>
                   </td>
-                ))}
-                {Array.from({ length: 3 - companies.length }).map((_, i) => (
-                  <td key={`ph-${i}`} className="border-t border-l border-gray-100 px-4 py-4" />
                 ))}
               </tr>
             </tfoot>
