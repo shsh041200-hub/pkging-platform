@@ -34,6 +34,7 @@ const SUPABASE_PAGE_SIZE = 1_000
 // Blog posts that live at /blog/<slug> (not guides).
 const BLOG_POST_SLUGS = [
   { slug: 'packaging-rfq-guide', lastmod: '2026-05-08' },
+  { slug: '2026-korea-packaging-trends', lastmod: '2026-05-07' },
 ]
 
 function siteUrl() {
