@@ -11,14 +11,12 @@ export const metadata: Metadata = {
 export default async function CompaniesV1Index() {
   const supabase = await createClient()
 
-  // Pick a verified vendor with products, certifications, and contact info
+  // Pick any vendor with a phone number for representative preview
   const { data: company } = await supabase
     .from('companies')
     .select('slug')
-    .eq('is_verified', true)
     .not('phone', 'is', null)
-    .not('products', 'is', null)
-    .order('view_count', { ascending: false })
+    .not('description', 'is', null)
     .limit(1)
     .single()
 
@@ -30,7 +28,6 @@ export default async function CompaniesV1Index() {
   const { data: fallback } = await supabase
     .from('companies')
     .select('slug')
-    .order('view_count', { ascending: false })
     .limit(1)
     .single()
 
