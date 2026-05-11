@@ -43,7 +43,7 @@ export function GuideSidebar({
       {/* Vendor CTA */}
       <div
         className="rounded-[14px] p-6 text-white"
-        style={{ background: "linear-gradient(135deg,#0b1220 0%,#0a3d62 100%)" }}
+        style={{ background: "linear-gradient(135deg,#1c1e54 0%,#533afd 100%)" }}
       >
         <h5 className="m-0 mb-3 text-xs tracking-[.04em] uppercase font-semibold text-white/70">
           지금 견적 받기
@@ -54,7 +54,8 @@ export function GuideSidebar({
         <p className="m-0 mb-4 text-white/80 text-[13.5px] leading-[1.6]">{ctaSubtext}</p>
         <Link
           href={ctaHref}
-          className="block text-center bg-white text-[var(--g-brand)] font-bold py-[11px] rounded-[9px] no-underline text-sm hover:bg-gray-50 transition-colors"
+          className="block text-center bg-white font-bold py-[11px] rounded-[9px] no-underline text-sm hover:bg-gray-50 transition-colors"
+          style={{ color: "var(--color-brand-500)" }}
         >
           {ctaButtonLabel}
         </Link>
@@ -98,7 +99,13 @@ export function GuideSidebar({
               <li key={g.href} className="py-[10px] border-b border-[#f1f3f5] last:border-0">
                 <Link
                   href={g.href}
-                  className="block text-[var(--g-ink)] font-medium text-sm leading-[1.45] no-underline hover:text-[var(--g-brand-2)] transition-colors"
+                  className="block text-[var(--g-ink)] font-medium text-sm leading-[1.45] no-underline transition-colors"
+                  onMouseEnter={(e) =>
+                    ((e.currentTarget as HTMLAnchorElement).style.color = "var(--color-brand-500)")
+                  }
+                  onMouseLeave={(e) =>
+                    ((e.currentTarget as HTMLAnchorElement).style.color = "var(--g-ink)")
+                  }
                 >
                   {g.title}
                   <span className="block text-[var(--g-ink-3)] text-xs mt-[3px]">

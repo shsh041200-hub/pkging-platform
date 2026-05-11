@@ -10,6 +10,7 @@ import { GuideChecklist } from "@/components/guide/GuideChecklist";
 import { GuideFaq } from "@/components/guide/GuideFaq";
 import { GuideSidebar } from "@/components/guide/GuideSidebar";
 import { GuideEndCta } from "@/components/guide/GuideEndCta";
+import Link from "next/link";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://packlinx.com";
 
@@ -343,7 +344,17 @@ function CorrugatedBoxGuideV1({ guide }: { guide: GuideContent }) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
       {/* Hero — full-width breakout from the layout's overflow-x-clip wrapper */}
-      <div className="-mx-5 sm:-mx-8 -mt-10 sm:-mt-14">
+      {/* V1 #3: --g-brand navy → V05 purple across section badges, CTA, sidebar */}
+      <div
+        className="-mx-5 sm:-mx-8 -mt-10 sm:-mt-14"
+        style={
+          {
+            "--g-brand": "var(--color-brand-500)",
+            "--g-brand-2": "var(--color-brand-400)",
+            "--g-brand-soft": "var(--color-brand-50)",
+          } as React.CSSProperties
+        }
+      >
         <GuideHero
           tag="박스·골판지 · 업체 선정"
           title="골판지 박스 업체, 어떻게 골라야 후회 안 할까?"
@@ -379,7 +390,7 @@ function CorrugatedBoxGuideV1({ guide }: { guide: GuideContent }) {
             padding: "40px 24px 80px",
           }}
         >
-          {/* TOC */}
+          {/* TOC — V1 #3: active state → purple */}
           <GuideToc items={CORRUGATED_TOC_ITEMS} />
 
           {/* Article */}
@@ -621,7 +632,7 @@ function CorrugatedBoxGuideV1({ guide }: { guide: GuideContent }) {
             />
           </article>
 
-          {/* Sidebar */}
+          {/* Sidebar — V1 #3: purple CTA button, hover links */}
           <GuideSidebar
             ctaHeadline="MOQ 500개부터 가능한 업체"
             ctaSubtext="등록된 320개 골판지 박스 업체 중 조건에 맞는 곳만 추려 비교하세요."
@@ -636,6 +647,21 @@ function CorrugatedBoxGuideV1({ guide }: { guide: GuideContent }) {
           />
         </div>
       </div>
+
+      {/* V1 #4: mobile sticky bottom CTA — desktop sidebar covers this */}
+      <div
+        className="lg:hidden fixed bottom-0 left-0 right-0 z-40 px-4 pb-4 pt-3"
+        style={{ background: "linear-gradient(180deg, transparent 0%, rgba(250,251,252,0.96) 30%, #fafbfc 100%)" }}
+      >
+        <Link
+          href="/products/box"
+          className="block text-center text-white font-bold py-4 rounded-[12px] no-underline text-[15px] hover:opacity-90 transition-opacity"
+          style={{ background: "var(--color-brand-500)" }}
+        >
+          업체 찾기 →
+        </Link>
+      </div>
+      <div className="lg:hidden h-20" />
     </>
   );
 }
@@ -2916,7 +2942,17 @@ function GuideSlotV1Page({
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
-      <div className="-mx-5 sm:-mx-8 -mt-10 sm:-mt-14">
+      {/* V1 #3: --g-brand navy → V05 purple across category pill, CTA, sidebar */}
+      <div
+        className="-mx-5 sm:-mx-8 -mt-10 sm:-mt-14"
+        style={
+          {
+            "--g-brand": "var(--color-brand-500)",
+            "--g-brand-2": "var(--color-brand-400)",
+            "--g-brand-soft": "var(--color-brand-50)",
+          } as React.CSSProperties
+        }
+      >
         <GuideHero
           tag={data.heroTag}
           title={guide.title}
@@ -2969,6 +3005,7 @@ function GuideSlotV1Page({
             />
           </article>
 
+          {/* V1 #3: purple CTA button, hover links */}
           <GuideSidebar
             ctaHeadline={data.sidebar.ctaHeadline}
             ctaSubtext={data.sidebar.ctaSubtext}
@@ -2978,6 +3015,21 @@ function GuideSlotV1Page({
           />
         </div>
       </div>
+
+      {/* V1 #4: mobile sticky bottom CTA — desktop sidebar covers this */}
+      <div
+        className="lg:hidden fixed bottom-0 left-0 right-0 z-40 px-4 pb-4 pt-3"
+        style={{ background: "linear-gradient(180deg, transparent 0%, rgba(250,251,252,0.96) 30%, #fafbfc 100%)" }}
+      >
+        <Link
+          href={data.sidebar.ctaHref}
+          className="block text-center text-white font-bold py-4 rounded-[12px] no-underline text-[15px] hover:opacity-90 transition-opacity"
+          style={{ background: "var(--color-brand-500)" }}
+        >
+          {data.sidebar.ctaButtonLabel}
+        </Link>
+      </div>
+      <div className="lg:hidden h-20" />
     </>
   );
 }

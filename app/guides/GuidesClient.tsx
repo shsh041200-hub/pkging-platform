@@ -62,14 +62,12 @@ type GuideDisplay = {
 };
 
 const ALL_GUIDES: GuideDisplay[] = [
-  // box
   { slug: "corrugated-box-supplier-selection", icon: "📦", readTime: "6분", title: "골판지 박스 업체 선정 가이드 — MOQ·납기·인쇄·인증 비교", desc: "업체 유형별 MOQ·단가·납기 비교표와 샘플 검수 체크리스트." },
   { slug: "corrugated-flute-types", icon: "🟫", readTime: "4분", title: "골판지 골 종류 (A·B·E·F골) 선택 가이드", desc: "제품 무게·완충성·인쇄 기준으로 고르는 골 선택 매트릭스." },
   { slug: "shipping-box-pricing", icon: "💰", readTime: "5분", title: "택배 박스 단가 — 수량·사이즈별 가격대", desc: "실측 견적 기반 가격 레인지와 절감 포인트 5가지." },
   { slug: "small-quantity-custom-box", icon: "📐", readTime: "4분", title: "소량 맞춤 박스 — 100~500매 발주 옵션", desc: "디지털 인쇄 vs 실크·옵셋 비교, 견적 받는 법." },
   { slug: "이사박스-사이즈-규격", icon: "📏", readTime: "3분", title: "이사박스 사이즈·규격 표", desc: "1호~5호 표준 규격과 실제 적재 효율." },
   { slug: "이사박스-대량구매-가이드", icon: "🚚", readTime: "4분", title: "이사박스 대량 구매 가이드", desc: "이사·물류 업체 단체 발주 시 단가 산정 방식." },
-  // material
   { slug: "packaging-material-complete-guide", icon: "🧱", readTime: "9분", title: "패키징 소재 종합 가이드", desc: "종이·플라스틱·금속·유리 6대 소재의 강·약점 한눈에." },
   { slug: "eco-friendly-packaging", icon: "🌱", readTime: "7분", title: "친환경 패키징 — 인증·비용·로드맵", desc: "FSC·GRS·생분해 인증 비교와 단계적 도입 전략." },
   { slug: "flexible-packaging-guide", icon: "🎀", readTime: "6분", title: "연포장 (파우치·필름) 가이드", desc: "식품·화장품·생활용품 파우치 소재 비교." },
@@ -77,15 +75,12 @@ const ALL_GUIDES: GuideDisplay[] = [
   { slug: "plastic-container-guide", icon: "🧴", readTime: "5분", title: "플라스틱 용기 가이드", desc: "PP·PET·HDPE 차이와 식품 적합성 기준." },
   { slug: "glass-metal-container-guide", icon: "🍾", readTime: "6분", title: "유리·금속 용기 가이드", desc: "주류·화장품·고급 식품 용기 선택 기준." },
   { slug: "packaging-tape-comparison", icon: "🧲", readTime: "5분", title: "포장 테이프 완전 비교 가이드", desc: "OPP·크라프트·무소음 테이프 점착력·용도별 선택 기준." },
-  // industry
   { slug: "cosmetic-packaging-box", icon: "💄", readTime: "5분", title: "화장품 패키징 박스", desc: "브랜드 톤과 단가 모두 잡는 박스 사양 가이드." },
   { slug: "electronics-packaging-design", icon: "🔌", readTime: "6분", title: "전자제품 패키징 디자인", desc: "완충·정전기·국제 운송 표준 충족 설계." },
   { slug: "food-packaging-materials", icon: "🍱", readTime: "6분", title: "식품 패키징 소재", desc: "식약처 기준·온도·차단성 요구사항." },
   { slug: "packaging-accessories-guide", icon: "🎁", readTime: "4분", title: "포장 부자재 가이드", desc: "완충재·테이프·라벨 등 부자재 선택." },
-  // process
   { slug: "packaging-printing-guide", icon: "🖨️", readTime: "6분", title: "포장 인쇄 종류·후가공 완전 가이드", desc: "옵셋·플렉소·그라비어·디지털 비교와 후가공 옵션." },
   { slug: "packaging-machinery-guide", icon: "⚙️", readTime: "7분", title: "포장기계·자동화 완전 가이드", desc: "충전기·밀봉기·라벨러 등 자동화 ROI 계산과 도입 체크리스트." },
-  // trend
   { slug: "2026-korea-packaging-trends", icon: "📈", readTime: "8분", title: "2026 한국 패키징 트렌드 5가지 — 규제·소재·공급망 일괄 정리", desc: "2026년부터 적용되는 일회용 규제, EPR 강화, 친환경 인증 의무화까지." },
 ];
 
@@ -184,12 +179,20 @@ const CATEGORY_SECTIONS: CategorySection[] = [
 function thumbBackground(variant: "default" | "alt" | "alt2") {
   if (variant === "alt") return "linear-gradient(135deg,#0f766e 0%,#10b981 100%)";
   if (variant === "alt2") return "linear-gradient(135deg,#4434d4 0%,#533afd 100%)";
-  return "linear-gradient(135deg,#0a3d62 0%,#1e6fb8 100%)";
+  return "linear-gradient(135deg,#1c1e54 0%,#533afd 100%)";
 }
 
 function normalise(s: string) {
   return s.toLowerCase().replace(/\s+/g, "");
 }
+
+// V1: --g-brand (navy) → --color-brand-500 (purple) token bridge
+const V1 = {
+  brand:      "var(--color-brand-500)",
+  brandHover: "var(--color-brand-600)",
+  brandSoft:  "var(--color-brand-50)",
+  brandBorder:"var(--color-brand-200)",
+} as const;
 
 // ─── Main component ───────────────────────────────────────────────────────────
 
@@ -198,7 +201,6 @@ export function GuidesClient({ totalGuides }: { totalGuides: number }) {
   const [query, setQuery] = useState("");
   const [activeChip, setActiveChip] = useState<Chip>("전체");
 
-  // Debounce 200ms
   useEffect(() => {
     const t = setTimeout(() => setQuery(inputValue), 200);
     return () => clearTimeout(t);
@@ -208,19 +210,16 @@ export function GuidesClient({ totalGuides }: { totalGuides: number }) {
 
   const filtered = useMemo(() => {
     let result = ALL_GUIDES;
-
     if (activeChip !== "전체") {
       const slugSet = new Set(CHIP_SLUGS[activeChip] ?? []);
       result = result.filter((g) => slugSet.has(g.slug));
     }
-
     if (query.trim()) {
       const q = normalise(query.trim());
       result = result.filter(
         (g) => normalise(g.title).includes(q) || normalise(g.desc).includes(q),
       );
     }
-
     return result;
   }, [query, activeChip]);
 
@@ -235,9 +234,7 @@ export function GuidesClient({ totalGuides }: { totalGuides: number }) {
       >
         <div className="max-w-[1180px] mx-auto px-6">
           <nav className="text-[13px] text-[var(--g-ink-3)] mb-[14px]">
-            <Link href="/" className="text-[var(--g-ink-3)] no-underline hover:underline">
-              홈
-            </Link>
+            <Link href="/" className="text-[var(--g-ink-3)] no-underline hover:underline">홈</Link>
             {" · "}
             <b className="text-[var(--g-ink-2)] font-medium">가이드</b>
           </nav>
@@ -246,10 +243,23 @@ export function GuidesClient({ totalGuides }: { totalGuides: number }) {
             <br className="hidden sm:block" />
             패키징 실무 가이드
           </h1>
-          <p className="text-lg leading-[1.6] text-[var(--g-ink-2)] max-w-[720px] m-0 mb-6">
+          <p className="text-lg leading-[1.6] text-[var(--g-ink-2)] max-w-[720px] m-0 mb-4">
             소재 선택부터 MOQ·납기·인증까지. 1,380개 업체 데이터를 기반으로 만든 현장형 가이드 —
             추측 대신 비교, 검색 대신 결정.
           </p>
+
+          {/* Fold-above CTA — 가이드 읽고 바로 업체 찾기로 진입 */}
+          <div className="flex items-center gap-3 flex-wrap mb-6">
+            <Link
+              href="/categories"
+              className="inline-flex items-center gap-2 text-white font-semibold text-sm px-5 py-3 rounded-[10px] no-underline hover:opacity-90 transition-opacity"
+              style={{ background: V1.brand }}
+            >
+              지금 업체 찾기 →
+            </Link>
+            <span className="text-[var(--g-ink-3)] text-[13px]">1,380개 검증 업체 · 무료 비교</span>
+          </div>
+
           <div className="flex flex-wrap gap-[10px] mt-2">
             {[
               { dot: true, text: "주간 업데이트" },
@@ -261,7 +271,10 @@ export function GuidesClient({ totalGuides }: { totalGuides: number }) {
                 className="inline-flex items-center gap-[6px] bg-white border border-[var(--g-line)] rounded-full px-[14px] py-2 text-[13px] text-[var(--g-ink-2)] font-medium"
               >
                 {pill.dot && (
-                  <span className="w-[6px] h-[6px] rounded-full bg-[var(--g-accent)] flex-none" />
+                  <span
+                    className="w-[6px] h-[6px] rounded-full flex-none"
+                    style={{ background: V1.brand }}
+                  />
                 )}
                 {pill.text}
               </span>
@@ -273,9 +286,7 @@ export function GuidesClient({ totalGuides }: { totalGuides: number }) {
             className="mt-7 bg-white border border-[var(--g-line)] rounded-2xl px-4 py-4 flex gap-[10px] items-center"
             style={{ boxShadow: "var(--g-shadow)" }}
           >
-            <span aria-hidden className="text-[var(--g-ink-3)] text-lg flex-none">
-              🔎
-            </span>
+            <span aria-hidden className="text-[var(--g-ink-3)] text-lg flex-none">🔎</span>
             <input
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
@@ -295,18 +306,15 @@ export function GuidesClient({ totalGuides }: { totalGuides: number }) {
             )}
             <button
               type="button"
-              className="bg-[var(--g-brand)] text-white border-0 rounded-[10px] px-[18px] py-3 font-semibold text-sm cursor-pointer hover:opacity-90 transition-opacity"
+              className="text-white border-0 rounded-[10px] px-[18px] py-3 font-semibold text-sm cursor-pointer hover:opacity-90 transition-opacity"
+              style={{ background: V1.brand }}
             >
               가이드 찾기
             </button>
           </div>
 
           {/* Chip filters */}
-          <div
-            className="mt-3 flex flex-wrap gap-2"
-            role="group"
-            aria-label="카테고리 필터"
-          >
+          <div className="mt-3 flex flex-wrap gap-2" role="group" aria-label="카테고리 필터">
             {CHIPS.map((chip) => (
               <button
                 key={chip}
@@ -315,9 +323,10 @@ export function GuidesClient({ totalGuides }: { totalGuides: number }) {
                 aria-pressed={activeChip === chip}
                 className={`text-[13px] px-3 py-1.5 rounded-full border transition-colors cursor-pointer ${
                   activeChip === chip
-                    ? "bg-[var(--g-brand)] text-white border-[var(--g-brand)]"
+                    ? "text-white border-transparent"
                     : "bg-[#eef2f6] text-[var(--g-ink-2)] border-transparent hover:bg-[#e2e8f0]"
                 }`}
+                style={activeChip === chip ? { background: V1.brand } : undefined}
               >
                 {chip}
               </button>
@@ -339,7 +348,7 @@ export function GuidesClient({ totalGuides }: { totalGuides: number }) {
       <div className="max-w-[1180px] mx-auto px-6">
         <div
           className="mb-20 text-white rounded-[20px] px-10 py-10 flex items-center justify-between gap-6 flex-wrap"
-          style={{ background: "linear-gradient(135deg,#0b1220 0%,#0a3d62 100%)" }}
+          style={{ background: "linear-gradient(135deg,#1c1e54 0%,#533afd 100%)" }}
         >
           <div>
             <h3 className="m-0 mb-1.5 text-2xl tracking-[-0.015em] font-bold">
@@ -351,7 +360,8 @@ export function GuidesClient({ totalGuides }: { totalGuides: number }) {
           </div>
           <Link
             href="/categories"
-            className="bg-white text-[var(--g-brand)] font-bold px-[22px] py-[14px] rounded-xl text-[15px] no-underline hover:bg-gray-50 transition-colors"
+            className="text-white font-bold px-[22px] py-[14px] rounded-xl text-[15px] no-underline hover:opacity-90 transition-opacity"
+            style={{ background: "rgba(255,255,255,.15)", border: "1px solid rgba(255,255,255,.3)" }}
           >
             업체 찾기 →
           </Link>
@@ -385,7 +395,6 @@ function FilteredResults({
         <h2 className="text-[20px] font-bold text-[var(--g-ink)] m-0">{label}</h2>
         <span className="text-[var(--g-ink-3)] text-sm">{guides.length}개</span>
       </div>
-
       {guides.length === 0 ? (
         <div className="py-20 text-center text-[var(--g-ink-3)]">
           <div className="text-4xl mb-4">🔍</div>
@@ -398,9 +407,12 @@ function FilteredResults({
             <Link
               key={g.slug}
               href={`/guides/${g.slug}`}
-              className="group bg-white border border-[var(--g-line)] rounded-[14px] p-[22px] flex flex-col gap-[10px] no-underline transition-all duration-150 hover:border-[var(--g-brand-2)] hover:-translate-y-px hover:shadow-[var(--g-shadow)] min-h-[180px]"
+              className="group bg-white border border-[var(--g-line)] rounded-[14px] p-[22px] flex flex-col gap-[10px] no-underline transition-all duration-150 hover:-translate-y-px hover:shadow-[var(--g-shadow)] min-h-[180px]"
             >
-              <div className="w-9 h-9 rounded-[10px] grid place-items-center bg-[#eef4fb] text-[var(--g-brand)] font-bold text-sm">
+              <div
+                className="w-9 h-9 rounded-[10px] grid place-items-center font-bold text-sm"
+                style={{ background: V1.brandSoft, color: V1.brand }}
+              >
                 {g.icon}
               </div>
               <h4 className="m-0 mt-1 text-[17px] leading-[1.4] tracking-[-0.01em] text-[var(--g-ink)] font-semibold">
@@ -409,7 +421,7 @@ function FilteredResults({
               <p className="m-0 text-[var(--g-ink-3)] text-[13.5px] leading-[1.55]">{g.desc}</p>
               <div className="mt-auto flex items-center justify-between text-xs text-[var(--g-ink-3)]">
                 <span>⏱ {g.readTime}</span>
-                <span className="text-[var(--g-brand-2)] font-semibold group-hover:underline">
+                <span className="font-semibold group-hover:underline" style={{ color: V1.brand }}>
                   읽기 →
                 </span>
               </div>
@@ -443,11 +455,12 @@ function DefaultLayout({ totalGuides }: { totalGuides: number }) {
           <span
             key={tab.label}
             role="tab"
-            className={`px-[18px] py-[14px] font-semibold text-sm border-b-2 cursor-default transition-colors whitespace-nowrap ${
+            className="px-[18px] py-[14px] font-semibold text-sm border-b-2 cursor-default transition-colors whitespace-nowrap"
+            style={
               i === 0
-                ? "text-[var(--g-brand)] border-[var(--g-brand)]"
-                : "text-[var(--g-ink-3)] border-transparent"
-            }`}
+                ? { color: V1.brand, borderBottomColor: V1.brand }
+                : { color: "var(--g-ink-3)", borderBottomColor: "transparent" }
+            }
           >
             {tab.label}{" "}
             <span className="ml-1.5 text-[var(--g-ink-3)] font-medium text-xs">{tab.count}</span>
@@ -455,7 +468,7 @@ function DefaultLayout({ totalGuides }: { totalGuides: number }) {
         ))}
       </div>
 
-      {/* Featured cards */}
+      {/* Featured cards — large H3 32px > category H2 22px (V1 hierarchy fix) */}
       <div className="mb-10 grid gap-[18px]" style={{ gridTemplateColumns: "2fr 1fr 1fr" }}>
         {FEATURED.map((feat, i) => (
           <Link
@@ -481,12 +494,16 @@ function DefaultLayout({ totalGuides }: { totalGuides: number }) {
               </span>
             </div>
             <div className="px-[22px] pt-5 pb-[22px] flex-1 flex flex-col">
-              <div className="text-xs text-[var(--g-brand-2)] font-semibold mb-2 tracking-[.02em]">
+              <div
+                className="text-xs font-semibold mb-2 tracking-[.02em]"
+                style={{ color: V1.brand }}
+              >
                 {feat.tag}
               </div>
+              {/* V1 hierarchy: large featured H3 → 32px; small → 20px; clearly above category H2=22px */}
               <h3
                 className={`m-0 mb-2 leading-[1.35] tracking-[-0.015em] text-[var(--g-ink)] font-bold ${
-                  feat.isLarge ? "text-[26px]" : "text-xl"
+                  feat.isLarge ? "text-[32px]" : "text-[20px]"
                 }`}
               >
                 {feat.title}
@@ -496,9 +513,7 @@ function DefaultLayout({ totalGuides }: { totalGuides: number }) {
               )}
               <div className="mt-auto pt-[14px] flex gap-[14px] text-xs text-[var(--g-ink-3)]">
                 {feat.meta.map((m) => (
-                  <span key={m} className="inline-flex items-center gap-[5px]">
-                    {m}
-                  </span>
+                  <span key={m} className="inline-flex items-center gap-[5px]">{m}</span>
                 ))}
               </div>
             </div>
@@ -506,14 +521,14 @@ function DefaultLayout({ totalGuides }: { totalGuides: number }) {
         ))}
       </div>
 
-      {/* Category sections */}
+      {/* Category sections — H2 22px (was 26px, V1 hierarchy fix) */}
       {CATEGORY_SECTIONS.map((section) => (
         <section key={section.key} className="mb-14" aria-labelledby={`cat-${section.key}`}>
           <div className="flex items-end justify-between mb-[18px] gap-[18px]">
             <div>
               <h2
                 id={`cat-${section.key}`}
-                className="text-[26px] tracking-[-0.02em] m-0 mb-1 font-extrabold text-[var(--g-ink)]"
+                className="text-[22px] tracking-[-0.02em] m-0 mb-1 font-extrabold text-[var(--g-ink)]"
               >
                 {section.heading}
               </h2>
@@ -525,9 +540,12 @@ function DefaultLayout({ totalGuides }: { totalGuides: number }) {
               <Link
                 key={g.slug}
                 href={`/guides/${g.slug}`}
-                className="group bg-white border border-[var(--g-line)] rounded-[14px] p-[22px] flex flex-col gap-[10px] no-underline transition-all duration-150 hover:border-[var(--g-brand-2)] hover:-translate-y-px hover:shadow-[var(--g-shadow)] min-h-[180px]"
+                className="group bg-white border border-[var(--g-line)] rounded-[14px] p-[22px] flex flex-col gap-[10px] no-underline transition-all duration-150 hover:-translate-y-px hover:shadow-[var(--g-shadow)] min-h-[180px]"
               >
-                <div className="w-9 h-9 rounded-[10px] grid place-items-center bg-[#eef4fb] text-[var(--g-brand)] font-bold text-sm">
+                <div
+                  className="w-9 h-9 rounded-[10px] grid place-items-center font-bold text-sm"
+                  style={{ background: V1.brandSoft, color: V1.brand }}
+                >
                   {g.icon}
                 </div>
                 <h4 className="m-0 mt-1 text-[17px] leading-[1.4] tracking-[-0.01em] text-[var(--g-ink)] font-semibold">
@@ -536,7 +554,10 @@ function DefaultLayout({ totalGuides }: { totalGuides: number }) {
                 <p className="m-0 text-[var(--g-ink-3)] text-[13.5px] leading-[1.55]">{g.desc}</p>
                 <div className="mt-auto flex items-center justify-between text-xs text-[var(--g-ink-3)]">
                   <span>⏱ {g.time}</span>
-                  <span className="text-[var(--g-brand-2)] font-semibold group-hover:underline">
+                  <span
+                    className="font-semibold group-hover:underline"
+                    style={{ color: V1.brand }}
+                  >
                     읽기 →
                   </span>
                 </div>

@@ -1,9 +1,19 @@
 import Link from "next/link";
+import type React from "react";
 import { PacklinxLogo } from "@/components/PacklinxLogo";
 
 export default function GuidesLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="min-h-screen bg-white flex flex-col">
+    <div
+      className="min-h-screen bg-white flex flex-col"
+      style={
+        {
+          "--g-brand": "var(--color-brand-500)",
+          "--g-brand-2": "var(--color-brand-400)",
+          "--g-brand-soft": "var(--color-brand-50)",
+        } as React.CSSProperties
+      }
+    >
       <header className="bg-[#0F172A] sticky top-0 z-50 border-b border-white/[0.06]">
         <div className="max-w-7xl mx-auto px-5 sm:px-8 h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-3">
