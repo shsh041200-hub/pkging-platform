@@ -1,7 +1,10 @@
-# PACAA-557 — CI health monitor
-# Fires every 30 minutes; alerts via Telegram if any watched workflow's
-# last run on main ended in failure or timed_out.
-# Includes failure duration so on-call can judge urgency without opening GitHub.
+# PACAA-557 / PACAA-602 — CI health monitor
+# Fires every 30 minutes; turns this workflow red in GitHub Actions if any
+# watched workflow's last run on main ended in failure or timed_out.
+# No Telegram notifications — board directive 2026-05-12 (PACAA-602):
+# alerts for things the board does not handle (CI/infra) must not page board.
+# CTO/CEO see the signal via the red badge on this workflow in the Actions tab
+# and via CEO weekly infra sweep.
 name: CI health monitor
 
 on:
@@ -23,8 +26,6 @@ jobs:
       - name: Inspect watched workflows
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           REPO: ${{ github.repository }}
         run: |
           WATCH=("supabase-migrate.yml" "smoke-test.yml")
@@ -42,17 +43,19 @@ jobs:
             RUN_URL=$(echo "$RESP" | jq -r '.workflow_runs[0].html_url // ""')
 
             if [ "$CONCLUSION" = "failure" ] || [ "$CONCLUSION" = "timed_out" ]; then
-              ALERT_LINES="${ALERT_LINES}\n• ${WF}: ${CONCLUSION} (${UPDATED})\n  ${RUN_URL}"
+              ALERT_LINES="${ALERT_LINES}\n- ${WF}: ${CONCLUSION} (${UPDATED}) ${RUN_URL}"
             fi
           done
 
           if [ -n "$ALERT_LINES" ]; then
-            ACTIONS_URL="https://github.com/$REPO/actions"
-            printf -v MESSAGE '🚨 <b>CI 워크플로우 실패 감지</b>\n\n%s\n\n전체 현황: %s' \
-              "$ALERT_LINES" "$ACTIONS_URL"
-            curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage" \
-              -d "chat_id=${TELEGRAM_CHAT_ID}" \
-              --data-urlencode "text=${MESSAGE}" \
-              -d "parse_mode=HTML" \
-              -d "disable_web_page_preview=true"
+            {
+              echo "## Watched workflows in failure/timed_out"
+              printf '%b\n' "$ALERT_LINES"
+              echo
+              echo "See: https://github.com/$REPO/actions"
+            } >> "$GITHUB_STEP_SUMMARY"
+            echo "CI health monitor: detected failing watched workflows — failing this run for visibility."
+            exit 1
           fi
+
+          echo "All watched workflows green."
