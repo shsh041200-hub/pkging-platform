@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import Link from 'next/link'
 import { PacklinxLogo } from '@/components/PacklinxLogo'
+import { SiteHeader } from '@/components/SiteHeader'
 import { BusinessRegistrationInfo } from '@/components/BusinessRegistrationInfo'
 
 const T = {
@@ -269,29 +270,7 @@ function FaqAccordion({ item }: { item: FaqItem }) {
 export function FaqClient() {
   return (
     <div className="min-h-screen" style={{ background: T.bg }}>
-      <header style={{ background: T.ink }} className="sticky top-0 z-50">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2.5">
-            <PacklinxLogo variant="dark" />
-          </Link>
-          <nav className="flex items-center gap-2 sm:gap-3">
-            <Link
-              href="/guides"
-              className="text-sm font-medium px-3 py-1.5 rounded-full transition-colors"
-              style={{ color: 'rgba(255,255,255,0.7)' }}
-            >
-              가이드
-            </Link>
-            <Link
-              href="/categories"
-              className="text-sm font-medium px-3 py-1.5 rounded-full transition-colors"
-              style={{ color: 'rgba(255,255,255,0.7)' }}
-            >
-              카테고리
-            </Link>
-          </nav>
-        </div>
-      </header>
+      <SiteHeader />
 
       <section style={{ borderBottom: `1px solid ${T.line}`, background: 'linear-gradient(180deg,#f3f7fb 0%,#fafbfc 100%)' }} className="py-10">
         <div className="max-w-3xl mx-auto px-4 sm:px-6">

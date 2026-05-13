@@ -4,6 +4,7 @@ import Link from "next/link";
 import { createSupabaseServer } from "@/lib/supabase-server";
 import type { Vendor, KeywordPageData } from "@/lib/keyword-data";
 import { PacklinxLogo } from "@/components/PacklinxLogo";
+import { SiteHeader } from "@/components/SiteHeader";
 import { BusinessRegistrationInfo } from "@/components/BusinessRegistrationInfo";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://packlinx.vercel.app";
@@ -132,29 +133,7 @@ export default async function KeywordPage({ params }: Props) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      {/* Header */}
-      <header className="bg-neutral-900 sticky top-0 z-50 border-b border-white/[0.06]">
-        <div className="max-w-7xl mx-auto px-5 sm:px-8 h-16 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-3">
-            <PacklinxLogo variant="dark" />
-            <span className="hidden sm:inline text-slate-400 text-[11px] font-medium tracking-widest uppercase">패키징 업체 검색 플랫폼</span>
-          </Link>
-          <nav className="flex items-center gap-3">
-            <Link
-              href="/keywords"
-              className="flex items-center gap-1.5 text-slate-200 hover:text-white text-sm font-medium px-3.5 py-2 border border-white/[0.15] hover:border-white/[0.30] hover:bg-white/[0.06] rounded-full transition-colors"
-            >
-              키워드 목록
-            </Link>
-            <Link
-              href="/guides"
-              className="flex items-center gap-1.5 text-slate-200 hover:text-white text-sm font-medium px-3.5 py-2 border border-white/[0.15] hover:border-white/[0.30] hover:bg-white/[0.06] rounded-full transition-colors"
-            >
-              가이드
-            </Link>
-          </nav>
-        </div>
-      </header>
+      <SiteHeader />
 
       {/* Hero */}
       <section className="bg-neutral-900 border-b border-white/[0.06] py-10 px-5 sm:px-8">
