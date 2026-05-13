@@ -69,6 +69,11 @@ CORP_SUFFIX_RE = re.compile(
     r"|㈜|\(주\)|\(유\)|\(합\)|\(사\)|주\.|\(재\))[\s\)）]*",
     re.UNICODE,
 )
+# companies_name_no_pii CHECK constraint: name must not contain phone or email patterns
+NAME_PII_RE = re.compile(r"\d{2,4}-\d{3,4}-\d{4}")
+# companies_name_no_pii CHECK constraint patterns (PACAA-585 / 20260511006)
+PHONE_IN_NAME_RE = re.compile(r"\d{2,4}-\d{3,4}-\d{4}")
+EMAIL_IN_NAME_RE = re.compile(r"\S+@\S+")
 
 logging.basicConfig(
     level=logging.INFO,
@@ -124,6 +129,13 @@ def insert_batch(table: str, rows: list) -> tuple[int, int]:
 
 # ── Name normalization (for dedup check) ────────────────────────────────────────
 
+def clean_name_pii(raw: str) -> str:
+    """Strip phone/email from business_name (companies_name_no_pii CHECK constraint)."""
+    cleaned = PHONE_IN_NAME_RE.sub("", raw)
+    cleaned = EMAIL_IN_NAME_RE.sub("", cleaned)
+    return re.sub(r"\s+", " ", cleaned).strip()
+
+
 def normalize_name(name: str) -> str:
     name = CORP_SUFFIX_RE.sub("", name).strip()
     name = unicodedata.normalize("NFC", name)
@@ -131,21 +143,20 @@ def normalize_name(name: str) -> str:
     return name
 
 
-def normalize_phone(phone: str | None) -> str | None:
-    if not phone:
-        return None
-    digits = re.sub(r"[^\d]", "", phone)
-    return digits if len(digits) >= 8 else None
+def clean_name_pii(name: str) -> str:
+    """Strip phone numbers and email from scraped business names (companies_name_no_pii)."""
+    name = NAME_PII_RE.sub("", name)
+    name = re.sub(r"[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}", "", name)
+    return re.sub(r"\s+", " ", name).strip()
 
 
 # ── Slug generation ─────────────────────────────────────────────────────────────
 
 def slugify(text: str) -> str:
     text = unicodedata.normalize("NFC", text)
-    # Transliterate Korean characters to their romanized equivalent is complex;
-    # use UUID-based fallback for Korean names instead.
-    # For mixed/ASCII names: strip special chars and kebab-case.
-    ascii_only = re.sub(r"[^\w\s-]", "", text.lower())
+    # ASCII-only: Korean names fall through to the UUID-based path in make_slug.
+    # re.ASCII restricts \w to [a-zA-Z0-9_] so Korean chars are stripped.
+    ascii_only = re.sub(r"[^\w\s-]", "", text.lower(), flags=re.ASCII)
     ascii_only = re.sub(r"[\s_]+", "-", ascii_only).strip("-")
     return ascii_only
 
@@ -272,7 +283,13 @@ def main():
             stats[cat_key]["skip_no_name"] += 1
             continue
 
-        norm_name = normalize_name(name_raw)
+        # Strip PII embedded in scraped names (companies_name_no_pii constraint)
+        name_clean = clean_name_pii(name_raw)
+        if len(name_clean) < 2:
+            stats[cat_key]["skip_no_name"] += 1
+            continue
+
+        norm_name = normalize_name(name_clean)
         dedup_key = (norm_name, companies_cat)
 
         # Already imported this exact candidate (idempotency)
@@ -286,22 +303,21 @@ def main():
             continue
 
         # Legal P0-B: 4-field limit ONLY
-        slug = make_slug(name_raw, companies_cat)
+        slug = make_slug(name_clean, companies_cat)
         # Ensure slug uniqueness within this run
         if slug in slug_seen:
             slug = f"{slug}-{str(uuid.uuid4())[:6]}"
         slug_seen.add(slug)
 
         row = {
-            # 4 allowed fields
-            "name":     name_raw,
-            "phone":    normalize_phone(vc.get("phone")),
+            # Allowed fields: name, address, category (phone omitted: KOR-371)
+            "name":     name_clean,
             "address":  (vc.get("address_raw") or "").strip() or None,
             "category": companies_cat,
             # Fixed defaults
             "is_verified":          False,   # Legal P1-E
             "is_hidden":            False,
-            "data_source":          "naver_place",
+            "data_source":          "naver_local",
             "candidate_source_id":  vc["id"],   # idempotency + audit
             "slug":                 slug,
             # Structural required fields (non-PII, pipeline-assigned)
