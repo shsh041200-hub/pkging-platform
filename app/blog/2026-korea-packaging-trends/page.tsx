@@ -1,6 +1,7 @@
 import React from "react";
 import type { Metadata } from "next";
 import Link from "next/link";
+import { SiteHeader } from "@/components/SiteHeader";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://packlinx.com";
 const canonicalUrl = `${siteUrl}/blog/2026-korea-packaging-trends`;
@@ -114,11 +115,12 @@ export default function KoreaPackagingTrends2026Page() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
       />
+      <SiteHeader />
       <main>
-        <header>
+        <div>
           <p>Packlinx 편집팀 | 최초 발행: 2026-05-07 | 산업 리포트</p>
           <h1>2026 한국 패키징 트렌드: 구매 담당자가 알아야 할 7가지 변화</h1>
-        </header>
+        </div>
 
         <p>
           패키징 산업은 조용한 분야처럼 보이지만, 2025~2026년 사이 국내 시장은 세 가지 압력이
