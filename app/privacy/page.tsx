@@ -7,7 +7,7 @@ import { BusinessRegistrationInfo } from '@/components/BusinessRegistrationInfo'
 
 export const metadata: Metadata = {
   title: '개인정보처리방침 — Packlinx',
-  description: 'Packlinx 개인정보처리방침 — 최종 개정일 2026년 5월 10일 (개정 5회)',
+  description: 'Packlinx 개인정보처리방침 — 최종 개정일 2026년 5월 13일 (개정 6회)',
 }
 
 export default function PrivacyPage() {
@@ -18,19 +18,24 @@ export default function PrivacyPage() {
       <main className="max-w-3xl mx-auto px-4 sm:px-6 py-10 pb-16">
         <h1 className="text-2xl font-bold text-neutral-900 mb-2">개인정보처리방침</h1>
         <p className="text-sm text-neutral-500 mb-1">최초 시행일: 2026년 4월 19일</p>
-        <p className="text-sm text-neutral-500 mb-6">시행일: 2026년 5월 10일 (개정 5회)</p>
+        <p className="text-sm text-neutral-500 mb-6">시행일: 2026년 5월 13일 (개정 6회)</p>
 
         <div className="bg-amber-50 border-l-4 border-amber-500 px-4 py-3 mb-4 rounded-r">
-          <p className="text-sm font-medium text-amber-900 mb-1">개인정보처리방침 개정 안내 (2026-05-10)</p>
+          <p className="text-sm font-medium text-amber-900 mb-1">개인정보처리방침 개정 안내 (2026-05-13)</p>
           <p className="text-sm text-amber-800">
-            견적 의뢰 기능이 폐지됨에 따라 관련 처리 목적·항목·보유기간·제3자 제공 항목이 삭제됩니다.
-            본 서비스는 정보제공 디렉토리로서 견적 의뢰 양식을 운영하지 않으며, 관련 개인정보를 추가 수집하지 않습니다.
-            변경 이력은 하단 &apos;변경 이력&apos; 참조.
+            카테고리 디렉터리 커버리지 확대를 위해 네이버 플레이스(map.naver.com)에 사업자가
+            자발적으로 공개한 사업체명·전화·주소·업종(카테고리) 4개 항목을 수집·표시하는
+            범위가 신설됩니다. 수집 근거는 「개인정보 보호법」 제15조 제1항 제6호(정당한 이익)이며,
+            정보주체는 <Link href="/opt-out" className="underline text-amber-900">/opt-out</Link>{' '}
+            웹폼 또는{' '}
+            <a href="mailto:rpdla041200@gmail.com" className="underline text-amber-900">rpdla041200@gmail.com</a>{' '}
+            으로 즉시 디렉터리 제거 및 재유입 차단(suppression)을 요청할 수 있습니다.
+            세부 사항은 제2조·제17조 및 하단 &apos;변경 이력&apos; 참조.
           </p>
         </div>
 
         <div className="bg-brand-50 border-l-4 border-brand-700 px-4 py-3 mb-8 rounded-r">
-          <p className="text-sm text-neutral-900">본 문서의 최신 개정(개정 5회)은 2026-05-10 부터 시행됩니다.</p>
+          <p className="text-sm text-neutral-900">본 문서의 최신 개정(개정 6회)은 2026-05-13 부터 시행됩니다.</p>
         </div>
 
         <div className="space-y-8 text-sm text-neutral-700 leading-relaxed">
@@ -48,20 +53,66 @@ export default function PrivacyPage() {
             <h2 className="text-base font-semibold text-neutral-900 mb-3">제2조 (처리하는 개인정보의 항목 및 처리 방법)</h2>
             <p className="mb-3">서비스는 회원가입 절차를 운영하지 않으며, 다음과 같은 항목·방법으로 개인정보를 처리합니다.</p>
 
-            <h3 className="font-medium text-neutral-800 mb-2">① 공개 출처로부터의 자동 수집 (사업자 정보)</h3>
+            <h3 className="font-medium text-neutral-800 mb-2">① 공개 출처로부터의 자동 수집 (사업자 일반 정보)</h3>
             <ul className="list-disc list-inside space-y-1 mb-1 ml-2">
               <li><strong>수집 항목</strong>: 업체명, 웹사이트 URL, 카테고리, 공개된 사업 설명·취급 제품·인증 정보</li>
-              <li><strong>수집 방법</strong>: 공공데이터 포털, 업체 공개 웹사이트, 네이버 지역 검색 등 인터넷에 공개된 사업자 정보를 자동화된 도구로 수집</li>
+              <li><strong>수집 방법</strong>: 공공데이터 포털, 업체 공개 웹사이트 등 인터넷에 공개된 사업자 정보를 자동화된 도구로 수집</li>
               <li><strong>수집 대상</strong>: 사업자(법인 또는 개인사업자)에 관한 공개 사업 정보에 한정</li>
               <li><strong>법적 근거</strong>: 「개인정보 보호법」 제15조 제1항 제6호 (정보주체의 정당한 이익을 위하여 명백히 필요한 경우로서 정보주체의 이익을 부당하게 침해하지 않는 범위에서 처리하는 경우) — 공개된 사업자 정보를 B2B 디렉토리 서비스 제공 목적으로 수집·이용</li>
             </ul>
-            <p className="mb-1 ml-2"><strong>명시적 비수집 항목</strong>: 회사 정책에 따라 다음 항목은 <strong>수집·저장·노출하지 않습니다</strong></p>
+
+            <h3 className="font-medium text-neutral-800 mb-2 mt-4">① -2 네이버 플레이스 공개 정보의 수집 (사업체 연락·소재 정보)</h3>
+            <ul className="list-disc list-inside space-y-1 mb-1 ml-2">
+              <li><strong>수집 항목 (4개로 한정)</strong>: 사업체명, 사업체 전화번호, 사업장 주소, 업종(카테고리)</li>
+              <li>
+                <strong>수집 출처</strong>: 네이버 플레이스 (
+                <a
+                  href="https://map.naver.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline text-neutral-700 hover:text-neutral-900"
+                >
+                  https://map.naver.com
+                </a>
+                ) 에 사업자가 자발적으로 공개·등록한 정보
+              </li>
+              <li>
+                <strong>수집 방법</strong>: 네이버 플레이스 공개 페이지에 게시된 정보를 자동화된 도구로 수집하여
+                <code className="text-xs bg-neutral-100 px-1 py-0.5 mx-1 rounded">vendor_candidates</code> →
+                <code className="text-xs bg-neutral-100 px-1 py-0.5 mx-1 rounded">companies</code> 디렉터리에 표시
+              </li>
+              <li>
+                <strong>법적 근거</strong>: 「개인정보 보호법」 제15조 제1항 제6호(정당한 이익) 및 대법원 2014다235080 판결
+                (공개된 개인정보 처리 법리) — 사업자가 잠재 거래상대방에게 자기 영업을 알릴 목적으로
+                네이버 플레이스에 자발적으로 공개한 정보를 동일·유사한 목적(B2B 디렉터리)으로
+                수집·이용하는 것은 사회통념상 합리적인 범위에 해당
+              </li>
+              <li>
+                <strong>옵트아웃 즉시성</strong>: 정보주체가{' '}
+                <Link href="/opt-out" className="underline text-neutral-700 hover:text-neutral-900">
+                  /opt-out
+                </Link>
+                {' '}웹폼 또는{' '}
+                <a href="mailto:rpdla041200@gmail.com" className="underline text-neutral-700 hover:text-neutral-900">
+                  rpdla041200@gmail.com
+                </a>
+                {' '}이메일로 삭제를 요청하면 카테고리 디렉터리에서 즉시 해당 사업체 정보를 제거하며,
+                재유입을 차단하기 위해 차단 목록(suppression list)에 보존합니다 (제17조 참조).
+              </li>
+              <li>
+                <strong>개인사업자/법인 구분</strong>: 개인사업자의 사업체명·전화·주소는 대표자 개인과 동일시될
+                여지가 있어 본 처리방침의 정보주체 권리(제7조) 및 옵트아웃 조항을 모두 적용합니다.
+                법인사업자의 동일 항목은 PIPA 적용 대상이 아니나, 형평성·운영 단순화를 위해
+                동일한 옵트아웃 절차를 보장합니다.
+              </li>
+            </ul>
+
+            <p className="mb-1 ml-2 mt-3"><strong>명시적 비수집 항목</strong>: 회사 정책에 따라 다음 항목은 <strong>수집·저장·노출하지 않습니다</strong></p>
             <ul className="list-disc list-inside space-y-1 mb-3 ml-6">
-              <li>사업자 전화번호 (DB 트리거로 INSERT/UPDATE 차단)</li>
-              <li>사업장 주소(소재지)</li>
               <li>사업자 이메일</li>
-              <li>개인(자연인)을 식별할 수 있는 정보</li>
+              <li>개인(자연인)을 식별할 수 있는 정보 (대표자 실명 단독, 주민등록번호 등)</li>
               <li>민감정보 (「개인정보 보호법」 제23조)</li>
+              <li>네이버 플레이스 등 공개 출처에 게시되어 있더라도 위 4개 한정 항목(제2조 ①-2) 이외의 부수 정보 (예: 영업시간, SNS, 사진, 리뷰)</li>
             </ul>
 
             <h3 className="font-medium text-neutral-800 mb-2 mt-4">② 서비스 이용 과정에서 자동 생성·수집되는 정보</h3>
@@ -342,9 +393,65 @@ export default function PrivacyPage() {
           </section>
 
           <section>
+            <h2 className="text-base font-semibold text-neutral-900 mb-3">
+              제17조 (공개 출처 수집의 사후 통지·옵트아웃·재유입 차단)
+            </h2>
+            <p className="mb-2">
+              회사는 제2조 ①-2 에 따라 네이버 플레이스 등 공개 출처에서 사업체명·전화·주소·카테고리
+              4개 항목을 정보주체로부터 직접 수집하지 않고 이용하므로, 다음과 같이 사후 권리행사
+              채널을 운영합니다.
+            </p>
+            <ol className="list-decimal list-inside space-y-2 ml-2 mb-3">
+              <li>
+                <strong>사후 통지 의무의 면제 근거</strong>: 「개인정보 보호법」 제20조 제1항은 정보주체 이외로부터
+                수집한 개인정보의 출처·목적·권리행사 방법을 30일 이내에 통지하도록 규정하나, 같은 조 단서 및
+                같은 법 시행령 제15조의2 에 따라 <strong>연간 정보주체 수가 100만 명 미만인 개인정보처리자</strong>는
+                통지 의무가 면제됩니다. 현재 Packlinx 의 처리 규모는 면제 기준 이하이며, 향후 처리 규모가
+                해당 기준에 근접하는 시점에 별도 통지 절차를 수립합니다.
+              </li>
+              <li>
+                <strong>옵트아웃 채널 (정보주체 권리행사)</strong>: 정보주체는 별도 동의 절차 없이 다음 채널 중 하나로
+                즉시 디렉터리 제거 및 향후 재유입 차단을 요청할 수 있습니다.
+                <ul className="list-disc list-inside space-y-1 ml-6 mt-1">
+                  <li>
+                    웹폼:{' '}
+                    <Link href="/opt-out" className="underline text-neutral-700 hover:text-neutral-900">
+                      https://packlinx.com/opt-out
+                    </Link>
+                  </li>
+                  <li>
+                    이메일:{' '}
+                    <a href="mailto:rpdla041200@gmail.com" className="underline text-neutral-700 hover:text-neutral-900">
+                      rpdla041200@gmail.com
+                    </a>
+                  </li>
+                </ul>
+              </li>
+              <li>
+                <strong>재유입 차단 (suppression list)</strong>: 옵트아웃 요청을 처리한 사업체는{' '}
+                <code className="text-xs bg-neutral-100 px-1 py-0.5 rounded">companies</code> 디렉터리에서
+                즉시 비공개 처리되며, 추후 자동 수집 파이프라인이 동일 사업체를 재유입시키지 않도록
+                별도의 차단 목록(suppression list) 에 식별자(사업체명·전화·주소 등의 해시값)를 보존합니다.
+                해당 차단 목록은 본인 확인 요청 시 열람이 가능하며, 차단 해제(재유입 허용) 는
+                정보주체의 명시적 요청이 있는 경우에만 처리됩니다.
+              </li>
+              <li>
+                <strong>처리 기간</strong>: 디렉터리에 노출되는 4개 항목은 사업자가 활동 중인 동안 보유하며,
+                옵트아웃 요청을 접수한 즉시(영업일 기준 24시간 이내) 디렉터리에서 파기합니다.
+                차단 목록 자체는 재유입 차단 목적이 유지되는 동안 별도로 보관합니다.
+              </li>
+            </ol>
+            <p className="text-neutral-600 text-xs">
+              ※ 본 조항은 「개인정보 보호법」 제15조 제1항 제6호 및 대법원 2014다235080 판결에서 요구하는
+              사후 권리행사 보장 의무를 구체화한 것이며, 같은 법 제35조~제37조에 따른 정보주체의 권리
+              (제7조) 는 별도로 보장됩니다.
+            </p>
+          </section>
+
+          <section>
             <h2 className="text-base font-semibold text-neutral-900 mb-3">부칙</h2>
             <ol className="list-decimal list-inside space-y-1 ml-2">
-              <li>본 처리방침은 2026년 5월 10일부터 적용합니다. (개정 5회)</li>
+              <li>본 처리방침은 2026년 5월 13일부터 적용합니다. (개정 6회)</li>
               <li>이전 처리방침은 별도 보관하며, 요청 시 제공합니다.</li>
             </ol>
           </section>
@@ -372,6 +479,19 @@ export default function PrivacyPage() {
                 2026년 5월 10일 (개정 5회): 견적 의뢰 기능 폐지 — 제2조 ④항(quote_requests 수집 항목), 제3조 견적 의뢰 처리목적, 제4조 quote_requests 보유기간 행, 제5조 견적 의뢰 제3자 제공 표 삭제. 본 서비스는 정보제공 디렉토리로서 견적 의뢰 관련 개인정보를 추가 수집·제공하지 않습니다.
                 <br />
                 <span className="ml-4 text-neutral-500">(PACAA-466 견적 의뢰 기능 폐지 — 정보제공 디렉토리 정체성 재정렬)</span>
+              </li>
+              <li>
+                2026년 5월 13일 (개정 6회): 네이버 플레이스 공개 정보 수집의 명문화 — 제2조 ①-2 신설
+                (사업체명·전화·주소·카테고리 4개 항목, 출처 https://map.naver.com, PIPA §15(1)6호 및
+                대법원 2014다235080 근거, 개인사업자·법인 구분), 제2조 명시적 비수집 항목에서
+                사업자 전화·사업장 주소 삭제(네이버 플레이스 공개 정보에 한해 수집·노출),
+                제17조 신설 (PIPA §20 통지의무 면제 근거, 옵트아웃 채널 명문화, 재유입 차단 suppression list,
+                처리 기간). 본 개정은 vendor_candidates → companies 신규 카테고리 import (PACAA-647) 와
+                동일 배포 시점에 시행됩니다.
+                <br />
+                <span className="ml-4 text-neutral-500">
+                  (PACAA-652 / Legal Counsel 자문 PACAA-648 — 네이버 플레이스 공개 정보 PIPA Surface 2)
+                </span>
               </li>
             </ul>
           </section>
