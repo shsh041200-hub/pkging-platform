@@ -112,7 +112,7 @@ export default async function MatchPage() {
               Packlinx는 거래를 중개하지 않습니다. 업체 공개 사업자 정보만 제공합니다.
             </p>
           </div>
-          <div className="relative w-full sm:w-64 flex-none rounded-xl overflow-hidden" style={{ aspectRatio: '4/3' }}>
+          <div className="relative w-full sm:w-64 h-48 sm:h-48 flex-none rounded-xl overflow-hidden">
             <Image
               src="/images/ai/phase1/match-hero.webp"
               alt="포장재 공급업체 매칭 일러스트"
