@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import Link from 'next/link'
 import { useState } from 'react'
 
@@ -37,6 +38,15 @@ export function HomeHero({ totalCount }: { totalCount?: number | null }) {
   return (
     <section className="bg-neutral-50 border-b border-border-v04 py-20 px-5">
       <div className="max-w-3xl mx-auto text-center">
+        <div className="relative w-full max-w-xl mx-auto mb-10 rounded-2xl overflow-hidden" style={{ aspectRatio: '16/7' }}>
+          <Image
+            src="/images/ai/phase1/home-hero.webp"
+            alt="한국 패키징 업체 매칭 일러스트"
+            fill
+            className="object-cover"
+            priority
+          />
+        </div>
         <h1 className="text-[40px] sm:text-[52px] font-light text-heading-deep-navy leading-[1.1] tracking-[-0.04em] mb-4">
           포장재 파트너를<br />찾고 계신가요?
         </h1>
