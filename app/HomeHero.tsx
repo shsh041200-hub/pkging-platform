@@ -36,83 +36,89 @@ export function HomeHero({ totalCount }: { totalCount?: number | null }) {
   const selectedSit = SITUATIONS.find((s) => s.id === selected)
 
   return (
-    <section className="bg-neutral-50 border-b border-border-v04 py-20 px-5">
-      <div className="max-w-3xl mx-auto text-center">
-        <div className="relative w-full max-w-xl mx-auto mb-10 rounded-2xl overflow-hidden" style={{ aspectRatio: '16/7' }}>
-          <Image
-            src="/images/ai/phase1/home-hero.webp"
-            alt="한국 패키징 업체 매칭 일러스트"
-            fill
-            className="object-cover"
-            priority
-          />
+    <section className="border-b border-border-v04">
+      {/* Variant A: full-width background + copy overlay */}
+      <div className="relative w-full overflow-hidden" style={{ height: '480px' }}>
+        <Image
+          src="/images/ai/phase1/home-hero.webp"
+          alt="한국 패키징 업체 매칭 일러스트"
+          fill
+          className="object-cover object-center"
+          priority
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-white/95 via-white/70 to-transparent" />
+        <div className="relative z-10 max-w-6xl mx-auto h-full flex items-center px-8">
+          <div className="max-w-xl">
+            <h1 className="text-[32px] sm:text-5xl font-light text-heading-deep-navy leading-tight tracking-tight mb-4">
+              포장재 파트너를<br />찾고 계신가요?
+            </h1>
+            <p className="text-neutral-600 mb-2">상황을 선택하면 맞춤 결과를 안내해 드립니다.</p>
+            {totalCount != null && (
+              <p className="text-sm text-neutral-400">
+                {totalCount.toLocaleString()}개 업체 등록됨 · 무료 이용
+              </p>
+            )}
+          </div>
         </div>
-        <h1 className="text-[40px] sm:text-[52px] font-light text-heading-deep-navy leading-[1.1] tracking-[-0.04em] mb-4">
-          포장재 파트너를<br />찾고 계신가요?
-        </h1>
-        <p className="text-base text-neutral-500 mb-2">
-          상황을 선택하면 맞춤 결과를 안내해 드립니다.
-        </p>
-        {totalCount != null && (
-          <p className="text-[13px] text-neutral-400 mb-12">
-            {totalCount.toLocaleString()}개 업체 등록됨 · 무료 이용
-          </p>
-        )}
-        {totalCount == null && <div className="mb-12" />}
+      </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-left">
-          {SITUATIONS.map((sit) => (
-            <button
-              key={sit.id}
-              type="button"
-              onClick={() => setSelected(sit.id === selected ? null : sit.id)}
-              className={`group border-2 rounded-xl p-6 text-left transition-all ${
-                selected === sit.id
-                  ? 'border-stripe-purple bg-stripe-purple/4 shadow-[rgba(83,58,253,0.15)_0px_8px_24px]'
-                  : 'border-border-v04 bg-white hover:border-stripe-purple/40 hover:shadow-[rgba(83,58,253,0.06)_0px_4px_12px]'
-              }`}
-            >
-              <div
-                className={`w-10 h-10 rounded-lg mb-4 flex items-center justify-center transition-colors ${
+      {/* Situation selector */}
+      <div className="bg-white px-5 py-8">
+        <div className="max-w-4xl mx-auto">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-left">
+            {SITUATIONS.map((sit) => (
+              <button
+                key={sit.id}
+                type="button"
+                onClick={() => setSelected(sit.id === selected ? null : sit.id)}
+                className={`group border-2 rounded-xl p-6 text-left transition-all ${
                   selected === sit.id
-                    ? 'bg-stripe-purple'
-                    : 'bg-stripe-purple/8 group-hover:bg-stripe-purple/12'
+                    ? 'border-stripe-purple bg-stripe-purple/4 shadow-[rgba(83,58,253,0.15)_0px_8px_24px]'
+                    : 'border-border-v04 bg-white hover:border-stripe-purple/40 hover:shadow-[rgba(83,58,253,0.06)_0px_4px_12px]'
                 }`}
               >
                 <div
-                  className={`w-4 h-4 rounded ${
-                    selected === sit.id ? 'bg-white' : 'bg-stripe-purple/40'
+                  className={`w-10 h-10 rounded-lg mb-4 flex items-center justify-center transition-colors ${
+                    selected === sit.id
+                      ? 'bg-stripe-purple'
+                      : 'bg-stripe-purple/8 group-hover:bg-stripe-purple/12'
                   }`}
-                />
-              </div>
-              <h3
-                className={`text-[17px] font-semibold mb-2 transition-colors ${
-                  selected === sit.id ? 'text-stripe-purple' : 'text-heading-deep-navy'
-                }`}
-              >
-                {sit.title}
-              </h3>
-              <p className="text-[13px] text-neutral-500 leading-relaxed">{sit.desc}</p>
-            </button>
-          ))}
-        </div>
-
-        {selectedSit && (
-          <div className="mt-8 border border-stripe-purple/20 rounded-xl bg-white p-6 text-left flex items-center justify-between gap-4">
-            <div>
-              <p className="text-sm font-semibold text-heading-deep-navy mb-1">
-                {selectedSit.title} — 맞춤 안내
-              </p>
-              <p className="text-[13px] text-neutral-500">{selectedSit.detail}</p>
-            </div>
-            <Link
-              href={selectedSit.link}
-              className="flex-shrink-0 bg-stripe-purple hover:bg-stripe-purple-hover text-white px-5 py-2.5 rounded text-sm font-medium transition-colors"
-            >
-              {selectedSit.linkLabel}
-            </Link>
+                >
+                  <div
+                    className={`w-4 h-4 rounded ${
+                      selected === sit.id ? 'bg-white' : 'bg-stripe-purple/40'
+                    }`}
+                  />
+                </div>
+                <h3
+                  className={`text-[17px] font-semibold mb-2 transition-colors ${
+                    selected === sit.id ? 'text-stripe-purple' : 'text-heading-deep-navy'
+                  }`}
+                >
+                  {sit.title}
+                </h3>
+                <p className="text-[13px] text-neutral-500 leading-relaxed">{sit.desc}</p>
+              </button>
+            ))}
           </div>
-        )}
+
+          {selectedSit && (
+            <div className="mt-8 border border-stripe-purple/20 rounded-xl bg-white p-6 text-left flex items-center justify-between gap-4">
+              <div>
+                <p className="text-sm font-semibold text-heading-deep-navy mb-1">
+                  {selectedSit.title} — 맞춤 안내
+                </p>
+                <p className="text-[13px] text-neutral-500">{selectedSit.detail}</p>
+              </div>
+              <Link
+                href={selectedSit.link}
+                className="flex-shrink-0 bg-stripe-purple hover:bg-stripe-purple-hover text-white px-5 py-2.5 rounded text-sm font-medium transition-colors"
+              >
+                {selectedSit.linkLabel}
+              </Link>
+            </div>
+          )}
+        </div>
       </div>
     </section>
   )
