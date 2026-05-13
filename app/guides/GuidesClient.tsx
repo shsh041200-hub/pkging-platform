@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useState, useMemo, useEffect, useCallback } from "react";
 import Link from "next/link";
 
@@ -89,6 +90,8 @@ const ALL_GUIDES: GuideDisplay[] = [
 type FeaturedCard = {
   slug: string;
   thumbVariant: "default" | "alt" | "alt2";
+  imageSrc: string;
+  imageAlt: string;
   badge: string;
   tag: string;
   title: string;
@@ -101,6 +104,8 @@ const FEATURED: FeaturedCard[] = [
   {
     slug: "2026-korea-packaging-trends",
     thumbVariant: "default",
+    imageSrc: "/images/ai/phase1/guides-featured-trends.webp",
+    imageAlt: "2026 한국 패키징 트렌드 규제 일러스트",
     badge: "📈 이번 주 인기",
     tag: "트렌드 리포트",
     title: "2026 한국 패키징 트렌드 5가지 — 규제·소재·공급망 일괄 정리",
@@ -112,6 +117,8 @@ const FEATURED: FeaturedCard[] = [
   {
     slug: "corrugated-box-supplier-selection",
     thumbVariant: "alt",
+    imageSrc: "/images/ai/phase1/guides-featured-comparison.webp",
+    imageAlt: "골판지 박스 공급업체 비교 일러스트",
     badge: "⭐ 가장 많이 본",
     tag: "박스·골판지",
     title: "골판지 박스 업체 선정 가이드",
@@ -120,6 +127,8 @@ const FEATURED: FeaturedCard[] = [
   {
     slug: "eco-friendly-packaging",
     thumbVariant: "alt2",
+    imageSrc: "/images/ai/phase1/guides-featured-eco.webp",
+    imageAlt: "친환경 패키징 소재 일러스트",
     badge: "🌱 ESG",
     tag: "소재",
     title: "친환경 패키징 도입 — 인증·비용·로드맵",
@@ -483,11 +492,13 @@ function DefaultLayout({ totalGuides }: { totalGuides: number }) {
           >
             <div
               className="relative overflow-hidden"
-              style={{ aspectRatio: "16/9", background: thumbBackground(feat.thumbVariant) }}
+              style={{ aspectRatio: "16/9" }}
             >
-              <div
-                className="absolute right-[-30px] bottom-[-30px] w-[220px] h-[220px] rounded-full"
-                style={{ background: "rgba(255,255,255,.08)" }}
+              <Image
+                src={feat.imageSrc}
+                alt={feat.imageAlt}
+                fill
+                className="object-cover"
               />
               <span className="absolute top-[14px] left-[14px] bg-white/90 text-[var(--g-ink)] text-xs font-semibold px-[10px] py-[5px] rounded-full">
                 {feat.badge}
