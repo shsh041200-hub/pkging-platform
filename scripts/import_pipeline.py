@@ -69,11 +69,9 @@ CORP_SUFFIX_RE = re.compile(
     r"|㈜|\(주\)|\(유\)|\(합\)|\(사\)|주\.|\(재\))[\s\)）]*",
     re.UNICODE,
 )
-# companies_name_no_pii CHECK constraint: name must not contain phone or email patterns
-NAME_PII_RE = re.compile(r"\d{2,4}-\d{3,4}-\d{4}")
 # companies_name_no_pii CHECK constraint patterns (PACAA-585 / 20260511006)
 PHONE_IN_NAME_RE = re.compile(r"\d{2,4}-\d{3,4}-\d{4}")
-EMAIL_IN_NAME_RE = re.compile(r"\S+@\S+")
+EMAIL_IN_NAME_RE = re.compile(r"[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}")
 
 logging.basicConfig(
     level=logging.INFO,
@@ -141,13 +139,6 @@ def normalize_name(name: str) -> str:
     name = unicodedata.normalize("NFC", name)
     name = re.sub(r"\s+", " ", name).strip().lower()
     return name
-
-
-def clean_name_pii(name: str) -> str:
-    """Strip phone numbers and email from scraped business names (companies_name_no_pii)."""
-    name = NAME_PII_RE.sub("", name)
-    name = re.sub(r"[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}", "", name)
-    return re.sub(r"\s+", " ", name).strip()
 
 
 # ── Slug generation ─────────────────────────────────────────────────────────────
