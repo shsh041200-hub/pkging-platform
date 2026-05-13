@@ -107,6 +107,16 @@ function categoryToSlug(key: IndustryCategory): string {
   return key
 }
 
+// Static material preview chips per category for bento card (PACAA-611).
+// Hardcoded to avoid extra Supabase aggregation per landing render.
+const CATEGORY_MATERIAL_PREVIEW: Record<IndustryCategory, string[]> = {
+  'food-beverage':           ['종이', '필름', '플라스틱', '친환경'],
+  'ecommerce-shipping':      ['골판지', '완충재', '테이프', '에어캡'],
+  'cosmetics-beauty':        ['유리', '플라스틱', '라벨', '튜브'],
+  'pharma-health':           ['블리스터', '병', '캡슐', '필름'],
+  'electronics-industrial':  ['EPP', '진공포장', '강화골판지', '트레이'],
+}
+
 export default async function HomePage({
   searchParams,
 }: {
@@ -397,23 +407,70 @@ export default async function HomePage({
               전체 보기 →
             </Link>
           </h2>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            {INDUSTRY_CATEGORIES.filter((cat) => categoryCounts[cat] > 0).map((cat) => (
-              <Link
-                key={cat}
-                href={`/categories/${categoryToSlug(cat)}`}
-                className="group border border-border-v04 rounded-lg p-4 bg-white hover:border-stripe-purple/30 hover:shadow-[rgba(83,58,253,0.06)_0px_4px_12px] transition-all text-center"
-              >
-                <div className="w-10 h-10 rounded-lg bg-stripe-purple/6 mx-auto mb-3 flex items-center justify-center group-hover:bg-stripe-purple/10 transition-colors">
-                  <span className="text-lg">{INDUSTRY_CATEGORY_ICONS[cat]}</span>
-                </div>
-                <p className="text-[13px] font-semibold text-heading-deep-navy group-hover:text-stripe-purple transition-colors">
-                  {INDUSTRY_CATEGORY_LABELS[cat]}
-                </p>
-                <p className="text-[11px] text-neutral-500 mt-0.5">{categoryCounts[cat]}개</p>
-              </Link>
-            ))}
-          </div>
+          {(() => {
+            const activeCats = INDUSTRY_CATEGORIES.filter((cat) => categoryCounts[cat] > 0)
+            const sortedCats = [...activeCats].sort((a, b) => categoryCounts[b] - categoryCounts[a])
+            const heroCat = sortedCats[0]
+            const restCats = sortedCats.slice(1)
+            return (
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 auto-rows-[140px]">
+                {heroCat && (
+                  <Link
+                    href={`/categories/${categoryToSlug(heroCat)}`}
+                    className="group sm:col-span-2 sm:row-span-2 border border-border-v04 rounded-xl p-5 bg-gradient-to-br from-stripe-purple/8 via-white to-white hover:border-stripe-purple/40 hover:shadow-[rgba(83,58,253,0.06)_0px_4px_12px] transition-all flex flex-col justify-between"
+                  >
+                    <div className="flex items-start justify-between">
+                      <div className="w-14 h-14 rounded-xl bg-stripe-purple/10 flex items-center justify-center">
+                        <span className="text-3xl">{INDUSTRY_CATEGORY_ICONS[heroCat]}</span>
+                      </div>
+                      <span className="text-[11px] font-semibold text-stripe-purple bg-white border border-stripe-purple/20 px-2 py-0.5 rounded-full">
+                        가장 많이 찾는
+                      </span>
+                    </div>
+                    <div>
+                      <p className="text-[18px] font-bold text-heading-deep-navy group-hover:text-stripe-purple transition-colors">
+                        {INDUSTRY_CATEGORY_LABELS[heroCat]}
+                      </p>
+                      <p className="text-[12px] text-neutral-600 mt-1">
+                        <b className="text-heading-deep-navy">{categoryCounts[heroCat]}</b>개 업체
+                      </p>
+                      <div className="flex flex-wrap gap-1 mt-3">
+                        {CATEGORY_MATERIAL_PREVIEW[heroCat]?.map((m) => (
+                          <span key={m} className="text-[11px] text-stripe-purple bg-stripe-purple/6 px-2 py-0.5 rounded-full font-medium">
+                            {m}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </Link>
+                )}
+                {restCats.map((cat) => (
+                  <Link
+                    key={cat}
+                    href={`/categories/${categoryToSlug(cat)}`}
+                    className="group border border-border-v04 rounded-xl p-4 bg-white hover:border-stripe-purple/30 hover:shadow-[rgba(83,58,253,0.06)_0px_4px_12px] transition-all flex flex-col justify-between"
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="text-xl">{INDUSTRY_CATEGORY_ICONS[cat]}</span>
+                      <span className="text-[11px] font-semibold text-neutral-400 tabular-nums">{categoryCounts[cat]}</span>
+                    </div>
+                    <div>
+                      <p className="text-[13px] font-semibold text-heading-deep-navy group-hover:text-stripe-purple transition-colors leading-tight">
+                        {INDUSTRY_CATEGORY_LABELS[cat]}
+                      </p>
+                      <div className="flex gap-1 mt-1.5">
+                        {CATEGORY_MATERIAL_PREVIEW[cat]?.slice(0, 2).map((m) => (
+                          <span key={m} className="text-[10px] text-neutral-500 bg-neutral-50 px-1.5 py-0.5 rounded font-medium">
+                            {m}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            )
+          })()}
 
           {/* Printing & Design service card */}
           <div className="mt-6">
