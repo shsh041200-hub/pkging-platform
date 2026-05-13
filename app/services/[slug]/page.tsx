@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { PacklinxLogo } from '@/components/PacklinxLogo'
+import { SiteHeader } from '@/components/SiteHeader'
 import { TermsNoticeFooterLine } from '@/components/TermsNoticeFooterLine'
 import { BusinessRegistrationInfo } from '@/components/BusinessRegistrationInfo'
 import {
@@ -165,23 +166,7 @@ export default async function ServicePage({ params, searchParams }: Props) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionJsonLd) }}
       />
 
-      {/* Header */}
-      <header className="bg-neutral-900 sticky top-0 z-50 border-b border-white/[0.06]">
-        <div className="max-w-7xl mx-auto px-5 sm:px-8 h-16 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-3">
-            <PacklinxLogo variant="dark" />
-            <span className="hidden sm:inline text-slate-400 text-[11px] font-medium tracking-widest uppercase">전국 패키징 파트너, 한 번에</span>
-          </Link>
-          <nav className="flex items-center gap-4">
-            <Link href="/services/printing-design" className="text-white text-[13px] font-medium transition-colors">
-              인쇄·디자인
-            </Link>
-            <Link href="/guides" className="text-slate-300 hover:text-white text-[13px] font-medium transition-colors">
-              가이드
-            </Link>
-          </nav>
-        </div>
-      </header>
+      <SiteHeader />
 
       {/* Service Hero */}
       <section className="bg-white border-b border-gray-100 px-5">

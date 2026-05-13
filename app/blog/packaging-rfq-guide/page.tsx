@@ -1,6 +1,7 @@
 import React from "react";
 import type { Metadata } from "next";
 import Link from "next/link";
+import { SiteHeader } from "@/components/SiteHeader";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://packlinx.com";
 const canonicalUrl = `${siteUrl}/blog/packaging-rfq-guide`;
@@ -125,14 +126,15 @@ export default function PackagingRfqGuidePage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
       />
+      <SiteHeader />
       <main>
-        <header>
+        <div>
           <p>Packlinx 편집팀 | 최초 발행: 2026-05-08 | 조달 가이드</p>
           <h1>
             포장 업체 견적 요청 완전 가이드 — RFQ 준비부터 업체 선정까지
             (2026)
           </h1>
-        </header>
+        </div>
 
         <p>
           포장재 조달에서 가장 많은 시간을 낭비하는 단계는 견적 요청(RFQ)

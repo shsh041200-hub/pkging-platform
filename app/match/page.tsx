@@ -3,6 +3,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import { PacklinxLogo } from '@/components/PacklinxLogo'
+import { SiteHeader } from '@/components/SiteHeader'
 import { BusinessRegistrationInfo } from '@/components/BusinessRegistrationInfo'
 import MatchClient, { type MatchVendor } from './MatchClient'
 
@@ -76,25 +77,7 @@ export default async function MatchPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      {/* Header */}
-      <header className="bg-white sticky top-0 z-50 border-b border-[#e5edf5]">
-        <div className="max-w-6xl mx-auto px-5 h-14 flex items-center justify-between">
-          <Link href="/" className="flex items-center">
-            <PacklinxLogo variant="light" />
-          </Link>
-          <nav className="flex items-center gap-4 text-sm text-neutral-500">
-            <Link href="/" className="hover:text-[#061b31] transition-colors">
-              전체 업체
-            </Link>
-            <Link href="/categories" className="hover:text-[#061b31] transition-colors">
-              카테고리
-            </Link>
-            <Link href="/compare" className="hover:text-[#061b31] transition-colors">
-              비교하기
-            </Link>
-          </nav>
-        </div>
-      </header>
+      <SiteHeader />
 
       {/* Hero — Variant C: 광역 배경 그라데이션 + 중앙 카피 */}
       <div className="relative bg-gradient-to-b from-brand-100 via-brand-50 to-white overflow-hidden">

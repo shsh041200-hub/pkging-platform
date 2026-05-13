@@ -5,6 +5,7 @@ import { getCompaniesBySlugs, computeCompleteness } from '@/lib/compare-data'
 import CompareCart from '@/app/components/CompareCart'
 import CompareTable from '../CompareTable'
 import { PacklinxLogo } from '@/components/PacklinxLogo'
+import { SiteHeader } from '@/components/SiteHeader'
 import { BusinessRegistrationInfo } from '@/components/BusinessRegistrationInfo'
 
 export const revalidate = 3600
@@ -107,20 +108,7 @@ export default async function CompareSlugPage({ params }: Props) {
     <>
       <div className="min-h-screen bg-neutral-50">
 
-        {/* V05 dark sticky header */}
-        <header className="bg-[#0F172A] sticky top-0 z-50 border-b border-white/[0.06]">
-          <div className="max-w-5xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
-            <Link href="/" className="flex items-center gap-3">
-              <PacklinxLogo variant="dark" />
-              <span className="hidden sm:inline text-slate-400 text-[11px] font-medium tracking-widest uppercase">전국 패키징 파트너, 한 번에</span>
-            </Link>
-            <nav className="flex items-center gap-6">
-              <Link href="/guides" className="text-slate-300 hover:text-white text-[13px] font-medium transition-colors">
-                가이드
-              </Link>
-            </nav>
-          </div>
-        </header>
+        <SiteHeader />
 
         {/* V05 breadcrumb with chevron */}
         <div className="max-w-5xl mx-auto px-4 sm:px-6 pt-5 pb-0">
