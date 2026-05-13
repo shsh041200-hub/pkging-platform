@@ -17,7 +17,7 @@ const SITUATIONS = [
     title: '공급사 변경',
     desc: '기존 업체를 바꾸고 싶어요',
     detail: '더 나은 조건의 업체를 비교하고 검색하세요.',
-    link: '/',
+    link: '/match',
     linkLabel: '업체 비교하기 →',
   },
   {
