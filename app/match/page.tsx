@@ -96,30 +96,28 @@ export default async function MatchPage() {
         </div>
       </header>
 
-      {/* Hero */}
-      <div className="bg-white border-b border-[#e5edf5]">
-        <div className="max-w-4xl mx-auto px-5 py-10 flex flex-col sm:flex-row items-center gap-8">
-          <div className="flex-1">
-            <h1
-              className="text-[28px] sm:text-[36px] font-[300] text-[#061b31] tracking-tight leading-tight mb-2"
-              style={{ fontFeatureSettings: '"ss01"', letterSpacing: '-0.64px' }}
-            >
-              더 나은 포장재 업체 찾기
-            </h1>
-            <p className="text-[15px] text-[#64748d] leading-relaxed">
-              지금 거래 중인 업체를 입력하면, 더 나은 업체 Top 3를 바로 비교해드립니다.
-              <br />
-              Packlinx는 거래를 중개하지 않습니다. 업체 공개 사업자 정보만 제공합니다.
-            </p>
-          </div>
-          <div className="relative w-full sm:w-64 h-48 sm:h-48 flex-none rounded-xl overflow-hidden">
+      {/* Hero — Variant C: 광역 배경 그라데이션 + 중앙 카피 */}
+      <div className="relative bg-gradient-to-b from-brand-100 via-brand-50 to-white overflow-hidden">
+        <div className="absolute inset-0 opacity-50">
+          <div className="absolute inset-0">
             <Image
               src="/images/ai/phase1/match-hero.webp"
               alt="포장재 공급업체 매칭 일러스트"
               fill
-              className="object-cover"
+              className="object-cover object-center"
+              priority
             />
           </div>
+          <div className="absolute inset-0 bg-gradient-to-b from-brand-50/0 via-brand-50/30 to-white" />
+        </div>
+        <div className="relative z-10 max-w-3xl mx-auto px-6 py-16 sm:py-24 text-center">
+          <h1 className="text-[28px] sm:text-5xl font-light text-heading-deep-navy leading-tight tracking-tight mb-3">
+            더 나은 포장재 업체 찾기
+          </h1>
+          <p className="text-[15px] text-neutral-600 leading-relaxed">
+            지금 거래 중인 업체를 입력하면, 더 나은 업체 Top 3를 바로 비교해드립니다.<br />
+            Packlinx는 거래를 중개하지 않습니다. 업체 공개 사업자 정보만 제공합니다.
+          </p>
         </div>
       </div>
 
