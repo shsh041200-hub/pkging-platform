@@ -222,6 +222,7 @@ export const DELIVERY_REGION_LABELS: Record<DeliveryRegion, string> = {
 }
 
 // ── Legacy types (kept for crawler/classifier backward compat) ──
+// Extended in PACAA-682 to include new ENUM values added since PACAA-650.
 
 export type Category =
   | 'paper'
@@ -230,23 +231,48 @@ export type Category =
   | 'flexible'
   | 'eco'
   | 'glass'
+  // New category_type ENUM values (PACAA-650 + PACAA-682)
+  | 'corrugated_box'
+  | 'flexible_packaging'
+  | 'plastic_container'
+  | 'glass_metal_container'
+  | 'label_sticker'
+  | 'printing_postprocess'
+  | 'packaging_accessories'
+  | 'packaging_machinery'
 
 export const CATEGORY_LABELS: Record<Category, string> = {
-  paper:    '지류/종이',
-  plastic:  '플라스틱',
-  metal:    '금속',
-  flexible: '연포장',
-  eco:      '친환경',
-  glass:    '유리',
+  paper:                '지류/종이',
+  plastic:              '플라스틱',
+  metal:                '금속',
+  flexible:             '연포장',
+  eco:                  '친환경',
+  glass:                '유리',
+  corrugated_box:       '골판지·종이박스',
+  flexible_packaging:   '연포장재',
+  plastic_container:    '플라스틱 용기·병',
+  glass_metal_container:'유리·금속 용기',
+  label_sticker:        '라벨·스티커',
+  printing_postprocess: '인쇄·후가공',
+  packaging_accessories:'포장 부자재',
+  packaging_machinery:  '포장기계·자동화',
 }
 
 export const CATEGORY_TO_MATERIAL: Record<Category, MaterialType> = {
-  paper:    'paper-corrugated',
-  plastic:  'plastic-container',
-  flexible: 'film-pouch',
-  metal:    'glass-metal',
-  glass:    'glass-metal',
-  eco:      'eco-material',
+  paper:                'paper-corrugated',
+  plastic:              'plastic-container',
+  flexible:             'film-pouch',
+  metal:                'glass-metal',
+  glass:                'glass-metal',
+  eco:                  'eco-material',
+  corrugated_box:       'paper-corrugated',
+  flexible_packaging:   'film-pouch',
+  plastic_container:    'plastic-container',
+  glass_metal_container:'glass-metal',
+  label_sticker:        'paper-corrugated',
+  printing_postprocess: 'paper-corrugated',
+  packaging_accessories:'eco-material',
+  packaging_machinery:  'eco-material',
 }
 
 // ── Certification taxonomy (canonical IDs for filtering) ──
