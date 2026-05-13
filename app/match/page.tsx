@@ -10,14 +10,14 @@ export const revalidate = 300
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://www.packlinx.com'
 
 export const metadata: Metadata = {
-  title: '포장재 업체 찾기 — 사양 매칭 | Packlinx',
+  title: '포장재 업체 비교 — 기존 업체보다 더 나은 곳 찾기 | Packlinx',
   description:
-    '업종·소재·포장형태·지역을 선택하면 조건에 맞는 패키징 업체 목록을 바로 확인할 수 있습니다. 개인정보 수집 없이 업체 공개 정보만 제공합니다.',
+    '현재 거래 중인 포장재 업체와 새 업체를 1:1로 비교해보세요. 가격·MOQ·납기·인증·지역 기준으로 더 나은 업체를 추천합니다.',
   alternates: { canonical: `${siteUrl}/match` },
   openGraph: {
-    title: '포장재 업체 찾기 — 사양 매칭 | Packlinx',
+    title: '포장재 업체 비교 — 기존 업체보다 더 나은 곳 찾기 | Packlinx',
     description:
-      '업종·소재·포장형태·지역으로 조건에 맞는 포장재 업체를 찾아보세요. 거래 중개 없이 공개 사업자 정보만 제공합니다.',
+      '기존 업체와 1:1 비교로 더 나은 포장재 공급사를 찾아보세요. 거래 중개 없이 공개 사업자 정보만 제공합니다.',
     url: `${siteUrl}/match`,
     siteName: 'Packlinx',
     locale: 'ko_KR',
@@ -29,8 +29,8 @@ export const metadata: Metadata = {
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'SearchResultsPage',
-  name: '포장재 업체 사양 매칭',
-  description: '사양·카테고리·지역으로 패키징 업체를 직접 찾는 디렉토리 검색 도구.',
+  name: '포장재 업체 1:1 비교 매칭',
+  description: '기존 거래 업체와 새로운 포장재 공급사를 가격·MOQ·납기·인증·지역 기준으로 직접 비교.',
   url: `${siteUrl}/match`,
   inLanguage: 'ko',
   isPartOf: { '@type': 'WebSite', url: siteUrl, name: 'Packlinx' },
@@ -42,7 +42,7 @@ export default async function MatchPage() {
   const { data: rows } = await supabase
     .from('companies')
     .select(
-      'id, slug, name, industry_categories, material_type, packaging_form, delivery_regions, province, city, phone, email, website, created_at',
+      'id, slug, name, industry_categories, material_type, packaging_form, delivery_regions, province, city, phone, email, website, moq_value, moq_unit, min_order_quantity, lead_time_standard_days, lead_time_express_days, certifications, created_at',
     )
     .order('created_at', { ascending: false })
 
@@ -59,6 +59,12 @@ export default async function MatchPage() {
     phone: r.phone as string | null,
     email: r.email as string | null,
     website: r.website as string | null,
+    moq_value: r.moq_value as number | null,
+    moq_unit: r.moq_unit as string | null,
+    min_order_quantity: r.min_order_quantity as string | null,
+    lead_time_standard_days: r.lead_time_standard_days as number | null,
+    lead_time_express_days: r.lead_time_express_days as number | null,
+    certifications: (r.certifications as string[]) ?? [],
     created_at: r.created_at as string,
   }))
 
@@ -96,17 +102,17 @@ export default async function MatchPage() {
             className="text-[28px] sm:text-[36px] font-[300] text-[#061b31] tracking-tight leading-tight mb-2"
             style={{ fontFeatureSettings: '"ss01"', letterSpacing: '-0.64px' }}
           >
-            포장재 업체 찾기
+            더 나은 포장재 업체 찾기
           </h1>
           <p className="text-[15px] text-[#64748d] leading-relaxed">
-            사양·카테고리·지역을 선택하면 조건에 맞는 업체 목록을 바로 확인할 수 있습니다.
+            지금 거래 중인 업체를 입력하면, 더 나은 업체 Top 3를 바로 비교해드립니다.
             <br />
             Packlinx는 거래를 중개하지 않습니다. 업체 공개 사업자 정보만 제공합니다.
           </p>
         </div>
       </div>
 
-      {/* Main content — client component handles form + filtering */}
+      {/* Main content */}
       <main className="flex-1">
         <MatchClient vendors={vendors} />
       </main>
