@@ -177,9 +177,9 @@ async function companyEntries(shardIndex: number): Promise<Entry[]> {
 }
 
 // PACAA-348: compare pair sitemap entries.
-// Cap policy (CEO-approved 2026-05-08):
+// Cap policy (CEO-approved 2026-05-08, PACAA-666 fix: removed is_verified filter):
 //   - Per category: top-5 by avg_rating DESC → 5×5 = 25 pairs (≤125 total for 5 categories).
-//   - If a category has ≤5 verified vendors, list ALL pairs (no cap).
+//   - If a category has ≤5 vendors, list ALL pairs (no cap).
 //   - Pairs are deduplicated across categories (slug-pair key, alphabetically sorted).
 //   - Trigger: when total compare URLs reach 500+, open a new PACAA issue to upgrade
 //     cap to top-10×10 and consider a separate compare shard.
@@ -190,7 +190,6 @@ async function compareEntries(): Promise<Entry[]> {
   const { data, error } = await supabase()
     .from('companies')
     .select('slug, industry_categories, avg_rating')
-    .eq('is_verified', true)
     .eq('is_hidden', false)
     .not('industry_categories', 'is', null)
 
@@ -199,7 +198,7 @@ async function compareEntries(): Promise<Entry[]> {
     return []
   }
 
-  // Group all verified vendors by category
+  // Group all non-hidden vendors by category
   const byCategory = new Map<string, { slug: string; avg_rating: number | null }[]>()
   for (const cat of INDUSTRY_CATEGORIES) {
     byCategory.set(cat, [])
