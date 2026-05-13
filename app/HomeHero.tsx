@@ -40,9 +40,10 @@ export function HomeHero({ totalCount }: { totalCount?: number | null }) {
       {/* Variant A: full-width background + copy overlay */}
       <div className="relative w-full overflow-hidden" style={{ height: '480px' }}>
         <Image
-          src="/images/ai/phase1/home-hero.webp"
-          alt="한국 패키징 업체 매칭 일러스트"
+          src="/images/ai/phase2/hero-photo-A.webp"
+          alt="산업용 포장 현장 사진"
           fill
+          sizes="100vw"
           className="object-cover object-center"
           priority
         />
