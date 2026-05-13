@@ -48,13 +48,13 @@ jobs:
           )
 
           FAIL=0
-          for PATH in "${PATHS[@]}"; do
-            URL="${BASE}${PATH}"
+          for URL_PATH in "${PATHS[@]}"; do
+            URL="${BASE}${URL_PATH}"
             HTTP=$(curl -s -o /dev/null -w "%{http_code}" --max-time 15 --location "$URL")
             if [ "$HTTP" -eq 200 ]; then
-              echo "✅ $HTTP  $PATH"
+              echo "✅ $HTTP  $URL_PATH"
             else
-              echo "❌ $HTTP  $PATH"
+              echo "❌ $HTTP  $URL_PATH"
               FAIL=1
             fi
           done
