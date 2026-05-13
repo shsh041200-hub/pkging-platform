@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { createServiceClient } from '@/lib/supabase/service'
 import { PacklinxLogo } from '@/components/PacklinxLogo'
+import { SiteHeader } from '@/components/SiteHeader'
 import { BusinessRegistrationInfo } from '@/components/BusinessRegistrationInfo'
 import { WebsiteFavicon } from '@/components/WebsiteFavicon'
 import { simplifyCompanyName } from '@/lib/simplify-company-name'
@@ -130,20 +131,7 @@ export default async function UseCaseLandingPage({ params }: Props) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListJsonLd) }}
       />
 
-      {/* Header */}
-      <header className="bg-neutral-900 sticky top-0 z-50 border-b border-white/[0.06]">
-        <div className="max-w-7xl mx-auto px-5 sm:px-8 h-16 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-3">
-            <PacklinxLogo variant="dark" />
-            <span className="hidden sm:inline text-slate-400 text-[11px] font-medium tracking-widest uppercase">전국 패키징 파트너, 한 번에</span>
-          </Link>
-          <nav className="flex items-center gap-6">
-            <Link href="/guides" className="text-slate-300 hover:text-white text-[13px] font-medium transition-colors">
-              가이드
-            </Link>
-          </nav>
-        </div>
-      </header>
+      <SiteHeader />
 
       {/* Hero */}
       <section className="bg-neutral-50 bg-dot-grid border-b border-gray-100 pt-12 pb-14 sm:pt-16 sm:pb-18 px-5">
