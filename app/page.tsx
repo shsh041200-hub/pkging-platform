@@ -116,6 +116,10 @@ const CATEGORY_MATERIAL_PREVIEW: Record<IndustryCategory, string[]> = {
   'cosmetics-beauty':        ['유리', '플라스틱', '라벨', '튜브'],
   'pharma-health':           ['블리스터', '병', '캡슐', '필름'],
   'electronics-industrial':  ['EPP', '진공포장', '강화골판지', '트레이'],
+  'label-sticker':           ['감열지', 'PP라벨', '방수', '바코드'],
+  'printing-postprocess':    ['오프셋', '디지털', '코팅', '형압'],
+  'packaging-accessories':   ['OPP테이프', '에어캡', 'PP밴드', '완충재'],
+  'packaging-machinery':     ['충전기', '밀봉기', '수축기', '팔레타이저'],
 }
 
 export default async function HomePage({

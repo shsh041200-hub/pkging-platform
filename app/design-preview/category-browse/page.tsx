@@ -19,6 +19,10 @@ const CATEGORY_COUNT: Record<IndustryCategory, number> = {
   'cosmetics-beauty': 132,
   'pharma-health': 84,
   'electronics-industrial': 71,
+  'label-sticker': 0,
+  'printing-postprocess': 0,
+  'packaging-accessories': 0,
+  'packaging-machinery': 0,
 }
 
 const CATEGORY_MATERIALS: Record<IndustryCategory, string[]> = {
@@ -27,6 +31,10 @@ const CATEGORY_MATERIALS: Record<IndustryCategory, string[]> = {
   'cosmetics-beauty': ['유리', '플라스틱', '라벨', '튜브'],
   'pharma-health': ['블리스터', '병', '캡슐', '필름'],
   'electronics-industrial': ['EPP', '진공포장', '강화골판지', '트레이'],
+  'label-sticker': ['감열지', 'PP라벨', '방수', '바코드'],
+  'printing-postprocess': ['오프셋', '디지털', '코팅', '형압'],
+  'packaging-accessories': ['OPP테이프', '에어캡', 'PP밴드', '완충재'],
+  'packaging-machinery': ['충전기', '밀봉기', '수축기', '팔레타이저'],
 }
 
 const CATEGORY_CERTS: Record<IndustryCategory, number> = {
@@ -35,6 +43,10 @@ const CATEGORY_CERTS: Record<IndustryCategory, number> = {
   'cosmetics-beauty': 21,
   'pharma-health': 27,
   'electronics-industrial': 9,
+  'label-sticker': 0,
+  'printing-postprocess': 0,
+  'packaging-accessories': 0,
+  'packaging-machinery': 0,
 }
 
 const CATEGORY_VERIFIED: Record<IndustryCategory, number> = {
@@ -43,6 +55,10 @@ const CATEGORY_VERIFIED: Record<IndustryCategory, number> = {
   'cosmetics-beauty': 76,
   'pharma-health': 54,
   'electronics-industrial': 31,
+  'label-sticker': 0,
+  'printing-postprocess': 0,
+  'packaging-accessories': 0,
+  'packaging-machinery': 0,
 }
 
 const VENDOR_LOGOS: Record<IndustryCategory, string[]> = {
@@ -51,6 +67,10 @@ const VENDOR_LOGOS: Record<IndustryCategory, string[]> = {
   'cosmetics-beauty': ['아모레', 'LG생건', '코스맥스', '한국콜마', '에이블씨'],
   'pharma-health': ['종근당', '유한양행', '동아', 'GC녹십자', '한미'],
   'electronics-industrial': ['삼성', 'LG', 'SK', '현대모비스', '한화'],
+  'label-sticker': [],
+  'printing-postprocess': [],
+  'packaging-accessories': [],
+  'packaging-machinery': [],
 }
 
 function VariantHeader({ idx, name, sub }: { idx: number; name: string; sub: string }) {
@@ -285,6 +305,10 @@ function Variant5() {
     'cosmetics-beauty': 'from-pink-50 via-fuchsia-50 to-purple-50',
     'pharma-health': 'from-emerald-50 via-teal-50 to-cyan-50',
     'electronics-industrial': 'from-slate-100 via-zinc-100 to-stone-100',
+    'label-sticker': 'from-blue-50 via-sky-50 to-cyan-50',
+    'printing-postprocess': 'from-violet-50 via-purple-50 to-fuchsia-50',
+    'packaging-accessories': 'from-orange-50 via-amber-50 to-yellow-50',
+    'packaging-machinery': 'from-green-50 via-emerald-50 to-teal-50',
   }
   const ringColors: Record<IndustryCategory, string> = {
     'food-beverage': 'hover:ring-orange-200',
@@ -292,6 +316,10 @@ function Variant5() {
     'cosmetics-beauty': 'hover:ring-pink-200',
     'pharma-health': 'hover:ring-emerald-200',
     'electronics-industrial': 'hover:ring-slate-200',
+    'label-sticker': 'hover:ring-blue-200',
+    'printing-postprocess': 'hover:ring-violet-200',
+    'packaging-accessories': 'hover:ring-orange-200',
+    'packaging-machinery': 'hover:ring-green-200',
   }
   return (
     <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
