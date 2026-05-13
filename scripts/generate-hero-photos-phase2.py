@@ -99,9 +99,10 @@ def generate_and_save(candidate: dict) -> None:
         size_kb = out_path.stat().st_size / 1024
     print(f"  Saved {out_path.name}: {size_kb:.1f} KB (quality={quality})")
 
-for c in CANDIDATES:
+for i, c in enumerate(CANDIDATES):
+    if i > 0:
+        time.sleep(12)
     generate_and_save(c)
-    time.sleep(1)
 
 print("\nAll 3 hero photo candidates generated.")
 print(f"Files in {OUTPUT_DIR}:")
