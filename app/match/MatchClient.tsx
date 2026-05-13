@@ -36,7 +36,7 @@ export interface MatchVendor {
 
 type WizardStep = 'vendor' | 'axis' | 'compare'
 
-type Axis = 'price' | 'moq' | 'lead' | 'cert' | 'region'
+type Axis = 'moq' | 'lead' | 'cert' | 'region'
 
 interface ManualVendor {
   name: string
@@ -46,7 +46,6 @@ interface ManualVendor {
 // ── Axis config ──
 
 const AXIS_OPTIONS: { id: Axis; label: string; desc: string }[] = [
-  { id: 'price', label: '단가/가격', desc: '더 저렴한 단가' },
   { id: 'moq',   label: '낮은 MOQ',  desc: '소량 발주 가능' },
   { id: 'lead',  label: '빠른 납기',  desc: '납기일 단축' },
   { id: 'cert',  label: '품질 인증',  desc: 'HACCP·ISO·친환경 등' },
@@ -72,7 +71,7 @@ function getRecommendations(
   }
 
   const sorted = [...candidates].sort((a, b) => {
-    if (axis === 'moq' || axis === 'price') {
+    if (axis === 'moq') {
       const av = a.moq_value ?? Infinity
       const bv = b.moq_value ?? Infinity
       return av - bv
@@ -530,11 +529,6 @@ const COMPARE_ROWS: CompareRow[] = [
       return certs.length > 0 ? certs.slice(0, 3).join(', ') : '없음'
     },
   },
-  {
-    axis: 'price',
-    label: '단가',
-    getValue: () => '비공개 / 문의',
-  },
 ]
 
 function VendorCompareCard({
@@ -615,26 +609,12 @@ function VendorCompareCard({
                 className={`text-[13px] text-right ${
                   isHighlighted
                     ? 'text-[#533afd] font-[400]'
-                    : value === '정보 없음' || value === '없음' || value === '비공개 / 문의' || value === '—'
+                    : value === '정보 없음' || value === '없음' || value === '—'
                     ? 'text-[#b0bec5] italic'
                     : 'text-[#273951]'
                 }`}
               >
-                {row.axis === 'price' && value === '비공개 / 문의' ? (
-                  <span className="inline-flex items-center gap-1">
-                    <span>비공개</span>
-                    {vendor && (
-                      <Link
-                        href={`/companies/${vendor.slug}`}
-                        className="text-[11px] text-[#533afd] underline underline-offset-1 hover:text-[#4434d4]"
-                      >
-                        문의
-                      </Link>
-                    )}
-                  </span>
-                ) : (
-                  value
-                )}
+                {value}
               </dd>
             </div>
           )
@@ -797,14 +777,6 @@ function Step3({ existingVendor, manualVendor, axis, recommendations, onBack, on
           </div>
         )}
       </div>
-
-      {/* Price axis note */}
-      {axis === 'price' && (
-        <div className="mt-4 px-4 py-3 rounded-lg bg-[#fffbeb] border border-[#fde68a] text-[13px] text-[#92400e]">
-          단가 정보는 현재 제공되지 않습니다. 업체 상세 페이지에서 직접 문의하세요.
-          MOQ 기준으로 가격 대비 유리한 업체를 추천했습니다.
-        </div>
-      )}
 
       <div className="flex flex-wrap items-center gap-3 mt-6">
         <button
