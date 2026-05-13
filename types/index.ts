@@ -6,6 +6,10 @@ export type IndustryCategory =
   | 'cosmetics-beauty'
   | 'pharma-health'
   | 'electronics-industrial'
+  | 'label-sticker'
+  | 'printing-postprocess'
+  | 'packaging-accessories'
+  | 'packaging-machinery'
 
 export const INDUSTRY_CATEGORIES: IndustryCategory[] = [
   'food-beverage',
@@ -13,6 +17,10 @@ export const INDUSTRY_CATEGORIES: IndustryCategory[] = [
   'cosmetics-beauty',
   'pharma-health',
   'electronics-industrial',
+  'label-sticker',
+  'printing-postprocess',
+  'packaging-accessories',
+  'packaging-machinery',
 ]
 
 export const INDUSTRY_CATEGORY_LABELS: Record<IndustryCategory, string> = {
@@ -21,6 +29,10 @@ export const INDUSTRY_CATEGORY_LABELS: Record<IndustryCategory, string> = {
   'cosmetics-beauty':        '화장품·뷰티 포장',
   'pharma-health':           '의약·건강 포장',
   'electronics-industrial':  '전자·산업 포장',
+  'label-sticker':           '라벨·스티커',
+  'printing-postprocess':    '인쇄·후가공',
+  'packaging-accessories':   '포장 부자재',
+  'packaging-machinery':     '포장기계·자동화',
 }
 
 export const INDUSTRY_CATEGORY_DESCRIPTIONS: Record<IndustryCategory, string> = {
@@ -29,6 +41,10 @@ export const INDUSTRY_CATEGORY_DESCRIPTIONS: Record<IndustryCategory, string> = 
   'cosmetics-beauty':        '스킨케어, 메이크업, 헤어케어 포장',
   'pharma-health':           '의약품, 건강기능식품, 의료기기 포장',
   'electronics-industrial':  '전자제품, 부품, 산업재 보호 포장',
+  'label-sticker':           '라벨, 스티커, 바코드 인쇄 및 라벨 제작',
+  'printing-postprocess':    '상업 인쇄, 패키지 인쇄, 코팅·박·형압 후가공',
+  'packaging-accessories':   '테이프, 완충재, 스트래핑, 포장용 부자재',
+  'packaging-machinery':     '자동 포장기, 충전기, 밀봉기, 팔레타이저',
 }
 
 export const INDUSTRY_CATEGORY_ICONS: Record<IndustryCategory, string> = {
@@ -37,6 +53,10 @@ export const INDUSTRY_CATEGORY_ICONS: Record<IndustryCategory, string> = {
   'cosmetics-beauty':        '💄',
   'pharma-health':           '💊',
   'electronics-industrial':  '⚙️',
+  'label-sticker':           '🏷️',
+  'printing-postprocess':    '🖨️',
+  'packaging-accessories':   '🔧',
+  'packaging-machinery':     '🏭',
 }
 
 // ── Print / Design service subtype filter (인쇄·디자인 세부 카테고리) ──
@@ -457,6 +477,10 @@ export const GUIDE_CATEGORY_COLORS: Record<IndustryCategory, string> = {
   'cosmetics-beauty':        '#F472B6',
   'pharma-health':           '#34D399',
   'electronics-industrial':  '#94A3B8',
+  'label-sticker':           '#60A5FA',
+  'printing-postprocess':    '#A78BFA',
+  'packaging-accessories':   '#FB923C',
+  'packaging-machinery':     '#4ADE80',
 }
 
 export interface Review {

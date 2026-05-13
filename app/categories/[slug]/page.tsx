@@ -44,6 +44,10 @@ const CATEGORY_SEO_TITLE: Record<IndustryCategory, string> = {
   'cosmetics-beauty':        '화장품 포장 업체 찾기 — 뷰티 브랜드 포장재 전문',
   'pharma-health':           '의약품·건강기능식품 포장 업체 — 전국 의약 포장재',
   'electronics-industrial':  '전자·산업용 포장 업체 — 보호 포장재 전문',
+  'label-sticker':           '라벨·스티커 인쇄 업체 — 전국 라벨 제작 전문',
+  'printing-postprocess':    '인쇄·후가공 업체 찾기 — 패키지 인쇄·코팅·박·형압',
+  'packaging-accessories':   '포장 부자재 업체 — 테이프·완충재·스트래핑 전국 공급',
+  'packaging-machinery':     '포장기계·자동화 업체 — 충전기·밀봉기·팔레타이저 전문',
 }
 
 const CATEGORY_SEO_DESCRIPTION: Record<IndustryCategory, string> = {
@@ -57,6 +61,14 @@ const CATEGORY_SEO_DESCRIPTION: Record<IndustryCategory, string> = {
     '의약품, 건강기능식품 포장 업체를 비교하세요. GMP 인증 의약 포장재 전문 업체를 찾아보세요.',
   'electronics-industrial':
     '전자제품, 부품, 산업재 보호 포장 업체를 비교하세요. 완충·정전기방지 포장재 전문 업체를 Packlinx에서 찾아보세요.',
+  'label-sticker':
+    '전국 라벨·스티커 인쇄 업체를 비교하세요. 바코드 라벨, 제품 라벨, 방수 스티커 B2B 공급업체를 Packlinx에서 찾아보세요.',
+  'printing-postprocess':
+    '전국 인쇄·후가공 업체를 비교하세요. 패키지 인쇄, 코팅, 박·형압 전문 B2B 공급업체 Packlinx.',
+  'packaging-accessories':
+    '전국 포장 부자재 업체를 비교하세요. OPP테이프, 에어캡, PP밴드, 완충재 전문 B2B 공급업체 Packlinx.',
+  'packaging-machinery':
+    '전국 포장기계·자동화 업체를 비교하세요. 충전기, 밀봉기, 팔레타이저, 자동 포장라인 B2B 공급업체 Packlinx.',
 }
 
 const CATEGORY_H1_OVERRIDE: Partial<Record<IndustryCategory, string>> = {
@@ -74,10 +86,14 @@ const CATEGORY_OG_DESCRIPTION: Partial<Record<IndustryCategory, string>> = {}
 
 const RELATED_CATEGORIES: Record<IndustryCategory, IndustryCategory[]> = {
   'food-beverage':           ['pharma-health', 'ecommerce-shipping', 'cosmetics-beauty'],
-  'ecommerce-shipping':      ['electronics-industrial', 'food-beverage', 'cosmetics-beauty'],
-  'cosmetics-beauty':        ['pharma-health', 'food-beverage', 'ecommerce-shipping'],
+  'ecommerce-shipping':      ['electronics-industrial', 'food-beverage', 'packaging-accessories'],
+  'cosmetics-beauty':        ['pharma-health', 'food-beverage', 'label-sticker'],
   'pharma-health':           ['cosmetics-beauty', 'food-beverage', 'electronics-industrial'],
-  'electronics-industrial':  ['ecommerce-shipping', 'food-beverage', 'pharma-health'],
+  'electronics-industrial':  ['ecommerce-shipping', 'food-beverage', 'packaging-machinery'],
+  'label-sticker':           ['printing-postprocess', 'cosmetics-beauty', 'food-beverage'],
+  'printing-postprocess':    ['label-sticker', 'packaging-accessories', 'ecommerce-shipping'],
+  'packaging-accessories':   ['ecommerce-shipping', 'printing-postprocess', 'packaging-machinery'],
+  'packaging-machinery':     ['packaging-accessories', 'electronics-industrial', 'food-beverage'],
 }
 
 const CATEGORY_KEYWORDS: Record<IndustryCategory, Array<{ slug: string; label: string }>> = {
@@ -110,6 +126,30 @@ const CATEGORY_KEYWORDS: Record<IndustryCategory, Array<{ slug: string; label: s
     { slug: '택배박스-제작', label: '택배박스 제작' },
     { slug: '테이프-제작', label: '테이프 제작' },
     { slug: '골판지박스-제작', label: '골판지박스 제작' },
+  ],
+  'label-sticker': [
+    { slug: '라벨-스티커-제작', label: '라벨 스티커 제작' },
+    { slug: '스티커-인쇄-업체', label: '스티커 인쇄 업체' },
+    { slug: '바코드-라벨-제작', label: '바코드 라벨 제작' },
+    { slug: '방수-스티커-제작', label: '방수 스티커 제작' },
+  ],
+  'printing-postprocess': [
+    { slug: '패키지-인쇄-업체', label: '패키지 인쇄 업체' },
+    { slug: '박스-인쇄-제작', label: '박스 인쇄 제작' },
+    { slug: '후가공-코팅-업체', label: '후가공 코팅 업체' },
+    { slug: '소량-인쇄-업체', label: '소량 인쇄 업체' },
+  ],
+  'packaging-accessories': [
+    { slug: '박스-테이프-제작', label: '박스 테이프 제작' },
+    { slug: '에어캡-완충재-제작', label: '에어캡 완충재 제작' },
+    { slug: '테이프-제작', label: '테이프 제작' },
+    { slug: 'pp밴드-스트래핑', label: 'PP밴드 스트래핑' },
+  ],
+  'packaging-machinery': [
+    { slug: '진공포장기-가격', label: '진공포장기 가격' },
+    { slug: '자동-포장기계-가격', label: '자동 포장기계 가격' },
+    { slug: '충전기-포장기-업체', label: '충전기 포장기 업체' },
+    { slug: '수축포장기-가격', label: '수축포장기 가격' },
   ],
 }
 
