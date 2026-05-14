@@ -1,5 +1,8 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import Image from 'next/image'
+import { existsSync } from 'fs'
+import path from 'path'
 import { notFound } from 'next/navigation'
 import { PacklinxLogo } from '@/components/PacklinxLogo'
 import { SiteHeader } from '@/components/SiteHeader'
@@ -302,6 +305,10 @@ export default async function CategoryPage({ params, searchParams }: Props) {
   const hasFilters = selectedMaterials.length > 0 || selectedForms.length > 0 || selectedCerts.length > 0 || !!selectedUseCase || sample === 'true' || eco === 'true' || fresh === 'true'
   const heroCount = hasFilters ? filteredCount : totalInCategory
 
+  const heroImageSrc = `/images/ai/categories/${slug}-hero.webp`
+  const heroImageDiskPath = path.join(process.cwd(), 'public', heroImageSrc)
+  const hasHeroImage = existsSync(heroImageDiskPath)
+
   const breadcrumbJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
@@ -337,24 +344,54 @@ export default async function CategoryPage({ params, searchParams }: Props) {
 
       <SiteHeader />
 
-      {/* Category Hero - compact one-line */}
-      <section className="bg-white border-b border-gray-100 px-5">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex items-center gap-3 py-4 flex-wrap">
-            {!HIDE_ICON_CATEGORIES.has(categoryKey) && (
-              <span className="text-[24px] leading-none flex-shrink-0">{icon}</span>
-            )}
-            <h1 className="text-[20px] font-light text-heading-deep-navy leading-tight">
-              {CATEGORY_H1_OVERRIDE[categoryKey] ?? `${label} 업체`}
-            </h1>
-            {heroCount != null && (
-              <span className="text-[14px] text-slate-500 font-medium">
-                {heroCount.toLocaleString()}개
-              </span>
-            )}
+      {/* Category Hero */}
+      {hasHeroImage ? (
+        <section className="relative w-full overflow-hidden border-b border-gray-100">
+          <div className="relative h-[250px] md:h-[400px] w-full">
+            <Image
+              src={heroImageSrc}
+              alt={`${label} 포장 업체 현장`}
+              fill
+              sizes="100vw"
+              className="object-cover object-center"
+              priority
+            />
+            {/* Left gradient overlay */}
+            <div className="absolute inset-0 bg-gradient-to-r from-[#061b31]/85 via-[#061b31]/50 to-transparent" />
+            <div className="absolute inset-0 flex items-end px-5 sm:px-8 pb-6 sm:pb-10 max-w-7xl mx-auto left-0 right-0">
+              <div>
+                <h1 className="text-[22px] sm:text-[34px] font-light text-white leading-tight tracking-tight">
+                  {CATEGORY_H1_OVERRIDE[categoryKey] ?? `${label} 업체`}
+                </h1>
+                {heroCount != null && (
+                  <p className="text-white/65 text-[13px] sm:text-[15px] mt-1.5">
+                    전국 {heroCount.toLocaleString()}개 업체
+                  </p>
+                )}
+              </div>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      ) : (
+        /* Fallback: compact one-line header when no hero image */
+        <section className="bg-white border-b border-gray-100 px-5">
+          <div className="max-w-7xl mx-auto">
+            <div className="flex items-center gap-3 py-4 flex-wrap">
+              {!HIDE_ICON_CATEGORIES.has(categoryKey) && (
+                <span className="text-[24px] leading-none flex-shrink-0">{icon}</span>
+              )}
+              <h1 className="text-[20px] font-light text-heading-deep-navy leading-tight">
+                {CATEGORY_H1_OVERRIDE[categoryKey] ?? `${label} 업체`}
+              </h1>
+              {heroCount != null && (
+                <span className="text-[14px] text-slate-500 font-medium">
+                  {heroCount.toLocaleString()}개
+                </span>
+              )}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Dropdown filter bar (desktop) + mobile filter button */}
       <CategoryFilterBar
