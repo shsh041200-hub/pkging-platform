@@ -52,8 +52,9 @@ DRY_RUN = "--apply" not in sys.argv
 
 # Legal P0-B: 4-field limit + Legal P1-D: category mapping
 # packaging_categories.category_key → companies.category enum value
-# corrugated_box is EXCLUDED (maps to legacy 'paper'; separate migration needed)
+# corrugated_box ENUM added via PACAA-683 migration; now included (PACAA-686)
 CATEGORY_MAP = {
+    "corrugated_box":        "corrugated_box",
     "flexible_packaging":    "flexible_packaging",
     "plastic_container":     "plastic_container",
     "glass_metal_container": "glass_metal_container",
@@ -261,10 +262,17 @@ def main():
     log.info("Candidate records (target cats, clean/merged, not deleted%s): %d",
              ", not suppressed" if suppression_available else "", len(candidates))
 
+    # 3b. Pre-load existing slugs to prevent secondary unique constraint violations
+    existing_slugs: set[str] = set()
+    for row in fetch_all("companies", {"select": "slug"}):
+        if row.get("slug"):
+            existing_slugs.add(row["slug"])
+    log.info("Existing slugs in DB: %d", len(existing_slugs))
+
     # 4. Process candidates
     stats = defaultdict(lambda: defaultdict(int))
     rows_to_insert = []
-    slug_seen: set[str] = set()
+    slug_seen: set[str] = existing_slugs.copy()
 
     for vc in candidates:
         cat_key = cat_id_to_key[vc["category_id"]]
@@ -295,9 +303,9 @@ def main():
 
         # Legal P0-B: 4-field limit ONLY
         slug = make_slug(name_clean, companies_cat)
-        # Ensure slug uniqueness within this run
+        # Ensure slug uniqueness within this run and against existing DB slugs
         if slug in slug_seen:
-            slug = f"{slug}-{str(uuid.uuid4())[:6]}"
+            slug = f"{companies_cat}-{str(uuid.uuid4())[:8]}"
         slug_seen.add(slug)
 
         row = {
