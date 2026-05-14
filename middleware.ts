@@ -76,9 +76,11 @@ export async function middleware(request: NextRequest) {
 
   // Filter URLs (/?industry=...&material=...) — tell crawlers to use the canonical homepage
   // and allow Vercel CDN to cache them so bursts don't 429 the origin (PACAA-711).
+  // Next.js SSR overwrites Cache-Control (dynamic pages always emit private,no-store),
+  // so use Vercel-CDN-Cache-Control which Vercel reads independently of Next.js's header.
   if (pathname === '/' && request.nextUrl.search.length > 0) {
     const response = NextResponse.next()
-    response.headers.set('Cache-Control', 'public, s-maxage=60, stale-while-revalidate=600')
+    response.headers.set('Vercel-CDN-Cache-Control', 'public, max-age=60, stale-while-revalidate=600')
     response.headers.set('X-Robots-Tag', 'noindex, follow')
     return response
   }
