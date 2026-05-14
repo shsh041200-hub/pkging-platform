@@ -66,7 +66,12 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const params = await searchParams
   const hasAnyParam = Object.values(params).some(v => v !== undefined && v !== '')
-  if (hasAnyParam) return { robots: { index: false, follow: true } }
+  if (hasAnyParam) {
+    return {
+      robots: { index: false, follow: true },
+      alternates: { canonical: siteUrl },
+    }
+  }
   return { alternates: { canonical: siteUrl } }
 }
 
