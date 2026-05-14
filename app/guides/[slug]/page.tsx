@@ -51,9 +51,9 @@ const GUIDES: Record<DynamicGuideSlug, GuideContent> = {
     body: <SmallQuantityCustomBoxContent />,
   },
   "corrugated-flute-types": {
-    title: "골판지 플루트 유형 완전 가이드 — A·B·C·E·F 비교",
+    title: "박스 골 종류 완전 가이드 — a골·b골·ab골·e골·f골 차이 및 선택 기준 | Packlinx",
     description:
-      "골판지 박스 설계 시 A·B·C·E·F 플루트의 특성, 두께, 용도별 적합성을 비교합니다. Packlinx에서 골판지 제조 업체를 한눈에 비교하세요.",
+      "a골(4.7mm)·ab골(이중벽)·e골(1.6mm) 등 골판지 박스 골 종류별 두께·완충성·인쇄 적합성을 비교합니다. 용도에 맞는 골을 5분에 선택하세요. Packlinx에서 골판지 업체 바로 비교.",
     datePublished: "2026-05-01",
     redesignVersion: 1,
     body: <CorugatedFluteTypesContent />,
