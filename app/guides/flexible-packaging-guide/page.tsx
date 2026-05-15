@@ -13,7 +13,7 @@ const canonicalUrl = `${siteUrl}/guides/flexible-packaging-guide`;
 
 const title = "연포장재 완전 가이드 — 종류·소재·선택 기준";
 const description =
-  "연포장재 종류·소재·식품 안전 기준·업체 선택 체크리스트를 한 곳에 정리했습니다. 파우치, 롤 필름, 합지 소재 비교와 Packlinx 연포장재 업체 디렉토리.";
+  "연포장재(파우치·롤필름·합지) 종류·소재·식품 안전 기준(OTR·WVTR)·MOQ·업체 선택 체크리스트를 한 곳에 정리했습니다. 2026년 최신 기준으로 업체를 빠르게 비교하세요.";
 
 // generateMetadata (function form) matches the dynamic-route pattern that reliably
 // serialises alternates.languages in Next.js 15 + React 19.  The static
@@ -734,7 +734,7 @@ export default function FlexiblePackagingGuidePage() {
           ctaButtonLabel="업체 바로 비교 →"
           ctaHref="/products/film"
           relatedGuides={[
-            { href: "/guides/packaging-material-complete-guide", title: "골판지·단프라·연포장 소재 종합 비교", readTime: "6분" },
+            { href: "/guides/packaging-material-complete-guide", title: "포장재 소재 종합 비교 가이드", readTime: "6분" },
             { href: "/guides/eco-friendly-packaging", title: "FSC·GRS·생분해 인증 소재 전환 가이드", readTime: "6분" },
             { href: "/guides/food-packaging-materials", title: "식품 포장재 위생·식약처 기준", readTime: "5분" },
             { href: "/guides/packaging-printing-guide", title: "그라비아·플렉소·디지털 인쇄 비교", readTime: "5분" },

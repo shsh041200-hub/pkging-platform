@@ -48,6 +48,8 @@ export interface ProductGuideData {
   seoTitle: string
   seoDescription: string
   seoKeywords: string[]
+  /** Optional deep-dive guide link shown in the product page guide section */
+  guideLink?: { href: string; label: string }
 }
 
 export const PRODUCT_GUIDE: Record<ProductSlug, ProductGuideData> = {
@@ -178,6 +180,7 @@ export const PRODUCT_GUIDE: Record<ProductSlug, ProductGuideData> = {
     seoTitle: '스트레치·필름 업체 찾기 — 전국 필름 전문업체',
     seoDescription: '전국 스트레치·필름 전문 업체를 한 번에 비교하세요. 스트레치 필름, 수축필름, OPP 필름 B2B 공급업체 Packlinx.',
     seoKeywords: ['스트레치 필름', '수축필름', '포장 필름', 'OPP 필름', '필름 업체'],
+    guideLink: { href: '/guides/flexible-packaging-guide', label: '연포장재 완전 가이드 (파우치·소재·MOQ) 읽기 →' },
   },
   'label': {
     slug: 'label',

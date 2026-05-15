@@ -323,6 +323,16 @@ export default async function ProductPage({ params, searchParams }: Props) {
               ))}
             </div>
           </div>
+          {guide.guideLink && (
+            <div className="mt-5 pt-5 border-t border-gray-100">
+              <Link
+                href={guide.guideLink.href}
+                className="text-[13px] font-medium text-stripe-purple hover:underline"
+              >
+                {guide.guideLink.label}
+              </Link>
+            </div>
+          )}
         </div>
       </section>
 
