@@ -5,6 +5,16 @@ const BLOCKED_BOT_RE =
 
 const PERCENT_ENCODED_RE = /%[0-9A-Fa-f]{2}/
 
+// Admin cookie name — httpOnly, Secure, SameSite=Strict
+const ADMIN_COOKIE = 'admin_session'
+
+// Admin paths that require authentication (excludes login page and login API)
+function isAdminProtected(pathname: string): boolean {
+  if (pathname === '/admin/login') return false
+  if (pathname.startsWith('/api/admin/login')) return false
+  return pathname.startsWith('/admin')
+}
+
 export async function middleware(request: NextRequest) {
   const ua = request.headers.get('user-agent') ?? ''
   if (BLOCKED_BOT_RE.test(ua)) {
@@ -12,6 +22,20 @@ export async function middleware(request: NextRequest) {
   }
 
   const { pathname, origin } = request.nextUrl
+
+  // ── Admin auth guard (PACAA-754) ─────────────────────────────────────────
+  // Protects all /admin/* routes except /admin/login and /api/admin/login.
+  // Cookie value must match ADMIN_SECRET; absent or wrong → /admin/login.
+  if (isAdminProtected(pathname)) {
+    const adminSecret = process.env.ADMIN_SECRET
+    const sessionCookie = request.cookies.get(ADMIN_COOKIE)?.value
+    if (!adminSecret || sessionCookie !== adminSecret) {
+      const loginUrl = new URL('/admin/login', origin)
+      loginUrl.searchParams.set('redirect', pathname)
+      return NextResponse.redirect(loginUrl)
+    }
+  }
+  // ─────────────────────────────────────────────────────────────────────────
 
   // slug_redirects lookup: /companies/{from_slug} → /companies/{to_slug}
   // Covers: old-style numeric-suffix slugs (-NNNN), PIPA slug fixes, HTML-entity
