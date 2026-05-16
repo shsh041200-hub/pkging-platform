@@ -135,9 +135,37 @@ export default async function VendorDetailV4({ params }: Props) {
     keyFacts.push({ label: '인증 상태', value: 'Packlinx 검증 완료', accent: true })
   }
 
-  // Ensure we have at least 6 — pad with category if needed
+  // Products as early filler when data is sparse
   if (keyFacts.length < 6 && products.length > 0) {
     keyFacts.splice(2, 0, { label: '주력 제품', value: products.slice(0, 3).join(', ') })
+  }
+  if (keyFacts.length < 6 && serviceCapabilities.length > 0) {
+    keyFacts.push({ label: '서비스', value: serviceCapabilities.slice(0, 2).join(', ') })
+  }
+  if (keyFacts.length < 6 && keyClients.length > 0) {
+    keyFacts.push({ label: '주요 납품처', value: keyClients.slice(0, 2).join(', ') })
+  }
+
+  // Guaranteed fallbacks so every company reaches ≥6 key facts
+  const dataSrcLabel =
+    company.data_source === 'naver_local' ? '네이버 지역 검색' :
+    company.data_source === 'public_data_portal' ? '공공데이터 포털' :
+    company.data_source === 'website_crawl' ? '업체 웹사이트' : null
+
+  if (keyFacts.length < 6 && dataSrcLabel) {
+    keyFacts.push({ label: '데이터 출처', value: dataSrcLabel })
+  }
+  if (keyFacts.length < 6) {
+    keyFacts.push({ label: '플랫폼', value: 'Packlinx 등록 업체' })
+  }
+  const contactSummary = (company.phone as string | null) ??
+    (company.email as string | null) ??
+    (company.website as string | null) ? '연락처 보유' : '문의 가능'
+  if (keyFacts.length < 6) {
+    keyFacts.push({ label: '연락 방법', value: contactSummary })
+  }
+  if (keyFacts.length < 6) {
+    keyFacts.push({ label: '디렉터리', value: '무료 조회 · Packlinx' })
   }
 
   // Tagline: short one-liner derived from description or products
