@@ -16,6 +16,7 @@ import {
 import { VendorModelBadge } from './VendorModelBadge'
 import { VendorTradingBox } from './VendorTradingBox'
 import type { VendorModel } from './VendorModelBadge'
+import { createSupabaseServer } from '@/lib/supabase-server'
 
 type Props = {
   params: Promise<{ slug: string }>
@@ -122,10 +123,25 @@ export default async function VendorRedesignV1({ params }: Props) {
 
   const hasServiceCapabilities = Array.isArray(company.service_capabilities) && company.service_capabilities.length > 0
 
-  // ── VendorModel (PACAA-749) ───────────────────────────────────────────────
-  // Mock='A' until BE telesales pipeline (vendor_telesales_checks) is wired.
-  // Wire-up PR: query with service-role client; map found→'B', not_found→'A', exempt→'unknown'.
-  const vendorModel = 'A' as VendorModel
+  // ── VendorModel (PACAA-753) — real-data wire-up ───────────────────────────
+  // vendor_telesales_checks has RLS (no public read) → service-role client required.
+  // Latest row by checked_at: found→'B', not_found→'A', exempt/NULL→'unknown'.
+  const supabase = createSupabaseServer()
+  const { data: telesalesRow } = await supabase
+    .from('vendor_telesales_checks')
+    .select('result')
+    .eq('vendor_id', company.id as string)
+    .order('checked_at', { ascending: false })
+    .limit(1)
+    .maybeSingle()
+
+  function resolveVendorModel(result: string | null | undefined): VendorModel {
+    if (result === 'found') return 'B'
+    if (result === 'not_found') return 'A'
+    return 'unknown'
+  }
+
+  const vendorModel = resolveVendorModel(telesalesRow?.result)
 
   return (
     <>
