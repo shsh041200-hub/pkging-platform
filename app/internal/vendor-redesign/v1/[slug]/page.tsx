@@ -13,6 +13,9 @@ import {
   type IndustryCategory,
   type Portfolio,
 } from '@/types'
+import { VendorModelBadge } from './VendorModelBadge'
+import { VendorTradingBox } from './VendorTradingBox'
+import type { VendorModel } from './VendorModelBadge'
 
 type Props = {
   params: Promise<{ slug: string }>
@@ -119,6 +122,11 @@ export default async function VendorRedesignV1({ params }: Props) {
 
   const hasServiceCapabilities = Array.isArray(company.service_capabilities) && company.service_capabilities.length > 0
 
+  // ── VendorModel (PACAA-749) ───────────────────────────────────────────────
+  // Mock='A' until BE telesales pipeline (vendor_telesales_checks) is wired.
+  // Wire-up PR: query with service-role client; map found→'B', not_found→'A', exempt→'unknown'.
+  const vendorModel = 'A' as VendorModel
+
   return (
     <>
       {/* noindex via metadata export — this line is an extra safety net for proxies */}
@@ -214,6 +222,10 @@ export default async function VendorRedesignV1({ params }: Props) {
                         )}
                       </div>
                       <p className="text-[13px] text-neutral-500 font-medium">{categoryLabel}</p>
+                      {/* VendorModel badge (PACAA-749) — legal item 2 (i) tooltip baked inside */}
+                      <div className="mt-1.5">
+                        <VendorModelBadge model={vendorModel} />
+                      </div>
                     </div>
                   </div>
 
@@ -472,7 +484,19 @@ export default async function VendorRedesignV1({ params }: Props) {
                       <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full">검증완료</span>
                     )}
                   </div>
-                  <p className="text-[11px] text-neutral-400 mb-4">Packlinx 운영팀이 해당 업체와 연결해드립니다</p>
+
+                  {/* VendorTradingBox — model-specific CTA + copy (PACAA-749) */}
+                  <div className="mb-3">
+                    <VendorTradingBox
+                      model={vendorModel}
+                      phone={(company.phone as string | null) ?? null}
+                      email={(company.email as string | null) ?? null}
+                      website={(company.website as string | null) ?? null}
+                      vendorName={company.name as string}
+                    />
+                  </div>
+
+                  <p className="text-[11px] text-neutral-400 mb-3">또는 Packlinx 채널을 통해 문의하세요</p>
 
                   <div className="space-y-2.5">
                     {/* Kakao channel */}
@@ -587,45 +611,58 @@ export default async function VendorRedesignV1({ params }: Props) {
                 <p className="text-[10px] text-neutral-400 text-center leading-relaxed px-1">
                   ※ 이 페이지는 내부 리뉴얼 프리뷰입니다. 공개 페이지가 아니며 검색엔진에 노출되지 않습니다.
                 </p>
+
+                {/* Legal item 3: 분류 출처 표기 (PACAA-749) */}
+                <p className="text-[10px] text-neutral-400 text-center leading-relaxed px-1 border-t border-neutral-100 pt-2">
+                  분류 근거: 공정위 통신판매사업자 공시 + vendor 자가신고
+                </p>
+
+                {/* Legal item 4: Model B §20① 통신판매중개자 고지 (PACAA-749) */}
+                {vendorModel === 'B' && (
+                  <p className="text-[10px] text-neutral-400 text-center leading-relaxed px-1">
+                    Packlinx는 「전자상거래 등에서의 소비자보호에 관한 법률」 제20조의
+                    통신판매중개자에 해당하지 않습니다.
+                  </p>
+                )}
               </div>
             </div>
           </div>
 
-          {/* ── Mobile sticky CTA ── */}
+          {/* ── Mobile sticky CTA (PACAA-749: model-aware) ── */}
           <div className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-neutral-200 px-4 py-3">
-            <div className="flex gap-2.5">
-              <a
-                href="https://pf.kakao.com/_packlinx"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex-1 flex items-center justify-center gap-2 text-[14px] font-bold text-[#3A1D1D] bg-[#FEE500] hover:bg-[#F5DB00] py-3.5 rounded-xl transition-colors"
-              >
-                카카오로 문의
-              </a>
-              {hasPhone && (
+            <div className="flex gap-2">
+              {vendorModel === 'B' && (hasWebsite || hasPhone) && (
                 <a
-                  href={`tel:${company.phone}`}
-                  className="w-14 flex items-center justify-center bg-white border border-neutral-200 rounded-xl shrink-0"
-                  aria-label="전화 문의"
+                  href={hasWebsite ? (company.website as string) : `tel:${company.phone as string}`}
+                  target={hasWebsite ? '_blank' : undefined}
+                  rel={hasWebsite ? 'noopener noreferrer' : undefined}
+                  className="flex-1 flex items-center justify-center gap-2 text-[14px] font-bold text-white bg-emerald-700 hover:bg-emerald-800 py-3.5 rounded-xl transition-colors"
                 >
-                  <svg className="w-5 h-5 text-neutral-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  샘플 신청
+                </a>
+              )}
+              <a
+                href={
+                  hasPhone ? `tel:${company.phone as string}`
+                  : hasEmail ? `mailto:${company.email as string}?subject=${encodeURIComponent(`[Packlinx] ${company.name as string} 견적 문의`)}`
+                  : hasWebsite ? (company.website as string)
+                  : 'https://pf.kakao.com/_packlinx'
+                }
+                target={(!hasPhone && !hasEmail && (hasWebsite || true)) ? '_blank' : undefined}
+                rel={(!hasPhone && !hasEmail) ? 'noopener noreferrer' : undefined}
+                className={`flex items-center justify-center gap-2 text-[14px] font-bold py-3.5 rounded-xl transition-colors ${
+                  vendorModel === 'B'
+                    ? 'w-14 text-[#533afd] border border-[#533afd]/25 bg-[#533afd]/5'
+                    : 'flex-1 text-white bg-[#533afd] hover:bg-[#4434d4]'
+                }`}
+                aria-label={vendorModel === 'B' ? '견적 문의' : undefined}
+              >
+                {vendorModel === 'B' ? (
+                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                   </svg>
-                </a>
-              )}
-              {hasWebsite && (
-                <a
-                  href={company.website}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-14 flex items-center justify-center bg-[#533afd] rounded-xl shrink-0"
-                  aria-label="웹사이트"
-                >
-                  <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                  </svg>
-                </a>
-              )}
+                ) : '견적 문의'}
+              </a>
             </div>
           </div>
         </div>
