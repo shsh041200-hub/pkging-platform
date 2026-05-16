@@ -6,9 +6,12 @@ import { ALL_GUIDE_SLUGS } from '@/lib/guide-data'
 import { listKeywordSlugs } from '@/lib/keyword-data'
 
 // PACAA-116 sitemap shard.
-// Emits raw UTF-8 URLs (no percent-encoding) per the canonical ADR. Only
-// XML-special characters (& < > " ') are escaped. Korean characters in path
-// segments are passed through as raw UTF-8 bytes.
+// Emits raw UTF-8 URLs per the canonical ADR (2026-04-30) for vendor company
+// pages. Only XML-special characters (& < > " ') are escaped.
+// EXCEPTION — keyword pages (PACAA-731): slugs are percent-encoded with
+// encodeURIComponent so GSC can match the sitemap <loc> to crawled URLs.
+// Keyword pages are a separate feature created after the ADR; the vendor
+// company URL pool remains raw UTF-8 as decided.
 //
 // Moved from app/sitemap/[id]/ to app/sitemaps/[id]/ to avoid Next.js
 // internal metadata routing conflict with app/sitemap.ts (PACAA-360).
@@ -134,10 +137,11 @@ async function staticEntries(): Promise<Entry[]> {
     out.push({ url: `${root}/blog/${post.slug}`, lastmod: post.lastmod, changefreq: 'monthly', priority: 0.8 })
   }
 
-  // Keyword landing pages
+  // Keyword landing pages — PACAA-731: percent-encode slug so GSC URL inspection
+  // can match the sitemap <loc> to the crawled URL (Korean chars → %xx form).
   const keywordSlugs = await listKeywordSlugs()
   for (const slug of keywordSlugs) {
-    out.push({ url: `${root}/keywords/${slug}`, lastmod: now, changefreq: 'daily', priority: 0.8 })
+    out.push({ url: `${root}/keywords/${encodeURIComponent(slug)}`, lastmod: now, changefreq: 'daily', priority: 0.8 })
   }
 
   return out
