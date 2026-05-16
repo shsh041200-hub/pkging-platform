@@ -451,7 +451,7 @@ export default async function VendorRedesignV1({ params }: Props) {
                   </svg>
                   <div>
                     <p className="text-[12px] font-semibold text-neutral-600">자료 요청은 하단 문의 채널을 이용하세요</p>
-                    <p className="text-[11px] text-neutral-400 mt-0.5">이메일 또는 카카오채널로 "카탈로그 요청" 메시지를 보내주세요.</p>
+                    <p className="text-[11px] text-neutral-400 mt-0.5">이메일로 "카탈로그 요청" 메시지를 보내주세요.</p>
                   </div>
                 </div>
               </div>
@@ -512,22 +512,7 @@ export default async function VendorRedesignV1({ params }: Props) {
                     />
                   </div>
 
-                  <p className="text-[11px] text-neutral-400 mb-3">또는 Packlinx 채널을 통해 문의하세요</p>
-
                   <div className="space-y-2.5">
-                    {/* Kakao channel */}
-                    <a
-                      href="https://pf.kakao.com/_packlinx"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-3 w-full bg-[#FEE500] hover:bg-[#F5DB00] text-[#3A1D1D] font-bold text-[13px] px-4 py-3.5 rounded-xl transition-colors"
-                    >
-                      <svg className="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M12 3C6.477 3 2 6.799 2 11.5c0 3.009 1.877 5.65 4.703 7.197L5.5 22l4.386-2.46C10.543 19.82 11.261 20 12 20c5.523 0 10-3.799 10-8.5S17.523 3 12 3z"/>
-                      </svg>
-                      카카오 채널로 문의
-                    </a>
-
                     {hasWebsite && (
                       <a
                         href={company.website}
@@ -570,14 +555,6 @@ export default async function VendorRedesignV1({ params }: Props) {
                     {!hasWebsite && !hasPhone && !hasEmail && (
                       <div className="text-center py-4">
                         <p className="text-[12px] text-neutral-400">연락처 정보가 등록되지 않았습니다</p>
-                        <a
-                          href="https://pf.kakao.com/_packlinx"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="mt-2 inline-block text-[12px] text-[#533afd] hover:underline"
-                        >
-                          Packlinx 카카오채널로 문의하기
-                        </a>
                       </div>
                     )}
                   </div>
@@ -667,28 +644,29 @@ export default async function VendorRedesignV1({ params }: Props) {
                   샘플 신청
                 </a>
               )}
-              <a
-                href={
-                  hasPhone ? `tel:${company.phone as string}`
-                  : hasEmail ? `mailto:${company.email as string}?subject=${encodeURIComponent(`[Packlinx] ${company.name as string} 견적 문의`)}`
-                  : hasWebsite ? (company.website as string)
-                  : 'https://pf.kakao.com/_packlinx'
-                }
-                target={(!hasPhone && !hasEmail && (hasWebsite || true)) ? '_blank' : undefined}
-                rel={(!hasPhone && !hasEmail) ? 'noopener noreferrer' : undefined}
-                className={`flex items-center justify-center gap-2 text-[14px] font-bold py-3.5 rounded-xl transition-colors ${
-                  vendorModel === 'B'
-                    ? 'w-14 text-[#533afd] border border-[#533afd]/25 bg-[#533afd]/5'
-                    : 'flex-1 text-white bg-[#533afd] hover:bg-[#4434d4]'
-                }`}
-                aria-label={vendorModel === 'B' ? '견적 문의' : undefined}
-              >
-                {vendorModel === 'B' ? (
-                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                  </svg>
-                ) : '견적 문의'}
-              </a>
+              {(hasPhone || hasEmail || hasWebsite) && (
+                <a
+                  href={
+                    hasPhone ? `tel:${company.phone as string}`
+                    : hasEmail ? `mailto:${company.email as string}?subject=${encodeURIComponent(`[Packlinx] ${company.name as string} 견적 문의`)}`
+                    : (company.website as string)
+                  }
+                  target={(!hasPhone && !hasEmail && hasWebsite) ? '_blank' : undefined}
+                  rel={(!hasPhone && !hasEmail && hasWebsite) ? 'noopener noreferrer' : undefined}
+                  className={`flex items-center justify-center gap-2 text-[14px] font-bold py-3.5 rounded-xl transition-colors ${
+                    vendorModel === 'B'
+                      ? 'w-14 text-[#533afd] border border-[#533afd]/25 bg-[#533afd]/5'
+                      : 'flex-1 text-white bg-[#533afd] hover:bg-[#4434d4]'
+                  }`}
+                  aria-label={vendorModel === 'B' ? '견적 문의' : undefined}
+                >
+                  {vendorModel === 'B' ? (
+                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                    </svg>
+                  ) : '견적 문의'}
+                </a>
+              )}
             </div>
           </div>
         </div>
