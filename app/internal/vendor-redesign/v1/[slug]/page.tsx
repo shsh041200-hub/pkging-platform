@@ -640,6 +640,16 @@ export default async function VendorRedesignV1({ params }: Props) {
                     통신판매중개자에 해당하지 않습니다.
                   </p>
                 )}
+
+                {/* PACAA-754: 분류 정정 요청 링크 — 옵션 B 이의제기 채널 진입점 */}
+                <div className="pt-2 border-t border-neutral-100 text-center">
+                  <Link
+                    href={`/vendor/dispute?vendor_id=${encodeURIComponent(company.id as string)}&vendor_name=${encodeURIComponent(company.name as string)}`}
+                    className="text-[10px] text-neutral-400 hover:text-[#533afd] hover:underline transition-colors"
+                  >
+                    분류 정정 요청
+                  </Link>
+                </div>
               </div>
             </div>
           </div>
