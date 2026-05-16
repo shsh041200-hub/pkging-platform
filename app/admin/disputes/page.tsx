@@ -1,4 +1,3 @@
-import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { createServiceClient } from '@/lib/supabase/service'
@@ -8,8 +7,8 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 }
 
-// Internal admin page — protected by ADMIN_SECRET env var.
-// This page is SSR (no static export) to always show fresh queue data.
+// Protected by middleware cookie auth (PACAA-754 security fix).
+// Middleware redirects to /admin/login when admin_session cookie is absent or invalid.
 export const dynamic = 'force-dynamic'
 
 type SearchParams = {
@@ -49,9 +48,6 @@ function slaStatus(submittedAt: string, status: string): { label: string; color:
 }
 
 export default async function AdminDisputesPage({ searchParams }: Props) {
-  const adminSecret = process.env.ADMIN_SECRET
-  if (!adminSecret) notFound()
-
   const params = await searchParams
   const statusFilter = params.status ?? 'all'
   const page = parseInt(params.page ?? '1', 10)

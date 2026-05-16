@@ -32,9 +32,6 @@ function DaysBadge({ submittedAt, status }: { submittedAt: string; status: strin
 }
 
 export default async function AdminDisputeDetailPage({ params }: Props) {
-  const adminSecret = process.env.ADMIN_SECRET
-  if (!adminSecret) notFound()
-
   const { id } = await params
 
   const supabase = createServiceClient()
