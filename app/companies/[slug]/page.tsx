@@ -376,7 +376,7 @@ export default async function CompanyPage({ params }: Props) {
                           {company.name}
                         </h1>
                         <AddToCompareButton slug={slug} name={company.name} />
-                        {company.is_verified && <VerifiedTooltip />}
+                        {company.packlinx_verified && <VerifiedTooltip />}
                       </div>
                       <p className="text-[13px] text-neutral-500 font-medium">{categoryLabel}</p>
                       {/* VendorModel badge — legal item 2(i) tooltip baked inside */}
@@ -693,6 +693,9 @@ export default async function CompanyPage({ params }: Props) {
                             </span>
                           ))}
                         </div>
+                        <p className="text-[10px] text-[#6B7280] mt-2">
+                          본 정보는 업체 자기신고이며 Packlinx가 검증하지 않았습니다.
+                        </p>
                       </div>
                     )}
                   </div>
