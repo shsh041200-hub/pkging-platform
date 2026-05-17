@@ -228,6 +228,27 @@ export default async function CompanyPage({ params }: Props) {
 
   const rawCanonical = `${siteUrl}/companies/${slug}`
 
+  // Build hasCredential array from resolved certifications
+  const hasCredentialItems = certItems
+    .map(({ raw, resolved }) => ({
+      '@type': 'EducationalOccupationalCredential',
+      name: resolved?.label ?? raw,
+    }))
+
+  // knowsAbout: products list
+  const knowsAboutItems: string[] = Array.isArray(company.products) ? (company.products as string[]) : []
+
+  // PostalAddress from city/province when available
+  const hasAddressData = !!(company.city || company.province)
+  const addressSchema = hasAddressData
+    ? {
+        '@type': 'PostalAddress',
+        addressCountry: 'KR',
+        ...(company.province ? { addressRegion: company.province as string } : {}),
+        ...(company.city ? { addressLocality: company.city as string } : {}),
+      }
+    : null
+
   const companyJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'LocalBusiness',
@@ -236,24 +257,59 @@ export default async function CompanyPage({ params }: Props) {
     ...(company.description ? { description: company.description } : {}),
     url: rawCanonical,
     ...(company.icon_url ? { image: company.icon_url } : {}),
-    ...(company.website && { sameAs: [company.website] }),
-    ...(company.founded_year && { foundingDate: String(company.founded_year) }),
-    ...(company.phone && { telephone: company.phone }),
-    ...(company.email && { email: company.email }),
+    ...(company.website ? { sameAs: [company.website as string] } : {}),
+    ...(company.founded_year ? { foundingDate: String(company.founded_year) } : {}),
+    ...(company.phone ? { telephone: company.phone as string } : {}),
+    ...(company.email ? { email: company.email as string } : {}),
+    // 사업자등록번호 identifier
+    ...(company.business_registration_number
+      ? {
+          identifier: {
+            '@type': 'PropertyValue',
+            name: '사업자등록번호',
+            value: company.business_registration_number as string,
+          },
+        }
+      : {}),
+    // certifications → hasCredential
+    ...(hasCredentialItems.length > 0 ? { hasCredential: hasCredentialItems } : {}),
+    // products → knowsAbout
+    ...(knowsAboutItems.length > 0 ? { knowsAbout: knowsAboutItems } : {}),
+    // address
+    ...(addressSchema ? { address: addressSchema } : {}),
+    // Packlinx 검증 배지
+    ...(company.is_verified
+      ? {
+          additionalProperty: {
+            '@type': 'PropertyValue',
+            name: 'packlinx_verified',
+            value: 'true',
+          },
+        }
+      : {}),
   }
 
   const breadcrumbCategoryUrl = primaryIndustry
     ? `${siteUrl}/categories/${primaryIndustry}`
     : `${siteUrl}/?category=${company.category}`
 
+  // Build breadcrumb: include region level when city/province data is available
+  const regionLabel = (company.city as string | null) ?? (company.province as string | null)
+  const breadcrumbItems = [
+    { '@type': 'ListItem', position: 1, name: 'Packlinx', item: siteUrl },
+    { '@type': 'ListItem', position: 2, name: categoryLabel, item: breadcrumbCategoryUrl },
+    ...(regionLabel
+      ? [
+          { '@type': 'ListItem', position: 3, name: regionLabel, item: breadcrumbCategoryUrl },
+          { '@type': 'ListItem', position: 4, name: company.name as string, item: rawCanonical },
+        ]
+      : [{ '@type': 'ListItem', position: 3, name: company.name as string, item: rawCanonical }]),
+  ]
+
   const breadcrumbJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
-    itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Packlinx', item: siteUrl },
-      { '@type': 'ListItem', position: 2, name: categoryLabel, item: breadcrumbCategoryUrl },
-      { '@type': 'ListItem', position: 3, name: company.name, item: rawCanonical },
-    ],
+    itemListElement: breadcrumbItems,
   }
 
   return (
