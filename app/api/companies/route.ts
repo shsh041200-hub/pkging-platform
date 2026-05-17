@@ -73,7 +73,7 @@ export async function GET(request: NextRequest) {
   let query = supabase
     .from('companies')
     .select(
-      'id, slug, name, description, category, industry_categories, material_type, packaging_form, subcategory, use_case_tags, is_verified, cert_count, founded_year, min_order_quantity, service_capabilities, target_industries, products, certifications',
+      'id, slug, name, description, category, industry_categories, material_type, packaging_form, subcategory, use_case_tags, is_verified, cert_count, founded_year, min_order_quantity, service_capabilities, target_industries, products, certifications, packlinx_verified, business_registration_number, telecom_sales_registration_number, certifications_structured',
       { count: 'exact' }
     )
     .eq('is_hidden', false)

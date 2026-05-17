@@ -435,6 +435,12 @@ export interface Company {
   is_eco: boolean
   is_print_design_service: boolean
   is_cold_chain: boolean
+  // Trust signal fields (PACAA-768)
+  business_registration_number: string | null
+  packlinx_verified: boolean
+  telecom_sales_registration_number: string | null
+  certifications_structured: Array<{ name: string; identifier: string; url: string | null }> | null
+  founder_attestation: { attested: boolean; attested_at: string } | null
   created_at: string
   updated_at: string
 }
