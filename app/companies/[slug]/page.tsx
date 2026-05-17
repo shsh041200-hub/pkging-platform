@@ -97,6 +97,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title,
     description,
+    alternates: {
+      canonical: `${siteUrl}/companies/${slug}`,
+      languages: { 'ko-KR': `${siteUrl}/companies/${slug}`, 'x-default': `${siteUrl}/companies/${slug}` },
+    },
     openGraph: {
       title: company.name,
       description,
