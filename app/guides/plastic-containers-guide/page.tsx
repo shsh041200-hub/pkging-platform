@@ -5,6 +5,16 @@ import { GuidePageShell } from "@/components/guide/GuidePageShell";
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://packlinx.com";
 const canonicalUrl = `${siteUrl}/guides/plastic-containers-guide`;
 
+const breadcrumbJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "홈", item: siteUrl },
+    { "@type": "ListItem", position: 2, name: "패키징 가이드", item: `${siteUrl}/guides` },
+    { "@type": "ListItem", position: 3, name: "플라스틱 용기·병 완전 가이드", item: canonicalUrl },
+  ],
+};
+
 const title =
   "플라스틱 용기·병 완전 가이드 — 종류·소재·선택 기준";
 const description =
@@ -115,6 +125,10 @@ export default function PlasticContainersGuidePage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
       <main>
         <h1>
