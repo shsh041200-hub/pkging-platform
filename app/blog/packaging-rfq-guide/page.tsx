@@ -13,7 +13,7 @@ const description =
 
 export function generateMetadata(): Metadata {
   return {
-    title,
+    title: { absolute: title },
     description,
     alternates: {
       canonical: canonicalUrl,
