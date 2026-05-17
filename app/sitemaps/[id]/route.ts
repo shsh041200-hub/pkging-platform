@@ -146,6 +146,17 @@ async function staticEntries(): Promise<Entry[]> {
     out.push({ url: `${root}/keywords/${encodeURIComponent(slug)}`, lastmod: now, changefreq: 'daily', priority: 0.8 })
   }
 
+  // Use-case landing pages — PACAA-794
+  const { data: useCaseTags } = await supabase()
+    .from('use_case_tags')
+    .select('seo_slug')
+    .not('seo_slug', 'is', null)
+  for (const tag of useCaseTags ?? []) {
+    if (typeof tag.seo_slug === 'string') {
+      out.push({ url: `${root}/use-cases/${encodeURIComponent(tag.seo_slug)}`, lastmod: now, changefreq: 'weekly', priority: 0.7 })
+    }
+  }
+
   return out
 }
 

@@ -46,7 +46,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   if (!tag) return { title: '용도별 포장 업체 찾기' }
 
-  const pageTitle = tag.seo_title ?? `${tag.label} 포장 업체 찾기`
+  const rawTitle = tag.seo_title ?? `${tag.label} 포장 업체 찾기`
+  // Strip any trailing branding suffix so the root layout template doesn't double-brand.
+  const pageTitle = rawTitle.replace(/\s*[—–|]\s*Packlinx\s*$/i, '')
   const ogTitle = tag.seo_title ?? `${tag.label} 포장 업체 찾기 — Packlinx`
   const description = tag.seo_description ?? `${tag.label} 전문 포장 업체를 Packlinx에서 찾아보세요.`
 

@@ -9,6 +9,7 @@ import { BusinessRegistrationInfo } from '@/components/BusinessRegistrationInfo'
 export const metadata: Metadata = {
   title: '정보 삭제·수정·권리침해 신고',
   description: 'Packlinx에 등록된 업체 정보의 삭제·수정 요청 또는 권리침해(임시조치) 신고를 접수할 수 있습니다.',
+  robots: { index: false, follow: false },
 }
 
 type Props = {

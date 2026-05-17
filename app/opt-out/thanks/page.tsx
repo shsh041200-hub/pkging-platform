@@ -6,6 +6,7 @@ import { BusinessRegistrationInfo } from '@/components/BusinessRegistrationInfo'
 
 export const metadata: Metadata = {
   title: '요청 접수 완료',
+  robots: { index: false, follow: false },
 }
 
 export default function OptOutThanksPage() {
