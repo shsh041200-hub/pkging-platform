@@ -81,7 +81,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: data.titleKo,
     description: data.descriptionKo,
     keywords: [slug.replace(/-/g, ' ')],
-    alternates: { canonical: canonicalUrl },
+    alternates: {
+      canonical: canonicalUrl,
+      languages: { 'ko-KR': canonicalUrl, 'x-default': canonicalUrl },
+    },
     openGraph: {
       title: data.titleKo,
       description: data.descriptionKo,
