@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+
+User-agent: Googlebot
+Allow: /
+
+User-agent: Yeti
+Allow: /
+
+Sitemap: https://www.packlinx.com/sitemap.xml
+Sitemap: https://keywords.packlinx.com/sitemap.xml
