@@ -5,7 +5,7 @@ import { createPortal } from 'react-dom'
 import Link from 'next/link'
 
 const DISCLAIMER =
-  '본 표시(정보 등록)는 외부 공인 인증기관이 발급한 인증이 아닙니다. Packlinx 자체 등록 절차에 따라 객관적 기준을 만족한 업체에 부여됩니다.'
+  'Packlinx 인증은 사업자등록 진위 확인, 통신판매업 신고 확인, 최근 6개월 분쟁 0건 등 내부 검수팀이 확인한 업체에 부여됩니다.'
 
 export function VerifiedTooltip() {
   const [open, setOpen] = useState(false)
@@ -73,11 +73,11 @@ export function VerifiedTooltip() {
     >
       <p className="text-[12px] text-gray-700 leading-relaxed mb-2">{DISCLAIMER}</p>
       <Link
-        href="/faq#what-is-jeongbo-deungrok"
+        href="/verified-criteria"
         className="text-[12px] text-emerald-700 font-medium underline underline-offset-2 hover:text-emerald-900 transition-colors"
         onClick={(e) => e.stopPropagation()}
       >
-        정보 등록 기준 안내
+        평가기준 전체 보기 →
       </Link>
     </span>
   ) : null
@@ -90,7 +90,7 @@ export function VerifiedTooltip() {
         onMouseEnter={show}
         onMouseLeave={hide}
         onTouchEnd={handleTouchEnd}
-        aria-label="정보 등록 업체 — 한정 문구 보기"
+        aria-label="Packlinx 인증 업체 — 평가기준 보기"
         role="button"
         tabIndex={0}
         onKeyDown={(e) => {
@@ -100,7 +100,7 @@ export function VerifiedTooltip() {
           }
         }}
       >
-        정보 등록
+        Packlinx 인증
         <svg
           className="w-3 h-3 text-emerald-500 flex-shrink-0"
           fill="none"
