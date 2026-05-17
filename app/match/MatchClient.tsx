@@ -54,6 +54,16 @@ const AXIS_OPTIONS: { id: Axis; label: string; desc: string }[] = [
 
 // ── Recommendation algorithm ──
 
+function hasAxisData(v: MatchVendor, axis: Axis): boolean {
+  if (axis === 'moq') return v.moq_value != null
+  if (axis === 'lead') return v.lead_time_standard_days != null
+  if (axis === 'cert') return (v.certifications?.length ?? 0) > 0
+  if (axis === 'region') {
+    return (v.delivery_regions?.length ?? 0) > 0 || v.province != null
+  }
+  return true
+}
+
 function getRecommendations(
   vendors: MatchVendor[],
   existingId: string | null,
@@ -61,10 +71,13 @@ function getRecommendations(
   existingIndustry: IndustryCategory | null,
   axis: Axis,
 ): MatchVendor[] {
-  let candidates = vendors.filter((v) => v.id !== existingId)
+  const pool = vendors.filter(
+    (v) => v.id !== existingId && hasAxisData(v, axis),
+  )
 
+  let candidates = pool
   if (existingIndustry) {
-    const sameCat = candidates.filter((v) =>
+    const sameCat = pool.filter((v) =>
       v.industry_categories.includes(existingIndustry),
     )
     if (sameCat.length >= 3) candidates = sameCat
@@ -72,14 +85,10 @@ function getRecommendations(
 
   const sorted = [...candidates].sort((a, b) => {
     if (axis === 'moq') {
-      const av = a.moq_value ?? Infinity
-      const bv = b.moq_value ?? Infinity
-      return av - bv
+      return (a.moq_value ?? 0) - (b.moq_value ?? 0)
     }
     if (axis === 'lead') {
-      const av = a.lead_time_standard_days ?? Infinity
-      const bv = b.lead_time_standard_days ?? Infinity
-      return av - bv
+      return (a.lead_time_standard_days ?? 0) - (b.lead_time_standard_days ?? 0)
     }
     if (axis === 'cert') {
       return (b.certifications?.length ?? 0) - (a.certifications?.length ?? 0)
