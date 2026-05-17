@@ -104,8 +104,35 @@ export default async function CompareSlugPage({ params }: Props) {
   const hasWebsiteA = !!compA.website
   const hasWebsiteB = !!compB.website
 
+  const canonicalUrl = `${siteUrl}/compare/${canonA}-vs-${canonB}`
+  const compareJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    '@id': canonicalUrl,
+    url: canonicalUrl,
+    name: `${compA.name} vs ${compB.name} — 패키징 업체 비교`,
+    inLanguage: 'ko',
+    about: [
+      {
+        '@type': 'Organization',
+        name: compA.name,
+        url: compA.website ?? `${siteUrl}/companies/${canonA}`,
+      },
+      {
+        '@type': 'Organization',
+        name: compB.name,
+        url: compB.website ?? `${siteUrl}/companies/${canonB}`,
+      },
+    ],
+    isPartOf: { '@type': 'WebSite', name: 'Packlinx', url: siteUrl },
+  }
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(compareJsonLd) }}
+      />
       <div className="min-h-screen bg-neutral-50">
 
         <SiteHeader />
