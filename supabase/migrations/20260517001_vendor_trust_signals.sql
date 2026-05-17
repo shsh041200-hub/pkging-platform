@@ -4,19 +4,23 @@
 --
 -- Field status at time of writing (2026-05-17):
 --   founded_year         — already exists (no-op)
---   certifications       — already exists as text[] (no-op; structured variant tracked separately)
---   key_clients          — already exists as text[] (serves as notable_clients equivalent)
+--   certifications       — already exists as text[] (no-op; API 하위 호환 유지)
+--   key_clients          — already exists as text[] (notable_clients 동일 개념 — 재활용)
 --   business_registration_number  — new (P1)
 --   packlinx_verified             — new (P1)
 --   telecom_sales_registration_number — new (P2)
---   notable_clients               — new (P2, self-reported; key_clients stores same concept)
+--   certifications_structured     — new (P2, 구조화 인증 데이터; certifications text[] 병행 유지)
 --   founder_attestation           — new (P3)
+--
+-- CTO 결정 (PACAA-772, 2026-05-17):
+--   - certifications_structured JSONB 신규 추가 (certifications_v2 → 명칭 확정)
+--   - notable_clients 추가 불필요 — key_clients(text[]) 재활용
 --
 -- Rollback:
 --   ALTER TABLE companies DROP COLUMN IF EXISTS business_registration_number;
 --   ALTER TABLE companies DROP COLUMN IF EXISTS packlinx_verified;
 --   ALTER TABLE companies DROP COLUMN IF EXISTS telecom_sales_registration_number;
---   ALTER TABLE companies DROP COLUMN IF EXISTS notable_clients;
+--   ALTER TABLE companies DROP COLUMN IF EXISTS certifications_structured;
 --   ALTER TABLE companies DROP COLUMN IF EXISTS founder_attestation;
 
 -- ─────────────────────────────────────────────────────────────────────────────
@@ -39,13 +43,13 @@ COMMENT ON COLUMN companies.packlinx_verified IS
 
 ALTER TABLE companies
   ADD COLUMN IF NOT EXISTS telecom_sales_registration_number TEXT,
-  ADD COLUMN IF NOT EXISTS notable_clients                   JSONB;
+  ADD COLUMN IF NOT EXISTS certifications_structured         JSONB;
 
 COMMENT ON COLUMN companies.telecom_sales_registration_number IS
   '통신판매업 신고번호. vendor_telesales_checks에 evidence 연계. 통신판매업 §13 — 공개 노출 전 Legal Counsel 자문 필수 (PACAA-770).';
 
-COMMENT ON COLUMN companies.notable_clients IS
-  '주요 납품처 목록 (업체 자기신고). 형식: text[] 호환 JSONB. 기존 key_clients(text[])와 병행 운영하다가 데이터 이관 후 단일화 예정.';
+COMMENT ON COLUMN companies.certifications_structured IS
+  '구조화 인증 데이터. 형식: [{name: string, identifier: string, url: string}]. nullable, default null. 프론트엔드 schema markup에 사용. 기존 certifications(text[]) 하위 호환 유지하며 병행.';
 
 -- ─────────────────────────────────────────────────────────────────────────────
 -- P3 fields
