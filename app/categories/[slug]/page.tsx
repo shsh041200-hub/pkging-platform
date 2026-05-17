@@ -33,6 +33,7 @@ import AddToCompareButton from '@/app/components/AddToCompareButton'
 import CompareCart from '@/app/components/CompareCart'
 import { VerifiedTooltip } from '@/components/VerifiedTooltip'
 import { VendorDirectoryDisclaimer } from '@/components/VendorDirectoryDisclaimer'
+import { TrustSignalBadges } from '@/app/components/TrustSignalBadges'
 
 const PAGE_SIZE = 30
 
@@ -244,7 +245,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
 
   let query = supabase
     .from('companies')
-    .select('id, slug, name, description, category, industry_categories, material_type, packaging_form, is_verified, products, certifications, founded_year, website, icon_url, service_capabilities, target_industries, sample_available', { count: 'exact' })
+    .select('id, slug, name, description, category, industry_categories, material_type, packaging_form, is_verified, packlinx_verified, products, certifications, founded_year, website, icon_url, service_capabilities, target_industries, sample_available', { count: 'exact' })
     .contains('industry_categories', [categoryKey])
 
   if (selectedMaterials.length === 1) {
@@ -419,13 +420,17 @@ export default async function CategoryPage({ params, searchParams }: Props) {
               >
                 <div className="p-6">
                   <div className="flex items-start justify-between mb-3.5">
-                    <div className="flex flex-wrap gap-1.5">
-                      {company.is_verified && <VerifiedTooltip />}
+                    <div className="flex flex-col gap-1.5">
                       {company.material_type && (
-                        <span className="text-[11px] font-medium bg-gray-100 text-gray-500 px-2 py-0.5 rounded">
+                        <span className="text-[11px] font-medium bg-gray-100 text-gray-500 px-2 py-0.5 rounded self-start">
                           {MATERIAL_TYPE_LABELS[company.material_type as MaterialType]}
                         </span>
                       )}
+                      <TrustSignalBadges
+                        isVerified={!!company.is_verified}
+                        packlinxVerified={!!(company as Record<string, unknown>).packlinx_verified}
+                        certifications={(company.certifications as string[] | null) ?? []}
+                      />
                     </div>
                   </div>
 

@@ -14,6 +14,7 @@ import { OwnerControls } from './OwnerControls'
 import { CompanyViewTracker } from './CompanyViewTracker'
 import { VendorModelBadge } from './VendorModelBadge'
 import { VendorTradingBox } from './VendorTradingBox'
+import { TrustInfoSection } from '@/app/components/TrustInfoSection'
 import type { VendorModel } from './VendorModelBadge'
 import AddToCompareButton from '@/app/components/AddToCompareButton'
 import CompareCart from '@/app/components/CompareCart'
@@ -206,6 +207,16 @@ export default async function CompanyPage({ params }: Props) {
     raw,
     resolved: resolveCertification(raw),
   }))
+
+  const certificationsStructured = (() => {
+    const raw = (company as Record<string, unknown>).certifications_structured
+    if (!raw || !Array.isArray(raw)) return null
+    return (raw as Array<Record<string, unknown>>).map((c) => ({
+      name: String(c.name ?? ''),
+      identifier: c.identifier ? String(c.identifier) : null,
+      url: c.url ? String(c.url) : null,
+    }))
+  })()
   const hasCertifications = certItems.length > 0
 
   const yearsInBusiness = company.founded_year
@@ -498,6 +509,15 @@ export default async function CompanyPage({ params }: Props) {
                   )}
                 </div>
               </div>
+
+              {/* ── TRUST INFO SECTION (PACAA-771) ── */}
+              <TrustInfoSection
+                businessRegistrationNumber={(company.business_registration_number as string | null) ?? null}
+                packlinxVerified={!!(company as Record<string, unknown>).packlinx_verified}
+                isVerified={!!company.is_verified}
+                certificationsStructured={certificationsStructured}
+                keyClients={(company.key_clients as string[] | null) ?? null}
+              />
 
               {/* ── CERTIFICATIONS GRID ── */}
               {(hasCertifications || true) && (
