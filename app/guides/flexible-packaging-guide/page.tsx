@@ -142,6 +142,16 @@ const slotFaq = [
   },
 ];
 
+const breadcrumbJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Packlinx", item: siteUrl },
+    { "@type": "ListItem", position: 2, name: "가이드", item: `${siteUrl}/guides` },
+    { "@type": "ListItem", position: 3, name: title, item: canonicalUrl },
+  ],
+};
+
 export default function FlexiblePackagingGuidePage() {
   // Spread lowercase `hreflang` prop to bypass React 19 camelCase hoisting serialiser.
   // React 19 outputs hrefLang= (camelCase) for metadata alternates; direct JSX spread
@@ -159,6 +169,10 @@ export default function FlexiblePackagingGuidePage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
       <GuideHero
         tag="소재·친환경 · 연포장 가이드"

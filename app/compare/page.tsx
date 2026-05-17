@@ -9,6 +9,17 @@ import CompareTable from './CompareTable'
 
 export const dynamic = 'force-dynamic'
 
+const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL ?? 'https://www.packlinx.com').replace(/\/$/, '')
+
+const breadcrumbJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Packlinx', item: siteUrl },
+    { '@type': 'ListItem', position: 2, name: '비교', item: `${siteUrl}/compare` },
+  ],
+}
+
 type Props = { searchParams: Promise<{ ids?: string }> }
 
 export const metadata: Metadata = {
@@ -33,6 +44,10 @@ export default async function ComparePage({ searchParams }: Props) {
   if (companies.length === 0) {
     return (
       <div className="min-h-screen bg-neutral-50">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+        />
         <SiteHeader />
 
         <main className="max-w-2xl mx-auto px-5 py-16 text-center">
@@ -48,6 +63,10 @@ export default async function ComparePage({ searchParams }: Props) {
 
   return (
     <div className="min-h-screen bg-neutral-50">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
 
       <SiteHeader />
 

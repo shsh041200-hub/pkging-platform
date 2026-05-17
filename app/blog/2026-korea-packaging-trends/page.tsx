@@ -101,6 +101,16 @@ const faqJsonLd = {
   ],
 };
 
+const breadcrumbJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Packlinx", item: siteUrl },
+    { "@type": "ListItem", position: 2, name: "블로그", item: `${siteUrl}/blog` },
+    { "@type": "ListItem", position: 3, name: "2026 한국 패키징 트렌드: 구매 담당자가 알아야 할 7가지 변화", item: canonicalUrl },
+  ],
+};
+
 export default function KoreaPackagingTrends2026Page() {
   const hreflangKo = { rel: "alternate", hreflang: "ko-KR", href: canonicalUrl } as React.LinkHTMLAttributes<HTMLLinkElement>;
   const hreflangDefault = { rel: "alternate", hreflang: "x-default", href: canonicalUrl } as React.LinkHTMLAttributes<HTMLLinkElement>;
@@ -115,6 +125,10 @@ export default function KoreaPackagingTrends2026Page() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
       <SiteHeader />
       <main>

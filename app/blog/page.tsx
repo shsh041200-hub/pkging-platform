@@ -82,12 +82,25 @@ const brand = "var(--color-brand-500)";
 const brandSoft = "var(--color-brand-50)";
 const brandBorder = "var(--color-brand-200)";
 
+const breadcrumbJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Packlinx", item: siteUrl },
+    { "@type": "ListItem", position: 2, name: "블로그", item: canonicalUrl },
+  ],
+};
+
 export default function BlogIndexPage() {
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(blogListJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
       <SiteHeader />
       <div className="-mx-5 sm:-mx-8 -mt-10 sm:-mt-14">

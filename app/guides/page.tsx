@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { GUIDE_META } from "@/lib/guide-data";
 import { GuidesClient } from "./GuidesClient";
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.packlinx.com";
+const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.packlinx.com").replace(/\/$/, "");
 const canonicalUrl = `${siteUrl}/guides`;
 
 export const metadata: Metadata = {
@@ -24,7 +24,24 @@ export const metadata: Metadata = {
   },
 };
 
+const breadcrumbJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Packlinx", item: siteUrl },
+    { "@type": "ListItem", position: 2, name: "가이드", item: canonicalUrl },
+  ],
+};
+
 export default function GuidesIndexPage() {
   const totalGuides = GUIDE_META.length;
-  return <GuidesClient totalGuides={totalGuides} />;
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
+      <GuidesClient totalGuides={totalGuides} />
+    </>
+  );
 }

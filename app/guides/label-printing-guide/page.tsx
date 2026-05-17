@@ -175,6 +175,16 @@ const slotFaq = [
   },
 ];
 
+const breadcrumbJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Packlinx", item: siteUrl },
+    { "@type": "ListItem", position: 2, name: "가이드", item: `${siteUrl}/guides` },
+    { "@type": "ListItem", position: 3, name: title, item: canonicalUrl },
+  ],
+};
+
 export default function LabelPrintingGuidePage() {
   return (
     <div className="-mx-5 sm:-mx-8 -mt-10 sm:-mt-14">
@@ -185,6 +195,10 @@ export default function LabelPrintingGuidePage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
       <GuideHero
         tag="인쇄·라벨 가이드"
