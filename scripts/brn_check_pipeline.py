@@ -42,10 +42,14 @@ SUPABASE_SERVICE_KEY = os.getenv(
         "8tQ0z1mhJxg"
     ),
 )
-NTS_API_KEY = os.getenv("NTS_API_KEY", "")
+NTS_API_KEY = os.getenv("NTS_API_KEY", "") or os.getenv("FTC_API_KEY", "")
 NTS_API_BASE = os.getenv("NTS_API_BASE", "https://api.odcloud.kr/api/nts-businessman/v1")
 NTS_BATCH_SIZE = 10  # API 최대 배치 크기
 RATE_LIMIT_SLEEP = 0.5  # 초 단위 (API 제한: 초당 10건)
+
+# 공정위 BRN별 조회 (CEO 라이브 검증 2026-05-17 — PACAA-790)
+FTC_API_KEY = os.getenv("FTC_API_KEY", "") or NTS_API_KEY
+FTC_API_BASE = os.getenv("FTC_API_BASE", "https://apis.data.go.kr/1130000/MllBs_2Service")
 
 DRY_RUN = "--apply" not in sys.argv
 LIMIT = None
@@ -194,14 +198,47 @@ def match_addresses(db_addr: Optional[str], api_addr: Optional[str]) -> Optional
 
 
 # ── FTC cross-check ────────────────────────────────────────────────────────────
+# 1순위: ftc_telesales_registry DB lookup (bulk import 완료 후)
+# 2순위: 공정위 API 직접 조회 (DB에 없을 때 fallback)
 
-def ftc_lookup(brn: str) -> bool:
-    """ftc_telesales_registry 에서 활성 레코드 있으면 True."""
+def ftc_lookup_db(brn: str) -> bool:
+    """ftc_telesales_registry DB에서 활성 레코드 확인."""
     rows = sb_get(
         "ftc_telesales_registry",
         {"select": "id", "business_registration_number": f"eq.{brn}", "status": "eq.active", "limit": "1"},
     )
     return len(rows) > 0
+
+
+def ftc_lookup_api(brn: str) -> bool:
+    """공정위 API getMllBsBiznoInfo_2 직접 조회 (DB fallback)."""
+    if not FTC_API_KEY:
+        return False
+    try:
+        url = f"{FTC_API_BASE}/getMllBsBiznoInfo_2"
+        r = requests.get(url,
+                         params={"serviceKey": FTC_API_KEY, "brno": brn, "resultType": "json"},
+                         timeout=15)
+        if r.status_code != 200:
+            return False
+        data = r.json()
+        items = data.get("items") or []
+        if isinstance(items, dict):
+            items = [items]
+        if not items:
+            return False
+        status_raw = str(items[0].get("operSttusCdNm") or "").strip()
+        return not any(k in status_raw for k in ("폐업", "말소", "취소", "휴업", "정지"))
+    except Exception as e:
+        log.debug("FTC API lookup 실패 brn=%s: %s", brn, e)
+        return False
+
+
+def ftc_lookup(brn: str) -> bool:
+    """DB 먼저 확인; 없으면 API fallback."""
+    if ftc_lookup_db(brn):
+        return True
+    return ftc_lookup_api(brn)
 
 
 # ── Main pipeline ──────────────────────────────────────────────────────────────
