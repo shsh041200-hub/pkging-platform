@@ -194,6 +194,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       siteName: "Packlinx",
       locale: "ko_KR",
       type: "article",
+      images: [{ url: `${siteUrl}/og-default.png`, width: 1200, height: 630, alt: guide.title }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      images: [`${siteUrl}/og-default.png`],
     },
   };
 }
@@ -236,55 +241,55 @@ function GuideV1Page({
   guide: GuideContent;
 }) {
   if (slug === "corrugated-box-supplier-selection") {
-    return <CorrugatedBoxGuideV1 guide={guide} />;
+    return <CorrugatedBoxGuideV1 slug={slug} guide={guide} />;
   }
   if (slug === "corrugated-flute-types") {
-    return <GuideSlotV1Page guide={guide} data={SLOT_DATA_CORRUGATED_FLUTE} />;
+    return <GuideSlotV1Page slug={slug} guide={guide} data={SLOT_DATA_CORRUGATED_FLUTE} />;
   }
   if (slug === "shipping-box-pricing") {
-    return <GuideSlotV1Page guide={guide} data={SLOT_DATA_SHIPPING_PRICING} />;
+    return <GuideSlotV1Page slug={slug} guide={guide} data={SLOT_DATA_SHIPPING_PRICING} />;
   }
   if (slug === "small-quantity-custom-box") {
-    return <GuideSlotV1Page guide={guide} data={SLOT_DATA_SMALL_QUANTITY} />;
+    return <GuideSlotV1Page slug={slug} guide={guide} data={SLOT_DATA_SMALL_QUANTITY} />;
   }
   if (slug === "이사박스-사이즈-규격") {
-    return <GuideSlotV1Page guide={guide} data={SLOT_DATA_MOVING_SIZE} />;
+    return <GuideSlotV1Page slug={slug} guide={guide} data={SLOT_DATA_MOVING_SIZE} />;
   }
   if (slug === "이사박스-대량구매-가이드") {
-    return <GuideSlotV1Page guide={guide} data={SLOT_DATA_MOVING_BULK} />;
+    return <GuideSlotV1Page slug={slug} guide={guide} data={SLOT_DATA_MOVING_BULK} />;
   }
   if (slug === "eco-friendly-packaging") {
-    return <GuideSlotV1Page guide={guide} data={SLOT_DATA_ECO_FRIENDLY} />;
+    return <GuideSlotV1Page slug={slug} guide={guide} data={SLOT_DATA_ECO_FRIENDLY} />;
   }
   if (slug === "packaging-material-complete-guide") {
-    return <GuideSlotV1Page guide={guide} data={SLOT_DATA_PACKAGING_MATERIAL} />;
+    return <GuideSlotV1Page slug={slug} guide={guide} data={SLOT_DATA_PACKAGING_MATERIAL} />;
   }
   if (slug === "food-packaging-materials") {
-    return <GuideSlotV1Page guide={guide} data={SLOT_DATA_FOOD_PACKAGING} />;
+    return <GuideSlotV1Page slug={slug} guide={guide} data={SLOT_DATA_FOOD_PACKAGING} />;
   }
   if (slug === "cosmetic-packaging-box") {
-    return <GuideSlotV1Page guide={guide} data={SLOT_DATA_COSMETIC_BOX} />;
+    return <GuideSlotV1Page slug={slug} guide={guide} data={SLOT_DATA_COSMETIC_BOX} />;
   }
   if (slug === "electronics-packaging-design") {
-    return <GuideSlotV1Page guide={guide} data={SLOT_DATA_ELECTRONICS_PACKAGING} />;
+    return <GuideSlotV1Page slug={slug} guide={guide} data={SLOT_DATA_ELECTRONICS_PACKAGING} />;
   }
   if (slug === "glass-metal-container-guide") {
-    return <GuideSlotV1Page guide={guide} data={SLOT_DATA_GLASS_METAL} />;
+    return <GuideSlotV1Page slug={slug} guide={guide} data={SLOT_DATA_GLASS_METAL} />;
   }
   if (slug === "packaging-accessories-guide") {
-    return <GuideSlotV1Page guide={guide} data={SLOT_DATA_PACKAGING_ACCESSORIES} />;
+    return <GuideSlotV1Page slug={slug} guide={guide} data={SLOT_DATA_PACKAGING_ACCESSORIES} />;
   }
   if (slug === "packaging-tape-comparison") {
-    return <GuideSlotV1Page guide={guide} data={SLOT_DATA_PACKAGING_TAPE} />;
+    return <GuideSlotV1Page slug={slug} guide={guide} data={SLOT_DATA_PACKAGING_TAPE} />;
   }
   if (slug === "2026-korea-packaging-trends") {
-    return <GuideSlotV1Page guide={guide} data={SLOT_DATA_KOREA_TRENDS_2026} />;
+    return <GuideSlotV1Page slug={slug} guide={guide} data={SLOT_DATA_KOREA_TRENDS_2026} />;
   }
   if (slug === "packaging-printing-guide") {
-    return <GuideSlotV1Page guide={guide} data={SLOT_DATA_PACKAGING_PRINTING} />;
+    return <GuideSlotV1Page slug={slug} guide={guide} data={SLOT_DATA_PACKAGING_PRINTING} />;
   }
   if (slug === "packaging-machinery-guide") {
-    return <GuideSlotV1Page guide={guide} data={SLOT_DATA_PACKAGING_MACHINERY} />;
+    return <GuideSlotV1Page slug={slug} guide={guide} data={SLOT_DATA_PACKAGING_MACHINERY} />;
   }
   // Fallback to prose template for any other redesign-flagged guide
   return (
@@ -297,7 +302,21 @@ function GuideV1Page({
   );
 }
 
-function CorrugatedBoxGuideV1({ guide }: { guide: GuideContent }) {
+function CorrugatedBoxGuideV1({ slug, guide }: { slug: string; guide: GuideContent }) {
+  const canonicalUrl = `${siteUrl}/guides/${slug}`;
+  const articleSchema = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: guide.title,
+    description: guide.description,
+    url: canonicalUrl,
+    inLanguage: "ko-KR",
+    datePublished: guide.datePublished,
+    author: { "@type": "Organization", name: "Packlinx", url: siteUrl },
+    image: `${siteUrl}/og-default.png`,
+    publisher: { "@type": "Organization", name: "Packlinx", url: siteUrl },
+  };
+
   const faqSchema = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
@@ -339,6 +358,10 @@ function CorrugatedBoxGuideV1({ guide }: { guide: GuideContent }) {
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
+      />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
@@ -2920,12 +2943,28 @@ type SlotData = {
 };
 
 function GuideSlotV1Page({
+  slug,
   guide,
   data,
 }: {
+  slug: string;
   guide: GuideContent;
   data: SlotData;
 }) {
+  const canonicalUrl = `${siteUrl}/guides/${slug}`;
+  const articleSchema = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: guide.title,
+    description: guide.description,
+    url: canonicalUrl,
+    inLanguage: "ko-KR",
+    datePublished: guide.datePublished,
+    author: { "@type": "Organization", name: "Packlinx", url: siteUrl },
+    image: `${siteUrl}/og-default.png`,
+    publisher: { "@type": "Organization", name: "Packlinx", url: siteUrl },
+  };
+
   const faqSchema = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
@@ -2938,6 +2977,10 @@ function GuideSlotV1Page({
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
+      />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}

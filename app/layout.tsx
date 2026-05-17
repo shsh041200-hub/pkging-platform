@@ -49,11 +49,13 @@ export const metadata: Metadata = {
     siteName: 'Packlinx',
     locale: 'ko_KR',
     type: 'website',
+    images: [{ url: '/og-default.png', width: 1200, height: 630, alt: 'Packlinx — 전국 패키징 업체 플랫폼' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: '전국 패키징 업체 찾기 — B2B 포장재 플랫폼 | Packlinx',
     description: '국내 1,396개 패키징 업체를 무료로 검색·비교하세요. 식품·화장품·이커머스·친환경 포장재 B2B 플랫폼 Packlinx.',
+    images: ['/og-default.png'],
   },
   verification: {
     google: '_GGnVSZzAe6F2EM9dnt4z7PIMimex08aUukQZzAxN7c',
