@@ -7,8 +7,11 @@ import {
   INDUSTRY_CATEGORIES,
   MATERIAL_TYPE_LABELS,
   MATERIAL_TYPES,
+  PACKAGING_FORM_LABELS,
+  PACKAGING_FORMS,
   type IndustryCategory,
   type MaterialType,
+  type PackagingForm,
 } from '@/types'
 import { VendorDirectoryDisclaimer } from '@/components/VendorDirectoryDisclaimer'
 
@@ -40,7 +43,7 @@ type WizardStep = 'vendor' | 'industry' | 'material' | 'volume' | 'axis' | 'comp
 
 type Axis = 'moq' | 'lead' | 'cert' | 'region'
 
-type VolumeRange = 'lt_10k' | 'btw_10k_100k' | 'gt_100k'
+type VolumeRange = 'lt_1k' | 'btw_1k_10k' | 'btw_10k_100k' | 'gt_100k'
 
 interface ManualVendor {
   name: string
@@ -48,10 +51,11 @@ interface ManualVendor {
 
 // ── Volume range config ──
 
-const VOLUME_OPTIONS: { id: VolumeRange; label: string; desc: string }[] = [
-  { id: 'lt_10k',       label: '1만 개 미만',   desc: '소량 발주' },
-  { id: 'btw_10k_100k', label: '1만~10만 개',  desc: '중량 발주' },
-  { id: 'gt_100k',      label: '10만 개 이상', desc: '대량 발주' },
+const VOLUME_OPTIONS: { id: VolumeRange; label: string; desc: string; moqMax?: number; moqMin?: number }[] = [
+  { id: 'lt_1k',        label: '1천 개 미만',    desc: '초소량 발주',   moqMax: 999 },
+  { id: 'btw_1k_10k',   label: '1천~1만 개',    desc: '소량 발주',    moqMin: 1000,  moqMax: 10000 },
+  { id: 'btw_10k_100k', label: '1만~10만 개',   desc: '중량 발주',   moqMin: 10000, moqMax: 100000 },
+  { id: 'gt_100k',      label: '10만 개 이상',  desc: '대량 발주',   moqMin: 100000 },
 ]
 
 // ── Axis config ──
@@ -75,74 +79,98 @@ function hasAxisData(v: MatchVendor, axis: Axis): boolean {
   return true
 }
 
+function axisScore(v: MatchVendor, ax: Axis, existingProvince: string | null): number {
+  if (ax === 'moq') {
+    const moq = v.moq_value ?? 999999
+    return 1 / (1 + moq / 10000)
+  }
+  if (ax === 'lead') {
+    const days = v.lead_time_standard_days ?? 999
+    return 1 / (1 + days / 7)
+  }
+  if (ax === 'cert') {
+    return v.certifications?.length ?? 0
+  }
+  if (ax === 'region') {
+    if (!existingProvince) return 0
+    if (v.delivery_regions?.includes('전국')) return 2
+    if (v.delivery_regions?.includes(existingProvince)) return 1
+    if (v.province === existingProvince) return 1
+    return 0
+  }
+  return 0
+}
+
 function getRecommendations(
   vendors: MatchVendor[],
   existingId: string | null,
   existingProvince: string | null,
   industry: IndustryCategory | null,
   materials: MaterialType[],
+  packagingForms: PackagingForm[],
   volume: VolumeRange | null,
   axes: Axis[],
 ): MatchVendor[] {
   const primaryAxis = axes[0] ?? 'moq'
+  const secondaryAxis = axes[1] ?? null
 
   let pool = vendors.filter(
     (v) => v.id !== existingId && axes.some((ax) => hasAxisData(v, ax)),
   )
 
-  // Filter by industry
+  // Filter by industry (soft: keep all if < 3 match)
   if (industry) {
     const sameCat = pool.filter((v) => v.industry_categories.includes(industry))
     if (sameCat.length >= 3) pool = sameCat
   }
 
-  // Filter by material (soft match — keep if any overlap or vendor has no material data)
+  // Filter by material (soft match)
   if (materials.length > 0) {
-    const withMaterial = pool.filter(
+    const withMat = pool.filter(
       (v) => v.material_type == null || materials.includes(v.material_type),
     )
-    if (withMaterial.length >= 3) pool = withMaterial
+    if (withMat.length >= 3) pool = withMat
   }
 
-  // Filter by volume (MOQ-based soft match)
+  // Filter by packaging form (soft match against packaging_form string field)
+  if (packagingForms.length > 0) {
+    const withForm = pool.filter((v) => {
+      if (!v.packaging_form) return true
+      return packagingForms.some((pf) => v.packaging_form?.includes(pf))
+    })
+    if (withForm.length >= 3) pool = withForm
+  }
+
+  // Filter by volume (MOQ soft match)
   if (volume) {
-    const volumeFiltered = pool.filter((v) => {
-      if (v.moq_value == null) return true
-      if (volume === 'lt_10k') return v.moq_value <= 10000
-      if (volume === 'btw_10k_100k') return v.moq_value >= 1000 && v.moq_value <= 100000
-      if (volume === 'gt_100k') return v.moq_value >= 10000
-      return true
-    })
-    if (volumeFiltered.length >= 3) pool = volumeFiltered
+    const opt = VOLUME_OPTIONS.find((o) => o.id === volume)
+    if (opt) {
+      const volFiltered = pool.filter((v) => {
+        if (v.moq_value == null) return true
+        if (opt.moqMax != null && opt.moqMin == null) return v.moq_value <= opt.moqMax
+        if (opt.moqMin != null && opt.moqMax != null) {
+          return v.moq_value >= opt.moqMin && v.moq_value <= opt.moqMax
+        }
+        if (opt.moqMin != null && opt.moqMax == null) return v.moq_value >= opt.moqMin
+        return true
+      })
+      if (volFiltered.length >= 3) pool = volFiltered
+    }
   }
 
-  // Score by all selected axes, primary axis weighted higher
+  // Score: primary 0.7 + secondary 0.3
   const score = (v: MatchVendor): number => {
-    let s = 0
-    axes.forEach((ax, i) => {
-      const weight = i === 0 ? 2 : 1
-      if (ax === 'moq') {
-        const moq = v.moq_value ?? 999999
-        s += weight * (1 / (1 + moq / 10000))
-      } else if (ax === 'lead') {
-        const days = v.lead_time_standard_days ?? 999
-        s += weight * (1 / (1 + days / 7))
-      } else if (ax === 'cert') {
-        s += weight * (v.certifications?.length ?? 0)
-      } else if (ax === 'region') {
-        if (!existingProvince) s += weight * 0
-        else if (v.delivery_regions?.includes('전국')) s += weight * 2
-        else if (v.delivery_regions?.includes(existingProvince)) s += weight * 1
-        else if (v.province === existingProvince) s += weight * 1
-      }
-    })
-    return s
+    const primary = axisScore(v, primaryAxis, existingProvince) * 0.7
+    const secondary = secondaryAxis
+      ? axisScore(v, secondaryAxis, existingProvince) * 0.3
+      : 0
+    return primary + secondary
   }
 
-  // Also sort by primary axis for tie-breaking clarity
   const sorted = [...pool].sort((a, b) => {
     const sd = score(b) - score(a)
     if (sd !== 0) return sd
+    // tie-break by primary axis raw
     if (primaryAxis === 'moq') return (a.moq_value ?? 0) - (b.moq_value ?? 0)
     if (primaryAxis === 'lead') return (a.lead_time_standard_days ?? 0) - (b.lead_time_standard_days ?? 0)
     if (primaryAxis === 'cert') return (b.certifications?.length ?? 0) - (a.certifications?.length ?? 0)
@@ -221,6 +249,51 @@ function StepIndicator({ step }: { step: WizardStep }) {
         )
       })}
     </div>
+  )
+}
+
+// ── Shared: multi-select chip button ──
+
+function ChipButton({
+  selected,
+  onClick,
+  children,
+}: {
+  selected: boolean
+  onClick: () => void
+  children: React.ReactNode
+}) {
+  return (
+    <button
+      type="button"
+      role="checkbox"
+      aria-checked={selected}
+      onClick={onClick}
+      className={`flex items-center gap-2 px-4 py-3 rounded-xl border-2 text-left transition-all focus:outline-none focus:ring-2 focus:ring-[#533afd]/40 ${
+        selected
+          ? 'border-[#533afd] bg-[#f4f3ff]'
+          : 'border-[#e5edf5] bg-white hover:border-[#b9b9f9] hover:bg-[#f8fafc]'
+      }`}
+    >
+      <div
+        className={`w-4 h-4 rounded border-2 flex items-center justify-center flex-shrink-0 transition-colors ${
+          selected ? 'border-[#533afd] bg-[#533afd]' : 'border-[#d1d9e0] bg-white'
+        }`}
+        aria-hidden="true"
+      >
+        {selected && (
+          <svg width="8" height="8" viewBox="0 0 8 8" fill="none">
+            <path d="M1 4l2 2 4-4" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        )}
+      </div>
+      <span
+        className={`text-[14px] font-[400] ${selected ? 'text-[#533afd]' : 'text-[#273951]'}`}
+        style={{ fontFeatureSettings: '"ss01"' }}
+      >
+        {children}
+      </span>
+    </button>
   )
 }
 
@@ -444,13 +517,14 @@ function Step1({ vendors, onSelect }: Step1Props) {
 // ── Step 2: Industry selection ──
 
 interface Step2Props {
+  prefill: IndustryCategory | null
   onSelect: (industry: IndustryCategory) => void
   onSkip: () => void
   onBack: () => void
 }
 
-function Step2({ onSelect, onSkip, onBack }: Step2Props) {
-  const [selected, setSelected] = useState<IndustryCategory | null>(null)
+function Step2({ prefill, onSelect, onSkip, onBack }: Step2Props) {
+  const [selected, setSelected] = useState<IndustryCategory | null>(prefill)
 
   return (
     <div>
@@ -509,7 +583,7 @@ function Step2({ onSelect, onSkip, onBack }: Step2Props) {
           onClick={onSkip}
           className="text-[13px] text-[#64748d] hover:text-[#273951] focus:outline-none"
         >
-          건너뛰기
+          잘 모름 — 건너뛰기
         </button>
         <button
           type="button"
@@ -523,24 +597,32 @@ function Step2({ onSelect, onSkip, onBack }: Step2Props) {
   )
 }
 
-// ── Step 3: Material / form multi-select ──
+// ── Step 3: Material + packaging form multi-select ──
 
 interface Step3Props {
-  onSelect: (materials: MaterialType[]) => void
+  onSelect: (materials: MaterialType[], forms: PackagingForm[]) => void
   onBack: () => void
 }
 
 function Step3({ onSelect, onBack }: Step3Props) {
-  const [selected, setSelected] = useState<Set<MaterialType>>(new Set())
+  const [selMaterials, setSelMaterials] = useState<Set<MaterialType>>(new Set())
+  const [selForms, setSelForms] = useState<Set<PackagingForm>>(new Set())
 
-  const toggle = (mat: MaterialType) => {
-    setSelected((prev) => {
+  const toggleMat = (mat: MaterialType) =>
+    setSelMaterials((prev) => {
       const next = new Set(prev)
-      if (next.has(mat)) next.delete(mat)
-      else next.add(mat)
+      next.has(mat) ? next.delete(mat) : next.add(mat)
       return next
     })
-  }
+
+  const toggleForm = (form: PackagingForm) =>
+    setSelForms((prev) => {
+      const next = new Set(prev)
+      next.has(form) ? next.delete(form) : next.add(form)
+      return next
+    })
+
+  const totalSelected = selMaterials.size + selForms.size
 
   return (
     <div>
@@ -550,63 +632,42 @@ function Step3({ onSelect, onBack }: Step3Props) {
       >
         필요한 소재·형태를 선택해주세요
       </h2>
-      <p className="text-[14px] text-[#64748d] mb-6">
-        복수 선택 가능합니다. 건너뛰면 모든 소재를 포함합니다.
+      <p className="text-[14px] text-[#64748d] mb-5">
+        복수 선택 가능합니다. 선택하지 않으면 모든 소재·형태를 포함합니다.
       </p>
 
-      <div
-        className="grid grid-cols-2 sm:grid-cols-3 gap-3"
-        role="group"
-        aria-label="소재·형태 선택"
-      >
-        {MATERIAL_TYPES.map((mat) => {
-          const isSelected = selected.has(mat)
-          return (
-            <button
-              key={mat}
-              type="button"
-              role="checkbox"
-              aria-checked={isSelected}
-              onClick={() => toggle(mat)}
-              className={`text-left px-4 py-3 rounded-xl border-2 transition-all focus:outline-none focus:ring-2 focus:ring-[#533afd]/40 ${
-                isSelected
-                  ? 'border-[#533afd] bg-[#f4f3ff]'
-                  : 'border-[#e5edf5] bg-white hover:border-[#b9b9f9] hover:bg-[#f8fafc]'
-              }`}
-            >
-              <div className="flex items-center gap-2">
-                <div
-                  className={`w-4 h-4 rounded border-2 flex items-center justify-center flex-shrink-0 transition-colors ${
-                    isSelected ? 'border-[#533afd] bg-[#533afd]' : 'border-[#d1d9e0] bg-white'
-                  }`}
-                  aria-hidden="true"
-                >
-                  {isSelected && (
-                    <svg width="8" height="8" viewBox="0 0 8 8" fill="none">
-                      <path d="M1 4l2 2 4-4" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
-                  )}
-                </div>
-                <span
-                  className={`text-[14px] font-[400] ${isSelected ? 'text-[#533afd]' : 'text-[#273951]'}`}
-                  style={{ fontFeatureSettings: '"ss01"' }}
-                >
-                  {MATERIAL_TYPE_LABELS[mat]}
-                </span>
-              </div>
-            </button>
-          )
-        })}
+      {/* Material group */}
+      <div className="mb-5">
+        <p className="text-[12px] font-[400] text-[#64748d] uppercase tracking-wider mb-2">소재</p>
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2" role="group" aria-label="소재 선택">
+          {MATERIAL_TYPES.map((mat) => (
+            <ChipButton key={mat} selected={selMaterials.has(mat)} onClick={() => toggleMat(mat)}>
+              {MATERIAL_TYPE_LABELS[mat]}
+            </ChipButton>
+          ))}
+        </div>
       </div>
 
-      <div className="flex flex-wrap items-center gap-3 mt-6">
+      {/* Packaging form group */}
+      <div className="mb-5">
+        <p className="text-[12px] font-[400] text-[#64748d] uppercase tracking-wider mb-2">형태</p>
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2" role="group" aria-label="형태 선택">
+          {PACKAGING_FORMS.map((form) => (
+            <ChipButton key={form} selected={selForms.has(form)} onClick={() => toggleForm(form)}>
+              {PACKAGING_FORM_LABELS[form]}
+            </ChipButton>
+          ))}
+        </div>
+      </div>
+
+      <div className="flex flex-wrap items-center gap-3 mt-2">
         <button
           type="button"
-          onClick={() => onSelect(Array.from(selected))}
+          onClick={() => onSelect(Array.from(selMaterials), Array.from(selForms))}
           className="h-10 px-6 rounded-lg bg-[#533afd] text-white text-[14px] font-[400] hover:bg-[#4434d4] transition-colors focus:outline-none focus:ring-2 focus:ring-[#533afd]/50"
           style={{ fontFeatureSettings: '"ss01"' }}
         >
-          {selected.size > 0 ? `${selected.size}개 선택 · 다음` : '건너뛰기'}
+          {totalSelected > 0 ? `${totalSelected}개 선택 · 다음` : '잘 모름 — 건너뛰기'}
         </button>
         <button
           type="button"
@@ -623,12 +684,11 @@ function Step3({ onSelect, onBack }: Step3Props) {
 // ── Step 4: Monthly order volume ──
 
 interface Step4Props {
-  onSelect: (volume: VolumeRange) => void
-  onSkip: () => void
+  onSelect: (volume: VolumeRange | null) => void
   onBack: () => void
 }
 
-function Step4({ onSelect, onSkip, onBack }: Step4Props) {
+function Step4({ onSelect, onBack }: Step4Props) {
   const [selected, setSelected] = useState<VolumeRange | null>(null)
 
   return (
@@ -644,7 +704,7 @@ function Step4({ onSelect, onSkip, onBack }: Step4Props) {
       </p>
 
       <div
-        className="grid grid-cols-1 sm:grid-cols-3 gap-3"
+        className="grid grid-cols-2 sm:grid-cols-4 gap-3"
         role="radiogroup"
         aria-label="월 발주량 선택"
       >
@@ -662,14 +722,14 @@ function Step4({ onSelect, onSkip, onBack }: Step4Props) {
             }`}
           >
             <div
-              className={`text-[15px] font-[400] mb-0.5 ${
+              className={`text-[14px] font-[400] mb-0.5 ${
                 selected === opt.id ? 'text-[#533afd]' : 'text-[#273951]'
               }`}
               style={{ fontFeatureSettings: '"ss01"' }}
             >
               {opt.label}
             </div>
-            <div className="text-[12px] text-[#64748d]">{opt.desc}</div>
+            <div className="text-[11px] text-[#64748d]">{opt.desc}</div>
           </button>
         ))}
       </div>
@@ -686,10 +746,10 @@ function Step4({ onSelect, onSkip, onBack }: Step4Props) {
         </button>
         <button
           type="button"
-          onClick={onSkip}
+          onClick={() => onSelect(null)}
           className="text-[13px] text-[#64748d] hover:text-[#273951] focus:outline-none"
         >
-          건너뛰기
+          모름 — 건너뛰기
         </button>
         <button
           type="button"
@@ -741,7 +801,7 @@ function Step5({ onSelect, onBack }: Step5Props) {
         role="group"
         aria-label="개선 기준 선택"
       >
-        {AXIS_OPTIONS.map((opt, orderIdx) => {
+        {AXIS_OPTIONS.map((opt) => {
           const isSelected = selected.includes(opt.id)
           const isDisabled = !isSelected && selected.length >= 2
           const rank = selected.indexOf(opt.id)
@@ -861,13 +921,12 @@ function VendorCompareCard({
   vendor,
   axes,
   label,
-  isPlaceholder,
 }: {
   vendor: MatchVendor | null
   axes: Axis[]
   label: string
-  isPlaceholder?: boolean
 }) {
+  const isPlaceholder = !vendor
   const industryTags = vendor?.industry_categories.slice(0, 2).map((cat) => INDUSTRY_CATEGORY_LABELS[cat]) ?? []
 
   return (
@@ -876,7 +935,6 @@ function VendorCompareCard({
         isPlaceholder ? 'border-dashed border-[#b9b9f9]' : 'border-[#e5edf5]'
       }`}
     >
-      {/* Card header */}
       <div className={`px-5 py-4 border-b ${isPlaceholder ? 'border-[#d6d9fc] bg-[#f4f3ff]/50' : 'border-[#e5edf5] bg-[#f8fafc]'}`}>
         <div className="text-[11px] font-[400] text-[#64748d] uppercase tracking-wider mb-1">{label}</div>
         {vendor ? (
@@ -907,11 +965,10 @@ function VendorCompareCard({
         )}
       </div>
 
-      {/* Comparison rows */}
       <dl className="divide-y divide-[#f1f5f9]">
         {COMPARE_ROWS.map((row) => {
-          const isHighlighted = axes.includes(row.axis)
           const isPrimary = axes[0] === row.axis
+          const isSecondary = axes[1] === row.axis
           const value = vendor ? row.getValue(vendor) : '—'
           return (
             <div
@@ -919,25 +976,25 @@ function VendorCompareCard({
               className={`flex items-center justify-between px-5 py-3 transition-colors ${
                 isPrimary
                   ? 'bg-[#f4f3ff] border-l-2 border-l-[#533afd]'
-                  : isHighlighted
+                  : isSecondary
                   ? 'bg-[#faf9ff] border-l-2 border-l-[#b9b9f9]'
                   : ''
               }`}
             >
               <dt
                 className={`text-[13px] flex-shrink-0 w-[4.5rem] ${
-                  isPrimary ? 'text-[#533afd] font-[400]' : isHighlighted ? 'text-[#7c6ef9]' : 'text-[#64748d]'
+                  isPrimary ? 'text-[#533afd] font-[400]' : isSecondary ? 'text-[#7c6ef9]' : 'text-[#64748d]'
                 }`}
               >
                 {isPrimary && <span className="mr-1" aria-hidden="true">▶</span>}
-                {isHighlighted && !isPrimary && <span className="mr-1" aria-hidden="true">▷</span>}
+                {isSecondary && <span className="mr-1" aria-hidden="true">▷</span>}
                 {row.label}
               </dt>
               <dd
                 className={`text-[13px] text-right ${
                   isPrimary
                     ? 'text-[#533afd] font-[400]'
-                    : isHighlighted
+                    : isSecondary
                     ? 'text-[#7c6ef9]'
                     : value === '정보 없음' || value === '없음' || value === '—'
                     ? 'text-[#b0bec5] italic'
@@ -951,7 +1008,6 @@ function VendorCompareCard({
         })}
       </dl>
 
-      {/* CTA */}
       {vendor && (
         <div className="px-5 py-3 border-t border-[#f1f5f9] flex items-center gap-4">
           {vendor.website && (
@@ -988,7 +1044,6 @@ interface Step6Props {
 function Step6({ existingVendor, manualVendor, axes, recommendations, onBack, onReset }: Step6Props) {
   const [activeRec, setActiveRec] = useState(0)
 
-  const primaryAxis = axes[0] ?? 'moq'
   const axisLabels = axes.map((ax) => AXIS_OPTIONS.find((o) => o.id === ax)?.label ?? ax).join(' · ')
 
   const placeholderVendor: MatchVendor | null = manualVendor?.name
@@ -1038,87 +1093,97 @@ function Step6({ existingVendor, manualVendor, axes, recommendations, onBack, on
         선택하신 기준({axisLabels})으로 강조된 행을 비교해보세요.
       </p>
 
-      {/* Mobile tab switcher for Top 3 */}
-      {recommendations.length > 1 && (
-        <div className="flex gap-2 mb-4 sm:hidden" role="tablist" aria-label="추천 업체 탭">
-          {recommendations.map((r, i) => (
-            <button
-              key={r.id}
-              type="button"
-              role="tab"
-              aria-selected={activeRec === i}
-              onClick={() => setActiveRec(i)}
-              className={`flex-1 py-2 rounded-lg text-[13px] font-[400] transition-colors border focus:outline-none ${
-                activeRec === i
-                  ? 'border-[#533afd] bg-[#f4f3ff] text-[#533afd]'
-                  : 'border-[#e5edf5] bg-white text-[#64748d]'
-              }`}
-            >
-              추천 {i + 1}
-            </button>
-          ))}
+      {recommendations.length === 0 ? (
+        <div className="rounded-xl border border-[#e5edf5] bg-[#f8fafc] p-8 text-center">
+          <p className="text-[15px] text-[#273951] mb-2">조건에 맞는 업체가 없습니다.</p>
+          <p className="text-[13px] text-[#64748d] mb-4">
+            소재·형태 또는 발주량 조건을 완화하면 더 많은 업체를 볼 수 있습니다.
+          </p>
+          <button
+            type="button"
+            onClick={onReset}
+            className="h-10 px-6 rounded-lg bg-[#533afd] text-white text-[14px] font-[400] hover:bg-[#4434d4] transition-colors focus:outline-none focus:ring-2 focus:ring-[#533afd]/50"
+            style={{ fontFeatureSettings: '"ss01"' }}
+          >
+            처음부터 다시
+          </button>
         </div>
+      ) : (
+        <>
+          {recommendations.length > 1 && (
+            <div className="flex gap-2 mb-4 sm:hidden" role="tablist" aria-label="추천 업체 탭">
+              {recommendations.map((r, i) => (
+                <button
+                  key={r.id}
+                  type="button"
+                  role="tab"
+                  aria-selected={activeRec === i}
+                  onClick={() => setActiveRec(i)}
+                  className={`flex-1 py-2 rounded-lg text-[13px] font-[400] transition-colors border focus:outline-none ${
+                    activeRec === i
+                      ? 'border-[#533afd] bg-[#f4f3ff] text-[#533afd]'
+                      : 'border-[#e5edf5] bg-white text-[#64748d]'
+                  }`}
+                >
+                  추천 {i + 1}
+                </button>
+              ))}
+            </div>
+          )}
+
+          {/* Desktop */}
+          <div className="hidden sm:grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="lg:col-span-1">
+              {leftVendor ? (
+                <VendorCompareCard vendor={leftVendor} axes={axes} label="기존 업체" />
+              ) : (
+                <div className="rounded-xl border-2 border-dashed border-[#e5edf5] bg-[#f8fafc] p-6 flex flex-col items-center justify-center text-center h-full min-h-[200px]">
+                  <div className="text-[13px] text-[#64748d] mb-1">기존 업체 없음</div>
+                  <div className="text-[12px] text-[#b0bec5]">(건너뛰기 선택)</div>
+                </div>
+              )}
+            </div>
+            <div className="lg:col-span-3 grid grid-cols-1 lg:grid-cols-3 gap-4">
+              {recommendations.map((r, i) => (
+                <VendorCompareCard key={r.id} vendor={r} axes={axes} label={`추천 ${i + 1}`} />
+              ))}
+            </div>
+          </div>
+
+          {/* Mobile */}
+          <div className="sm:hidden space-y-4">
+            {leftVendor ? (
+              <VendorCompareCard vendor={leftVendor} axes={axes} label="기존 업체" />
+            ) : (
+              <div className="rounded-xl border-2 border-dashed border-[#e5edf5] bg-[#f8fafc] p-5 text-[13px] text-[#64748d] text-center">
+                기존 업체 없음 (건너뛰기 선택)
+              </div>
+            )}
+            {recommendations[activeRec] && (
+              <VendorCompareCard
+                vendor={recommendations[activeRec]}
+                axes={axes}
+                label={`추천 ${activeRec + 1}`}
+              />
+            )}
+          </div>
+        </>
       )}
 
-      {/* Desktop: left vs right grid */}
-      <div className="hidden sm:grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="lg:col-span-1">
-          {leftVendor ? (
-            <VendorCompareCard vendor={leftVendor} axes={axes} label="기존 업체" />
-          ) : (
-            <div className="rounded-xl border-2 border-dashed border-[#e5edf5] bg-[#f8fafc] p-6 flex flex-col items-center justify-center text-center h-full min-h-[200px]">
-              <div className="text-[13px] text-[#64748d] mb-1">기존 업체 없음</div>
-              <div className="text-[12px] text-[#b0bec5]">(건너뛰기 선택)</div>
-            </div>
-          )}
-        </div>
-        <div className="lg:col-span-3 grid grid-cols-1 lg:grid-cols-3 gap-4">
-          {recommendations.map((r, i) => (
-            <VendorCompareCard key={r.id} vendor={r} axes={axes} label={`추천 ${i + 1}`} />
-          ))}
-          {recommendations.length === 0 && (
-            <div className="col-span-3 text-center py-12 text-[14px] text-[#64748d]">
-              추천 조건에 맞는 업체가 없습니다.
-            </div>
-          )}
-        </div>
-      </div>
-
-      {/* Mobile: stacked comparison */}
-      <div className="sm:hidden space-y-4">
-        {leftVendor ? (
-          <VendorCompareCard vendor={leftVendor} axes={axes} label="기존 업체" />
-        ) : (
-          <div className="rounded-xl border-2 border-dashed border-[#e5edf5] bg-[#f8fafc] p-5 text-[13px] text-[#64748d] text-center">
-            기존 업체 없음 (건너뛰기 선택)
-          </div>
-        )}
-        {recommendations[activeRec] && (
-          <VendorCompareCard
-            vendor={recommendations[activeRec]}
-            axes={axes}
-            label={`추천 ${activeRec + 1}`}
-          />
-        )}
-        {recommendations.length === 0 && (
-          <div className="text-center py-8 text-[14px] text-[#64748d]">
-            추천 조건에 맞는 업체가 없습니다.
-          </div>
-        )}
-      </div>
-
       <div className="flex flex-wrap items-center gap-3 mt-6">
-        <button
-          type="button"
-          onClick={onBack}
-          className="text-[13px] text-[#64748d] hover:text-[#273951] focus:outline-none"
-        >
-          ← 기준 다시 선택
-        </button>
+        {recommendations.length > 0 && (
+          <button
+            type="button"
+            onClick={onBack}
+            className="text-[13px] text-[#64748d] hover:text-[#273951] focus:outline-none"
+          >
+            ← 기준 다시 선택
+          </button>
+        )}
         <button
           type="button"
           onClick={onReset}
-          className="sm:hidden text-[13px] text-[#64748d] hover:text-[#273951] focus:outline-none"
+          className="text-[13px] text-[#64748d] hover:text-[#273951] focus:outline-none sm:hidden"
         >
           처음부터
         </button>
@@ -1139,8 +1204,12 @@ export default function MatchClient({ vendors }: Props) {
   const [manualVendor, setManualVendor] = useState<ManualVendor | null>(null)
   const [selectedIndustry, setSelectedIndustry] = useState<IndustryCategory | null>(null)
   const [selectedMaterials, setSelectedMaterials] = useState<MaterialType[]>([])
+  const [selectedForms, setSelectedForms] = useState<PackagingForm[]>([])
   const [selectedVolume, setSelectedVolume] = useState<VolumeRange | null>(null)
   const [selectedAxes, setSelectedAxes] = useState<Axis[]>([])
+
+  // Pre-fill industry from vendor when vendor is selected
+  const vendorIndustryPrefill = selectedVendor?.industry_categories[0] ?? null
 
   const recommendations = useMemo(() => {
     if (selectedAxes.length === 0) return []
@@ -1150,39 +1219,16 @@ export default function MatchClient({ vendors }: Props) {
       selectedVendor?.province ?? null,
       selectedIndustry,
       selectedMaterials,
+      selectedForms,
       selectedVolume,
       selectedAxes,
     )
-  }, [vendors, selectedVendor, selectedIndustry, selectedMaterials, selectedVolume, selectedAxes])
+  }, [vendors, selectedVendor, selectedIndustry, selectedMaterials, selectedForms, selectedVolume, selectedAxes])
 
   function handleVendorSelect(vendor: MatchVendor | null, manual: ManualVendor | null) {
     setSelectedVendor(vendor)
     setManualVendor(manual)
-    // Pre-fill industry from selected vendor
-    if (vendor?.industry_categories[0]) {
-      setSelectedIndustry(vendor.industry_categories[0])
-    }
     setStep('industry')
-  }
-
-  function handleIndustrySelect(industry: IndustryCategory) {
-    setSelectedIndustry(industry)
-    setStep('material')
-  }
-
-  function handleMaterialSelect(materials: MaterialType[]) {
-    setSelectedMaterials(materials)
-    setStep('volume')
-  }
-
-  function handleVolumeSelect(volume: VolumeRange) {
-    setSelectedVolume(volume)
-    setStep('axis')
-  }
-
-  function handleAxesSelect(axes: Axis[]) {
-    setSelectedAxes(axes)
-    setStep('compare')
   }
 
   function handleReset() {
@@ -1191,6 +1237,7 @@ export default function MatchClient({ vendors }: Props) {
     setManualVendor(null)
     setSelectedIndustry(null)
     setSelectedMaterials([])
+    setSelectedForms([])
     setSelectedVolume(null)
     setSelectedAxes([])
   }
@@ -1217,27 +1264,31 @@ export default function MatchClient({ vendors }: Props) {
         )}
         {step === 'industry' && (
           <Step2
-            onSelect={handleIndustrySelect}
+            prefill={vendorIndustryPrefill}
+            onSelect={(ind) => { setSelectedIndustry(ind); setStep('material') }}
             onSkip={() => { setSelectedIndustry(null); setStep('material') }}
             onBack={() => setStep('vendor')}
           />
         )}
         {step === 'material' && (
           <Step3
-            onSelect={handleMaterialSelect}
+            onSelect={(mats, forms) => {
+              setSelectedMaterials(mats)
+              setSelectedForms(forms)
+              setStep('volume')
+            }}
             onBack={() => setStep('industry')}
           />
         )}
         {step === 'volume' && (
           <Step4
-            onSelect={handleVolumeSelect}
-            onSkip={() => { setSelectedVolume(null); setStep('axis') }}
+            onSelect={(vol) => { setSelectedVolume(vol); setStep('axis') }}
             onBack={() => setStep('material')}
           />
         )}
         {step === 'axis' && (
           <Step5
-            onSelect={handleAxesSelect}
+            onSelect={(axes) => { setSelectedAxes(axes); setStep('compare') }}
             onBack={() => setStep('volume')}
           />
         )}
