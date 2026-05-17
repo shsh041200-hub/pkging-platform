@@ -12,7 +12,10 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://www.packlinx.com'
 export const metadata: Metadata = {
   title: '패키징 키워드 디렉터리 — 업체 검색 | Packlinx',
   description: '골판지박스, 택배박스, 비닐봉투, 화장품 용기 등 50개 패키징 키워드별 전문 업체 목록을 확인하세요.',
-  alternates: { canonical: `${siteUrl}/keywords` },
+  alternates: {
+    canonical: `${siteUrl}/keywords`,
+    languages: { 'ko-KR': `${siteUrl}/keywords`, 'x-default': `${siteUrl}/keywords` },
+  },
   openGraph: {
     title: '패키징 키워드 디렉터리 | Packlinx',
     description: '50개 패키징 키워드별 전문 업체 목록',

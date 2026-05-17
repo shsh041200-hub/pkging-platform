@@ -7,6 +7,7 @@ export const metadata: Metadata = {
     'Packlinx 인증(packlinx_verified) 부여 기준 안내 — 사업자등록 진위 확인, 통신판매업 신고 확인, 분쟁 이력 검토 등 내부 검수 절차.',
   alternates: {
     canonical: 'https://www.packlinx.com/verified-criteria',
+    languages: { 'ko-KR': 'https://www.packlinx.com/verified-criteria', 'x-default': 'https://www.packlinx.com/verified-criteria' },
   },
 }
 
