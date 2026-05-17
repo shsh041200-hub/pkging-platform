@@ -181,7 +181,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title,
     description,
-    alternates: { canonical: `/categories/${slug}` },
+    alternates: { canonical: `${siteUrl}/categories/${slug}` },
     openGraph: {
       title: CATEGORY_OG_TITLE[categoryKey] ?? `${title} — Packlinx`,
       description: CATEGORY_OG_DESCRIPTION[categoryKey] ?? description,

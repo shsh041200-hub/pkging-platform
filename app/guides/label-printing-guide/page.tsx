@@ -7,7 +7,7 @@ import { GuideFaq } from "@/components/guide/GuideFaq";
 import { GuideSidebar } from "@/components/guide/GuideSidebar";
 import { GuideEndCta } from "@/components/guide/GuideEndCta";
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://packlinx.com";
+const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.packlinx.com").replace(/\/$/, "");
 const canonicalUrl = `${siteUrl}/guides/label-printing-guide`;
 
 const title = "라벨 인쇄 업체 선정 가이드 — 인쇄 방식·비용·소재·MOQ 비교 (2026)";

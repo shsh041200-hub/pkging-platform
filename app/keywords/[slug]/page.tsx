@@ -7,7 +7,7 @@ import { PacklinxLogo } from "@/components/PacklinxLogo";
 import { SiteHeader } from "@/components/SiteHeader";
 import { BusinessRegistrationInfo } from "@/components/BusinessRegistrationInfo";
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://packlinx.vercel.app";
+const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.packlinx.com").replace(/\/$/, "");
 
 // force-dynamic: render fresh on every request.
 // ISR (revalidate=21600) caused build-time null caches → stale 404 for 6 hours.

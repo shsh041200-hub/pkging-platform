@@ -12,7 +12,7 @@ import { GuideSidebar } from "@/components/guide/GuideSidebar";
 import { GuideEndCta } from "@/components/guide/GuideEndCta";
 import Link from "next/link";
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://packlinx.com";
+const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.packlinx.com").replace(/\/$/, "");
 
 type GuideContent = {
   title: string;
