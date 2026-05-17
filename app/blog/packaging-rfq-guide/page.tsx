@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { SiteHeader } from "@/components/SiteHeader";
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://packlinx.com";
+const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.packlinx.com").replace(/\/$/, "");
 const canonicalUrl = `${siteUrl}/blog/packaging-rfq-guide`;
 
 const title =
@@ -49,6 +49,7 @@ const articleJsonLd = {
     name: "Packlinx",
     url: siteUrl,
   },
+  image: `${siteUrl}/og-default.png`,
   about: {
     "@type": "Thing",
     name: "패키징 RFQ 가이드",
