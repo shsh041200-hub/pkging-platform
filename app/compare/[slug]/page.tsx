@@ -104,8 +104,68 @@ export default async function CompareSlugPage({ params }: Props) {
   const hasWebsiteA = !!compA.website
   const hasWebsiteB = !!compB.website
 
+  const canonicalUrl = `${siteUrl}/compare/${canonA}-vs-${canonB}`
+
+  const itemListJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: `${compA.name} vs ${compB.name} 비교`,
+    description: `${compA.name}과 ${compB.name}를 한눈에 비교하세요. 최소주문수량, 납기, 인증, 가격 등 18가지 항목 비교.`,
+    url: canonicalUrl,
+    numberOfItems: 2,
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: compA.name,
+        url: `${siteUrl}/companies/${compA.slug}`,
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: compB.name,
+        url: `${siteUrl}/companies/${compB.slug}`,
+      },
+    ],
+  }
+
+  const organizationJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: 'Packlinx',
+    url: siteUrl,
+    logo: `${siteUrl}/packlinx-logo-light.svg`,
+  }
+
+  const breadcrumbJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Packlinx', item: siteUrl },
+      { '@type': 'ListItem', position: 2, name: '비교', item: `${siteUrl}/compare` },
+      {
+        '@type': 'ListItem',
+        position: 3,
+        name: `${compA.name} vs ${compB.name}`,
+        item: canonicalUrl,
+      },
+    ],
+  }
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
       <div className="min-h-screen bg-neutral-50">
 
         <SiteHeader />
