@@ -105,6 +105,14 @@ export default async function KeywordPage({ params }: Props) {
     "@context": "https://schema.org",
     "@graph": [
       {
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "홈", item: siteUrl },
+          { "@type": "ListItem", position: 2, name: "키워드 디렉터리", item: `${siteUrl}/keywords` },
+          { "@type": "ListItem", position: 3, name: data.titleKo, item: canonicalUrl },
+        ],
+      },
+      {
         "@type": "ItemList",
         name: data.titleKo,
         description: data.descriptionKo,
