@@ -356,6 +356,16 @@ function CorrugatedBoxGuideV1({ slug, guide }: { slug: string; guide: GuideConte
     ],
   };
 
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "홈", item: siteUrl },
+      { "@type": "ListItem", position: 2, name: "패키징 가이드", item: `${siteUrl}/guides` },
+      { "@type": "ListItem", position: 3, name: guide.title, item: canonicalUrl },
+    ],
+  };
+
   return (
     <>
       <script
@@ -365,6 +375,10 @@ function CorrugatedBoxGuideV1({ slug, guide }: { slug: string; guide: GuideConte
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
       {/* Hero — full-width breakout from the layout's overflow-x-clip wrapper */}
       {/* V1 #3: --g-brand navy → V05 purple across section badges, CTA, sidebar */}
@@ -2975,6 +2989,16 @@ function GuideSlotV1Page({
     })),
   };
 
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "홈", item: siteUrl },
+      { "@type": "ListItem", position: 2, name: "패키징 가이드", item: `${siteUrl}/guides` },
+      { "@type": "ListItem", position: 3, name: guide.title, item: canonicalUrl },
+    ],
+  };
+
   return (
     <>
       <script
@@ -2984,6 +3008,10 @@ function GuideSlotV1Page({
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
       {/* V1 #3: --g-brand navy → V05 purple across category pill, CTA, sidebar */}
       <div

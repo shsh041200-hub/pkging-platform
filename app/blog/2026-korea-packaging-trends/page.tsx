@@ -6,6 +6,16 @@ import { SiteHeader } from "@/components/SiteHeader";
 const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.packlinx.com").replace(/\/$/, "");
 const canonicalUrl = `${siteUrl}/blog/2026-korea-packaging-trends`;
 
+const breadcrumbJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "홈", item: siteUrl },
+    { "@type": "ListItem", position: 2, name: "블로그", item: `${siteUrl}/blog` },
+    { "@type": "ListItem", position: 3, name: "2026 한국 패키징 트렌드", item: canonicalUrl },
+  ],
+};
+
 const title = "2026 한국 패키징 트렌드: 구매 담당자가 알아야 할 7가지 변화 | Packlinx";
 const description =
   "2026 한국 패키징 트렌드 — EPR 규제 강화·친환경 전환·스마트 패키징·이커머스 포장 변화·원자재 가격 대응 전략을 구매 담당자 시각에서 정리합니다.";
@@ -115,6 +125,10 @@ export default function KoreaPackagingTrends2026Page() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
       <SiteHeader />
       <main>
