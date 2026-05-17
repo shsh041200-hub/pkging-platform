@@ -99,7 +99,7 @@ async function staticEntries(): Promise<Entry[]> {
     { url: root, lastmod: now, changefreq: 'daily', priority: 1 },
     { url: `${root}/categories`, lastmod: now, changefreq: 'weekly', priority: 0.9 },
     { url: `${root}/guides`, lastmod: now, changefreq: 'daily', priority: 0.7 },
-    { url: `${root}/keywords`, lastmod: now, changefreq: 'weekly', priority: 0.7 },
+    { url: `${root}/keywords`, lastmod: now, changefreq: 'daily', priority: 0.8 },
     { url: `${root}/faq`, lastmod: now, changefreq: 'monthly', priority: 0.5 },
     { url: `${root}/match`, lastmod: now, changefreq: 'weekly', priority: 0.7 },
     { url: `${root}/terms`, lastmod: now, changefreq: 'yearly', priority: 0.3 },
