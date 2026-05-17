@@ -13,7 +13,6 @@ export const STATIC_GUIDE_SLUGS = [
   "label-printing-guide",
   "flexible-packaging-guide",
   "plastic-container-guide",
-  "plastic-containers-guide",
 ] as const;
 export type StaticGuideSlug = (typeof STATIC_GUIDE_SLUGS)[number];
 
