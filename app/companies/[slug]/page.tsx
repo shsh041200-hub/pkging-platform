@@ -526,6 +526,7 @@ export default async function CompanyPage({ params }: Props) {
                 businessRegistrationNumber={(company.business_registration_number as string | null) ?? null}
                 packlinxVerified={!!(company as Record<string, unknown>).packlinx_verified}
                 isVerified={!!company.is_verified}
+                verifiedAt={(company as Record<string, unknown>).is_verified_at as string | null ?? null}
                 certificationsStructured={certificationsStructured}
                 keyClients={(company.key_clients as string[] | null) ?? null}
               />

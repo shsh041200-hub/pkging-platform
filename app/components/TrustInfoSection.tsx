@@ -11,14 +11,22 @@ interface TrustInfoSectionProps {
   businessRegistrationNumber: string | null
   packlinxVerified: boolean          // Tier 1: 사업자 확인 ✓
   isVerified: boolean                // Tier 3: Packlinx 검증 ★
+  verifiedAt?: string | null         // Tier 3: 확인일 (ISO timestamp; shown as YYYY년 M월)
   certificationsStructured: CertStructured[] | null  // Tier 2a
   keyClients: string[] | null        // Tier 2b — always labeled "(업체 제공 정보)"
+}
+
+function formatVerifiedAt(iso: string): string {
+  const d = new Date(iso)
+  if (isNaN(d.getTime())) return ''
+  return `${d.getFullYear()}년 ${d.getMonth() + 1}월`
 }
 
 export function TrustInfoSection({
   businessRegistrationNumber,
   packlinxVerified,
   isVerified,
+  verifiedAt,
   certificationsStructured,
   keyClients,
 }: TrustInfoSectionProps) {
@@ -58,6 +66,11 @@ export function TrustInfoSection({
               <p className="text-[12px] text-neutral-500 mt-0.5">
                 주요 정보를 Packlinx 스태프가 직접 교차 확인했습니다.
               </p>
+              {verifiedAt && formatVerifiedAt(verifiedAt) && (
+                <p className="text-[12px] text-neutral-500 mt-0.5">
+                  확인일: {formatVerifiedAt(verifiedAt)}
+                </p>
+              )}
             </div>
           </div>
         )}
