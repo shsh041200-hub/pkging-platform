@@ -21,7 +21,10 @@ export const metadata: Metadata = {
   title: '패키징 카테고리 — 전국 포장재 업체 분야별 검색',
   description:
     '식품·이커머스·화장품·의약·전자 등 분야별 전국 패키징 업체를 한눈에 비교하세요. Packlinx 카테고리 디렉토리.',
-  alternates: { canonical: `${siteUrl}/categories` },
+  alternates: {
+    canonical: `${siteUrl}/categories`,
+    languages: { 'ko-KR': `${siteUrl}/categories`, 'x-default': `${siteUrl}/categories` },
+  },
   openGraph: {
     title: '패키징 카테고리 — 전국 포장재 업체 분야별 검색',
     description:

@@ -15,7 +15,10 @@ export const metadata: Metadata = {
   title: '포장재 업체 비교 — 기존 업체보다 더 나은 곳 찾기 | Packlinx',
   description:
     '현재 거래 중인 포장재 업체와 새 업체를 1:1로 비교해보세요. 가격·MOQ·납기·인증·지역 기준으로 더 나은 업체를 추천합니다.',
-  alternates: { canonical: `${siteUrl}/match` },
+  alternates: {
+    canonical: `${siteUrl}/match`,
+    languages: { 'ko-KR': `${siteUrl}/match`, 'x-default': `${siteUrl}/match` },
+  },
   openGraph: {
     title: '포장재 업체 비교 — 기존 업체보다 더 나은 곳 찾기 | Packlinx',
     description:

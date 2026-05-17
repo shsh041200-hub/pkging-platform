@@ -72,7 +72,12 @@ export async function generateMetadata({
       alternates: { canonical: siteUrl },
     }
   }
-  return { alternates: { canonical: siteUrl } }
+  return {
+    alternates: {
+      canonical: siteUrl,
+      languages: { 'ko-KR': siteUrl, 'x-default': siteUrl },
+    },
+  }
 }
 
 const jsonLd = {
