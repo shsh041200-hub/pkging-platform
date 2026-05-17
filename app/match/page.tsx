@@ -12,12 +12,12 @@ export const revalidate = 300
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://www.packlinx.com'
 
 export const metadata: Metadata = {
-  title: '포장재 업체 비교 — 기존 업체보다 더 나은 곳 찾기 | Packlinx',
+  title: '포장재 업체 비교 — 기존 업체보다 더 나은 곳 찾기',
   description:
     '현재 거래 중인 포장재 업체와 새 업체를 1:1로 비교해보세요. 가격·MOQ·납기·인증·지역 기준으로 더 나은 업체를 추천합니다.',
   alternates: { canonical: `${siteUrl}/match` },
   openGraph: {
-    title: '포장재 업체 비교 — 기존 업체보다 더 나은 곳 찾기 | Packlinx',
+    title: '포장재 업체 비교 — 기존 업체보다 더 나은 곳 찾기',
     description:
       '기존 업체와 1:1 비교로 더 나은 포장재 공급사를 찾아보세요. 거래 중개 없이 공개 사업자 정보만 제공합니다.',
     url: `${siteUrl}/match`,
