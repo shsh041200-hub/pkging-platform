@@ -6,7 +6,7 @@ import { TermsNoticeFooterLine } from '@/components/TermsNoticeFooterLine'
 import { BusinessRegistrationInfo } from '@/components/BusinessRegistrationInfo'
 
 export const metadata: Metadata = {
-  title: '이용약관 — Packlinx',
+  title: '이용약관',
   description: 'Packlinx 이용약관 — 최종 개정일 2026년 5월 2일',
 }
 

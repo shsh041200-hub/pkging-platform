@@ -6,7 +6,7 @@ import Link from 'next/link'
 import DisputeForm from './DisputeForm'
 
 export const metadata: Metadata = {
-  title: '분류 이의제기 — Packlinx',
+  title: '분류 이의제기',
   description: 'Packlinx에 등록된 업체 분류 정보에 이의가 있으시면 이 채널을 통해 정정을 요청하실 수 있습니다.',
   robots: { index: false, follow: false },
 }

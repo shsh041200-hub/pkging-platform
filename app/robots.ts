@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://packlinx.vercel.app";
+const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.packlinx.com").replace(/\/$/, "");
 
 export default function robots(): MetadataRoute.Robots {
   return {
@@ -24,6 +24,9 @@ export default function robots(): MetadataRoute.Robots {
         "/*?q=*",
       ],
     },
-    sitemap: `${siteUrl}/sitemap.xml`,
+    sitemap: [
+      `${siteUrl}/sitemap.xml`,
+      "https://keywords.packlinx.com/sitemap.xml",
+    ],
   };
 }
