@@ -54,7 +54,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: guide.seoTitle,
     description: guide.seoDescription,
-    alternates: { canonical: `/products/${slug}` },
+    alternates: { canonical: `${siteUrl}/products/${slug}` },
     openGraph: {
       title: `${guide.label} 포장 업체 — Packlinx`,
       description: guide.seoDescription,
