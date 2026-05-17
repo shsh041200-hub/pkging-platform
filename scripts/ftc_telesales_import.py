@@ -43,13 +43,18 @@ SUPABASE_SERVICE_KEY = os.getenv(
     ),
 )
 # 공정위 통신판매업자 API — data.go.kr 기관명: 공정거래위원회
-# API ID: 15070068 (통신판매사업자 등록 현황)
+# API ID: 15126311 (통신판매사업자 등록현황 제공 서비스, 활용신청 562건)
+# 이전 15070068은 404 — 2026-05-17 CEO 보드 확인으로 15126311로 수정
 FTC_API_KEY = os.getenv("FTC_API_KEY", "")
-FTC_API_BASE = os.getenv("FTC_API_BASE", "https://api.odcloud.kr/api/15070068/v1")
+FTC_API_BASE = os.getenv("FTC_API_BASE", "https://api.odcloud.kr/api/15126311/v1")
+# FTC_API_ENDPOINT_PATH: data.go.kr 활용가이드(15126311/openapi.do)에서 확인한 경로.
+# 설정 없으면 자동 탐색(probe) 모드 실행.
+FTC_API_ENDPOINT_PATH = os.getenv("FTC_API_ENDPOINT_PATH", "")
 FTC_PAGE_SIZE = 1000
 RATE_LIMIT_SLEEP = 0.3
 
 DRY_RUN = "--apply" not in sys.argv
+PROBE_MODE = "--probe" in sys.argv  # endpoint 탐색 후 schema 출력
 FILE_MODE = None
 for i, arg in enumerate(sys.argv):
     if arg == "--file" and i + 1 < len(sys.argv):
@@ -103,22 +108,70 @@ def sb_upsert_batch(rows: list) -> None:
         r.raise_for_status()
 
 
+# ── FTC API endpoint discovery ────────────────────────────────────────────────
+# odcloud 15126311의 UDDI/경로는 data.go.kr 활용가이드에서만 확인 가능.
+# FTC_API_ENDPOINT_PATH 설정 시 직접 사용; 미설정 시 알려진 패턴을 탐색.
+
+_FTC_ENDPOINT_CACHE: str = ""
+
+KNOWN_UDDI_CANDIDATES = [
+    # 15126311 데이터셋에서 확인된 UDDI (활용가이드 기준, 보드 확인 필요)
+    # FTC_API_ENDPOINT_PATH 환경변수로 주입하는 것이 권장
+    "uddi:7f3038d2-f2e0-4793-a6cd-7ecf7f3c38dc",
+    "uddi:4a84cc2c-89f1-44ff-a75c-d4ea21044c48",  # 이전 15070068 UDDI (혹시 재사용 가능성)
+    "uddi:e38e4b66-d2af-4fe4-83ba-6e0b3bb1b0a0",
+    "uddi:c7c28aad-be92-4a29-a4f7-9a8d41e82bc7",
+]
+
+
+def probe_ftc_endpoint() -> str:
+    """FTC_API_ENDPOINT_PATH 미설정 시 알려진 UDDI를 탐색해 동작하는 경로 반환."""
+    global _FTC_ENDPOINT_CACHE
+    if _FTC_ENDPOINT_CACHE:
+        return _FTC_ENDPOINT_CACHE
+
+    if FTC_API_ENDPOINT_PATH:
+        _FTC_ENDPOINT_CACHE = f"{FTC_API_BASE}/{FTC_API_ENDPOINT_PATH}"
+        log.info("FTC endpoint (환경변수): %s", _FTC_ENDPOINT_CACHE)
+        return _FTC_ENDPOINT_CACHE
+
+    import urllib.parse
+    key_enc = urllib.parse.quote(FTC_API_KEY, safe="")
+    for uddi in KNOWN_UDDI_CANDIDATES:
+        url = f"{FTC_API_BASE}/{uddi}"
+        try:
+            r = requests.get(url, params={"serviceKey": FTC_API_KEY, "page": 1, "perPage": 1}, timeout=15)
+            if r.status_code == 200:
+                _FTC_ENDPOINT_CACHE = url
+                log.info("FTC endpoint 발견: %s", url)
+                return url
+            log.debug("  probe %s → %d", uddi, r.status_code)
+        except Exception as e:
+            log.debug("  probe %s error: %s", uddi, e)
+
+    raise RuntimeError(
+        "공정위 API 엔드포인트를 찾을 수 없습니다.\n"
+        "data.go.kr/data/15126311/openapi.do 활용가이드에서 UDDI를 확인하고 "
+        "FTC_API_ENDPOINT_PATH 환경변수에 설정하세요.\n"
+        "예: FTC_API_ENDPOINT_PATH=uddi:xxxx-xxxx-xxxx"
+    )
+
+
 # ── FTC API fetch ──────────────────────────────────────────────────────────────
 
 def fetch_ftc_api_page(page: int) -> dict:
-    params = {
-        "serviceKey": FTC_API_KEY,
-        "page": page,
-        "perPage": FTC_PAGE_SIZE,
-    }
-    r = requests.get(f"{FTC_API_BASE}/uddi:4a84cc2c-89f1-44ff-a75c-d4ea21044c48",
-                     params=params, timeout=60)
+    endpoint = probe_ftc_endpoint()
+    r = requests.get(
+        endpoint,
+        params={"serviceKey": FTC_API_KEY, "page": page, "perPage": FTC_PAGE_SIZE},
+        timeout=60,
+    )
     r.raise_for_status()
     return r.json()
 
 
 def fetch_all_ftc_api() -> list[dict]:
-    log.info("공정위 API 전체 fetch 시작...")
+    log.info("공정위 API 전체 fetch 시작 (base: %s)...", FTC_API_BASE)
     page = 1
     total_rows = []
     while True:
@@ -136,40 +189,84 @@ def fetch_all_ftc_api() -> list[dict]:
     return total_rows
 
 
+def _first(row: dict, *keys: str) -> str:
+    """주어진 키 순서대로 첫 번째 비어있지 않은 값 반환."""
+    for k in keys:
+        v = row.get(k)
+        if v is not None and str(v).strip():
+            return str(v).strip()
+    return ""
+
+
 def parse_ftc_row(raw_row: dict) -> Optional[dict]:
-    """공정위 API 응답 행 → ftc_telesales_registry row 변환."""
-    # 컬럼명은 공정위 API 실제 필드명에 따라 조정 필요
-    brn_raw = raw_row.get("사업자등록번호") or raw_row.get("business_registration_number") or ""
+    """공정위 API 응답 행 → ftc_telesales_registry row 변환.
+
+    15126311 데이터셋 실제 필드명은 활용가이드 확인 필요.
+    다중 필드명 후보로 유연하게 파싱 (15070068/15126311 양쪽 대응).
+    """
+    # BRN — 가장 중요한 키
+    brn_raw = _first(
+        raw_row,
+        "사업자등록번호", "사업자 등록번호", "business_registration_number",
+        "bsns_no", "businessNo",
+    )
     brn = normalise_brn(brn_raw)
     if not brn:
         return None
 
-    business_name = (
-        raw_row.get("상호명") or raw_row.get("쇼핑몰명") or raw_row.get("업체명") or ""
-    ).strip()
+    # 상호명
+    business_name = _first(
+        raw_row,
+        "상호명", "상호", "쇼핑몰명", "업체명", "법인명", "사업자명",
+        "business_name", "shopNm", "companyNm",
+    )
     if not business_name:
         return None
 
-    reg_no = (raw_row.get("신고번호") or raw_row.get("registration_number") or "").strip() or None
+    # 신고번호
+    reg_no = _first(
+        raw_row,
+        "신고번호", "통신판매신고번호", "registration_number",
+        "dclaraNo", "mailOrderNo",
+    ) or None
 
-    status_raw = (raw_row.get("영업상태") or raw_row.get("상태") or "active").strip()
-    if "폐업" in status_raw or "말소" in status_raw:
+    # 영업상태
+    status_raw = _first(
+        raw_row,
+        "영업상태", "상태", "운영여부", "status", "bsnsSttusCd",
+    )
+    if "폐업" in status_raw or "말소" in status_raw or "취소" in status_raw:
         status = "cancelled"
     elif "휴업" in status_raw or "정지" in status_raw:
         status = "suspended"
     else:
         status = "active"
 
-    registered_at_raw = raw_row.get("신고일자") or raw_row.get("등록일") or None
+    # 신고일자
+    registered_at_raw = _first(
+        raw_row,
+        "신고일자", "신고일", "등록일", "등록연월일",
+        "dclaraDe", "registDt",
+    )
     registered_at = None
     if registered_at_raw:
         try:
-            registered_at = str(registered_at_raw)[:10]
+            registered_at = str(registered_at_raw)[:10].replace("/", "-")
         except Exception:
             pass
 
-    # PIPA §15: 대표자명은 raw_payload에만 저장, representative_name 컬럼에는 저장 안 함
-    safe_raw = {k: v for k, v in raw_row.items() if "대표자" not in str(k) and "연락처" not in str(k)}
+    # 주소
+    address = _first(
+        raw_row,
+        "주소", "소재지", "사업장 주소", "소재지주소", "addr", "address",
+    ) or None
+
+    # PIPA §15: 대표자명·연락처·개인정보 필드 raw_payload에서 제거
+    PII_FIELDS = {"대표자", "대표자명", "연락처", "전화번호", "휴대폰", "핸드폰", "이메일", "이메일주소"}
+    safe_raw = {
+        k: v for k, v in raw_row.items()
+        if not any(pii in str(k) for pii in PII_FIELDS)
+    }
 
     return {
         "business_registration_number": brn,
@@ -177,7 +274,7 @@ def parse_ftc_row(raw_row: dict) -> Optional[dict]:
         "business_name": business_name,
         "representative_name": None,  # PIPA — 미저장
         "status": status,
-        "address": (raw_row.get("주소") or raw_row.get("소재지") or "").strip() or None,
+        "address": address,
         "registered_at": registered_at,
         "import_batch_id": BATCH_ID,
         "raw_payload": safe_raw,
@@ -212,6 +309,25 @@ def fetch_from_excel(file_path: str) -> list[dict]:
 # ── Main ────────────────────────────────────────────────────────────────────────
 
 def run() -> None:
+    # --probe 모드: 엔드포인트 탐색 + 첫 행 schema 출력
+    if PROBE_MODE:
+        if not FTC_API_KEY:
+            log.error("--probe 는 FTC_API_KEY 필요")
+            sys.exit(1)
+        try:
+            endpoint = probe_ftc_endpoint()
+            r = requests.get(endpoint, params={"serviceKey": FTC_API_KEY, "page": 1, "perPage": 3}, timeout=30)
+            data = r.json()
+            print(f"엔드포인트: {endpoint}")
+            print(f"totalCount: {data.get('totalCount')}")
+            if data.get("data"):
+                import json
+                print("첫 행 키:", list(data["data"][0].keys()))
+                print("첫 행 샘플:", json.dumps(data["data"][0], ensure_ascii=False, indent=2)[:500])
+        except Exception as e:
+            print(f"probe 실패: {e}")
+        return
+
     if not DRY_RUN and not FTC_API_KEY and not FILE_MODE:
         log.error("FTC_API_KEY 또는 --file <xlsx> 필요")
         sys.exit(1)
