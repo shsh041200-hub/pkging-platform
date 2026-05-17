@@ -44,17 +44,18 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     .eq('seo_slug', slug)
     .single()
 
-  if (!tag) return { title: '용도별 포장 업체 찾기 — Packlinx' }
+  if (!tag) return { title: '용도별 포장 업체 찾기' }
 
-  const title = tag.seo_title ?? `${tag.label} 포장 업체 찾기 — Packlinx`
+  const pageTitle = tag.seo_title ?? `${tag.label} 포장 업체 찾기`
+  const ogTitle = tag.seo_title ?? `${tag.label} 포장 업체 찾기 — Packlinx`
   const description = tag.seo_description ?? `${tag.label} 전문 포장 업체를 Packlinx에서 찾아보세요.`
 
   return {
-    title,
+    title: pageTitle,
     description,
     alternates: { canonical: `${siteUrl}/use-cases/${tag.seo_slug}` },
     openGraph: {
-      title,
+      title: ogTitle,
       description,
       url: `${siteUrl}/use-cases/${tag.seo_slug}`,
       siteName: 'Packlinx',
