@@ -67,11 +67,14 @@ DRY_RUN = "--apply" not in sys.argv
 PROBE_MODE = "--probe" in sys.argv
 BRN_LOOKUP = None
 FILE_MODE = None
+MAX_PAGES = None  # None = 전체 import
 for i, arg in enumerate(sys.argv):
     if arg == "--brn-lookup" and i + 1 < len(sys.argv):
         BRN_LOOKUP = sys.argv[i + 1]
     if arg == "--file" and i + 1 < len(sys.argv):
         FILE_MODE = sys.argv[i + 1]
+    if arg == "--max-pages" and i + 1 < len(sys.argv):
+        MAX_PAGES = int(sys.argv[i + 1])
 
 BATCH_ID = f"ftc_{datetime.now(timezone.utc).strftime('%Y%m%d_%H%M%S')}"
 
@@ -344,18 +347,63 @@ def run() -> None:
         converter = api_item_to_row
     else:
         total = ftc_get_total_count()
-        log.info("공정위 총 %s건. 일일 한도 10,000 — 페이지당 %.1fs", f"{total:,}", RATE_LIMIT_SLEEP)
-        raw_items = []
         total_pages = (total + FTC_PAGE_SIZE - 1) // FTC_PAGE_SIZE
+        if MAX_PAGES:
+            total_pages = min(total_pages, MAX_PAGES)
+        log.info("공정위 총 %s건 / %d 페이지 (max=%s). 페이지당 %.1fs",
+                 f"{total:,}", total_pages, MAX_PAGES or "전체", RATE_LIMIT_SLEEP)
+
+        # 스트리밍 방식: 10페이지(10,000건)마다 DB flush — 메모리 절약
+        FLUSH_EVERY = 10
+        raw_buf: list[dict] = []
+        total_parsed = 0
+        total_skipped = 0
+        from collections import Counter
+        status_counts: Counter = Counter()
+
+        def _flush(buf: list[dict]) -> None:
+            nonlocal total_parsed, total_skipped
+            for item in buf:
+                row = api_item_to_row(item)
+                if row:
+                    total_parsed += 1
+                    status_counts[row["status"]] += 1
+                    if not DRY_RUN:
+                        pass  # collected below
+                else:
+                    total_skipped += 1
+            rows_to_write = [r for item in buf if (r := api_item_to_row(item))]
+            if rows_to_write:
+                sb_upsert_batch(rows_to_write)
+
+        raw_items_count = 0
         for page_no in range(1, total_pages + 1):
             if page_no % 50 == 0:
-                log.info("  %d/%d 페이지 (%d건)...", page_no, total_pages, len(raw_items))
+                log.info("  %d/%d 페이지 (저장 %d건)...", page_no, total_pages, total_parsed)
             items = ftc_fetch_page(page_no)
-            raw_items.extend(items)
+            raw_buf.extend(items)
+            raw_items_count += len(items)
+            if page_no % FLUSH_EVERY == 0 or len(items) < FTC_PAGE_SIZE:
+                _flush(raw_buf)
+                raw_buf = []
             if len(items) < FTC_PAGE_SIZE:
                 break
             time.sleep(RATE_LIMIT_SLEEP)
-        converter = api_item_to_row
+        if raw_buf:
+            _flush(raw_buf)
+
+        log.info("파싱: %d건 유효 / %d건 건너뜀 (BRN 없음/상호 없음)", total_parsed, total_skipped)
+        log.info("%s %d건 ftc_telesales_registry 저장",
+                 "[DRY-RUN]" if DRY_RUN else "[APPLIED]", total_parsed)
+
+        print(f"\n{'='*60}")
+        print(f"FTC telesales import {'DRY-RUN' if DRY_RUN else 'APPLIED'}")
+        print(f"  수집: {raw_items_count}건  |  저장: {total_parsed}건  |  건너뜀: {total_skipped}건")
+        print(f"  active: {status_counts.get('active', 0)}")
+        print(f"  cancelled/suspended: {status_counts.get('cancelled', 0) + status_counts.get('suspended', 0)}")
+        print(f"  batch_id: {BATCH_ID}")
+        print(f"{'='*60}")
+        return
 
     parsed = []
     skipped = 0
