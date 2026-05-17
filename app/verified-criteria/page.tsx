@@ -1,6 +1,31 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 
+const canonicalUrl = 'https://www.packlinx.com/verified-criteria'
+const siteUrl = 'https://www.packlinx.com'
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: '홈', item: siteUrl },
+        { '@type': 'ListItem', position: 2, name: 'Packlinx 인증 평가기준', item: canonicalUrl },
+      ],
+    },
+    {
+      '@type': 'WebPage',
+      '@id': canonicalUrl,
+      url: canonicalUrl,
+      name: 'Packlinx 인증 평가기준',
+      description: 'Packlinx 인증(packlinx_verified) 부여 기준 안내 — 사업자등록 진위 확인, 통신판매업 신고 확인, 분쟁 이력 검토 등 내부 검수 절차.',
+      inLanguage: 'ko',
+      isPartOf: { '@type': 'WebSite', name: 'Packlinx', url: siteUrl },
+    },
+  ],
+}
+
 export const metadata: Metadata = {
   title: 'Packlinx 인증 평가기준 — Packlinx',
   description:
@@ -36,7 +61,9 @@ const criteria = [
 
 export default function VerifiedCriteriaPage() {
   return (
-    <main className="max-w-2xl mx-auto px-4 py-12">
+    <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <main className="max-w-2xl mx-auto px-4 py-12">
       <div className="mb-8">
         <Link
           href="/"
@@ -87,6 +114,7 @@ export default function VerifiedCriteriaPage() {
           또는 고객센터를 통해 문의하세요.
         </p>
       </div>
-    </main>
+      </main>
+    </>
   )
 }
