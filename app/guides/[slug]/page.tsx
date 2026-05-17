@@ -236,7 +236,7 @@ function GuideV1Page({
   guide: GuideContent;
 }) {
   if (slug === "corrugated-box-supplier-selection") {
-    return <CorrugatedBoxGuideV1 guide={guide} />;
+    return <CorrugatedBoxGuideV1 slug={slug} guide={guide} />;
   }
   if (slug === "corrugated-flute-types") {
     return <GuideSlotV1Page slug={slug} guide={guide} data={SLOT_DATA_CORRUGATED_FLUTE} />;
@@ -297,7 +297,21 @@ function GuideV1Page({
   );
 }
 
-function CorrugatedBoxGuideV1({ guide }: { guide: GuideContent }) {
+function CorrugatedBoxGuideV1({ slug, guide }: { slug: string; guide: GuideContent }) {
+  const canonicalUrl = `${siteUrl}/guides/${encodeURIComponent(slug)}`;
+  const articleJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: guide.title,
+    description: guide.description,
+    url: canonicalUrl,
+    inLanguage: "ko-KR",
+    datePublished: guide.datePublished,
+    dateModified: guide.datePublished,
+    author: { "@type": "Organization", name: "Packlinx", url: siteUrl },
+    image: `${canonicalUrl}/opengraph-image`,
+    publisher: { "@type": "Organization", name: "Packlinx", url: siteUrl },
+  };
   const faqSchema = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
@@ -339,6 +353,10 @@ function CorrugatedBoxGuideV1({ guide }: { guide: GuideContent }) {
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
+      />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
