@@ -309,7 +309,7 @@ function CorrugatedBoxGuideV1({ slug, guide }: { slug: string; guide: GuideConte
     datePublished: guide.datePublished,
     dateModified: guide.datePublished,
     author: { "@type": "Organization", name: "Packlinx", url: siteUrl },
-    image: `${canonicalUrl}/opengraph-image`,
+    image: `${siteUrl}/og-default.png`,
     publisher: { "@type": "Organization", name: "Packlinx", url: siteUrl },
   };
   const faqSchema = {
@@ -2957,7 +2957,7 @@ function GuideSlotV1Page({
     datePublished: guide.datePublished,
     dateModified: guide.datePublished,
     author: { "@type": "Organization", name: "Packlinx", url: siteUrl },
-    image: `${canonicalUrl}/opengraph-image`,
+    image: `${siteUrl}/og-default.png`,
     publisher: { "@type": "Organization", name: "Packlinx", url: siteUrl },
   };
   const faqSchema = {
