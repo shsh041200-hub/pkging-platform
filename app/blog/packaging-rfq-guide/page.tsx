@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { SiteHeader } from "@/components/SiteHeader";
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://packlinx.com";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.packlinx.com";
 const canonicalUrl = `${siteUrl}/blog/packaging-rfq-guide`;
 
 const title =
@@ -35,6 +35,7 @@ const articleJsonLd = {
   headline:
     "포장 업체 견적 요청 완전 가이드 — RFQ 준비부터 업체 선정까지 (2026)",
   description,
+  image: `${siteUrl}/og-default.png`,
   url: canonicalUrl,
   inLanguage: "ko-KR",
   datePublished: "2026-05-08",

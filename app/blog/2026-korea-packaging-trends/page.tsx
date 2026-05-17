@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { SiteHeader } from "@/components/SiteHeader";
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://packlinx.com";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.packlinx.com";
 const canonicalUrl = `${siteUrl}/blog/2026-korea-packaging-trends`;
 
 const title = "2026 한국 패키징 트렌드: 구매 담당자가 알아야 할 7가지 변화 | Packlinx";
@@ -33,6 +33,7 @@ const articleJsonLd = {
   "@type": "Article",
   headline: "2026 한국 패키징 트렌드: 구매 담당자가 알아야 할 7가지 변화",
   description,
+  image: `${siteUrl}/og-default.png`,
   url: canonicalUrl,
   inLanguage: "ko-KR",
   datePublished: "2026-05-07",
