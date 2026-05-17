@@ -101,6 +101,8 @@ async function staticEntries(): Promise<Entry[]> {
     { url: `${root}/guides`, lastmod: now, changefreq: 'daily', priority: 0.7 },
     { url: `${root}/faq`, lastmod: now, changefreq: 'monthly', priority: 0.5 },
     { url: `${root}/terms`, lastmod: now, changefreq: 'yearly', priority: 0.3 },
+    { url: `${root}/privacy`, lastmod: now, changefreq: 'yearly', priority: 0.3 },
+    { url: `${root}/opt-out`, lastmod: now, changefreq: 'yearly', priority: 0.3 },
   ]
 
   // Category pages
