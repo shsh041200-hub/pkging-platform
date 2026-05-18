@@ -34,6 +34,14 @@ export function generateMetadata(): Metadata {
       siteName: "Packlinx",
       locale: "ko_KR",
       type: "article",
+      images: [
+        {
+          url: 'https://www.packlinx.com/og-default.png',
+          width: 1200,
+          height: 630,
+          alt: 'Packlinx — 전국 패키징 업체 플랫폼',
+        },
+      ],
     },
   };
 }
