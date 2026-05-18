@@ -100,8 +100,13 @@ async function staticEntries(): Promise<Entry[]> {
     { url: `${root}/categories`, lastmod: now, changefreq: 'weekly', priority: 0.9 },
     { url: `${root}/guides`, lastmod: now, changefreq: 'daily', priority: 0.7 },
     { url: `${root}/blog`, lastmod: now, changefreq: 'weekly', priority: 0.7 },
+    { url: `${root}/keywords`, lastmod: now, changefreq: 'weekly', priority: 0.7 },
+    { url: `${root}/match`, lastmod: now, changefreq: 'weekly', priority: 0.7 },
     { url: `${root}/faq`, lastmod: now, changefreq: 'monthly', priority: 0.5 },
     { url: `${root}/terms`, lastmod: now, changefreq: 'yearly', priority: 0.3 },
+    { url: `${root}/verified-criteria`, lastmod: now, changefreq: 'monthly', priority: 0.4 },
+    { url: `${root}/privacy`, lastmod: now, changefreq: 'yearly', priority: 0.3 },
+    { url: `${root}/opt-out`, lastmod: now, changefreq: 'yearly', priority: 0.3 },
   ]
 
   // Category pages
@@ -143,6 +148,17 @@ async function staticEntries(): Promise<Entry[]> {
   const keywordSlugs = await listKeywordSlugs()
   for (const slug of keywordSlugs) {
     out.push({ url: `${root}/keywords/${encodeURIComponent(slug)}`, lastmod: now, changefreq: 'daily', priority: 0.8 })
+  }
+
+  // Use-case tag pages — percent-encode slug (Korean chars).
+  const { data: useCaseTags } = await supabase()
+    .from('use_case_tags')
+    .select('seo_slug')
+    .not('seo_slug', 'is', null)
+  for (const tag of useCaseTags ?? []) {
+    if (tag.seo_slug) {
+      out.push({ url: `${root}/use-cases/${encodeURIComponent(tag.seo_slug)}`, lastmod: now, changefreq: 'monthly', priority: 0.7 })
+    }
   }
 
   return out
