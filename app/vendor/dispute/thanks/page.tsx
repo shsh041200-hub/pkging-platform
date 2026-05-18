@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { SiteHeader } from '@/components/SiteHeader'
 
 export const metadata: Metadata = {
-  title: '이의제기 접수 완료 — Packlinx',
+  title: '이의제기 접수 완료',
   robots: { index: false, follow: false },
 }
 
