@@ -53,8 +53,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: '전국 패키징 업체 찾기 — B2B 포장재 플랫폼 | Packlinx',
-    description: '국내 1,396개 패키징 업체를 무료로 검색·비교하세요. 식품·화장품·이커머스·친환경 포장재 B2B 플랫폼 Packlinx.',
+    title: 'Packlinx — 전국 B2B 패키징 업체 플랫폼',
+    description: '국내 패키징·포장재 업체를 무료로 검색·비교하세요. 식품·화장품·이커머스·친환경 포장재 B2B 플랫폼 Packlinx.',
     images: ['/og-default.png'],
   },
   verification: {
