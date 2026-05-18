@@ -26,11 +26,26 @@ export const metadata: Metadata = {
   },
 }
 
+const collectionJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  '@id': `${siteUrl}/keywords`,
+  name: '패키징 키워드 디렉터리',
+  description: '골판지박스, 택배박스, 비닐봉투, 화장품 용기 등 50개 패키징 키워드별 전문 업체 목록',
+  url: `${siteUrl}/keywords`,
+  inLanguage: 'ko',
+  isPartOf: { '@type': 'WebSite', name: 'Packlinx', url: siteUrl },
+}
+
 export default async function KeywordsIndexPage() {
   const keywords = await listKeywordIndex()
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionJsonLd) }}
+      />
       <SiteHeader />
 
       {/* Hero */}
