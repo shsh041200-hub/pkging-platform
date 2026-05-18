@@ -27,7 +27,7 @@ const jsonLd = {
 }
 
 export const metadata: Metadata = {
-  title: 'Packlinx 인증 평가기준 — Packlinx',
+  title: 'Packlinx 인증 평가기준',
   description:
     'Packlinx 인증(packlinx_verified) 부여 기준 안내 — 사업자등록 진위 확인, 통신판매업 신고 확인, 분쟁 이력 검토 등 내부 검수 절차.',
   alternates: {
