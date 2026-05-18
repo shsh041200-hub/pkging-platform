@@ -10,6 +10,16 @@ import { GuideEndCta } from "@/components/guide/GuideEndCta";
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://packlinx.com";
 const canonicalUrl = `${siteUrl}/guides/label-printing-guide`;
 
+const breadcrumbJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "홈", item: siteUrl },
+    { "@type": "ListItem", position: 2, name: "패키징 가이드", item: `${siteUrl}/guides` },
+    { "@type": "ListItem", position: 3, name: "라벨 인쇄 업체 선정 가이드", item: canonicalUrl },
+  ],
+};
+
 const title = "라벨 인쇄 업체 선정 가이드 — 인쇄 방식·비용·소재·MOQ 비교 (2026)";
 const description =
   "라벨 인쇄 업체 선정 기준, 방식별 비용 비교표, 소재 선택 가이드를 정리했습니다. 소량~대량 디지털·옵셋·플렉소 인쇄 단가와 납기를 비교해 적합한 업체를 찾으세요.";
@@ -185,6 +195,10 @@ export default function LabelPrintingGuidePage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
       <GuideHero
         tag="인쇄·라벨 가이드"

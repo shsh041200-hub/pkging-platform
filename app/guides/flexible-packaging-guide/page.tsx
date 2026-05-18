@@ -11,6 +11,16 @@ import { GuideEndCta } from "@/components/guide/GuideEndCta";
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://packlinx.com";
 const canonicalUrl = `${siteUrl}/guides/flexible-packaging-guide`;
 
+const breadcrumbJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "홈", item: siteUrl },
+    { "@type": "ListItem", position: 2, name: "패키징 가이드", item: `${siteUrl}/guides` },
+    { "@type": "ListItem", position: 3, name: "연포장재 완전 가이드", item: canonicalUrl },
+  ],
+};
+
 const title = "연포장재 완전 가이드 — 종류·소재·선택 기준";
 const description =
   "연포장재(파우치·롤필름·합지) 종류·소재·식품 안전 기준(OTR·WVTR)·MOQ·업체 선택 체크리스트를 한 곳에 정리했습니다. 2026년 최신 기준으로 업체를 빠르게 비교하세요.";
@@ -159,6 +169,10 @@ export default function FlexiblePackagingGuidePage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
       <GuideHero
         tag="소재·친환경 · 연포장 가이드"

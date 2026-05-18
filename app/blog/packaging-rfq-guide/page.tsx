@@ -3,8 +3,18 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { SiteHeader } from "@/components/SiteHeader";
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://packlinx.com";
+const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.packlinx.com").replace(/\/$/, "");
 const canonicalUrl = `${siteUrl}/blog/packaging-rfq-guide`;
+
+const breadcrumbJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "홈", item: siteUrl },
+    { "@type": "ListItem", position: 2, name: "블로그", item: `${siteUrl}/blog` },
+    { "@type": "ListItem", position: 3, name: "포장 업체 견적 요청 완전 가이드", item: canonicalUrl },
+  ],
+};
 
 const title =
   "포장 업체 견적 요청 완전 가이드 — RFQ 준비부터 업체 선정까지 (2026) | Packlinx";
@@ -13,7 +23,7 @@ const description =
 
 export function generateMetadata(): Metadata {
   return {
-    title,
+    title: { absolute: title },
     description,
     alternates: {
       canonical: canonicalUrl,
@@ -49,6 +59,7 @@ const articleJsonLd = {
     name: "Packlinx",
     url: siteUrl,
   },
+  image: `${siteUrl}/og-default.png`,
   about: {
     "@type": "Thing",
     name: "패키징 RFQ 가이드",
@@ -125,6 +136,10 @@ export default function PackagingRfqGuidePage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
       <SiteHeader />
       <main>

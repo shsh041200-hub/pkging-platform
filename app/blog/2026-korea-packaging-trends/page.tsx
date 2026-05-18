@@ -3,8 +3,18 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { SiteHeader } from "@/components/SiteHeader";
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://packlinx.com";
+const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.packlinx.com").replace(/\/$/, "");
 const canonicalUrl = `${siteUrl}/blog/2026-korea-packaging-trends`;
+
+const breadcrumbJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "홈", item: siteUrl },
+    { "@type": "ListItem", position: 2, name: "블로그", item: `${siteUrl}/blog` },
+    { "@type": "ListItem", position: 3, name: "2026 한국 패키징 트렌드", item: canonicalUrl },
+  ],
+};
 
 const title = "2026 한국 패키징 트렌드: 구매 담당자가 알아야 할 7가지 변화 | Packlinx";
 const description =
@@ -12,7 +22,7 @@ const description =
 
 export function generateMetadata(): Metadata {
   return {
-    title,
+    title: { absolute: title },
     description,
     alternates: {
       canonical: canonicalUrl,
@@ -47,6 +57,7 @@ const articleJsonLd = {
     name: "Packlinx",
     url: siteUrl,
   },
+  image: `${siteUrl}/og-default.png`,
   about: {
     "@type": "Thing",
     name: "한국 패키징 시장 트렌드",
@@ -114,6 +125,10 @@ export default function KoreaPackagingTrends2026Page() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
       <SiteHeader />
       <main>
