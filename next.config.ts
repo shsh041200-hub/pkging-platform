@@ -36,6 +36,14 @@ const nextConfig: NextConfig = {
         destination: "/guides/plastic-container-guide",
         permanent: true,
       },
+      // PACAA-822: /docs/legal/vendor-verification-criteria is linked from the
+      // VerificationRevokedBanner (LC §5-B) but has no page. Route to the
+      // existing /verified-criteria page which is the published criteria doc.
+      {
+        source: "/docs/legal/:path*",
+        destination: "/verified-criteria",
+        permanent: false,
+      },
     ];
   },
 };
