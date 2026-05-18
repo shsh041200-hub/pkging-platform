@@ -181,7 +181,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title,
     description,
-    alternates: { canonical: `/categories/${slug}` },
+    keywords: CATEGORY_KEYWORDS[categoryKey].map((k) => k.label),
+    alternates: {
+      canonical: `${siteUrl}/categories/${slug}`,
+      languages: { 'ko-KR': `${siteUrl}/categories/${slug}`, 'x-default': `${siteUrl}/categories/${slug}` },
+    },
     openGraph: {
       title: CATEGORY_OG_TITLE[categoryKey] ?? `${title} — Packlinx`,
       description: CATEGORY_OG_DESCRIPTION[categoryKey] ?? description,

@@ -52,7 +52,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title,
     description,
-    alternates: { canonical: `${siteUrl}/use-cases/${tag.seo_slug}` },
+    alternates: {
+      canonical: `${siteUrl}/use-cases/${tag.seo_slug}`,
+      languages: { 'ko-KR': `${siteUrl}/use-cases/${tag.seo_slug}`, 'x-default': `${siteUrl}/use-cases/${tag.seo_slug}` },
+    },
     openGraph: {
       title,
       description,
