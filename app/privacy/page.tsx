@@ -5,9 +5,15 @@ import { SiteHeader } from '@/components/SiteHeader'
 import { TermsNoticeFooterLine } from '@/components/TermsNoticeFooterLine'
 import { BusinessRegistrationInfo } from '@/components/BusinessRegistrationInfo'
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://www.packlinx.com'
+
 export const metadata: Metadata = {
   title: '개인정보처리방침',
   description: 'Packlinx 개인정보처리방침 — 최종 개정일 2026년 5월 13일 (개정 6회)',
+  alternates: {
+    canonical: `${siteUrl}/privacy`,
+    languages: { 'ko-KR': `${siteUrl}/privacy`, 'x-default': `${siteUrl}/privacy` },
+  },
 }
 
 export default function PrivacyPage() {

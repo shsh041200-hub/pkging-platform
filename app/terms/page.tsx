@@ -5,9 +5,15 @@ import { SiteHeader } from '@/components/SiteHeader'
 import { TermsNoticeFooterLine } from '@/components/TermsNoticeFooterLine'
 import { BusinessRegistrationInfo } from '@/components/BusinessRegistrationInfo'
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://www.packlinx.com'
+
 export const metadata: Metadata = {
   title: '이용약관',
   description: 'Packlinx 이용약관 — 최종 개정일 2026년 5월 2일',
+  alternates: {
+    canonical: `${siteUrl}/terms`,
+    languages: { 'ko-KR': `${siteUrl}/terms`, 'x-default': `${siteUrl}/terms` },
+  },
 }
 
 export default function TermsPage() {
