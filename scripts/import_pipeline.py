@@ -309,7 +309,10 @@ def main():
         slug_seen.add(slug)
 
         row = {
-            # Allowed fields: name, address, category (phone omitted: KOR-371)
+            # Allowed fields: name, address, category
+            # phone omitted: KOR-371 (DB trigger prevent_companies_phone_write)
+            # Policy basis: PACAA-801 Legal Counsel advisory (PIPA §15/§17, Naver Open API ToS).
+            # See docs/legal/phone-data-kor371.md. Backfill deferred per PACAA-800 board decision (옵션 D).
             "name":     name_clean,
             "address":  (vc.get("address_raw") or "").strip() or None,
             "category": companies_cat,
