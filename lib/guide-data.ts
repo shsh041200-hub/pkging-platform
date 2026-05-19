@@ -13,6 +13,7 @@ export const STATIC_GUIDE_SLUGS = [
   "label-printing-guide",
   "flexible-packaging-guide",
   "plastic-container-guide",
+  "eco-friendly-packaging-guide",
 ] as const;
 export type StaticGuideSlug = (typeof STATIC_GUIDE_SLUGS)[number];
 
@@ -77,7 +78,13 @@ export type GuideMeta = {
 
 /** Display metadata for the /guides index page. Order matches ALL_GUIDE_SLUGS. */
 export const GUIDE_META: GuideMeta[] = [
-  // material (7)
+  // material (7+1)
+  { slug: "eco-friendly-packaging-guide", category: "material",
+    title: "친환경 포장재 종류 완전 가이드 (2026) — 생분해·재활용·바이오기반 비교",
+    description: "생분해(PLA·PBAT)·재활용(rPET·재생지)·바이오기반 포장재 종류 비교, 국내 GR 인증·EPR 분담금 기준, 업종별 적합 소재 선택표, MOQ·납기·전환 비용을 한 곳에 정리했습니다.",
+    redesignVersion: 1,
+    readTime: "7분",
+    icon: "🌿" },
   { slug: "label-printing-guide", category: "material",
     title: "라벨 인쇄 업체 선정 가이드",
     description: "인쇄 방식(디지털·옵셋·플렉소), 소재, MOQ, 납기 기준을 항목별로 비교합니다." },
