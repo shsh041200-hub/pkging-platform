@@ -9,7 +9,7 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://www.packlinx.com'
 
 export const metadata: Metadata = {
   title: '개인정보처리방침',
-  description: 'Packlinx 개인정보처리방침 — 최종 개정일 2026년 5월 13일 (개정 6회)',
+  description: 'Packlinx 개인정보처리방침 — 최종 개정일 2026년 5월 24일 (개정 7회)',
   alternates: {
     canonical: `${siteUrl}/privacy`,
     languages: { 'ko-KR': `${siteUrl}/privacy`, 'x-default': `${siteUrl}/privacy` },
@@ -24,24 +24,26 @@ export default function PrivacyPage() {
       <main className="max-w-3xl mx-auto px-4 sm:px-6 py-10 pb-16">
         <h1 className="text-2xl font-bold text-neutral-900 mb-2">개인정보처리방침</h1>
         <p className="text-sm text-neutral-500 mb-1">최초 시행일: 2026년 4월 19일</p>
-        <p className="text-sm text-neutral-500 mb-6">시행일: 2026년 5월 13일 (개정 6회)</p>
+        <p className="text-sm text-neutral-500 mb-6">시행일: 2026년 5월 24일 (개정 7회)</p>
 
         <div className="bg-amber-50 border-l-4 border-amber-500 px-4 py-3 mb-4 rounded-r">
-          <p className="text-sm font-medium text-amber-900 mb-1">개인정보처리방침 개정 안내 (2026-05-13)</p>
+          <p className="text-sm font-medium text-amber-900 mb-1">개인정보처리방침 개정 안내 (2026-05-24)</p>
           <p className="text-sm text-amber-800">
-            카테고리 디렉터리 커버리지 확대를 위해 네이버 플레이스(map.naver.com)에 사업자가
-            자발적으로 공개한 사업체명·전화·주소·업종(카테고리) 4개 항목을 수집·표시하는
-            범위가 신설됩니다. 수집 근거는 「개인정보 보호법」 제15조 제1항 제6호(정당한 이익)이며,
-            정보주체는 <Link href="/opt-out" className="underline text-amber-900">/opt-out</Link>{' '}
+            입점 사업자의 통신판매업 신고 의무 이행 여부 검증(소비자 보호)을 위해
+            공정거래위원회 공시정보로부터 통신판매업 신고번호·신고 여부·신고일·조회일자를
+            수집·저장하는 범위가 신설됩니다. 수집 근거는 「개인정보 보호법」
+            제15조 제1항 제6호(정당한 이익)이며, 본 정보는 현재 외부에 노출되지 않고
+            내부 검증 목적으로만 처리됩니다. 정보주체는{' '}
+            <Link href="/opt-out" className="underline text-amber-900">/opt-out</Link>{' '}
             웹폼 또는{' '}
             <a href="mailto:rpdla041200@gmail.com" className="underline text-amber-900">rpdla041200@gmail.com</a>{' '}
-            으로 즉시 디렉터리 제거 및 재유입 차단(suppression)을 요청할 수 있습니다.
-            세부 사항은 제2조·제17조 및 하단 &apos;변경 이력&apos; 참조.
+            으로 정정·삭제를 요청할 수 있습니다. 세부 사항은 제2조 ①-3 · 제3조 · 제4조
+            및 하단 &apos;변경 이력&apos; 참조.
           </p>
         </div>
 
         <div className="bg-brand-50 border-l-4 border-brand-700 px-4 py-3 mb-8 rounded-r">
-          <p className="text-sm text-neutral-900">본 문서의 최신 개정(개정 6회)은 2026-05-13 부터 시행됩니다.</p>
+          <p className="text-sm text-neutral-900">본 문서의 최신 개정(개정 7회)은 2026-05-24 부터 시행됩니다.</p>
         </div>
 
         <div className="space-y-8 text-sm text-neutral-700 leading-relaxed">
@@ -113,6 +115,40 @@ export default function PrivacyPage() {
               </li>
             </ul>
 
+            <h3 className="font-medium text-neutral-800 mb-2 mt-4">① -3 공정거래위원회 공시정보 자동 수집 (통신판매업 신고 여부 검증)</h3>
+            <ul className="list-disc list-inside space-y-1 mb-1 ml-2">
+              <li><strong>수집 항목</strong>: 통신판매업 신고번호, 신고 여부(found / not_found / exempt), 신고일, 조회일자 및 매칭 출처(source) 메타데이터</li>
+              <li>
+                <strong>수집 출처</strong>: 공정거래위원회가 「전자상거래 등에서의 소비자보호에 관한 법률」에 따라 공시하는
+                통신판매사업자 등록 정보 (
+                <a
+                  href="https://www.ftc.go.kr/bizCommView.do"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline text-neutral-700 hover:text-neutral-900"
+                >
+                  www.ftc.go.kr
+                </a>
+                ) 의 공개 페이지
+              </li>
+              <li>
+                <strong>수집 방법</strong>: 공정거래위원회 공시정보를 자동화된 도구로 조회하여
+                <code className="text-xs bg-neutral-100 px-1 py-0.5 mx-1 rounded">vendor_telesales_checks</code> 에 적재 후 매칭 결과를
+                <code className="text-xs bg-neutral-100 px-1 py-0.5 mx-1 rounded">companies.vendor_model</code> 및
+                <code className="text-xs bg-neutral-100 px-1 py-0.5 mx-1 rounded">companies.vendor_model_source</code> 컬럼에 저장
+              </li>
+              <li><strong>이용 목적</strong>: 입점 사업자의 통신판매업 신고 의무 이행 여부 확인 (소비자 보호)</li>
+              <li><strong>보유 기간</strong>: vendor 입점 종료 후 3년 (또는 관계 법령 보존기간). 입점 종료 시점부터 3년 경과 후 지체 없이 파기</li>
+              <li><strong>외부 노출 여부</strong>: 본 처리방침 시행 시점 기준 외부에 노출되지 않으며 내부 검증 목적으로만 처리합니다. 향후 외부 노출이 결정될 경우 「표시·광고의 공정화에 관한 법률」 등 관련 법령 검토를 거쳐 본 처리방침을 사전 개정합니다.</li>
+              <li>
+                <strong>법적 근거</strong>: 「개인정보 보호법」 제15조 제1항 제6호(정당한 이익) — 공정거래위원회가
+                소비자 보호 목적으로 이미 공시·공개한 정보를 동일한 소비자 보호 목적(입점 사업자의
+                신고 의무 이행 여부 검증)으로 처리하는 것은 사회통념상 합리적인 범위에 해당.
+                법인사업자의 동일 항목은 PIPA 적용 대상이 아니나, 형평성·운영 단순화를 위해
+                동일한 정정·삭제 절차(제7조)를 보장합니다.
+              </li>
+            </ul>
+
             <p className="mb-1 ml-2 mt-3"><strong>명시적 비수집 항목</strong>: 회사 정책에 따라 다음 항목은 <strong>수집·저장·노출하지 않습니다</strong></p>
             <ul className="list-disc list-inside space-y-1 mb-3 ml-6">
               <li>사업자 이메일</li>
@@ -152,6 +188,7 @@ export default function PrivacyPage() {
               </li>
               <li>서비스 이용 통계 분석 및 서비스 개선</li>
               <li>광고·마케팅 캠페인 효과 측정 (UTM 파라미터 분석)</li>
+              <li>입점 사업자의 통신판매업 신고 의무 이행 여부 검증 (소비자 보호 — 제2조 ①-3 참조)</li>
               <li>정보주체의 권리 행사(열람·정정·삭제·처리정지) 처리</li>
               <li>법령상 의무 이행 및 분쟁 대응</li>
             </ol>
@@ -179,6 +216,10 @@ export default function PrivacyPage() {
                   <tr>
                     <td className="border border-neutral-200 px-3 py-2">정보 정정·삭제 요청 기록 (opt_out_requests)</td>
                     <td className="border border-neutral-200 px-3 py-2">처리 완료 후 3년 (분쟁 대응 목적)</td>
+                  </tr>
+                  <tr>
+                    <td className="border border-neutral-200 px-3 py-2">통신판매업 신고 여부 검증 데이터 (vendor_telesales_checks, companies.vendor_model)</td>
+                    <td className="border border-neutral-200 px-3 py-2">vendor 입점 종료 후 3년 (관계 법령 보존기간이 더 긴 경우 해당 기간)</td>
                   </tr>
                 </tbody>
               </table>
@@ -457,7 +498,7 @@ export default function PrivacyPage() {
           <section>
             <h2 className="text-base font-semibold text-neutral-900 mb-3">부칙</h2>
             <ol className="list-decimal list-inside space-y-1 ml-2">
-              <li>본 처리방침은 2026년 5월 13일부터 적용합니다. (개정 6회)</li>
+              <li>본 처리방침은 2026년 5월 24일부터 적용합니다. (개정 7회)</li>
               <li>이전 처리방침은 별도 보관하며, 요청 시 제공합니다.</li>
             </ol>
           </section>
@@ -497,6 +538,19 @@ export default function PrivacyPage() {
                 <br />
                 <span className="ml-4 text-neutral-500">
                   (PACAA-652 / Legal Counsel 자문 PACAA-648 — 네이버 플레이스 공개 정보 PIPA Surface 2)
+                </span>
+              </li>
+              <li>
+                2026년 5월 24일 (개정 7회): 공정거래위원회 공시정보로부터 통신판매업 신고 여부
+                검증 데이터를 수집·저장하는 범위 신설 — 제2조 ①-3 신설(통신판매업 신고번호·신고
+                여부·신고일·조회일자, 출처 공정거래위원회 공시정보, PIPA §15(1)6호 근거, 외부
+                미노출 명문화), 제3조 처리 목적 추가(입점 사업자 신고 의무 이행 여부 검증),
+                제4조 보유기간 표에 vendor_telesales_checks · companies.vendor_model 행 추가
+                (vendor 입점 종료 후 3년). 본 개정은 companies.vendor_model 컬럼 migration
+                (PACAA-986 / PR #177) 운영 데이터 적재 전에 시행됩니다.
+                <br />
+                <span className="ml-4 text-neutral-500">
+                  (PACAA-993 / Legal Counsel 자문 PACAA-989 — companies.vendor_model PIPA §15·§30)
                 </span>
               </li>
             </ul>
