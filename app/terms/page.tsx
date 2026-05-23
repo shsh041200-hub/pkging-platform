@@ -9,7 +9,7 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://www.packlinx.com'
 
 export const metadata: Metadata = {
   title: '이용약관',
-  description: 'Packlinx 이용약관 — 최종 개정일 2026년 5월 2일',
+  description: 'Packlinx 이용약관 — 최종 개정일 2026년 5월 31일',
   alternates: {
     canonical: `${siteUrl}/terms`,
     languages: { 'ko-KR': `${siteUrl}/terms`, 'x-default': `${siteUrl}/terms` },
@@ -24,10 +24,10 @@ export default function TermsPage() {
       <main className="max-w-3xl mx-auto px-4 sm:px-6 py-10 pb-16">
         <h1 className="text-2xl font-bold text-neutral-900 mb-2">이용약관</h1>
         <p className="text-sm text-neutral-500 mb-1">최초 시행일: 2026년 4월 19일</p>
-        <p className="text-sm text-neutral-500 mb-6">시행일: 2026년 5월 2일 (개정 2회)</p>
+        <p className="text-sm text-neutral-500 mb-6">시행일: 2026년 5월 31일 (개정 3회)</p>
 
         <div className="bg-brand-50 border-l-4 border-brand-700 px-4 py-3 mb-8 rounded-r">
-          <p className="text-sm text-neutral-900">본 문서는 2026-05-02 부터 시행됩니다.</p>
+          <p className="text-sm text-neutral-900">본 문서는 2026-05-31 부터 시행됩니다. (공지일 2026-05-24, 시행 7일 전 공지)</p>
         </div>
 
         <div className="space-y-8 text-sm text-neutral-700 leading-relaxed">
@@ -102,6 +102,13 @@ export default function TermsPage() {
               <li>
                 서비스에 게재된 업체 정보는 인터넷에 공개된 정보를 자동으로 수집하여 가공한 것이며,
                 회사는 정보의 정확성·최신성·완전성을 보증하지 않습니다.
+              </li>
+              <li>
+                회사는 등록 업체의 통신판매업 신고 의무 이행 여부 등 「전자상거래 등에서의 소비자보호에 관한 법률」
+                관련 공시 정보 확인을 위하여, 공정거래위원회가 운영하는 통신판매사업자 조회 시스템 등 공공기관
+                공개 정보를 주기적으로 자동 조회·갱신하여 서비스 내 표시 정보의 정확성을 유지할 수 있습니다.
+                해당 조회 결과는 등록 업체 분류(예: 통신판매업 신고 여부) 표시에 활용되며, 등록 업체는 본
+                조항에 따른 자동 조회·갱신이 이루어진다는 사실을 인지합니다.
               </li>
               <li>
                 등록 업체 또는 정당한 권한이 있는 제3자는 자신에 관한 정보의 정정·삭제·추가를 다음 경로로 요청할 수 있습니다.
@@ -457,6 +464,13 @@ export default function TermsPage() {
                 <br />
                 <span className="ml-4 text-neutral-500">
                   (표시광고법 §3(3) 기만적 표시광고 방지 — Legal Counsel 자문 기반, PACAA-509)
+                </span>
+              </li>
+              <li>
+                2026년 5월 31일: 제5조에 공정거래위원회 통신판매사업자 조회 등 공공기관 공시정보 자동 조회·갱신 조항 신설
+                <br />
+                <span className="ml-4 text-neutral-500">
+                  (전자상거래법 §20 분쟁 예방 — Legal Counsel 자문 기반, PACAA-995/989)
                 </span>
               </li>
             </ul>
