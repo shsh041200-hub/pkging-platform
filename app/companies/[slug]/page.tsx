@@ -88,7 +88,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const productList = Array.isArray(company.products) && (company.products as string[]).length > 0
     ? (company.products as string[]).slice(0, 3).join(', ')
     : null
-  const descParts: string[] = [`${categoryLabel} 패키징 전문`]
+  const descParts: string[] = [`${categoryLabel} 포장 전문`]
   if (productList) descParts.push(`취급: ${productList}`)
   if (company.founded_year) descParts.push(`설립 ${company.founded_year as number}년`)
   if (company.phone) descParts.push(company.phone as string)

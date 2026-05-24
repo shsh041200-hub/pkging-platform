@@ -9,7 +9,7 @@ const collectionJsonLd = {
   "@context": "https://schema.org",
   "@type": "CollectionPage",
   "@id": canonicalUrl,
-  name: "패키징 실무 가이드",
+  name: "포장 실무 가이드",
   description: "소재 선택부터 MOQ·납기·인증까지. 포장재 구매 담당자를 위한 현장형 가이드 모음.",
   url: canonicalUrl,
   inLanguage: "ko",
@@ -17,7 +17,7 @@ const collectionJsonLd = {
 };
 
 export const metadata: Metadata = {
-  title: "패키징 실무 가이드 — 포장재 업체 선정·소재·공정 완벽 정리",
+  title: "포장 실무 가이드 — 포장재 업체 선정·소재·공정 완벽 정리",
   description:
     "소재 선택부터 MOQ·납기·인증까지. 1,380개 업체 데이터를 기반으로 만든 포장재 구매 담당자를 위한 현장형 가이드.",
   alternates: {
@@ -25,7 +25,7 @@ export const metadata: Metadata = {
     languages: { "ko-KR": canonicalUrl, "x-default": canonicalUrl },
   },
   openGraph: {
-    title: "패키징 실무 가이드 — Packlinx",
+    title: "포장 실무 가이드 — Packlinx",
     description:
       "소재 선택부터 MOQ·납기·인증까지. 1,380개 업체 데이터를 기반으로 만든 현장형 가이드.",
     url: canonicalUrl,

@@ -79,8 +79,8 @@ export async function generateMetadata({
     },
     twitter: {
       card: 'summary_large_image',
-      title: '전국 패키징 업체 찾기 — B2B 포장재 플랫폼 | Packlinx',
-      description: '국내 1,396개 패키징 업체를 무료로 검색·비교하세요. 식품·화장품·이커머스·친환경 포장재 B2B 플랫폼 Packlinx.',
+      title: '전국 포장 업체 찾기 — B2B 포장재 플랫폼 | Packlinx',
+      description: '국내 1,396개 포장 업체를 무료로 검색·비교하세요. 식품·화장품·이커머스·친환경 포장재 B2B 플랫폼 Packlinx.',
       images: ['/og-default.png'],
     },
   }
@@ -93,7 +93,7 @@ const jsonLd = {
       '@type': 'WebSite',
       name: 'Packlinx',
       url: siteUrl,
-      description: '전국 패키징 업체를 한눈에. 식품·산업용·친환경 포장재 B2B 파트너 찾기.',
+      description: '전국 포장 업체를 한눈에. 식품·산업용·친환경 포장재 B2B 파트너 찾기.',
       inLanguage: 'ko',
       potentialAction: {
         '@type': 'SearchAction',
@@ -1008,7 +1008,7 @@ export default async function HomePage({
             </div>
             <div className="flex flex-wrap gap-5 text-[12px] text-slate-400">
               <a href="https://keywords.packlinx.com/keywords" className="hover:text-slate-200 transition-colors">키워드 디렉터리</a>
-              <Link href="/guides" className="hover:text-slate-200 transition-colors">패키징 가이드</Link>
+              <Link href="/guides" className="hover:text-slate-200 transition-colors">포장 가이드</Link>
               <Link href="/privacy" className="hover:text-slate-200 transition-colors">개인정보처리방침</Link>
               <Link href="/terms" className="hover:text-slate-200 transition-colors">이용약관</Link>
               <Link href="/opt-out?type=takedown" className="hover:text-slate-200 transition-colors">권리침해 신고</Link>

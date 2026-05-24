@@ -361,7 +361,7 @@ function CorrugatedBoxGuideV1({ slug, guide }: { slug: string; guide: GuideConte
     "@type": "BreadcrumbList",
     itemListElement: [
       { "@type": "ListItem", position: 1, name: "홈", item: siteUrl },
-      { "@type": "ListItem", position: 2, name: "패키징 가이드", item: `${siteUrl}/guides` },
+      { "@type": "ListItem", position: 2, name: "포장 가이드", item: `${siteUrl}/guides` },
       { "@type": "ListItem", position: 3, name: guide.title, item: canonicalUrl },
     ],
   };
@@ -656,7 +656,7 @@ function CorrugatedBoxGuideV1({ slug, guide }: { slug: string; guide: GuideConte
                 {
                   question: "친환경 인증 (FSC) 박스는 단가가 얼마나 더 비싼가요?",
                   answer:
-                    '동일 사양 대비 8~15% 추가. 자세한 비교는 <a href="/guides/eco-friendly-packaging">친환경 패키징 가이드</a>를 참고하세요.',
+                    '동일 사양 대비 8~15% 추가. 자세한 비교는 <a href="/guides/eco-friendly-packaging">친환경 포장 가이드</a>를 참고하세요.',
                 },
               ]}
             />
@@ -2994,7 +2994,7 @@ function GuideSlotV1Page({
     "@type": "BreadcrumbList",
     itemListElement: [
       { "@type": "ListItem", position: 1, name: "홈", item: siteUrl },
-      { "@type": "ListItem", position: 2, name: "패키징 가이드", item: `${siteUrl}/guides` },
+      { "@type": "ListItem", position: 2, name: "포장 가이드", item: `${siteUrl}/guides` },
       { "@type": "ListItem", position: 3, name: guide.title, item: canonicalUrl },
     ],
   };
