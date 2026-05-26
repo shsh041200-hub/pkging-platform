@@ -18,17 +18,17 @@ export const revalidate = 300
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://www.packlinx.com'
 
 export const metadata: Metadata = {
-  title: '패키징 카테고리 — 전국 포장재 업체 분야별 검색',
+  title: '포장 카테고리 — 전국 포장재 업체 분야별 검색',
   description:
-    '식품·이커머스·화장품·의약·전자 등 분야별 전국 패키징 업체를 한눈에 비교하세요. Packlinx 카테고리 디렉토리.',
+    '식품·이커머스·화장품·의약·전자 등 분야별 전국 포장 업체를 한눈에 비교하세요. Packlinx 카테고리 디렉토리.',
   alternates: {
     canonical: `${siteUrl}/categories`,
     languages: { 'ko-KR': `${siteUrl}/categories`, 'x-default': `${siteUrl}/categories` },
   },
   openGraph: {
-    title: '패키징 카테고리 — 전국 포장재 업체 분야별 검색',
+    title: '포장 카테고리 — 전국 포장재 업체 분야별 검색',
     description:
-      '식품·이커머스·화장품·의약·전자 등 분야별 전국 패키징 업체를 한눈에 비교하세요. Packlinx 카테고리 디렉토리.',
+      '식품·이커머스·화장품·의약·전자 등 분야별 전국 포장 업체를 한눈에 비교하세요. Packlinx 카테고리 디렉토리.',
     url: `${siteUrl}/categories`,
     siteName: 'Packlinx',
     locale: 'ko_KR',
@@ -39,8 +39,8 @@ export const metadata: Metadata = {
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'CollectionPage',
-  name: '패키징 카테고리',
-  description: '분야별 전국 패키징 업체 디렉토리',
+  name: '포장 카테고리',
+  description: '분야별 전국 포장 업체 디렉토리',
   url: `${siteUrl}/categories`,
   inLanguage: 'ko',
   isPartOf: { '@type': 'WebSite', url: siteUrl, name: 'Packlinx' },
@@ -101,7 +101,7 @@ export default async function CategoriesIndexPage() {
       <section className="bg-white border-b border-border-v04 px-5 py-14 sm:py-20">
         <div className="max-w-3xl mx-auto text-center">
           <h1 className="text-[32px] sm:text-[44px] font-light text-heading-deep-navy leading-[1.1] tracking-[-0.03em] mb-4">
-            분야별 패키징 업체 찾기
+            분야별 포장 업체 찾기
           </h1>
           <p className="text-[15px] text-neutral-500 leading-relaxed mb-3">
             카테고리를 선택해 내 제품에 맞는 업체를 빠르게 탐색하세요.
@@ -230,7 +230,7 @@ export default async function CategoriesIndexPage() {
             </div>
             <div className="flex flex-wrap gap-5 text-[12px] text-slate-400">
               <a href="https://keywords.packlinx.com/keywords" className="hover:text-slate-200 transition-colors">키워드 디렉터리</a>
-              <Link href="/guides" className="hover:text-slate-200 transition-colors">패키징 가이드</Link>
+              <Link href="/guides" className="hover:text-slate-200 transition-colors">포장 가이드</Link>
               <Link href="/privacy" className="hover:text-slate-200 transition-colors">개인정보처리방침</Link>
               <Link href="/terms" className="hover:text-slate-200 transition-colors">이용약관</Link>
               <Link href="/opt-out?type=takedown" className="hover:text-slate-200 transition-colors">권리침해 신고</Link>

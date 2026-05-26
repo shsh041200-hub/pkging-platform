@@ -88,7 +88,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const productList = Array.isArray(company.products) && (company.products as string[]).length > 0
     ? (company.products as string[]).slice(0, 3).join(', ')
     : null
-  const descParts: string[] = [`${categoryLabel} 패키징 전문`]
+  const descParts: string[] = [`${categoryLabel} 포장 전문`]
   if (productList) descParts.push(`취급: ${productList}`)
   if (company.founded_year) descParts.push(`설립 ${company.founded_year as number}년`)
   if (company.phone) descParts.push(company.phone as string)
@@ -769,6 +769,26 @@ export default async function CompanyPage({ params }: Props) {
                       </Link>
                     ))}
                   </div>
+                  {/* Compare internal links — top 2-3 similar companies (SEO: /compare/* 색인 유도) */}
+                  {similarCompanies.slice(0, 3).length > 0 && (
+                    <div className="mt-3 pt-3 border-t border-neutral-100 flex flex-wrap gap-2">
+                      {similarCompanies.slice(0, 3).map((rel) => {
+                        const [a, b] = [slug, rel.slug].sort()
+                        return (
+                          <Link
+                            key={rel.id}
+                            href={`/compare/${a}-vs-${b}`}
+                            className="inline-flex items-center gap-1 text-[11px] text-neutral-500 hover:text-[#533afd] bg-neutral-50 hover:bg-[#533afd]/5 border border-neutral-200 hover:border-[#533afd]/30 px-2.5 py-1 rounded-md transition-colors"
+                          >
+                            <svg className="w-3 h-3 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                            </svg>
+                            {simplifyCompanyName(company.name as string)} vs {simplifyCompanyName(rel.name)} 비교
+                          </Link>
+                        )
+                      })}
+                    </div>
+                  )}
                 </div>
               )}
 

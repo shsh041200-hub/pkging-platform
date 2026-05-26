@@ -10,15 +10,15 @@ export const revalidate = 86400
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://www.packlinx.com'
 
 export const metadata: Metadata = {
-  title: '패키징 키워드 디렉터리 — 업체 검색',
-  description: '골판지박스, 택배박스, 비닐봉투, 화장품 용기 등 50개 패키징 키워드별 전문 업체 목록을 확인하세요.',
+  title: '포장 키워드 디렉터리 — 업체 검색',
+  description: '골판지박스, 택배박스, 비닐봉투, 화장품 용기 등 50개 포장 키워드별 전문 업체 목록을 확인하세요.',
   alternates: {
     canonical: `${siteUrl}/keywords`,
     languages: { 'ko-KR': `${siteUrl}/keywords`, 'x-default': `${siteUrl}/keywords` },
   },
   openGraph: {
-    title: '패키징 키워드 디렉터리 | Packlinx',
-    description: '50개 패키징 키워드별 전문 업체 목록',
+    title: '포장 키워드 디렉터리 | Packlinx',
+    description: '50개 포장 키워드별 전문 업체 목록',
     url: `${siteUrl}/keywords`,
     siteName: 'Packlinx',
     locale: 'ko_KR',
@@ -30,8 +30,8 @@ const collectionJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'CollectionPage',
   '@id': `${siteUrl}/keywords`,
-  name: '패키징 키워드 디렉터리',
-  description: '골판지박스, 택배박스, 비닐봉투, 화장품 용기 등 50개 패키징 키워드별 전문 업체 목록',
+  name: '포장 키워드 디렉터리',
+  description: '골판지박스, 택배박스, 비닐봉투, 화장품 용기 등 50개 포장 키워드별 전문 업체 목록',
   url: `${siteUrl}/keywords`,
   inLanguage: 'ko',
   isPartOf: { '@type': 'WebSite', name: 'Packlinx', url: siteUrl },
@@ -52,7 +52,7 @@ export default async function KeywordsIndexPage() {
       <section className="bg-neutral-900 border-b border-white/[0.06] py-12 px-5 sm:px-8">
         <div className="max-w-4xl mx-auto text-center">
           <h1 className="text-[28px] sm:text-[36px] font-bold text-white leading-tight tracking-[-0.02em] mb-3">
-            패키징 키워드 디렉터리
+            포장 키워드 디렉터리
           </h1>
           <p className="text-slate-400 text-[15px] leading-relaxed">
             골판지박스·택배박스부터 화장품 용기·포장기계까지 — 검색 키워드별 전문 업체 목록
@@ -103,7 +103,7 @@ export default async function KeywordsIndexPage() {
               <BusinessRegistrationInfo theme="dark" />
             </div>
             <div className="flex gap-5 text-[12px] text-slate-400">
-              <Link href="/guides" className="hover:text-slate-200 transition-colors">패키징 가이드</Link>
+              <Link href="/guides" className="hover:text-slate-200 transition-colors">포장 가이드</Link>
               <Link href="/privacy" className="hover:text-slate-200 transition-colors">개인정보처리방침</Link>
               <Link href="/terms" className="hover:text-slate-200 transition-colors">이용약관</Link>
               <Link href="/opt-out?type=takedown" className="hover:text-slate-200 transition-colors">권리침해 신고</Link>

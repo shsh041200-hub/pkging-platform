@@ -256,8 +256,11 @@ async function compareEntries(): Promise<Entry[]> {
         const key = `${a}|${b}`
         if (seen.has(key)) continue
         seen.add(key)
+        // PACAA-1028: percent-encode slugs so GSC can match sitemap <loc> to
+        // crawled URLs when slugs contain Korean characters (same fix as PACAA-731
+        // for keyword pages).
         out.push({
-          url: `${root}/compare/${a}-vs-${b}`,
+          url: `${root}/compare/${encodeURIComponent(a)}-vs-${encodeURIComponent(b)}`,
           lastmod: now,
           changefreq: 'weekly',
           priority: 0.7,

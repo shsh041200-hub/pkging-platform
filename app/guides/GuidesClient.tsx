@@ -250,7 +250,7 @@ export function GuidesClient({ totalGuides }: { totalGuides: number }) {
           <h1 className="text-[44px] leading-[1.18] tracking-[-0.025em] m-0 mb-3 font-extrabold text-[var(--g-ink)]">
             발주 전에 꼭 확인하는
             <br className="hidden sm:block" />
-            패키징 실무 가이드
+            포장 실무 가이드
           </h1>
           <p className="text-lg leading-[1.6] text-[var(--g-ink-2)] max-w-[720px] m-0 mb-4">
             소재 선택부터 MOQ·납기·인증까지. 1,380개 업체 데이터를 기반으로 만든 현장형 가이드 —

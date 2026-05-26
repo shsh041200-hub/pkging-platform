@@ -16,7 +16,7 @@ const breadcrumbJsonLd = {
   "@type": "BreadcrumbList",
   itemListElement: [
     { "@type": "ListItem", position: 1, name: "홈", item: siteUrl },
-    { "@type": "ListItem", position: 2, name: "패키징 가이드", item: `${siteUrl}/guides` },
+    { "@type": "ListItem", position: 2, name: "포장 가이드", item: `${siteUrl}/guides` },
     { "@type": "ListItem", position: 3, name: "친환경 포장재 종류 완전 가이드", item: canonicalUrl },
   ],
 };

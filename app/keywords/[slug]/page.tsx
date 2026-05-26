@@ -242,7 +242,7 @@ export default async function KeywordPage({ params }: Props) {
             </div>
             <div className="flex gap-5 text-[12px] text-slate-400">
               <Link href="/keywords" className="hover:text-slate-200 transition-colors">키워드 디렉터리</Link>
-              <Link href="/guides" className="hover:text-slate-200 transition-colors">패키징 가이드</Link>
+              <Link href="/guides" className="hover:text-slate-200 transition-colors">포장 가이드</Link>
               <Link href="/privacy" className="hover:text-slate-200 transition-colors">개인정보처리방침</Link>
               <Link href="/terms" className="hover:text-slate-200 transition-colors">이용약관</Link>
               <Link href="/opt-out?type=takedown" className="hover:text-slate-200 transition-colors">권리침해 신고</Link>
